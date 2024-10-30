@@ -1,4 +1,4 @@
-# A Process Oriented AO Library
+# AO-Process-Clients: A Process Oriented AO Library
 [![npm version](https://img.shields.io/npm/v/ao-process-clients)](https://www.npmjs.com/package/ao-process-clients)
 [![npm downloads](https://img.shields.io/npm/dm/ao-process-clients)](https://www.npmjs.com/package/ao-process-clients)
 [![license](https://img.shields.io/npm/l/ao-process-clients)](https://github.com/username/ao-process-clients/blob/main/LICENSE)
