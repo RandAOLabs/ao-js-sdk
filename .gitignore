@@ -1,0 +1,23 @@
+# Node.js dependencies
+node_modules/
+package-lock.json
+yarn.lock
+
+# Compiled output
+dist/
+
+# TypeScript
+*.tsbuildinfo
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local

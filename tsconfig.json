@@ -1,0 +1,23 @@
+// tsconfig.json
+{
+    "compilerOptions": {
+        "target": "es6", // Specify ECMAScript target version
+        "module": "commonjs", // CommonJS for Node compatibility
+        "outDir": "./dist", // Output directory for compiled files
+        "rootDir": "./src", // Root directory of source files
+        "sourceMap": true, // Enable source map generation
+        "declaration": true, // Generate declaration files (.d.ts)
+        "moduleResolution": "node", // Use Node module resolution
+        "strict": true, // Enable strict type-checking options
+        "esModuleInterop": true, // Enable interop between ES and CommonJS modules
+        "skipLibCheck": true, // Skip checking of library files
+        "forceConsistentCasingInFileNames": true // Ensure consistent file naming
+    },
+    "include": [
+        "src/**/*.ts"
+    ], // Include all .ts files in the src directory
+    "exclude": [
+        "node_modules",
+        "dist"
+    ] // Exclude node_modules and dist directories
+}

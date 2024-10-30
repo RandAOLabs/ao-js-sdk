@@ -1,0 +1,39 @@
+{
+  "name": "ao-process-clients",
+  "version": "1.0.0",
+  "description": "A modular TypeScript API client library for AO Process interactions",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "prepare": "npm run build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/username/ao-process-clients.git"
+  },
+  "author": "RandAO",
+  "license": "ISC",
+  "keywords": [
+    "API",
+    "TypeScript",
+    "client",
+    "AO Process",
+    "modular"
+  ],
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3"
+  },
+  "dependencies": {
+    "@permaweb/aoconnect": "^0.0.59"
+  }
+}
