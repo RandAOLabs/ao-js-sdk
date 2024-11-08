@@ -14,8 +14,9 @@
         "forceConsistentCasingInFileNames": true // Ensure consistent file naming
     },
     "include": [
-        "src/**/*.ts"
-    ], // Include all .ts files in the src directory
+        "src/**/*.ts",
+        "src/test/**/*.ts" // Include all .ts files in the test directory
+    ],
     "exclude": [
         "node_modules",
         "dist"
