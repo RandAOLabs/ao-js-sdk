@@ -14,7 +14,7 @@
     "build": "tsc",
     "prepare": "npm run build",
     "test": "jest --runInBand ./test",
-    "test:unit": "jest --runInBand ./test/unit",
+    "test:unit": "jest ./test/unit",
     "test:integration": "jest --runInBand ./test/integration"
   },
   "repository": {
