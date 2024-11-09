@@ -1,59 +1,75 @@
 import { message, result, results, createDataItemSigner } from '@permaweb/aoconnect';
-import { readFileSync } from 'fs';
-import { IBaseClient } from './IBaseClient';
-import { Tags } from './types';
+import { IBaseClient } from './abstract/IBaseClient';
+import { SortOrder, Tags } from './abstract/types';
+import { BaseClientConfig } from './abstract/BaseClientConfig';
+import { MessageError, ResultError, ResultsError } from './BaseClientError.ts';
+import { MessageResult } from '@permaweb/aoconnect/dist/lib/result';
+import { ResultsResponse } from '@permaweb/aoconnect/dist/lib/results';
+import { Logger } from '../utils/logger/logger';
+import { BASE_CLIENT_AUTO_CONFIGURATION } from './BaseClientAutoConfiguration';
 
-export class BaseClient implements IBaseClient {
-    private processId: string;
-    private signer: ReturnType<typeof createDataItemSigner>;
-
-    constructor(processId: string, walletPath: string) {
-        this.processId = processId;
-        const wallet = JSON.parse(readFileSync(walletPath, 'utf-8'));
-        this.signer = createDataItemSigner(wallet);
+export class BaseClient extends IBaseClient {
+    /* Fields */
+    readonly baseConfig: BaseClientConfig;
+    readonly signer: ReturnType<typeof createDataItemSigner>;
+    /* Fields */
+    /* Constructors */
+    protected constructor(baseConfig: BaseClientConfig) {
+        super()
+        this.baseConfig = baseConfig;
+        this.signer = createDataItemSigner(baseConfig.wallet);
     }
 
-    async message(data: string = '', tags: Tags = [], anchor?: string): Promise<void> {
+    public static autoConfiguration(): BaseClient {
+        return new BaseClient(BASE_CLIENT_AUTO_CONFIGURATION)
+    }
+    /* Constructors */
+    /* Core AO Functions */
+    async message(data: string = '', tags: Tags = [], anchor?: string): Promise<string> {
         try {
-            await message({
-                process: this.processId,
+            return await message({
+                process: this.baseConfig.processId,
                 signer: this.signer,
                 data,
                 tags,
                 anchor,
             });
-        } catch (error) {
-            console.error('Error sending message:', error);
-            throw error;
+        } catch (error: any) {
+            Logger.error(`Error sending message: ${error.message}`);
+            throw new MessageError(error);
         }
     }
 
-    async results(from?: string, to?: string, limit: number = 25, sort: 'ASC' | 'DESC' = 'ASC'): Promise<any> {
+    async results(
+        from?: string,
+        to?: string,
+        limit: number = 25,
+        sort: SortOrder = SortOrder.ASCENDING
+    ): Promise<ResultsResponse> {
         try {
-            const response = await results({
-                process: this.processId,
+            return await results({
+                process: this.baseConfig.processId,
                 from,
                 to,
                 limit,
                 sort,
             });
-            return Array.isArray(response) ? response : [response]; // Return as array, or wrap in array if it's a single object
-        } catch (error) {
-            console.error('Error fetching results:', error);
-            throw error;
+        } catch (error: any) {
+            Logger.error(`Error fetching results: ${error.message}`);
+            throw new ResultsError(error);
         }
     }
 
-    async result(messageId: string): Promise<any> {
+    async result(messageId: string): Promise<MessageResult> {
         try {
-            const response = await result({
+            return await result({
                 message: messageId,
-                process: this.processId,
+                process: this.baseConfig.processId,
             });
-            return response;
-        } catch (error) {
-            console.error('Error fetching result:', error);
-            throw error;
+        } catch (error: any) {
+            Logger.error(`Error fetching result: ${error.message}`);
+            throw new ResultError(error);
         }
     }
+    /* Core AO Functions */
 }

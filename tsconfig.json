@@ -1,24 +1,46 @@
-// tsconfig.json
 {
     "compilerOptions": {
-        "target": "es6", // Specify ECMAScript target version
-        "module": "commonjs", // CommonJS for Node compatibility
-        "outDir": "./dist", // Output directory for compiled files
-        "rootDir": "./src", // Root directory of source files
-        "sourceMap": true, // Enable source map generation
-        "declaration": true, // Generate declaration files (.d.ts)
-        "moduleResolution": "node", // Use Node module resolution
-        "strict": true, // Enable strict type-checking options
-        "esModuleInterop": true, // Enable interop between ES and CommonJS modules
-        "skipLibCheck": true, // Skip checking of library files
-        "forceConsistentCasingInFileNames": true // Ensure consistent file naming
+        "target": "es6",
+        "module": "commonjs",
+        "outDir": "./dist",
+        "rootDir": ".",
+        "sourceMap": true,
+        "declaration": true,
+        "moduleResolution": "node",
+        "strict": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "baseUrl": ".",
+        "paths": {
+            "@src/*": [
+                "src/*"
+            ],
+            "@test/*": [
+                "test/*"
+            ],
+            "@core/*": [
+                "src/core/*"
+            ],
+            "@randomClient/*": [
+                "src/clients/random/*"
+            ],
+            "@tokenClient/*": [
+                "src/clients/token/*"
+            ],
+            "@utils/*": [
+                "src/utils/*"
+            ]
+        }
     },
     "include": [
-        "src/**/*.ts",
-        "src/test/**/*.ts" // Include all .ts files in the test directory
+        "src",
+        "test"
     ],
     "exclude": [
         "node_modules",
         "dist"
-    ] // Exclude node_modules and dist directories
+    ]
 }
