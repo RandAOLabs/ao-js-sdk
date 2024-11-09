@@ -1,4 +1,4 @@
-import { Environment, getEnvironment } from "../environment";
+import { Environment, getEnvironment } from "../environment/environment";
 import { colors } from "./colors";
 
 export enum LogLevel {

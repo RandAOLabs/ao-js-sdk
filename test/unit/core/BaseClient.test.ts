@@ -1,4 +1,4 @@
-import { message, results, result, createDataItemSigner } from '@permaweb/aoconnect';
+import { message, results, result } from '@permaweb/aoconnect';
 import { BaseClient } from '@core/index';
 import { SortOrder } from '@src/core/abstract/types';
 
@@ -21,8 +21,6 @@ jest.mock('@utils/logger/logger', () => ({
 }));
 
 describe("BaseClient", () => {
-    const mockSigner = 'mockSigner';
-
     // Variable to hold the BaseClient instance
     let client: BaseClient;
 
