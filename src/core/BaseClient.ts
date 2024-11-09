@@ -1,8 +1,8 @@
-import { message, result, results, createDataItemSigner } from '@permaweb/aoconnect';
+import { message, result, results, createDataItemSigner, dryrun } from '@permaweb/aoconnect';
 import { IBaseClient } from './abstract/IBaseClient';
 import { SortOrder, Tags } from './abstract/types';
 import { BaseClientConfig } from './abstract/BaseClientConfig';
-import { MessageError, ResultError, ResultsError } from './BaseClientError';
+import { DryRunError, MessageError, ResultError, ResultsError } from './BaseClientError';
 import { MessageResult } from '@permaweb/aoconnect/dist/lib/result';
 import { ResultsResponse } from '@permaweb/aoconnect/dist/lib/results';
 import { Logger } from '../utils/logger/logger';
@@ -63,13 +63,33 @@ export class BaseClient extends IBaseClient {
     async result(messageId: string): Promise<MessageResult> {
         try {
             return await result({
-                message: messageId,
                 process: this.baseConfig.processId,
+                message: messageId,
             });
         } catch (error: any) {
             Logger.error(`Error fetching result: ${error.message}`);
             throw new ResultError(error);
         }
     }
+
+    async dryrun(data: any = '', tags: Tags = [], anchor?: string, id?: string, owner?: string): Promise<any> {
+        try {
+            return await dryrun({
+                process: this.baseConfig.processId,
+                data,
+                tags,
+                anchor,
+                id,
+                owner,
+            });
+        } catch (error: any) {
+            Logger.error(`Error performing dry run: ${error.message}`);
+            throw new DryRunError(error);
+        }
+    }
     /* Core AO Functions */
+
+    public getWalletIdentifier(): string {
+        return "unimplemented"
+    }
 }

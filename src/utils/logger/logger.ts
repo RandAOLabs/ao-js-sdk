@@ -50,7 +50,7 @@ export class Logger {
             // Throwing an error to get the stack trace
             const err = new Error();
             const stack = err.stack || "";
-            const stackLine = stack.split("\n")[3] || ""; // Typically the 3rd line is where the log was called
+            const stackLine = stack.split("\n")[5] || ""; // Typically the 3rd line is where the log was called
             const fileMatch = stackLine.match(/\((.*?):(\d+):(\d+)\)/);
             if (fileMatch) {
                 const [, file, line, column] = fileMatch;
