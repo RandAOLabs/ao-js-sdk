@@ -7,6 +7,7 @@ import { MessageResult } from '@permaweb/aoconnect/dist/lib/result';
 import { ResultsResponse } from '@permaweb/aoconnect/dist/lib/results';
 import { Logger } from '../utils/logger/logger';
 import { BASE_CLIENT_AUTO_CONFIGURATION } from './BaseClientAutoConfiguration';
+import { DryRunResult } from '@permaweb/aoconnect/dist/lib/dryrun';
 
 export class BaseClient extends IBaseClient {
     /* Fields */
@@ -72,7 +73,7 @@ export class BaseClient extends IBaseClient {
         }
     }
 
-    async dryrun(data: any = '', tags: Tags = [], anchor?: string, id?: string, owner?: string): Promise<any> {
+    async dryrun(data: any = '', tags: Tags = [], anchor?: string, id?: string, owner?: string): Promise<DryRunResult> {
         try {
             return await dryrun({
                 process: this.baseConfig.processId,
