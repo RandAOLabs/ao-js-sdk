@@ -15,11 +15,11 @@ export class TokenClient extends BaseClient implements ITokenClient {
     /* Core Token Functions */
     public async balance(identifier: string = this.getWalletIdentifier()): Promise<string> {
         try {
-            const response = await this.message('', [
+            const response = await this.dryrun('', [
                 { name: "Action", value: "Balance" },
-                // { name: "Target", value: identifier }
+                { name: "Target", value: identifier }
             ]);
-            return response;
+            return response.Messages[0].Data // Unsafe Typing
         } catch (error: any) {
             Logger.error(`Error fetching balance for identifier ${identifier}: ${error.message}`);
             throw new BalanceError(identifier, error);
