@@ -25,4 +25,23 @@ describe("TokenClient Integration Test", () => {
 
         });
     });
+
+
+    describe("balances()", () => {
+        it("should fetch balances without throwing an error", async () => {
+            await expect(client.balances()).resolves.not.toThrow();
+        });
+
+        it("should fetch balances with a limit and cursor without throwing an error", async () => {
+            const limit = 5;
+            await expect(client.balances(limit)).resolves.not.toThrow();
+        });
+    });
+
+    describe("getInfo()", () => {
+        it("should fetch token info without throwing an error", async () => {
+            const token = "TRUNK";
+            await expect(client.getInfo(token)).resolves.not.toThrow();
+        });
+    });
 });

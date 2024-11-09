@@ -1,5 +1,5 @@
 import { TokenClient } from "@tokenClient/index";
-import { message } from "@permaweb/aoconnect";
+import { dryrun, message } from "@permaweb/aoconnect";
 import { Tags } from "@src/core/abstract/types";
 
 // Mock the functions from '@permaweb/aoconnect'
@@ -8,6 +8,7 @@ jest.mock('@permaweb/aoconnect', () => ({
     message: jest.fn(),
     results: jest.fn(),
     result: jest.fn(),
+    dryrun: jest.fn(),
     createDataItemSigner: jest.fn(), // Create a Jest mock function here
 }));
 
@@ -30,15 +31,15 @@ describe("TokenClient", () => {
         it("should fetch balance with correct parameters", async () => {
             // Arrange
             const identifier = "test-identifier";
-            const mockResponse = "100";
-            (message as jest.Mock).mockResolvedValueOnce(mockResponse);
+            const mockResponse = { Messages: [{ Data: "10" }] };
+            (dryrun as jest.Mock).mockResolvedValueOnce(mockResponse);
 
             // Act
             const response = await client.balance(identifier);
 
             // Assert
-            expect(message).toHaveBeenCalled();
-            expect(response).toEqual(mockResponse);
+            expect(dryrun).toHaveBeenCalled();
+            expect(response).toEqual("10");
         });
     });
 
@@ -50,13 +51,13 @@ describe("TokenClient", () => {
             // Arrange
             const limit = 500;
             const cursor = "test-cursor";
-            (message as jest.Mock).mockResolvedValueOnce(undefined);
+            (dryrun as jest.Mock).mockResolvedValueOnce({});
 
             // Act
             await client.balances(limit, cursor);
 
             // Assert
-            expect(message).toHaveBeenCalled();
+            expect(dryrun).toHaveBeenCalled();
         });
     });
 
@@ -89,13 +90,13 @@ describe("TokenClient", () => {
         it("should fetch token info with correct parameters", async () => {
             // Arrange
             const token = "test-token";
-            (message as jest.Mock).mockResolvedValueOnce(undefined);
+            (dryrun as jest.Mock).mockResolvedValueOnce({ Messages: [{ Data: "10" }] });
 
             // Act
             await client.getInfo(token);
 
             // Assert
-            expect(message).toHaveBeenCalled();
+            expect(dryrun).toHaveBeenCalled();
         });
     });
 
