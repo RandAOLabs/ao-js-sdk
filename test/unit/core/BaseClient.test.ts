@@ -1,14 +1,16 @@
-import { message, results, result } from '@permaweb/aoconnect';
+import { message, results, result, dryrun } from '@permaweb/aoconnect';
 import { BaseClient } from '@core/index';
 import { SortOrder } from '@src/core/abstract/types';
 
 // Mocking external dependencies
 
 //mocks
+
 jest.mock('@permaweb/aoconnect', () => ({
     message: jest.fn(),
     results: jest.fn(),
     result: jest.fn(),
+    dryrun: jest.fn(),
     createDataItemSigner: jest.fn(), // Create a Jest mock function here
 }));
 jest.mock('@utils/logger/logger', () => ({
@@ -113,6 +115,35 @@ describe("BaseClient", () => {
             expect(result).toHaveBeenCalledWith({
                 message: messageId,
                 process: client.baseConfig.processId,
+            });
+            expect(response).toEqual(mockResponse);
+        });
+    });
+    /**
+     * Test case: Performing a dry run
+     */
+    describe('dryrun()', () => {
+        it('should perform a dry run with correct parameters', async () => {
+            // Arrange
+            const mockResponse = { success: true };
+            (dryrun as jest.Mock).mockResolvedValueOnce(mockResponse);
+            const data = 'test-data';
+            const tags = [{ name: 'tag1', value: 'value1' }];
+            const anchor = 'anchor123';
+            const id = 'test-id';
+            const owner = 'test-owner';
+
+            // Act
+            const response = await client.dryrun(data, tags, anchor, id, owner);
+
+            // Assert
+            expect(dryrun).toHaveBeenCalledWith({
+                process: client.baseConfig.processId,
+                data,
+                tags,
+                anchor,
+                id,
+                owner,
             });
             expect(response).toEqual(mockResponse);
         });

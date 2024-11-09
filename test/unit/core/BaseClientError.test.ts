@@ -1,5 +1,5 @@
-import { message, result, results, createDataItemSigner } from '@permaweb/aoconnect';
-import { BaseClient, SortOrder, MessageError, ResultError, ResultsError } from '@core/index';
+import { message, result, results, createDataItemSigner, dryrun } from '@permaweb/aoconnect';
+import { BaseClient, SortOrder, MessageError, ResultError, ResultsError, DryRunError } from '@core/index';
 import { Logger } from '@utils/logger/logger';
 
 //mocks
@@ -7,6 +7,7 @@ jest.mock('@permaweb/aoconnect', () => ({
     message: jest.fn(),
     results: jest.fn(),
     result: jest.fn(),
+    dryrun: jest.fn(),
     createDataItemSigner: jest.fn(), // Create a Jest mock function here
 }));
 jest.mock('@utils/logger/logger', () => ({
@@ -81,6 +82,23 @@ describe("BaseClient Error Handling", () => {
 
             // Act & Assert
             await expect(client.result(messageId)).rejects.toThrow(ResultError);
+            expect(Logger.error).toHaveBeenCalled();
+        });
+    });
+
+    /**
+     * Test case: Error handling when performing a dry run
+     */
+    describe('dryrun() error handling', () => {
+        it('should throw DryRunError and log an error when dry run fails', async () => {
+            // Arrange
+            const errorMessage = 'Failed to perform dry run';
+            (dryrun as jest.Mock).mockRejectedValueOnce(new Error(errorMessage));
+            const data = 'test-data';
+            const tags = [{ name: 'tag1', value: 'value1' }];
+
+            // Act & Assert
+            await expect(client.dryrun(data, tags)).rejects.toThrow(DryRunError);
             expect(Logger.error).toHaveBeenCalled();
         });
     });

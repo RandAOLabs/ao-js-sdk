@@ -29,3 +29,10 @@ export class ResultError extends BaseClientError {
         this.name = 'ResultError';
     }
 }
+
+export class DryRunError extends BaseClientError {
+    constructor(originalError?: Error) {
+        super('Error performing dry run', originalError);
+        this.name = 'DryRunError';
+    }
+}

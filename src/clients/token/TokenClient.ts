@@ -13,11 +13,11 @@ export class TokenClient extends BaseClient implements ITokenClient {
     /* Constructors */
 
     /* Core Token Functions */
-    public async balance(identifier: string): Promise<string> {
+    public async balance(identifier: string = this.getWalletIdentifier()): Promise<string> {
         try {
             const response = await this.message('', [
                 { name: "Action", value: "Balance" },
-                { name: "Target", value: identifier }
+                // { name: "Target", value: identifier }
             ]);
             return response;
         } catch (error: any) {
