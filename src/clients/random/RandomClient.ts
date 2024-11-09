@@ -1,6 +1,6 @@
 // src/RandomClient.ts
 import { BaseClient } from '../../core/BaseClient';
-import { IRandomClient } from './IRandomClient';
+import { IRandomClient } from './abstract/IRandomClient';
 
 export class RandomClient extends BaseClient implements IRandomClient {
 

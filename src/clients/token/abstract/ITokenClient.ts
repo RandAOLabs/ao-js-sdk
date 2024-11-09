@@ -1,6 +1,7 @@
-import { Tags } from "../../core/types";
+import { Tags } from "../../../core/abstract/types";
 
 // src/ITokenClient.ts
+/** @see {@link https://cookbook_ao.g8way.io/references/token.html | specification} */
 export interface ITokenClient {
     balance(identifier: string): Promise<void>;
     balances(limit?: number, cursor?: string): Promise<void>;

@@ -1,6 +1,6 @@
 import { BaseClient } from "../../core/BaseClient";
-import { Tags } from "../../core/types";
-import { ITokenClient } from "./ITokenClient";
+import { Tags } from "../../core/abstract/types";
+import { ITokenClient } from "./abstract/ITokenClient";
 
 export class TokenClient extends BaseClient implements ITokenClient {
     balance(identifier: string): Promise<void> {
