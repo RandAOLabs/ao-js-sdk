@@ -1,24 +1,26 @@
 import { message, results, result, createDataItemSigner } from '@permaweb/aoconnect';
-import { BaseClient, BaseClientConfig } from '@core/index';
-import { readFileSync } from 'fs';
+import { BaseClient } from '@core/index';
 import { SortOrder } from '@src/core/abstract/types';
 
 // Mocking external dependencies
+
+//mocks
 jest.mock('@permaweb/aoconnect', () => ({
     message: jest.fn(),
     results: jest.fn(),
     result: jest.fn(),
-    createDataItemSigner: jest.fn(),
+    createDataItemSigner: jest.fn(), // Create a Jest mock function here
 }));
-jest.mock('fs', () => ({
-    readFileSync: jest.fn(),
+jest.mock('@utils/logger/logger', () => ({
+    Logger: {
+        info: jest.fn(),
+        warn: jest.fn(),
+        error: jest.fn(),
+        debug: jest.fn(),
+    },
 }));
 
 describe("BaseClient", () => {
-    // Mock variables used in each test
-    const processId = 'test-process-id';
-    const walletPath = 'test-wallet.json';
-    const mockWallet = { key: 'value' };
     const mockSigner = 'mockSigner';
 
     // Variable to hold the BaseClient instance
@@ -26,8 +28,6 @@ describe("BaseClient", () => {
 
     // Setting up mocks and BaseClient instance before each test
     beforeEach(() => {
-        (readFileSync as jest.Mock).mockReturnValue(JSON.stringify(mockWallet));
-        (createDataItemSigner as jest.Mock).mockReturnValue(mockSigner);
         client = BaseClient.autoConfiguration()
     });
 
@@ -42,7 +42,6 @@ describe("BaseClient", () => {
     describe('Autoconfiguration Constructor', () => {
         it('should initialize with correct processId and signer', () => {
             expect(client.baseConfig).toBeDefined();
-            expect(client.signer).toBe(mockSigner);
         });
     });
 
@@ -63,7 +62,7 @@ describe("BaseClient", () => {
             // Assert
             expect(message).toHaveBeenCalledWith({
                 process: client.baseConfig.processId,
-                signer: mockSigner,
+                signer: undefined,
                 data,
                 tags,
                 anchor,

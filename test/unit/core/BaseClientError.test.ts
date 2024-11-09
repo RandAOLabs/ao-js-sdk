@@ -1,33 +1,30 @@
 import { message, result, results, createDataItemSigner } from '@permaweb/aoconnect';
 import { BaseClient, SortOrder, MessageError, ResultError, ResultsError } from '@core/index';
-import { readFileSync } from 'fs';
 import { Logger } from '@utils/logger/logger';
 
-// Mocking external dependencies
+//mocks
 jest.mock('@permaweb/aoconnect', () => ({
     message: jest.fn(),
     results: jest.fn(),
     result: jest.fn(),
-    createDataItemSigner: jest.fn(),
+    createDataItemSigner: jest.fn(), // Create a Jest mock function here
 }));
-
 jest.mock('@utils/logger/logger', () => ({
     Logger: {
+        info: jest.fn(),
+        warn: jest.fn(),
         error: jest.fn(),
+        debug: jest.fn(),
     },
 }));
 
 describe("BaseClient Error Handling", () => {
-    const mockWallet = { key: 'value' };
-    const mockSigner = 'mockSigner';
-
     // Variable to hold the BaseClient instance
     let client: BaseClient;
 
     // Setting up mocks and BaseClient instance before each test
     beforeEach(() => {
-        (readFileSync as jest.Mock).mockReturnValue(JSON.stringify(mockWallet));
-        (createDataItemSigner as jest.Mock).mockReturnValue(mockSigner);
+        (createDataItemSigner as jest.Mock).mockReturnValue("mockSigner");
         client = BaseClient.autoConfiguration();
     });
 

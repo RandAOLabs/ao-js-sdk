@@ -2,7 +2,7 @@ import { message, result, results, createDataItemSigner } from '@permaweb/aoconn
 import { IBaseClient } from './abstract/IBaseClient';
 import { SortOrder, Tags } from './abstract/types';
 import { BaseClientConfig } from './abstract/BaseClientConfig';
-import { MessageError, ResultError, ResultsError } from './BaseClientError.ts';
+import { MessageError, ResultError, ResultsError } from './BaseClientError';
 import { MessageResult } from '@permaweb/aoconnect/dist/lib/result';
 import { ResultsResponse } from '@permaweb/aoconnect/dist/lib/results';
 import { Logger } from '../utils/logger/logger';
