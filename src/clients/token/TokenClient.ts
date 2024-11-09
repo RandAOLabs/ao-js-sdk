@@ -3,6 +3,7 @@ import { Logger } from "@utils/index"
 import { ITokenClient } from "./abstract/ITokenClient";
 import { TOKEN_CLIENT_AUTO_CONFIGURATION } from "./TokenClientAutoConfiguration";
 import { BalanceError, BalancesError, GetInfoError, MintError, TransferError } from "./TokenClientError";
+import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
 
 /** @see {@link https://cookbook_ao.g8way.io/references/token.html | specification} */
 export class TokenClient extends BaseClient implements ITokenClient {
@@ -26,7 +27,7 @@ export class TokenClient extends BaseClient implements ITokenClient {
         }
     }
 
-    public async balances(limit: number = 1000, cursor?: string): Promise<void> {
+    public async balances(limit: number = 1000, cursor?: string): Promise<DryRunResult> {
         try {
             const tags: Tags = [
                 { name: "Action", value: "Balances" },
@@ -35,7 +36,7 @@ export class TokenClient extends BaseClient implements ITokenClient {
             if (cursor) {
                 tags.push({ name: "Cursor", value: cursor });
             }
-            await this.message('', tags);
+            return await this.dryrun('', tags); // If ever used should refactor to return the balances in a list format 
         } catch (error: any) {
             Logger.error(`Error fetching balances: ${error.message}`);
             throw new BalancesError(error);
@@ -61,10 +62,11 @@ export class TokenClient extends BaseClient implements ITokenClient {
 
     public async getInfo(token: string): Promise<void> {
         try {
-            await this.message('', [
+            const response = await this.dryrun('', [
                 { name: "Action", value: "Info" },
                 { name: "Target", value: token }
             ]);
+
         } catch (error: any) {
             Logger.error(`Error fetching info for token ${token}: ${error.message}`);
             throw new GetInfoError(token, error);

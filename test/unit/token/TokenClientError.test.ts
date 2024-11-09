@@ -1,5 +1,5 @@
 import { TokenClient } from "@tokenClient/index";
-import { message } from "@permaweb/aoconnect";
+import { dryrun, message } from "@permaweb/aoconnect";
 import { Logger } from "@utils/logger/logger";
 import {
     BalanceError,
@@ -14,6 +14,7 @@ jest.mock('@permaweb/aoconnect', () => ({
     message: jest.fn(),
     results: jest.fn(),
     result: jest.fn(),
+    dryrun: jest.fn(),
     createDataItemSigner: jest.fn(), // Create a Jest mock function here
 }));
 
@@ -45,7 +46,7 @@ describe("TokenClient Error Handling", () => {
             // Arrange
             const identifier = "test-identifier";
             const errorMessage = "Failed to fetch balance";
-            (message as jest.Mock).mockRejectedValueOnce(new Error(errorMessage));
+            (dryrun as jest.Mock).mockRejectedValueOnce(new Error(errorMessage));
 
             // Act & Assert
             await expect(client.balance(identifier)).rejects.toThrow(BalanceError);
@@ -59,8 +60,7 @@ describe("TokenClient Error Handling", () => {
     describe("balances() error handling", () => {
         it("should throw BalancesError and log an error when fetching balances fails", async () => {
             // Arrange
-            const errorMessage = "Failed to fetch balances";
-            (message as jest.Mock).mockRejectedValueOnce(new Error(errorMessage));
+            (dryrun as jest.Mock).mockRejectedValueOnce(new Error());
             const limit = 500;
             const cursor = "test-cursor";
 
@@ -78,8 +78,7 @@ describe("TokenClient Error Handling", () => {
             // Arrange
             const recipient = "test-recipient";
             const quantity = "50";
-            const errorMessage = "Failed to transfer tokens";
-            (message as jest.Mock).mockRejectedValueOnce(new Error(errorMessage));
+            (message as jest.Mock).mockRejectedValueOnce(new Error());
 
             // Act & Assert
             await expect(client.transfer(recipient, quantity)).rejects.toThrow(TransferError);
@@ -95,7 +94,7 @@ describe("TokenClient Error Handling", () => {
             // Arrange
             const token = "test-token";
             const errorMessage = "Failed to fetch token info";
-            (message as jest.Mock).mockRejectedValueOnce(new Error(errorMessage));
+            (dryrun as jest.Mock).mockRejectedValueOnce(new Error(errorMessage));
 
             // Act & Assert
             await expect(client.getInfo(token)).rejects.toThrow(GetInfoError);
