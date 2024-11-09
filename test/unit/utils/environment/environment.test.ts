@@ -25,7 +25,7 @@ describe('Environment Functions', () => {
         it('should return Environment.NODE when running in a node context', () => {
             // Arrange
             const originalProcess = global.process;
-            (global as any).process = { versions: { node: 'v14.0.0' } };
+            (global as any).process = { versions: { node: 'v22.0.0' } };
 
             // Act
             const environment = getEnvironment();
