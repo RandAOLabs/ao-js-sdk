@@ -1,3 +1,5 @@
+import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
+
 // BaseClientError.ts
 export class BaseClientError extends Error {
     constructor(message: string, originalError?: Error) {
@@ -34,5 +36,19 @@ export class DryRunError extends BaseClientError {
     constructor(originalError?: Error) {
         super('Error performing dry run', originalError);
         this.name = 'DryRunError';
+    }
+}
+
+export class MessageResultDataError extends BaseClientError {
+    constructor(originalError?: Error, message?: MessageResult) {
+        super(`Error Retrieving Message Result Data. Does this message have result data? Message: ${JSON.stringify(message)}`, originalError);
+        this.name = 'MessageResultDataError';
+    }
+}
+
+export class DryRunResultDataError extends BaseClientError {
+    constructor(originalError?: Error, message?: MessageResult) {
+        super(`Error Retrieving Dry Run Result Data. Does this message have result data? Message: ${JSON.stringify(message)}`, originalError);
+        this.name = 'DryRunResultDataError';
     }
 }

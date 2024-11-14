@@ -4,6 +4,7 @@ import { ITokenClient } from "./abstract/ITokenClient";
 import { TOKEN_CLIENT_AUTO_CONFIGURATION } from "./TokenClientAutoConfiguration";
 import { BalanceError, BalancesError, GetInfoError, MintError, TransferError } from "./TokenClientError";
 import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
+import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
 
 /** @see {@link https://cookbook_ao.g8way.io/references/token.html | specification} */
 export class TokenClient extends BaseClient implements ITokenClient {
@@ -14,7 +15,10 @@ export class TokenClient extends BaseClient implements ITokenClient {
     /* Constructors */
 
     /* Core Token Functions */
-    public async balance(identifier: string = this.getWalletIdentifier()): Promise<string> {
+    public async balance(identifier?: string): Promise<string> {
+        if (!identifier) {
+            identifier = await this.getCallingWalletAddress()
+        }
         try {
             const response = await this.dryrun('', [
                 { name: "Action", value: "Balance" },
@@ -43,7 +47,7 @@ export class TokenClient extends BaseClient implements ITokenClient {
         }
     }
 
-    public async transfer(recipient: string, quantity: string, forwardedTags?: Tags): Promise<void> {
+    public async transfer(recipient: string, quantity: string, forwardedTags?: Tags): Promise<MessageResult> {
         try {
             const tags: Tags = [
                 { name: "Action", value: "Transfer" },
@@ -53,7 +57,7 @@ export class TokenClient extends BaseClient implements ITokenClient {
             if (forwardedTags) {
                 forwardedTags.forEach(tag => tags.push({ name: `X-${tag.name}`, value: tag.value }));
             }
-            await this.message('', tags);
+            return await this.messageResult('', tags);
         } catch (error: any) {
             Logger.error(`Error transferring ${quantity} to ${recipient}: ${error.message}`);
             throw new TransferError(recipient, quantity, error);

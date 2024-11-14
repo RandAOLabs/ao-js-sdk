@@ -2,12 +2,13 @@ import { message, result, results, createDataItemSigner, dryrun } from '@permawe
 import { IBaseClient } from './abstract/IBaseClient';
 import { SortOrder, Tags } from './abstract/types';
 import { BaseClientConfig } from './abstract/BaseClientConfig';
-import { DryRunError, MessageError, ResultError, ResultsError } from './BaseClientError';
+import { DryRunError, DryRunResultDataError, MessageError, MessageResultDataError, ResultError, ResultsError } from './BaseClientError';
 import { MessageResult } from '@permaweb/aoconnect/dist/lib/result';
 import { ResultsResponse } from '@permaweb/aoconnect/dist/lib/results';
 import { Logger } from '../utils/logger/logger';
 import { BASE_CLIENT_AUTO_CONFIGURATION } from './BaseClientAutoConfiguration';
 import { DryRunResult } from '@permaweb/aoconnect/dist/lib/dryrun';
+import Arweave from 'arweave';
 
 export class BaseClient extends IBaseClient {
     /* Fields */
@@ -75,6 +76,7 @@ export class BaseClient extends IBaseClient {
 
     async dryrun(data: any = '', tags: Tags = [], anchor?: string, id?: string, owner?: string): Promise<DryRunResult> {
         try {
+            Logger.debug(data)
             return await dryrun({
                 process: this.baseConfig.processId,
                 data,
@@ -84,13 +86,33 @@ export class BaseClient extends IBaseClient {
                 owner,
             });
         } catch (error: any) {
-            Logger.error(`Error performing dry run: ${error.message}`);
+            Logger.error(`Error performing dry run: ${JSON.stringify(error.message)}`);
             throw new DryRunError(error);
         }
     }
     /* Core AO Functions */
-
-    public getWalletIdentifier(): string {
-        return "unimplemented"
+    /* Utility */
+    async messageResult(data: string = '', tags: Tags = [], anchor?: string): Promise<MessageResult> {
+        const result_id = await this.message(
+            data,
+            tags,
+            anchor
+        );
+        const response = await this.result(result_id);
+        return response;
     }
+
+    protected getFirstMessageData<T>(result: MessageResult | DryRunResult): T {
+        return (result.Messages[0].Data as T)
+    }
+
+    public getProcessId(): string {
+        return this.baseConfig.processId
+    }
+
+    public async getCallingWalletAddress(): Promise<string> {
+        const arweave = Arweave.init({});
+        return await arweave.wallets.jwkToAddress(this.baseConfig.wallet)
+    }
+    /* Utility */
 }

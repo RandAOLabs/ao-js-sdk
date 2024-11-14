@@ -1,10 +1,12 @@
 // TokenClientError.ts
-import { BaseClientError } from '@core/BaseClientError';
 
-export class TokenClientError extends BaseClientError {
+export class TokenClientError extends Error {
     constructor(message: string, originalError?: Error) {
-        super(message, originalError);
+        super(message);
         this.name = 'TokenClientError';
+        if (originalError) {
+            this.stack += '\nCaused by: ' + originalError.stack;
+        }
     }
 }
 

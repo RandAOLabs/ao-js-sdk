@@ -25,7 +25,7 @@ export class Logger {
             console.log(`%c[${timestamp}] [${level.toUpperCase()}] ${message} %c${fileLink}`, `color: ${color}`, "color: gray");
         } else {
             // Node context
-            console.log(`${color}[${timestamp}] [${level.toUpperCase()}]${colors.reset} ${message} ${colors.dim}${fileLink}${colors.reset}`);
+            console.log(`${color}[${timestamp}] [${level.toUpperCase()}] ${message} ${fileLink}${colors.reset}`);
         }
     }
 
@@ -50,11 +50,21 @@ export class Logger {
             // Throwing an error to get the stack trace
             const err = new Error();
             const stack = err.stack || "";
-            const stackLine = stack.split("\n")[5] || ""; // Typically the 3rd line is where the log was called
-            const fileMatch = stackLine.match(/\((.*?):(\d+):(\d+)\)/);
-            if (fileMatch) {
-                const [, file, line, column] = fileMatch;
-                return `at ${file}:${line}:${column}`;
+
+            // Find the correct stack line, skipping lines related to the logger itself
+            const stackLines = stack.split("\n");
+            for (let i = 1; i < stackLines.length; i++) {
+                const line = stackLines[i];
+                if (!line.includes("Logger.") && !line.includes("getFileLink")) {
+                    const fileMatch = line.match(/\((.*?):(\d+):(\d+)\)/);
+                    if (fileMatch) {
+                        const [, file, line, column] = fileMatch;
+                        if (file.includes("logger.ts")) {
+                            continue
+                        }
+                        return `at ${file}:${line}:${column}`;
+                    }
+                }
             }
         } catch (e) {
             // If anything fails, return an empty string
