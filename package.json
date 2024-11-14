@@ -43,6 +43,7 @@
   },
   "dependencies": {
     "@permaweb/aoconnect": "^0.0.59",
+    "arweave": "^1.15.5",
     "dotenv": "^16.4.5"
   }
 }
