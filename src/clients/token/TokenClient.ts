@@ -5,6 +5,7 @@ import { TOKEN_CLIENT_AUTO_CONFIGURATION } from "./TokenClientAutoConfiguration"
 import { BalanceError, BalancesError, GetInfoError, MintError, TransferError } from "./TokenClientError";
 import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
 import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
+import { SUCCESS_MESSAGE } from "./constants";
 
 /** @see {@link https://cookbook_ao.g8way.io/references/token.html | specification} */
 export class TokenClient extends BaseClient implements ITokenClient {
@@ -47,7 +48,7 @@ export class TokenClient extends BaseClient implements ITokenClient {
         }
     }
 
-    public async transfer(recipient: string, quantity: string, forwardedTags?: Tags): Promise<MessageResult> {
+    public async transfer(recipient: string, quantity: string, forwardedTags?: Tags): Promise<boolean> {
         try {
             const tags: Tags = [
                 { name: "Action", value: "Transfer" },
@@ -57,7 +58,9 @@ export class TokenClient extends BaseClient implements ITokenClient {
             if (forwardedTags) {
                 forwardedTags.forEach(tag => tags.push({ name: `X-${tag.name}`, value: tag.value }));
             }
-            return await this.messageResult('', tags);
+            const result = await this.messageResult('', tags)
+            const messageData: string = this.getFirstMessageDataString(result)
+            return messageData.includes(SUCCESS_MESSAGE);
         } catch (error: any) {
             Logger.error(`Error transferring ${quantity} to ${recipient}: ${error.message}`);
             throw new TransferError(recipient, quantity, error);

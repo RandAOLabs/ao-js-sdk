@@ -1,1 +1,1 @@
-const SUCCESS_MESSAGE = "200: Success"
+export const SUCCESS_MESSAGE = "200: Success"

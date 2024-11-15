@@ -1,0 +1,1 @@
+export const SUCCESS_MESSAGE = "You transferred" //You transferred ${amount} to ${Identifier}

@@ -52,3 +52,17 @@ export class DryRunResultDataError extends BaseClientError {
         this.name = 'DryRunResultDataError';
     }
 }
+
+export class JsonParsingError extends BaseClientError {
+    constructor(message: string, originalError?: Error) {
+        super(`Error parsing JSON data: ${message}`, originalError);
+        this.name = 'JsonParsingError';
+    }
+}
+
+export class MessageOutOfBoundsError extends BaseClientError {
+    constructor(index: number, length: number) {
+        super(`Index out of bounds: ${index}. Total messages available: ${length}`);
+        this.name = 'MessageOutOfBoundsError';
+    }
+}

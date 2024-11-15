@@ -26,7 +26,6 @@ describe("TokenClient Integration Test", () => {
         });
     });
 
-
     describe("balances()", () => {
         it("should fetch balances without throwing an error", async () => {
             await expect(client.balances()).resolves.not.toThrow();
