@@ -2,7 +2,7 @@ import { message, result, results, createDataItemSigner, dryrun } from '@permawe
 import { IBaseClient } from './abstract/IBaseClient';
 import { SortOrder, Tags } from './abstract/types';
 import { BaseClientConfig } from './abstract/BaseClientConfig';
-import { DryRunError, DryRunResultDataError, MessageError, MessageResultDataError, ResultError, ResultsError } from './BaseClientError';
+import { DryRunError, DryRunResultDataError, JsonParsingError, MessageError, MessageOutOfBoundsError, MessageResultDataError, ResultError, ResultsError } from './BaseClientError';
 import { MessageResult } from '@permaweb/aoconnect/dist/lib/result';
 import { ResultsResponse } from '@permaweb/aoconnect/dist/lib/results';
 import { Logger } from '../utils/logger/logger';
@@ -76,7 +76,6 @@ export class BaseClient extends IBaseClient {
 
     async dryrun(data: any = '', tags: Tags = [], anchor?: string, id?: string, owner?: string): Promise<DryRunResult> {
         try {
-            Logger.debug(data)
             return await dryrun({
                 process: this.baseConfig.processId,
                 data,
@@ -102,9 +101,33 @@ export class BaseClient extends IBaseClient {
         return response;
     }
 
-    protected getFirstMessageData<T>(result: MessageResult | DryRunResult): T {
-        return (result.Messages[0].Data as T)
+    protected getFirstMessageDataString(result: MessageResult | DryRunResult): string {
+        return this.getNthMessageDataString(result, 0);
     }
+
+    protected getNthMessageDataString(result: MessageResult | DryRunResult, n: number): string {
+        if (n < 0 || n >= result.Messages.length) {
+            throw new MessageOutOfBoundsError(n, result.Messages.length);
+        }
+        return result.Messages[n].Data;
+    }
+
+    protected getFirstMessageDataJson<T>(result: MessageResult | DryRunResult): T {
+        return this.getNthMessageDataJson(result, 0);
+    }
+
+    protected getNthMessageDataJson<T>(result: MessageResult | DryRunResult, n: number): T {
+        try {
+            if (n < 0 || n >= result.Messages.length) {
+                throw new MessageOutOfBoundsError(n, result.Messages.length);
+            }
+            const data = result.Messages[n].Data;
+            return JSON.parse(data) as T;
+        } catch (error) {
+            throw new JsonParsingError(`Invalid JSON in message data at index ${n}: ${result.Messages[n]?.Data}`, error as Error);
+        }
+    }
+
 
     public getProcessId(): string {
         return this.baseConfig.processId
