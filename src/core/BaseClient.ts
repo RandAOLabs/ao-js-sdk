@@ -2,7 +2,7 @@ import { message, result, results, createDataItemSigner, dryrun } from '@permawe
 import { IBaseClient } from './abstract/IBaseClient';
 import { SortOrder, Tags } from './abstract/types';
 import { BaseClientConfig } from './abstract/BaseClientConfig';
-import { DryRunError, DryRunResultDataError, JsonParsingError, MessageError, MessageOutOfBoundsError, MessageResultDataError, ResultError, ResultsError } from './BaseClientError';
+import { DryRunError, JsonParsingError, MessageError, MessageOutOfBoundsError, ResultError, ResultsError } from './BaseClientError';
 import { MessageResult } from '@permaweb/aoconnect/dist/lib/result';
 import { ResultsResponse } from '@permaweb/aoconnect/dist/lib/results';
 import { Logger } from '../utils/logger/logger';

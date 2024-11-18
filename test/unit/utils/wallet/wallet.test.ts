@@ -1,8 +1,8 @@
-import { getWallet } from '@utils/wallet';
-import { Environment, getEnvironment, getEnvironmentVariable } from '@utils/index';
+import { getWallet } from '../../../../src/index';
+import { Environment, getEnvironment, getEnvironmentVariable } from '../../../../src/index';
 import fs from 'fs';
 
-jest.mock('@utils/index');
+jest.mock('../../../../src/utils/environment/environment');
 
 describe('getWallet', () => {
     afterEach(() => {

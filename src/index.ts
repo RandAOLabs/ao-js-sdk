@@ -1,5 +1,5 @@
 // src/index.ts
-export * from "@core/index"
-export * from '@tokenClient/index';
-export * from '@randomClient/index';
-export * from '@utils/index'
+export * from "./core/index"
+export * from './clients/token/index';
+export * from './clients/random/index';
+export * from './utils/index'

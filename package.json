@@ -38,12 +38,12 @@
     "@types/node": "^22.8.6",
     "jest": "^29.7.0",
     "ts-jest": "^29.2.5",
-    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.6.3"
   },
   "dependencies": {
     "@permaweb/aoconnect": "^0.0.59",
     "arweave": "^1.15.5",
-    "dotenv": "^16.4.5"
+    "dotenv": "^16.4.5",
+    "tsconfig-paths": "^4.2.0"
   }
 }

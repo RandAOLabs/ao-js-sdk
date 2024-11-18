@@ -1,3 +1,5 @@
+import { GetProviderAvailableValuesResponse, GetOpenRandomRequestsResponse, GetRandomRequestsResponse } from "./types";
+
 // src/interfaces/IRandomClient.ts
 export interface IRandomClient {
     /**

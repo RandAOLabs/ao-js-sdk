@@ -1,5 +1,5 @@
-import { Environment, getEnvironment, getEnvironmentVariable } from '@utils/environment';
-import { EnvironmentVariableError, UnknownEnvironmentError } from '@utils/environment';
+import { getEnvironment, getEnvironmentVariable } from '../../../../src/index';
+import { EnvironmentVariableError, UnknownEnvironmentError } from '../../../../src/index';
 
 describe('Environment Functions', () => {
     afterEach(() => {
