@@ -1,4 +1,4 @@
-import { Environment, getEnvironment, getEnvironmentVariable } from "@utils/index"
+import { Environment, getEnvironment, getEnvironmentVariable } from "../environment/index"
 import { BrowserWalletError, FileReadError } from "./WalletError";
 
 export function getWallet() {

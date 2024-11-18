@@ -1,13 +1,13 @@
-import { TokenClient } from "@tokenClient/index";
+import { TokenClient } from "../../../src/index";
 import { dryrun, message } from "@permaweb/aoconnect";
-import { Logger } from "@utils/logger/logger";
+import { Logger } from "../../../src/index";
 import {
     BalanceError,
     BalancesError,
     TransferError,
     GetInfoError,
     MintError,
-} from "@tokenClient/TokenClientError";
+} from "../../../src/index";
 
 // Mocks
 jest.mock('@permaweb/aoconnect', () => ({
@@ -18,7 +18,7 @@ jest.mock('@permaweb/aoconnect', () => ({
     createDataItemSigner: jest.fn(), // Create a Jest mock function here
 }));
 
-jest.mock("@utils/logger/logger", () => ({
+jest.mock("@../../../../src/utils/logger/logger", () => ({
     Logger: {
         info: jest.fn(),
         warn: jest.fn(),

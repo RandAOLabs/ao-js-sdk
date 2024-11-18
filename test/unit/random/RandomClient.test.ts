@@ -1,10 +1,8 @@
-import { RandomClient } from "@randomClient/index";
-import { Logger } from "@utils/index";
-import { BaseClient } from "@core/BaseClient";
-import { ResultsResponse } from "@permaweb/aoconnect/dist/lib/results";
+import { RandomClient } from "../../../src/index";
+import { BaseClient } from "../../../src/core/BaseClient";
 import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
 import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
-import { TokenClient } from "@tokenClient/index"; // Assuming this is the correct import for TokenClient
+import { TokenClient } from "../../../src/index"; // Assuming this is the correct import for TokenClient
 
 
 // Mock individual methods of BaseClient using jest.spyOn
@@ -22,7 +20,7 @@ const dryRunResult: DryRunResult = {
 }
 jest.spyOn(BaseClient.prototype, 'dryrun').mockResolvedValue(dryRunResult);
 jest.spyOn(BaseClient.prototype, 'messageResult').mockResolvedValue(messageResult);
-jest.mock("@tokenClient/index");
+jest.mock("../../../src/clients/token/index");
 
 describe("RandomClient Unit Test", () => {
     let client: RandomClient;
