@@ -1,6 +1,8 @@
 import { TokenClient } from "@tokenClient/index";
 import { dryrun, message } from "@permaweb/aoconnect";
 import { Tags } from "@src/core/abstract/types";
+import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
+import { BaseClient } from "@src/core";
 
 // Mock the functions from '@permaweb/aoconnect'
 //mocks
@@ -73,13 +75,20 @@ describe("TokenClient", () => {
                 { name: "Tag1", value: "Value1" },
                 { name: "Tag2", value: "Value2" },
             ];
-            (message as jest.Mock).mockResolvedValueOnce(undefined);
+
+
+            const messageResult: MessageResult = {
+                Output: undefined,
+                Messages: [{ Data: "You transferred", Tags: [] }],
+                Spawns: []
+            }
+            jest.spyOn(BaseClient.prototype, 'messageResult').mockResolvedValue(messageResult);
 
             // Act
-            await client.transfer(recipient, quantity, forwardedTags);
+            const transfered = await client.transfer(recipient, quantity, forwardedTags);
 
             // Assert
-            expect(message).toHaveBeenCalled();
+            expect(transfered).toBeTruthy();
         });
     });
 
