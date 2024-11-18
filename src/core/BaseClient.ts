@@ -76,7 +76,7 @@ export class BaseClient extends IBaseClient {
 
     async dryrun(data: any = '', tags: Tags = [], anchor?: string, id?: string, owner?: string): Promise<DryRunResult> {
         try {
-            return await dryrun({
+            const result = await dryrun({
                 process: this.baseConfig.processId,
                 data,
                 tags,
@@ -84,6 +84,7 @@ export class BaseClient extends IBaseClient {
                 id,
                 owner,
             });
+            return result
         } catch (error: any) {
             Logger.error(`Error performing dry run: ${JSON.stringify(error.message)}`);
             throw new DryRunError(error);
@@ -97,8 +98,8 @@ export class BaseClient extends IBaseClient {
             tags,
             anchor
         );
-        const response = await this.result(result_id);
-        return response;
+        const result = await this.result(result_id);
+        return result;
     }
 
     protected getFirstMessageDataString(result: MessageResult | DryRunResult): string {

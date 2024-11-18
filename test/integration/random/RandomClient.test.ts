@@ -48,7 +48,8 @@ describe("RandomClient Integration Test", () => {
             const provider = await client.getCallingWalletAddress();
             const response = await client.getOpenRandomRequests(provider);
             expect(response).toBeTruthy();
-            openRandomRequestId = response.activeRequests[0]; // Set the ID for use in the following tests
+            openRandomRequestId = response.activeRequests.request_ids[0]; // Set the ID for use in the following tests
+            expect(openRandomRequestId).toBeTruthy()
         });
     });
 
@@ -68,8 +69,8 @@ describe("RandomClient Integration Test", () => {
             if (!openRandomRequestId) {
                 throw new Error("No open random request ID available for testing.");
             }
-            const modulus = "modulus1";
-            const input = "input1";
+            const modulus = "7";
+            const input = "3";
             const response = await client.postVDFChallenge(openRandomRequestId, modulus, input);
             expect(response).toBeTruthy();
         });
@@ -80,8 +81,8 @@ describe("RandomClient Integration Test", () => {
             if (!openRandomRequestId) {
                 throw new Error("No open random request ID available for testing.");
             }
-            const output = "output1";
-            const proof = "proof1";
+            const output = "4";
+            const proof = "[1,2]";
             const response = await client.postVDFOutputAndProof(openRandomRequestId, output, proof);
             expect(response).toBeTruthy();
         });

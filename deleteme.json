@@ -1,0 +1,90 @@
+{
+    "Messages": [
+        {
+            "Data": "\u001b[90mYou transferred \u001b[34m1\u001b[90m to \u001b[32mXgUoOWcsHDwibQCWoAdii3hw1sFh2sCExeGnVZsnzoo\u001b[0m",
+            "Tags": [
+                {
+                    "name": "Data-Protocol",
+                    "value": "ao"
+                },
+                {
+                    "name": "Variant",
+                    "value": "ao.TN.1"
+                },
+                {
+                    "name": "Type",
+                    "value": "Message"
+                },
+                {
+                    "name": "Reference",
+                    "value": "201"
+                },
+                {
+                    "name": "Action",
+                    "value": "Debit-Notice"
+                },
+                {
+                    "name": "Quantity",
+                    "value": "1"
+                },
+                {
+                    "name": "X-Providers",
+                    "value": "{\"provider_ids\":[\"5waCcAi35PC_ptF2MiIhL34Cq55jDew_Gyh2oy2s298\"]}"
+                },
+                {
+                    "name": "Recipient",
+                    "value": "XgUoOWcsHDwibQCWoAdii3hw1sFh2sCExeGnVZsnzoo"
+                }
+            ],
+            "Target": "5waCcAi35PC_ptF2MiIhL34Cq55jDew_Gyh2oy2s298",
+            "Anchor": "00000000000000000000000000000201"
+        },
+        {
+            "Data": "\u001b[90mYou received \u001b[34m1\u001b[90m from \u001b[32m5waCcAi35PC_ptF2MiIhL34Cq55jDew_Gyh2oy2s298\u001b[0m",
+            "Tags": [
+                {
+                    "name": "Data-Protocol",
+                    "value": "ao"
+                },
+                {
+                    "name": "Variant",
+                    "value": "ao.TN.1"
+                },
+                {
+                    "name": "Type",
+                    "value": "Message"
+                },
+                {
+                    "name": "Reference",
+                    "value": "202"
+                },
+                {
+                    "name": "Sender",
+                    "value": "5waCcAi35PC_ptF2MiIhL34Cq55jDew_Gyh2oy2s298"
+                },
+                {
+                    "name": "Action",
+                    "value": "Credit-Notice"
+                },
+                {
+                    "name": "Quantity",
+                    "value": "1"
+                },
+                {
+                    "name": "X-Providers",
+                    "value": "{\"provider_ids\":[\"5waCcAi35PC_ptF2MiIhL34Cq55jDew_Gyh2oy2s298\"]}"
+                }
+            ],
+            "Target": "XgUoOWcsHDwibQCWoAdii3hw1sFh2sCExeGnVZsnzoo",
+            "Anchor": "00000000000000000000000000000202"
+        }
+    ],
+    "Assignments": [],
+    "Spawns": [],
+    "Output": {
+        "prompt": "\u001b[32mRandAO\u001b[90m@\u001b[34maos-2.0.0\u001b[90m[Inbox:\u001b[31m16\u001b[90m]\u001b[0m> ",
+        "data": "",
+        "print": true
+    },
+    "GasUsed": 0
+}
