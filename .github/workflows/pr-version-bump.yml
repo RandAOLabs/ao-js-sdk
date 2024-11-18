@@ -1,0 +1,43 @@
+name: Check Version Bump
+
+on:
+  pull_request:
+    branches:
+      - "**"
+
+jobs:
+  version-check:
+    name: Check Version Bump
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository with full history
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # Fetch entire history to access previous commits
+
+      # Set up Node.js environment
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22
+
+      # Install jq for JSON parsing
+      - name: Install jq
+        run: sudo apt-get install -y jq
+
+      # Check if version has been bumped
+      - name: Check version bump
+        id: version-check
+        run: |
+          PREVIOUS_VERSION=$(git show HEAD~1:package.json | jq -r .version || echo "none")
+          CURRENT_VERSION=$(jq -r .version package.json)
+          if [ "$PREVIOUS_VERSION" = "none" ]; then
+            echo "No previous version found. Skipping check."
+          elif [ "$PREVIOUS_VERSION" = "$CURRENT_VERSION" ]; then
+            echo "Version has not been bumped! Please update the version in package.json."
+            exit 1
+          else
+            echo "Version bumped successfully from $PREVIOUS_VERSION to $CURRENT_VERSION."
+          fi
