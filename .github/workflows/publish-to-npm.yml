@@ -20,7 +20,16 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 22
-          cache: "npm"
+
+      - name: Bump version
+        run: npm version patch --no-git-tag-version
+      - name: Commit version bump
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add package.json package-lock.json
+          git commit -m "ci: bump version to $(node -p "require('./package.json').version")"
+          git push
 
       # Install dependencies
       - name: Install dependencies
