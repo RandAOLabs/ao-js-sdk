@@ -1,4 +1,4 @@
-name: Validate Pull Request
+name: Run Unit Tests
 
 on:
   pull_request:
