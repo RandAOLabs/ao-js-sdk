@@ -9,7 +9,10 @@ jobs:
   publish:
     name: Publish Package
     runs-on: ubuntu-latest
-
+    
+    permissions:
+      contents: write
+      
     steps:
       # Checkout the repository
       - name: Checkout code
