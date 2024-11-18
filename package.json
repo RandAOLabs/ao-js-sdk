@@ -1,6 +1,6 @@
 {
   "name": "ao-process-clients",
-  "version": "1.0.4",
+  "version": "2.0.4",
   "description": "A modular TypeScript API client library for AO Process interactions",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
