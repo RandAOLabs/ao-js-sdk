@@ -46,7 +46,6 @@ export class RandomClient extends BaseClient implements IRandomClient {
             const result = await this.messageResult(data, tags);
             this.checkResultForErrors(result)
             const messageData: string = this.getFirstMessageDataString(result)
-            Logger.info(messageData)
             return messageData.includes(SUCCESS_MESSAGE)
         } catch (error: any) {
             Logger.error(`Error posting VDF challenge: ${error.message}`);
@@ -117,7 +116,7 @@ export class RandomClient extends BaseClient implements IRandomClient {
 
     async createRequest(provider_ids: string[]): Promise<boolean> {
         try {
-            const paymentAmount = "1" // TODO determine payment amount
+            const paymentAmount = "100" // TODO determine payment amount
             const forwardedTags: Tags = [{
                 name: 'Providers',
                 value: JSON.stringify({ provider_ids })
@@ -138,7 +137,6 @@ export class RandomClient extends BaseClient implements IRandomClient {
             const result = await this.messageResult(data, tags);
             this.checkResultForErrors(result)
             const messageData: string = this.getFirstMessageDataString(result)
-            Logger.info(messageData)
             return messageData.includes(SUCCESS_MESSAGE)
         } catch (error: any) {
             Logger.error(`Error posting VDF output and proof: ${error.message}`);

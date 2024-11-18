@@ -27,10 +27,16 @@ type GetProviderAvailableValuesResponse = {
     availibleRandomValues: number;
 };
 
+type RequestList = {
+    request_ids: string[];
+};
+
 type GetOpenRandomRequestsResponse = {
     providerId: string;
-    activeRequests: string;
+    activeRequests: RequestList;
 };
+
+
 
 type RandomRequestResponse = {
     randomRequest: RandomRequest;
