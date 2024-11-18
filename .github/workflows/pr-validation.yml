@@ -36,3 +36,16 @@ jobs:
       # Run unit tests
       - name: Run unit tests
         run: npm run test:unit
+
+      # Check if version has been bumped
+      - name: Check version bump
+        id: version-check
+        run: |
+          PREVIOUS_VERSION=$(git show HEAD~1:package.json | jq -r .version)
+          CURRENT_VERSION=$(jq -r .version package.json)
+          if [ "$PREVIOUS_VERSION" = "$CURRENT_VERSION" ]; then
+            echo "Version has not been bumped! Please update the version in package.json."
+            exit 1
+          else
+            echo "Version bumped successfully."
+          fi
