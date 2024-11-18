@@ -25,6 +25,10 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      # Create .env file with secret values
+      - name: Set up environment variables
+        run: echo 'PATH_TO_WALLET="test/testWallet.json"' > .env
+
       # Build the project
       - name: Build project
         run: npm run build
