@@ -1,0 +1,38 @@
+name: Validate Pull Request
+
+on:
+  pull_request:
+    branches:
+      - "**" # Trigger on all branches for PRs
+
+jobs:
+  validate:
+    name: PR Validation
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Set up Node.js environment
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22
+
+      # Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # Create .env file with secret values
+      - name: Set up environment variables
+        run: echo 'PATH_TO_WALLET="test/testWallet.json"' > .env
+
+      # Build the project
+      - name: Build project
+        run: npm run build
+
+      # Run unit tests
+      - name: Run unit tests
+        run: npm run test:unit
