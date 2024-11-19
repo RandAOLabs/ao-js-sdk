@@ -1,7 +1,7 @@
 import { Tags, BaseClient } from "../../core/index";
 import { Logger } from "../../utils/index"
 import { ITokenClient } from "./abstract/ITokenClient";
-import { TOKEN_CLIENT_AUTO_CONFIGURATION } from "./TokenClientAutoConfiguration";
+import { getTokenClientAutoConfiguration } from "./TokenClientAutoConfiguration";
 import { BalanceError, BalancesError, GetInfoError, MintError, TransferError } from "./TokenClientError";
 import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
 import { SUCCESS_MESSAGE } from "./constants";
@@ -10,7 +10,7 @@ import { SUCCESS_MESSAGE } from "./constants";
 export class TokenClient extends BaseClient implements ITokenClient {
     /* Constructors */
     public static autoConfiguration(): TokenClient {
-        return new TokenClient(TOKEN_CLIENT_AUTO_CONFIGURATION);
+        return new TokenClient(getTokenClientAutoConfiguration());
     }
     /* Constructors */
 

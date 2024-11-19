@@ -1,7 +1,8 @@
+import { JWKInterface } from "arweave/node/lib/wallet";
 import { Environment, getEnvironment, getEnvironmentVariable } from "../environment/index"
 import { BrowserWalletError, FileReadError } from "./WalletError";
 
-export function getWallet() {
+export function getWallet(): JWKInterface { //type here
     const environment = getEnvironment();
 
     switch (environment) {
