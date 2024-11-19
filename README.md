@@ -13,8 +13,8 @@ npm i ao-process-clients
 ```
 ## Getting Started
 ```ts
-import { RandomClient } from "ao-process-clients";
+import { IRandomClient, RandomClient } from "ao-process-clients"
 
-const client = RandomClient.autoConfiguration()
+const client: IRandomClient = RandomClient.autoConfiguration()
 client.getOpenRandomRequests("providerId")
 ```
