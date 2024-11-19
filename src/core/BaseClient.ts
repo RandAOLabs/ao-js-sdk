@@ -92,7 +92,7 @@ export class BaseClient extends IBaseClient {
     }
     /* Core AO Functions */
     /* Utility */
-    async messageResult(data: string = '', tags: Tags = [], anchor?: string): Promise<MessageResult> {
+    protected async messageResult(data: string = '', tags: Tags = [], anchor?: string): Promise<MessageResult> {
         const result_id = await this.message(
             data,
             tags,
