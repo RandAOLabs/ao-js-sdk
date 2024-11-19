@@ -1,5 +1,5 @@
-import { RandomClient } from "@randomClient/index";
-import { Logger } from "@utils/index";
+import { RandomClient } from "../../../src/index";
+import { Logger } from "../../../src/utils/index";
 // Integration test for all functions in RandomClient
 jest.setTimeout(60000); // Set timeout to 60 seconds for all tests// Integration test for all functions in RandomClient
 describe("RandomClient Integration Test", () => {

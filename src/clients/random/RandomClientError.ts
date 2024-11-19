@@ -1,4 +1,3 @@
-import { BaseClientError } from "@src/core";
 
 // RandomClientError.ts
 export class RandomClientError extends Error {

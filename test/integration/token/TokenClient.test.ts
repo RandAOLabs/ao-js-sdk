@@ -1,5 +1,5 @@
-import { TokenClient } from "@tokenClient/index";
-import { Logger } from "@utils/index";
+import { TokenClient } from "../../../src/index";
+import { Logger } from "../../../src/index";
 
 // Integration test for the getInfo function in TokenClient
 

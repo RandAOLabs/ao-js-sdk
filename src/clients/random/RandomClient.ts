@@ -1,10 +1,10 @@
 // src/RandomClient.ts
-import { Tags } from '@src/core';
+import { Tags } from '../../index';
 import { BaseClient } from '../../core/BaseClient';
 import { IRandomClient } from './abstract/IRandomClient';
-import { Logger } from '@src/utils';
+import { Logger } from '../../index';
 import { PostVDFChallengeError, ProviderAvailableValuesError, UpdateProviderAvailableValuesError, OpenRandomRequestsError, RandomRequestsError, CreateRequestError, PostVDFOutputAndProofError } from './RandomClientError';
-import { RANDOM_CLIENT_AUTO_CONFIGURATION } from './RandomClientAutoConfiguration';
+import { getRandomClientAutoConfiguration } from './RandomClientAutoConfiguration';
 import { RandomClientConfig } from './abstract/RandomClientConfig';
 import { TokenClientConfig } from '../token/abstract/TokenClientConfig';
 import { TokenClient } from '../token';
@@ -12,6 +12,7 @@ import { MessageResult } from '@permaweb/aoconnect/dist/lib/result';
 import { RandomProcessError } from './RandomProcessError';
 import { DryRunResult } from '@permaweb/aoconnect/dist/lib/dryrun';
 import { SUCCESS_MESSAGE } from './constants';
+import { GetOpenRandomRequestsResponse, GetProviderAvailableValuesResponse, GetRandomRequestsResponse } from './abstract/types';
 
 
 /** @see {@link https://github.com/RandAOLabs/Random-Process | specification} */
@@ -32,7 +33,7 @@ export class RandomClient extends BaseClient implements IRandomClient {
     }
 
     public static autoConfiguration(): RandomClient {
-        return new RandomClient(RANDOM_CLIENT_AUTO_CONFIGURATION);
+        return new RandomClient(getRandomClientAutoConfiguration());
     }
     /* Constructors */
 

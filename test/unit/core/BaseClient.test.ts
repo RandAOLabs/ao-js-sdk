@@ -1,6 +1,6 @@
 import { message, results, result, dryrun } from '@permaweb/aoconnect';
-import { BaseClient } from '@core/index';
-import { SortOrder } from '@src/core/abstract/types';
+import { BaseClient } from '../../../src/core/index';
+import { SortOrder } from '../../../src/core/abstract/types';
 
 // Mocking external dependencies
 
@@ -13,7 +13,7 @@ jest.mock('@permaweb/aoconnect', () => ({
     dryrun: jest.fn(),
     createDataItemSigner: jest.fn(), // Create a Jest mock function here
 }));
-jest.mock('@utils/logger/logger', () => ({
+jest.mock('../../../src/utils/logger/logger', () => ({
     Logger: {
         info: jest.fn(),
         warn: jest.fn(),

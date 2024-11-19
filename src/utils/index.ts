@@ -1,2 +1,3 @@
-export * from "./environment/environment"
+export * from "./environment"
 export * from "./logger/logger"
+export * from "./wallet"
