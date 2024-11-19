@@ -6,9 +6,15 @@
 [![GitHub stars](https://img.shields.io/github/stars/RandAOLabs/ao-process-clients?style=social)](https://github.com/RandAOLabs/ao-process-clients)
 
 A modular TypeScript Process client library for AO Process interactions. This library simplifies interactions with various AO processes.
-
+---
 ## Install
 ```bash
 npm i ao-process-clients
 ```
----
+## Getting Started
+```ts
+import { RandomClient } from "ao-process-clients";
+
+const client = RandomClient.autoConfiguration()
+client.getOpenRandomRequests("providerId")
+```
