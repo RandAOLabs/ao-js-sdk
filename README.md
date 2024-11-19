@@ -18,3 +18,13 @@ import { IRandomClient, RandomClient } from "ao-process-clients"
 const client: IRandomClient = RandomClient.autoConfiguration()
 client.getOpenRandomRequests("providerId")
 ```
+
+## Environment
+### Node
+Create a `.env` file:
+```
+PATH_TO_WALLET="wallet.json"
+```
+And a JWKInterface json file representing a wallet.
+### Browser
+Ensure `globalThis.arweaveWallet` is set to an arweave wallet.
