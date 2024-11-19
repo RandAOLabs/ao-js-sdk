@@ -13,27 +13,7 @@
         "forceConsistentCasingInFileNames": true,
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
-        "baseUrl": ".",
-        "paths": {
-            "@src/*": [
-                "src/*"
-            ],
-            "@test/*": [
-                "test/*"
-            ],
-            "@core/*": [
-                "src/core/*"
-            ],
-            "@randomClient/*": [
-                "src/clients/random/*"
-            ],
-            "@tokenClient/*": [
-                "src/clients/token/*"
-            ],
-            "@utils/*": [
-                "src/utils/*"
-            ]
-        }
+        "baseUrl": "."
     },
     "include": [
         "src",

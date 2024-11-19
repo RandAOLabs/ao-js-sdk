@@ -1,4 +1,4 @@
-type ProviderVDFResult = {
+export type ProviderVDFResult = {
     request_id: string;
     provider_id: string;
     input_value: string;
@@ -9,7 +9,7 @@ type ProviderVDFResult = {
 };
 
 
-type RandomRequest = {
+export type RandomRequest = {
     request_id: string;
     requester: string;
     providers: string;
@@ -17,32 +17,32 @@ type RandomRequest = {
     created_at: number;
 };
 
-type ProviderVDFResults = {
+export type ProviderVDFResults = {
     requestResponses: ProviderVDFResult[];
 };
 
 
-type GetProviderAvailableValuesResponse = {
+export type GetProviderAvailableValuesResponse = {
     providerId: string;
     availibleRandomValues: number;
 };
 
-type RequestList = {
+export type RequestList = {
     request_ids: string[];
 };
 
-type GetOpenRandomRequestsResponse = {
+export type GetOpenRandomRequestsResponse = {
     providerId: string;
     activeRequests: RequestList;
 };
 
 
 
-type RandomRequestResponse = {
+export type RandomRequestResponse = {
     randomRequest: RandomRequest;
     providerVDFResults: ProviderVDFResults;
 };
 
-type GetRandomRequestsResponse = {
+export type GetRandomRequestsResponse = {
     randomRequestResponses: RandomRequestResponse[];
 };
