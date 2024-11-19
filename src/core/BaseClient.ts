@@ -6,7 +6,7 @@ import { DryRunError, JsonParsingError, MessageError, MessageOutOfBoundsError, R
 import { MessageResult } from '@permaweb/aoconnect/dist/lib/result';
 import { ResultsResponse } from '@permaweb/aoconnect/dist/lib/results';
 import { Logger } from '../utils/logger/logger';
-import { BASE_CLIENT_AUTO_CONFIGURATION } from './BaseClientAutoConfiguration';
+import { getBaseClientAutoConfiguration } from './BaseClientAutoConfiguration';
 import { DryRunResult } from '@permaweb/aoconnect/dist/lib/dryrun';
 import Arweave from 'arweave';
 
@@ -23,7 +23,7 @@ export class BaseClient extends IBaseClient {
     }
 
     public static autoConfiguration(): BaseClient {
-        return new BaseClient(BASE_CLIENT_AUTO_CONFIGURATION)
+        return new BaseClient(getBaseClientAutoConfiguration())
     }
     /* Constructors */
     /* Core AO Functions */

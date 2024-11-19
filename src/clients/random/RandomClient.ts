@@ -4,7 +4,7 @@ import { BaseClient } from '../../core/BaseClient';
 import { IRandomClient } from './abstract/IRandomClient';
 import { Logger } from '../../index';
 import { PostVDFChallengeError, ProviderAvailableValuesError, UpdateProviderAvailableValuesError, OpenRandomRequestsError, RandomRequestsError, CreateRequestError, PostVDFOutputAndProofError } from './RandomClientError';
-import { RANDOM_CLIENT_AUTO_CONFIGURATION } from './RandomClientAutoConfiguration';
+import { getRandomClientAutoConfiguration } from './RandomClientAutoConfiguration';
 import { RandomClientConfig } from './abstract/RandomClientConfig';
 import { TokenClientConfig } from '../token/abstract/TokenClientConfig';
 import { TokenClient } from '../token';
@@ -33,7 +33,7 @@ export class RandomClient extends BaseClient implements IRandomClient {
     }
 
     public static autoConfiguration(): RandomClient {
-        return new RandomClient(RANDOM_CLIENT_AUTO_CONFIGURATION);
+        return new RandomClient(getRandomClientAutoConfiguration());
     }
     /* Constructors */
 
