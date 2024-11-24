@@ -22,7 +22,7 @@ export class RandomClient extends BaseClient implements IRandomClient {
     /* Fields */
 
     /* Constructors */
-    protected constructor(randomConfig: RandomClientConfig) {
+    public constructor(randomConfig: RandomClientConfig) {
         super(randomConfig)
         const tokenConfig: TokenClientConfig = {
             processId: randomConfig.tokenProcessId,
