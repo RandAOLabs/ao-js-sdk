@@ -1,20 +1,25 @@
 import { JWKInterface } from "arweave/node/lib/wallet";
-import { Environment, getEnvironment, getEnvironmentVariable } from "../environment/index"
+import { Environment, EnvironmentVariableError, getEnvironment, getEnvironmentVariable } from "../environment/index"
 import { BrowserWalletError, FileReadError } from "./WalletError";
+import { Logger } from "../logger/logger";
 
-export function getWallet(): JWKInterface { //type here
+export function getWallet(): JWKInterface | undefined { //type here
     const environment = getEnvironment();
 
     switch (environment) {
         case Environment.NODE: {
             const fs = require('fs');
-            const pathToWallet = getEnvironmentVariable('PATH_TO_WALLET');
 
+            let pathToWallet = "MissingWalletPath";
             try {
-                const walletData = fs.readFileSync(pathToWallet, 'utf-8');
-                return JSON.parse(walletData);
-            } catch (error) {
-                if (error instanceof Error) {
+                pathToWallet = getEnvironmentVariable('PATH_TO_WALLET'); // May throw EnvironmentVariableError
+                const walletData = fs.readFileSync(pathToWallet, 'utf-8'); // May throw FS errors
+                return JSON.parse(walletData); // May throw SyntaxError if JSON is malformed
+            } catch (error: unknown) {
+                if (error instanceof EnvironmentVariableError) {
+                    Logger.warn(`Warning: Missing environment variable: ${error.message}`)
+                    return undefined;
+                } else if (error instanceof Error) {
                     throw new FileReadError(pathToWallet, error.message);
                 } else {
                     throw new FileReadError(pathToWallet, 'Unknown error');
