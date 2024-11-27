@@ -3,6 +3,6 @@ import { RandomClientConfig } from "./abstract/RandomClientConfig";
 
 export const getRandomClientAutoConfiguration = (): RandomClientConfig => ({
     ...getBaseClientAutoConfiguration(),
-    processId: "XgUoOWcsHDwibQCWoAdii3hw1sFh2sCExeGnVZsnzoo",
+    processId: "NlHgeFYslkUhiOdF1JcbTC9nkxFkwCJs8wjd2sBTjf8",
     tokenProcessId: "OeX1V1xSabUzUtNykWgu9GEaXqacBZawtK12_q5gXaA",
 });

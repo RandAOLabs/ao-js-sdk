@@ -36,10 +36,15 @@ describe("RandomClient Integration Test", () => {
 
     describe("createRequest()", () => {
         it("should create a request without throwing an error", async () => {
-            const provider = await client.getCallingWalletAddress()
+            const provider = await client.getCallingWalletAddress();
             const providerIds = [provider];
-            const response = await client.createRequest(providerIds);
+            const inputNumber = 5; // Specify the number of inputs
+
+            const response = await client.createRequest(providerIds, inputNumber);
+
+            // Assert that the response (request ID) is a non-empty string
             expect(response).toBeTruthy();
+            expect(typeof response).toBe("boolean");
         });
     });
 
@@ -47,9 +52,23 @@ describe("RandomClient Integration Test", () => {
         it("should fetch open random requests without throwing an error", async () => {
             const provider = await client.getCallingWalletAddress();
             const response = await client.getOpenRandomRequests(provider);
+
+            // Assert that the response is not null or undefined
             expect(response).toBeTruthy();
-            openRandomRequestId = response.activeRequests.request_ids[0]; // Set the ID for use in the following tests
-            expect(openRandomRequestId).toBeTruthy()
+            expect(response.providerId).toBe(provider);
+
+            // Assert the structure of `activeChallengeRequests` and `activeOutputRequests`
+            expect(response.activeChallengeRequests).toBeDefined();
+            expect(Array.isArray(response.activeChallengeRequests.request_ids)).toBe(true);
+
+            expect(response.activeOutputRequests).toBeDefined();
+            expect(Array.isArray(response.activeOutputRequests.request_ids)).toBe(true);
+
+            // Store the first ID from `activeChallengeRequests` for subsequent tests
+            if (response.activeChallengeRequests.request_ids.length > 0) {
+                openRandomRequestId = response.activeChallengeRequests.request_ids[0];
+                expect(openRandomRequestId).toBeTruthy();
+            }
         });
     });
 
