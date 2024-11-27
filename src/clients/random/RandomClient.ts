@@ -115,19 +115,21 @@ export class RandomClient extends BaseClient implements IRandomClient {
         }
     }
 
-    async createRequest(provider_ids: string[]): Promise<boolean> {
+    async createRequest(provider_ids: string[], requestedInputs: number, callbackId: string = ''): Promise<boolean> {
         try {
-            const paymentAmount = "100" // TODO determine payment amount
-            const forwardedTags: Tags = [{
-                name: 'Providers',
-                value: JSON.stringify({ provider_ids })
-            }]
-            return await this.tokenClient.transfer(this.getProcessId(), paymentAmount, forwardedTags);
+            const paymentAmount = "100"; // TODO: Determine payment amount dynamically if needed
+            const tags = [
+                { name: "Providers", value: JSON.stringify({ provider_ids }) },
+                { name: "CallbackId", value: callbackId },
+                { name: "RequestedInputs", value: JSON.stringify({ requested_inputs: requestedInputs }) }
+            ];
+            return await this.tokenClient.transfer(this.getProcessId(), paymentAmount, tags);
         } catch (error: any) {
             Logger.error(`Error creating request: ${error.message}`);
             throw new CreateRequestError(error);
         }
     }
+
 
     async postVDFOutputAndProof(randomnessRequestId: string, output: string, proof: string): Promise<boolean> {
         try {

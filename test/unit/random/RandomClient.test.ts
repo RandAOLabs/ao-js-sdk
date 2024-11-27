@@ -86,8 +86,9 @@ describe("RandomClient Unit Test", () => {
     describe("createRequest()", () => {
         it("should create a request and return true on success", async () => {
             const providerIds = ["provider-id-1", "provider-id-2"];
+            const inputNumber = 1;
 
-            const response = await client.createRequest(providerIds);
+            const response = await client.createRequest(providerIds, inputNumber);
 
             // Assert the method returns true
             expect(response).toBe(true);
