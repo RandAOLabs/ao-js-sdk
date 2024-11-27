@@ -51,8 +51,10 @@ export interface IRandomClient {
 
     /**
      * Creates a new randomness request using a list of provider IDs.
-     * @param providers_ids - An array of provider IDs to include in the request.
+     * @param providersIds - An array of provider IDs to include in the request.
+     * @param requestedInputs - The number of requested random inputs.
+     * @param callbackId - A unique identifier for tracking the request callback.
      * @returns - A promise that resolves with a boolean indicating success.
      */
-    createRequest(providers_ids: string[]): Promise<boolean>;
+    createRequest(providersIds: string[], requestedInputs: number, callbackId: string): Promise<boolean>;
 }
