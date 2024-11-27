@@ -33,7 +33,8 @@ export type RequestList = {
 
 export type GetOpenRandomRequestsResponse = {
     providerId: string;
-    activeRequests: RequestList;
+    activeChallengeRequests: RequestList;
+    activeOutputRequests: RequestList;
 };
 
 
