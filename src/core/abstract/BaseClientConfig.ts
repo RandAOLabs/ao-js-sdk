@@ -2,6 +2,6 @@ import { JWKInterface } from 'arweave/node/lib/wallet.js';
 
 export interface BaseClientConfig {
     processId: string
-    wallet: JWKInterface //TODO
+    wallet: JWKInterface | any 
     environment: 'local' | 'mainnet'
 }
