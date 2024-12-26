@@ -1,13 +1,13 @@
 import { Tags, BaseClient } from "../../core/index";
 import { Logger } from "../../utils/index"
-import { ITokenClient } from "./abstract/ITokenClient";
+import { ITokenClient, IGrantToken } from "./abstract";
 import { getTokenClientAutoConfiguration } from "./TokenClientAutoConfiguration";
-import { BalanceError, BalancesError, GetInfoError, MintError, TransferError } from "./TokenClientError";
+import { BalanceError, BalancesError, GetInfoError, MintError, TransferError, GrantError } from "./TokenClientError";
 import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
 import { TRANSFER_SUCCESS_MESSAGE } from "./constants";
 
 /** @see {@link https://cookbook_ao.g8way.io/references/token.html | specification} */
-export class TokenClient extends BaseClient implements ITokenClient {
+export class TokenClient extends BaseClient implements ITokenClient, IGrantToken {
     /* Constructors */
     public static autoConfiguration(): TokenClient {
         return new TokenClient(getTokenClientAutoConfiguration());
@@ -90,6 +90,22 @@ export class TokenClient extends BaseClient implements ITokenClient {
         } catch (error: any) {
             Logger.error(`Error minting quantity ${quantity}: ${error.message}`);
             throw new MintError(quantity, error);
+        }
+    }
+
+    public async grant(quantity: string, recipient?: string): Promise<boolean> {
+        try {
+            const recipientAddress = recipient ?? await this.getCallingWalletAddress();
+            const result = await this.messageResult('', [
+                { name: "Action", value: "Grant" },
+                { name: "Quantity", value: quantity },
+                { name: "Recipient", value: recipientAddress }
+            ]);
+            const actionValue = this.findTagValue(result.Messages[0].Tags, "Action");
+            return actionValue !== "Grant-Error";
+        } catch (error: any) {
+            Logger.error(`Error granting ${quantity} tokens to ${recipient}: ${error.message}`);
+            throw new GrantError(quantity, recipient ?? 'self', error);
         }
     }
     /* Core Token Functions */
