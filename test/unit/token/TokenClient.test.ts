@@ -113,16 +113,21 @@ describe("TokenClient", () => {
      * Test case: Minting tokens
      */
     describe("mint()", () => {
-        it("should mint tokens with correct parameters", async () => {
+        it("should mint tokens and return true on success", async () => {
             // Arrange
             const quantity = "1000";
-            (message as jest.Mock).mockResolvedValueOnce(undefined);
+            const messageResult: MessageResult = {
+                Output: undefined,
+                Messages: [{ Data: "200: Success", Tags: [] }],
+                Spawns: []
+            }
+            jest.spyOn(BaseClient.prototype, 'messageResult').mockResolvedValue(messageResult);
 
             // Act
-            await client.mint(quantity);
+            const response = await client.mint(quantity);
 
             // Assert
-            expect(message).toHaveBeenCalled();
+            expect(response).toBe(true);
         });
     });
 });
