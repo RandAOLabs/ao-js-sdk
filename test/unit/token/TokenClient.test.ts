@@ -118,7 +118,7 @@ describe("TokenClient", () => {
             const quantity = "1000";
             const messageResult: MessageResult = {
                 Output: undefined,
-                Messages: [{ Data: "200: Success", Tags: [] }],
+                Messages: [{ Tags: [{ name: "Action", value: "Mint-Error" }] }],
                 Spawns: []
             }
             jest.spyOn(BaseClient.prototype, 'messageResult').mockResolvedValue(messageResult);
@@ -127,7 +127,7 @@ describe("TokenClient", () => {
             const response = await client.mint(quantity);
 
             // Assert
-            expect(response).toBe(true);
+            expect(response).toBe(false);
         });
     });
 });
