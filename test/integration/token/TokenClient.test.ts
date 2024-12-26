@@ -43,4 +43,38 @@ describe("TokenClient Integration Test", () => {
             await expect(client.getInfo(token)).resolves.not.toThrow();
         });
     });
+
+    describe("grant()", () => {
+        it("should increase balance after granting tokens", async () => {
+            const initialBalance = await client.balance();
+            const grantAmount = "100";
+            
+            await client.grant(grantAmount);
+            
+            // Wait a bit for the grant to process
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            
+            const finalBalance = await client.balance();
+            const initialNum = BigInt(initialBalance);
+            const finalNum = BigInt(finalBalance);
+            const difference = finalNum - initialNum;
+            
+            expect(difference).toBe(BigInt(grantAmount));
+        });
+
+        it("should grant tokens to a specified recipient", async () => {
+            const quantity = "100";
+            const recipient = "recipient-address";
+            const result = await client.grant(quantity, recipient);
+            expect(result).toBe(true);
+        });
+
+        it("should handle errors when granting tokens", async () => {
+            const quantity = "-100"; // Invalid quantity
+            const recipient = "recipient-address";
+            await expect(client.grant(quantity, recipient))
+                .rejects
+                .toThrow();
+        });
+    });
 });
