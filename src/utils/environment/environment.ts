@@ -6,6 +6,14 @@ export enum Environment {
 }
 
 export function getEnvironment(): Environment {
+    console.log('Detecting environment:', {
+        windowDefined: typeof window !== 'undefined',
+        windowDocumentDefined: typeof window?.document !== 'undefined',
+        processDefined: typeof process !== 'undefined',
+        processVersionsDefined: typeof process?.versions !== 'undefined',
+        processNodeVersionDefined: typeof process?.versions?.node !== 'undefined'
+    });
+
     if (typeof window !== 'undefined' && typeof window.document !== 'undefined') {
         return Environment.BROWSER;
     } else if (typeof process !== 'undefined' && typeof process.versions !== 'undefined' && typeof process.versions.node !== 'undefined') {
