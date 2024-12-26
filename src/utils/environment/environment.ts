@@ -15,20 +15,20 @@ export function getEnvironment(): Environment {
     }
 }
 
-// Initialize dotenv in Node environment
-if (getEnvironment() === Environment.NODE) {
-    try {
-        const dotenv = require('dotenv');
-        dotenv.config();
-    } catch (error) {
-        console.warn('dotenv not available in Node environment');
-    }
-}
-
 export function getEnvironmentVariable(variableName: string): string {
     const currentEnv = getEnvironment();
     
-    if (currentEnv === Environment.BROWSER) {
+    if (currentEnv === Environment.NODE) {
+        try {
+            const dotenv = require('dotenv');
+            dotenv.config();
+        } catch (error) {
+            console.warn('dotenv not available in Node environment');
+        }
+        
+        const value = process.env[variableName];
+        if (value) return value;
+    } else if (currentEnv === Environment.BROWSER) {
         // Check process.env (webpack DefinePlugin/Create React App)
         if (typeof process !== 'undefined' && process.env && process.env[variableName]) {
             return process.env[variableName];
@@ -38,10 +38,6 @@ export function getEnvironmentVariable(variableName: string): string {
         if (typeof window !== 'undefined' && (window as any).__env__ && (window as any).__env__[variableName]) {
             return (window as any).__env__[variableName];
         }
-    } else {
-        // Node environment - use process.env
-        const value = process.env[variableName];
-        if (value) return value;
     }
     
     throw new EnvironmentVariableError(variableName);
