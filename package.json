@@ -47,5 +47,10 @@
   },
   "optionalDependencies": {
     "dotenv": "^16.4.5"
+  },
+  "browser": {
+    "path": "path-browserify",
+    "os": "os-browserify/browser",
+    "crypto": "crypto-browserify"
   }
 }
