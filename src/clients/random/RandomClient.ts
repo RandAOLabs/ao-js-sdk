@@ -11,7 +11,6 @@ import { TokenClient } from '../token';
 import { MessageResult } from '@permaweb/aoconnect/dist/lib/result';
 import { RandomProcessError } from './RandomProcessError';
 import { DryRunResult } from '@permaweb/aoconnect/dist/lib/dryrun';
-import { SUCCESS_MESSAGE } from './constants';
 import { GetOpenRandomRequestsResponse, GetProviderAvailableValuesResponse, GetRandomRequestsResponse } from './abstract/types';
 
 
@@ -46,8 +45,7 @@ export class RandomClient extends BaseClient implements IRandomClient {
             const data = JSON.stringify({ requestId: randomnessRequestId, input, modulus });
             const result = await this.messageResult(data, tags);
             this.checkResultForErrors(result)
-            const messageData: string = this.getFirstMessageDataString(result)
-            return messageData.includes(SUCCESS_MESSAGE)
+            return true
         } catch (error: any) {
             Logger.error(`Error posting VDF challenge: ${error.message}`);
             throw new PostVDFChallengeError(error);
@@ -77,8 +75,7 @@ export class RandomClient extends BaseClient implements IRandomClient {
             const data = JSON.stringify({ availableRandomValues });
             const result = await this.messageResult(data, tags);
             this.checkResultForErrors(result)
-            const messageData: string = this.getFirstMessageDataString(result)
-            return messageData.includes(SUCCESS_MESSAGE)
+            return true
         } catch (error: any) {
             Logger.error(`Error updating provider's available values: ${error.message}`);
             throw new UpdateProviderAvailableValuesError(error);
@@ -139,8 +136,7 @@ export class RandomClient extends BaseClient implements IRandomClient {
             const data = JSON.stringify({ requestId: randomnessRequestId, output, proof });
             const result = await this.messageResult(data, tags);
             this.checkResultForErrors(result)
-            const messageData: string = this.getFirstMessageDataString(result)
-            return messageData.includes(SUCCESS_MESSAGE)
+            return true
         } catch (error: any) {
             Logger.error(`Error posting VDF output and proof: ${error.message}`);
             throw new PostVDFOutputAndProofError(error);

@@ -40,7 +40,7 @@ describe("RandomClient Integration Test", () => {
             const providerIds = [provider];
             const inputNumber = 5; // Specify the number of inputs
 
-            const response = await client.createRequest(providerIds, inputNumber);
+            const response = await client.createRequest(providerIds, inputNumber, provider);
 
             // Assert that the response (request ID) is a non-empty string
             expect(response).toBeTruthy();
