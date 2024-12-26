@@ -130,4 +130,74 @@ describe("TokenClient", () => {
             expect(response).toBe(false);
         });
     });
+
+    /**
+     * Test case: Granting tokens
+     */
+    describe("grant()", () => {
+        it("should grant tokens with correct parameters and return true on success", async () => {
+            // Arrange
+            const quantity = "1000";
+            const recipient = "test-recipient";
+            const messageResult: MessageResult = {
+                Output: undefined,
+                Messages: [{ Tags: [{ name: "Action", value: "Success" }] }],
+                Spawns: []
+            }
+            jest.spyOn(BaseClient.prototype, 'messageResult').mockResolvedValue(messageResult);
+
+            // Act
+            const response = await client.grant(quantity, recipient);
+
+            // Assert
+            expect(response).toBe(true);
+        });
+
+        it("should grant tokens to calling wallet when no recipient specified", async () => {
+            // Arrange
+            const quantity = "1000";
+            const callingWallet = "default-wallet";
+            const messageResult: MessageResult = {
+                Output: undefined,
+                Messages: [{ Tags: [{ name: "Action", value: "Success" }] }],
+                Spawns: []
+            }
+            jest.spyOn(BaseClient.prototype, 'messageResult').mockResolvedValue(messageResult);
+            jest.spyOn(BaseClient.prototype, 'getCallingWalletAddress').mockResolvedValue(callingWallet);
+
+            // Act
+            const response = await client.grant(quantity);
+
+            // Assert
+            expect(response).toBe(true);
+        });
+
+        it("should return false on grant error", async () => {
+            // Arrange
+            const quantity = "1000";
+            const recipient = "test-recipient";
+            const messageResult: MessageResult = {
+                Output: undefined,
+                Messages: [{ Tags: [{ name: "Action", value: "Grant-Error" }] }],
+                Spawns: []
+            }
+            jest.spyOn(BaseClient.prototype, 'messageResult').mockResolvedValue(messageResult);
+
+            // Act
+            const response = await client.grant(quantity, recipient);
+
+            // Assert
+            expect(response).toBe(false);
+        });
+
+        it("should throw GrantError on failure", async () => {
+            // Arrange
+            const quantity = "1000";
+            const recipient = "test-recipient";
+            jest.spyOn(BaseClient.prototype, 'messageResult').mockRejectedValue(new Error("Network error"));
+
+            // Act & Assert
+            await expect(client.grant(quantity, recipient)).rejects.toThrow("Failed to grant 1000 tokens to test-recipient");
+        });
+    });
 });
