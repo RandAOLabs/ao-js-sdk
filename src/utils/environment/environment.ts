@@ -20,12 +20,8 @@ export function getEnvironmentVariable(variableName: string): string {
     
     if (currentEnv === Environment.NODE) {
         try {
-            // Use dynamic import for dotenv
-            import('dotenv').then(dotenv => {
-                dotenv.config();
-            }).catch(() => {
-                console.warn('dotenv not available in Node environment');
-            });
+            // Use eval and require for dotenv to avoid webpack issues
+            eval('require("dotenv")').config(); // Webpack friendly
         } catch (error) {
             console.warn('dotenv not available in Node environment');
         }
