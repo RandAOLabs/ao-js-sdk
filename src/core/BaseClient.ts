@@ -9,6 +9,7 @@ import { Logger } from '../utils/logger/logger';
 import { getBaseClientAutoConfiguration } from './BaseClientAutoConfiguration';
 import { DryRunResult } from '@permaweb/aoconnect/dist/lib/dryrun';
 import Arweave from 'arweave';
+import { getEnvironment, Environment, UnknownEnvironmentError } from '../utils/environment';
 
 export class BaseClient extends IBaseClient {
     /* Fields */
@@ -152,8 +153,17 @@ export class BaseClient extends IBaseClient {
     }
 
     public async getCallingWalletAddress(): Promise<string> {
-        const arweave = Arweave.init({});
-        return await arweave.wallets.jwkToAddress(this.baseConfig.wallet)
+        const environment = getEnvironment();
+        
+        switch (environment) {
+            case Environment.BROWSER:
+                return await this.baseConfig.wallet.getActiveAddress();
+            case Environment.NODE:
+                const arweave = Arweave.init({});
+                return await arweave.wallets.jwkToAddress(this.baseConfig.wallet);
+            default:
+                throw new UnknownEnvironmentError();
+        }
     }
     /* Utility */
 }
