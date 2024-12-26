@@ -20,8 +20,12 @@ export function getEnvironmentVariable(variableName: string): string {
     
     if (currentEnv === Environment.NODE) {
         try {
-            const dotenv = require('dotenv');
-            dotenv.config();
+            // Use dynamic import for dotenv
+            import('dotenv').then(dotenv => {
+                dotenv.config();
+            }).catch(() => {
+                console.warn('dotenv not available in Node environment');
+            });
         } catch (error) {
             console.warn('dotenv not available in Node environment');
         }

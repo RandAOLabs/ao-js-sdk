@@ -8,11 +8,17 @@ export function getWallet(): JWKInterface | undefined {
 
     switch (environment) {
         case Environment.NODE: {
-            const fs = require('fs');
-
             let pathToWallet = "MissingWalletPath";
             try {
                 pathToWallet = getEnvironmentVariable('PATH_TO_WALLET'); // May throw EnvironmentVariableError
+                
+                let fs;
+                try {
+                    fs = eval('require("fs")');
+                } catch {
+                    throw new FileReadError(pathToWallet, 'fs module not available');
+                }
+                
                 const walletData = fs.readFileSync(pathToWallet, 'utf-8'); // May throw FS errors
                 return JSON.parse(walletData); // May throw SyntaxError if JSON is malformed
             } catch (error: unknown) {
@@ -29,9 +35,8 @@ export function getWallet(): JWKInterface | undefined {
         case Environment.BROWSER: {
             if ('arweaveWallet' in globalThis) {
                 return (globalThis as any).arweaveWallet;
-            } else {
-                throw new BrowserWalletError();
             }
+            throw new BrowserWalletError();
         }
     }
 }
