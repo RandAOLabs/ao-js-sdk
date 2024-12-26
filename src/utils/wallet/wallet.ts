@@ -3,7 +3,7 @@ import { Environment, EnvironmentVariableError, getEnvironment, getEnvironmentVa
 import { BrowserWalletError, FileReadError } from "./WalletError";
 import { Logger } from "../logger/logger";
 
-export function getWallet(): JWKInterface | undefined { //type here
+export function getWallet(): JWKInterface | undefined { 
     const environment = getEnvironment();
 
     switch (environment) {

@@ -1,6 +1,6 @@
 {
   "name": "ao-process-clients",
-  "version": "3.4.2",
+  "version": "3.5.2",
   "description": "A modular TypeScript API client library for AO Process interactions",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
@@ -43,7 +43,9 @@
   "dependencies": {
     "@permaweb/aoconnect": "^0.0.59",
     "arweave": "^1.15.5",
-    "dotenv": "^16.4.5",
     "tsconfig-paths": "^4.2.0"
+  },
+  "optionalDependencies": {
+    "dotenv": "^16.4.5"
   }
 }
