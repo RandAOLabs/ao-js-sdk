@@ -92,6 +92,11 @@ export class BaseClient extends IBaseClient {
     }
     /* Core AO Functions */
     /* Utility */
+    protected findTagValue(tags: Tags, name: string): string | undefined {
+        const tag = tags.find(tag => tag.name === name);
+        return tag?.value;
+    }
+
     async messageResult(data: string = '', tags: Tags = [], anchor?: string): Promise<MessageResult> {
         const result_id = await this.message(
             data,

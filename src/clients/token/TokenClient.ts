@@ -4,7 +4,7 @@ import { ITokenClient } from "./abstract/ITokenClient";
 import { getTokenClientAutoConfiguration } from "./TokenClientAutoConfiguration";
 import { BalanceError, BalancesError, GetInfoError, MintError, TransferError } from "./TokenClientError";
 import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
-import { MINT_SUCCESS_MESSAGE, TRANSFER_SUCCESS_MESSAGE } from "./constants";
+import { TRANSFER_SUCCESS_MESSAGE } from "./constants";
 
 /** @see {@link https://cookbook_ao.g8way.io/references/token.html | specification} */
 export class TokenClient extends BaseClient implements ITokenClient {
@@ -85,9 +85,8 @@ export class TokenClient extends BaseClient implements ITokenClient {
                 { name: "Action", value: "Mint" },
                 { name: "Quantity", value: quantity }
             ]);
-            const messageData: string = this.getFirstMessageDataString(result)
-            Logger.debug(messageData)
-            return messageData.includes(MINT_SUCCESS_MESSAGE)
+            const actionValue = this.findTagValue(result.Messages[0].Tags, "Action");
+            return actionValue !== "Mint-Error";
         } catch (error: any) {
             Logger.error(`Error minting quantity ${quantity}: ${error.message}`);
             throw new MintError(quantity, error);
