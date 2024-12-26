@@ -74,6 +74,18 @@ export class BaseClient extends IBaseClient {
         }
     }
 
+    /**
+     * Performs a dry run, executing the logic of a message without actually persisting the result.
+     *
+     * @param data Optional data to be passed to the message.
+     * @param tags Optional tags to be passed to the message.
+     * @param anchor Optional anchor to be passed to the message.
+     * @param id Optional ID to be passed to the message.
+     * @param owner Optional owner to be passed to the message.
+     * @returns A DryRunResult object containing the output of the message, including
+     * the result of any computations, and any spawned messages.
+     * @throws DryRunError if there is an error performing the dry run.
+     */
     async dryrun(data: any = '', tags: Tags = [], anchor?: string, id?: string, owner?: string): Promise<DryRunResult> {
         try {
             const result = await dryrun({
