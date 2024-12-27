@@ -83,6 +83,13 @@ describe("RandomClient Unit Test", () => {
         });
     });
 
+    describe("getRandomRequestViaCallbackId()", () => {
+        it("should fetch random request via callback ID without throwing an error", async () => {
+            const callbackId = "test-callback-id";
+            await expect(client.getRandomRequestViaCallbackId(callbackId)).resolves.not.toThrow();
+        });
+    });
+
     describe("createRequest()", () => {
         it("should create a request and return true on success", async () => {
             const providerIds = ["provider-id-1", "provider-id-2"];
