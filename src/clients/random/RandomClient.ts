@@ -112,6 +112,21 @@ export class RandomClient extends BaseClient implements IRandomClient {
         }
     }
 
+    async getRandomRequestViaCallbackId(callbackId: string): Promise<GetRandomRequestsResponse> {
+        try {
+            const tags: Tags = [
+                { name: "Action", value: "Get-Random-Request-Via-Callback-Id" },
+            ];
+            const data = JSON.stringify({ callbackId });
+            const result = await this.dryrun(data, tags);
+            this.checkResultForErrors(result)
+            return this.getFirstMessageDataJson(result)
+        } catch (error: any) {
+            Logger.error(`Error retrieving random request via callback ID: ${error.message}`);
+            throw new RandomRequestsError(error);
+        }
+    }
+
     async createRequest(provider_ids: string[], requestedInputs: number, callbackId: string = ''): Promise<boolean> {
         try {
             const paymentAmount = "100"; // TODO: Determine payment amount dynamically if needed
