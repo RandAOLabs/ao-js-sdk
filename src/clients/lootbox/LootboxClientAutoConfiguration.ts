@@ -4,6 +4,6 @@ import { getTokenClientAutoConfiguration } from "../token/TokenClientAutoConfigu
 
 export const getLootboxClientAutoConfiguration = (): LootboxClientConfig => ({
     ...getBaseClientAutoConfiguration(),
-    processId: "REPLACE_WITH_ACTUAL_PROCESS_ID", // Base process ID is the lootbox process
+    processId: "8GGJmsRUH2oxNzDdyV6EgysgHdCl-kSyyumC1RpOmkA", // Base process ID is the lootbox process
     paymentTokenProcessId: getTokenClientAutoConfiguration().processId, // Reuse token process ID for payments
 });
