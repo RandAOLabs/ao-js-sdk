@@ -1,7 +1,8 @@
 import { TokenClientConfig } from "./abstract/TokenClientConfig";
 import { getBaseClientAutoConfiguration, } from "../../core/BaseClientAutoConfiguration";
+import { RNG_TOKEN_PROCESS_ID } from "../../processes_ids";
 
 export const getTokenClientAutoConfiguration = (): TokenClientConfig => ({
     ...getBaseClientAutoConfiguration(),
-    processId: "5ZR9uegKoEhE9fJMbs-MvWLIztMNCVxgpzfeBVE3vqI",
+    processId: RNG_TOKEN_PROCESS_ID,
 });

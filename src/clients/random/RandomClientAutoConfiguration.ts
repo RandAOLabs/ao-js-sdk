@@ -1,8 +1,8 @@
 import { getBaseClientAutoConfiguration } from "../../core/BaseClientAutoConfiguration";
 import { RandomClientConfig } from "./abstract/RandomClientConfig";
-
+import { RANDOM_PROCESS_ID, RNG_TOKEN_PROCESS_ID } from "../../processes_ids"
 export const getRandomClientAutoConfiguration = (): RandomClientConfig => ({
     ...getBaseClientAutoConfiguration(),
-    processId: "KbaY8P4h9wdHYKHlBSLbXN_yd-9gxUDxSgBackUxTiQ",
-    tokenProcessId: "7enZBOhWsyU3A5oCt8HtMNNPHSxXYJVTlOGOetR9IDw",
+    processId: RANDOM_PROCESS_ID,
+    tokenProcessId: RNG_TOKEN_PROCESS_ID,
 });
