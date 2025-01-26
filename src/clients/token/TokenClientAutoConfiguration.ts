@@ -3,5 +3,5 @@ import { getBaseClientAutoConfiguration, } from "../../core/BaseClientAutoConfig
 
 export const getTokenClientAutoConfiguration = (): TokenClientConfig => ({
     ...getBaseClientAutoConfiguration(),
-    processId: "7enZBOhWsyU3A5oCt8HtMNNPHSxXYJVTlOGOetR9IDw",
+    processId: "5ZR9uegKoEhE9fJMbs-MvWLIztMNCVxgpzfeBVE3vqI",
 });
