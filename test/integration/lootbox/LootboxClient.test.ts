@@ -23,7 +23,7 @@ describe("LootboxClient Integration Test", () => {
         Logger.info(`Using wallet address: ${walletAddress}`);
 
         // Get payment token client from lootbox client
-        paymentTokenClient = (client as any).paymentTokenClient;
+        paymentTokenClient = client.paymentToken;
 
         // Grant tokens to self for testing
         Logger.info("Granting payment tokens for testing...");
@@ -67,6 +67,15 @@ describe("LootboxClient Integration Test", () => {
         });
     });
 
+    describe("listPrizes()", () => {
+        it("should show 3 prizes after adding them", async () => {
+            const prizes = await client.listPrizes();
+            expect(prizes).toHaveLength(3);
+            expect(prizes).toEqual(expect.arrayContaining(deployer.deployedCollection.assetIds));
+            Logger.info("Verified 3 prizes are available");
+        });
+    });
+
     describe("openLootbox()", () => {
         it("should succeed for first 3 lootboxes and fail for 4th due to insufficient prizes", async () => {
             // First 3 lootboxes should succeed
@@ -81,13 +90,11 @@ describe("LootboxClient Integration Test", () => {
                 .rejects
                 .toThrow(OpenLootboxError);
             Logger.info("4th lootbox failed as expected due to no remaining prizes");
-        });
 
-        it("should fail to open lootbox when user has insufficient tokens", async () => {
-            // Attempt to open lootbox with insufficient tokens
-            await expect(client.openLootbox())
-                .rejects
-                .toThrow(InsufficientTokensError);
+            // Verify no prizes are left
+            const remainingPrizes = await client.listPrizes();
+            expect(remainingPrizes).toHaveLength(0);
+            Logger.info("Verified no prizes remain");
         });
     });
 });

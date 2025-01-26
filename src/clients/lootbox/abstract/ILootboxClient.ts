@@ -13,4 +13,10 @@ export interface ILootboxClient {
      * @returns A boolean indicating if the prize was successfully added
      */
     addPrize(prizeTokenProcessId: string): Promise<boolean>;
+
+    /**
+     * Lists all available prizes in the lootbox
+     * @returns A list of process IDs representing the available prizes
+     */
+    listPrizes(): Promise<string[]>;
 }

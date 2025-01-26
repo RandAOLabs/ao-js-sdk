@@ -3,12 +3,16 @@ import { Logger } from "../../utils";
 import { ILootboxClient } from "./abstract/ILootboxClient";
 import { LootboxClientConfig } from "./abstract/LootboxClientConfig";
 import { getLootboxClientAutoConfiguration } from "./LootboxClientAutoConfiguration";
-import { InsufficientTokensError, OpenLootboxError } from "./LootboxClientError";
+import { InsufficientTokensError, OpenLootboxError, ListPrizesError } from "./LootboxClientError";
 import { LOOTBOX_COST, SUCCESS_MESSAGE } from "./constants";
 import { TokenClient } from "../token";
 
 export class LootboxClient extends BaseClient implements ILootboxClient {
     private readonly paymentTokenClient: TokenClient;
+
+    public get paymentToken(): TokenClient {
+        return this.paymentTokenClient;
+    }
 
     /* Constructors */
     constructor(config: LootboxClientConfig) {
@@ -51,6 +55,7 @@ export class LootboxClient extends BaseClient implements ILootboxClient {
     }
 
     public async addPrize(prizeTokenProcessId: string): Promise<boolean> {
+        Logger.debug(prizeTokenProcessId)
         try {
             // Create a new token client instance for the prize token
             const prizeTokenClient = new TokenClient({
@@ -73,6 +78,26 @@ export class LootboxClient extends BaseClient implements ILootboxClient {
         } catch (error: any) {
             Logger.error(`Error adding prize: ${error.message}`);
             throw new OpenLootboxError(error);
+        }
+    }
+
+    public async listPrizes(): Promise<string[]> {
+        try {
+            const response = await this.dryrun('', [
+                { name: "Action", value: "List-Prizes" }
+            ]);
+
+            // Get the first message data which should be JSON encoded list of prize IDs
+            const messageData = this.getFirstMessageDataString(response);
+            try {
+                return JSON.parse(messageData);
+            } catch (parseError) {
+                Logger.error(`Error parsing prize list response: ${messageData}`);
+                throw new ListPrizesError(parseError as Error);
+            }
+        } catch (error: any) {
+            Logger.error(`Error listing prizes: ${error.message}`);
+            throw new ListPrizesError(error);
         }
     }
 }
