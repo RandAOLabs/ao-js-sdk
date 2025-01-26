@@ -24,6 +24,7 @@ export class TokenClient extends BaseClient implements ITokenClient {
                 { name: "Action", value: "Balance" },
                 { name: "Target", value: identifier }
             ]);
+            Logger.debug(JSON.stringify(response))
             return response.Messages[0].Data // Unsafe Typing
         } catch (error: any) {
             Logger.error(`Error fetching balance for identifier ${identifier}: ${error.message}`);

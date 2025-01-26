@@ -15,6 +15,13 @@ export class OpenLootboxError extends LootboxClientError {
     }
 }
 
+export class ListPrizesError extends LootboxClientError {
+    constructor(originalError?: Error) {
+        super('Error listing lootbox prizes. The process might be unavailable.', originalError);
+        this.name = 'ListPrizesError';
+    }
+}
+
 export class InsufficientTokensError extends LootboxClientError {
     constructor(balance: string, required: string, originalError?: Error) {
         super(`Insufficient tokens to open lootbox. Balance: ${balance}, Required: ${required}`, originalError);
