@@ -11,7 +11,6 @@ import { TokenClient } from '../token';
 import { MessageResult } from '@permaweb/aoconnect/dist/lib/result';
 import { RandomProcessError } from './RandomProcessError';
 import { DryRunResult } from '@permaweb/aoconnect/dist/lib/dryrun';
-import { SUCCESS_MESSAGE } from './constants';
 import { GetOpenRandomRequestsResponse, GetProviderAvailableValuesResponse, GetRandomRequestsResponse } from './abstract/types';
 
 
@@ -46,8 +45,7 @@ export class RandomClient extends BaseClient implements IRandomClient {
             const data = JSON.stringify({ requestId: randomnessRequestId, input, modulus });
             const result = await this.messageResult(data, tags);
             this.checkResultForErrors(result)
-            const messageData: string = this.getFirstMessageDataString(result)
-            return messageData.includes(SUCCESS_MESSAGE)
+            return true
         } catch (error: any) {
             Logger.error(`Error posting VDF challenge: ${error.message}`);
             throw new PostVDFChallengeError(error);
@@ -77,8 +75,7 @@ export class RandomClient extends BaseClient implements IRandomClient {
             const data = JSON.stringify({ availableRandomValues });
             const result = await this.messageResult(data, tags);
             this.checkResultForErrors(result)
-            const messageData: string = this.getFirstMessageDataString(result)
-            return messageData.includes(SUCCESS_MESSAGE)
+            return true
         } catch (error: any) {
             Logger.error(`Error updating provider's available values: ${error.message}`);
             throw new UpdateProviderAvailableValuesError(error);
@@ -115,14 +112,33 @@ export class RandomClient extends BaseClient implements IRandomClient {
         }
     }
 
-    async createRequest(provider_ids: string[], requestedInputs: number, callbackId: string = ''): Promise<boolean> {
+    async getRandomRequestViaCallbackId(callbackId: string): Promise<GetRandomRequestsResponse> {
+        try {
+            const tags: Tags = [
+                { name: "Action", value: "Get-Random-Request-Via-Callback-Id" },
+            ];
+            const data = JSON.stringify({ callbackId });
+            const result = await this.dryrun(data, tags);
+            this.checkResultForErrors(result)
+            return this.getFirstMessageDataJson(result)
+        } catch (error: any) {
+            Logger.error(`Error retrieving random request via callback ID: ${error.message}`);
+            throw new RandomRequestsError(error);
+        }
+    }
+
+    async createRequest(provider_ids: string[], requestedInputs?: number, callbackId: string = ''): Promise<boolean> {
         try {
             const paymentAmount = "100"; // TODO: Determine payment amount dynamically if needed
             const tags = [
                 { name: "Providers", value: JSON.stringify({ provider_ids }) },
                 { name: "CallbackId", value: callbackId },
-                { name: "RequestedInputs", value: JSON.stringify({ requested_inputs: requestedInputs }) }
             ];
+
+            if (requestedInputs !== undefined) {
+                tags.push({ name: "RequestedInputs", value: JSON.stringify({ requested_inputs: requestedInputs }) });
+            }
+            
             return await this.tokenClient.transfer(this.getProcessId(), paymentAmount, tags);
         } catch (error: any) {
             Logger.error(`Error creating request: ${error.message}`);
@@ -139,8 +155,7 @@ export class RandomClient extends BaseClient implements IRandomClient {
             const data = JSON.stringify({ requestId: randomnessRequestId, output, proof });
             const result = await this.messageResult(data, tags);
             this.checkResultForErrors(result)
-            const messageData: string = this.getFirstMessageDataString(result)
-            return messageData.includes(SUCCESS_MESSAGE)
+            return true
         } catch (error: any) {
             Logger.error(`Error posting VDF output and proof: ${error.message}`);
             throw new PostVDFOutputAndProofError(error);

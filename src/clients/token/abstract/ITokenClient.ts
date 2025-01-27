@@ -8,5 +8,5 @@ export interface ITokenClient {
     balances(limit?: number, cursor?: string): Promise<DryRunResult>;// If ever used should refactor to return the balances in a list format
     transfer(recipient: string, quantity: string, forwardedTags?: Tags): Promise<boolean>;
     getInfo(token: string): Promise<void>;
-    mint(quantity: string): Promise<void>;
+    mint(quantity: string): Promise<boolean>;
 }
