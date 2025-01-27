@@ -1,13 +1,13 @@
 import { Tags, BaseClient } from "../../core/index";
 import { Logger } from "../../utils/index"
-import { ITokenClient } from "./abstract/ITokenClient";
+import { ITokenClient, IGrantToken } from "./abstract";
 import { getTokenClientAutoConfiguration } from "./TokenClientAutoConfiguration";
-import { BalanceError, BalancesError, GetInfoError, MintError, TransferError } from "./TokenClientError";
+import { BalanceError, BalancesError, GetInfoError, MintError, TransferError, GrantError } from "./TokenClientError";
 import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
-import { SUCCESS_MESSAGE } from "./constants";
+import { TRANSFER_SUCCESS_MESSAGE } from "./constants";
 
 /** @see {@link https://cookbook_ao.g8way.io/references/token.html | specification} */
-export class TokenClient extends BaseClient implements ITokenClient {
+export class TokenClient extends BaseClient implements ITokenClient, IGrantToken {
     /* Constructors */
     public static autoConfiguration(): TokenClient {
         return new TokenClient(getTokenClientAutoConfiguration());
@@ -60,7 +60,7 @@ export class TokenClient extends BaseClient implements ITokenClient {
             }
             const result = await this.messageResult('', tags)
             const messageData: string = this.getFirstMessageDataString(result)
-            return messageData.includes(SUCCESS_MESSAGE);
+            return messageData.includes(TRANSFER_SUCCESS_MESSAGE);
         } catch (error: any) {
             Logger.error(`Error transferring ${quantity} to ${recipient}: ${error.message}`);
             throw new TransferError(recipient, quantity, error);
@@ -80,15 +80,33 @@ export class TokenClient extends BaseClient implements ITokenClient {
         }
     }
 
-    public async mint(quantity: string): Promise<void> {
+    public async mint(quantity: string): Promise<boolean> {
         try {
-            await this.message('', [
+            const result = await this.messageResult('', [
                 { name: "Action", value: "Mint" },
                 { name: "Quantity", value: quantity }
             ]);
+            const actionValue = this.findTagValue(result.Messages[0].Tags, "Action");
+            return actionValue !== "Mint-Error";
         } catch (error: any) {
             Logger.error(`Error minting quantity ${quantity}: ${error.message}`);
             throw new MintError(quantity, error);
+        }
+    }
+
+    public async grant(quantity: string, recipient?: string): Promise<boolean> {
+        try {
+            const recipientAddress = recipient ?? await this.getCallingWalletAddress();
+            const result = await this.messageResult('', [
+                { name: "Action", value: "Grant" },
+                { name: "Quantity", value: quantity },
+                { name: "Recipient", value: recipientAddress }
+            ]);
+            const actionValue = this.findTagValue(result.Messages[0].Tags, "Action");
+            return actionValue !== "Grant-Error";
+        } catch (error: any) {
+            Logger.error(`Error granting ${quantity} tokens to ${recipient}: ${error.message}`);
+            throw new GrantError(quantity, recipient ?? 'self', error);
         }
     }
     /* Core Token Functions */

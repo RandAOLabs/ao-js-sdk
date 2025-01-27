@@ -12,7 +12,10 @@ export type ProviderVDFResult = {
 export type RandomRequest = {
     request_id: string;
     requester: string;
+    callback_id: string;
     providers: string;
+    requested_inputs: number;
+    status: string;
     entropy: string;
     created_at: number;
 };

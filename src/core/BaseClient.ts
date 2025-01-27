@@ -9,6 +9,7 @@ import { Logger } from '../utils/logger/logger';
 import { getBaseClientAutoConfiguration } from './BaseClientAutoConfiguration';
 import { DryRunResult } from '@permaweb/aoconnect/dist/lib/dryrun';
 import Arweave from 'arweave';
+import { getEnvironment, Environment, UnknownEnvironmentError } from '../utils/environment';
 
 export class BaseClient extends IBaseClient {
     /* Fields */
@@ -74,6 +75,18 @@ export class BaseClient extends IBaseClient {
         }
     }
 
+    /**
+     * Performs a dry run, executing the logic of a message without actually persisting the result.
+     *
+     * @param data Optional data to be passed to the message.
+     * @param tags Optional tags to be passed to the message.
+     * @param anchor Optional anchor to be passed to the message.
+     * @param id Optional ID to be passed to the message.
+     * @param owner Optional owner to be passed to the message.
+     * @returns A DryRunResult object containing the output of the message, including
+     * the result of any computations, and any spawned messages.
+     * @throws DryRunError if there is an error performing the dry run.
+     */
     async dryrun(data: any = '', tags: Tags = [], anchor?: string, id?: string, owner?: string): Promise<DryRunResult> {
         try {
             const result = await dryrun({
@@ -92,6 +105,11 @@ export class BaseClient extends IBaseClient {
     }
     /* Core AO Functions */
     /* Utility */
+    protected findTagValue(tags: Tags, name: string): string | undefined {
+        const tag = tags.find(tag => tag.name === name);
+        return tag?.value;
+    }
+
     async messageResult(data: string = '', tags: Tags = [], anchor?: string): Promise<MessageResult> {
         const result_id = await this.message(
             data,
@@ -135,8 +153,17 @@ export class BaseClient extends IBaseClient {
     }
 
     public async getCallingWalletAddress(): Promise<string> {
-        const arweave = Arweave.init({});
-        return await arweave.wallets.jwkToAddress(this.baseConfig.wallet)
+        const environment = getEnvironment();
+        
+        switch (environment) {
+            case Environment.BROWSER:
+                return await this.baseConfig.wallet.getActiveAddress();
+            case Environment.NODE:
+                const arweave = Arweave.init({});
+                return await arweave.wallets.jwkToAddress(this.baseConfig.wallet);
+            default:
+                throw new UnknownEnvironmentError();
+        }
     }
     /* Utility */
 }

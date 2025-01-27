@@ -44,3 +44,10 @@ export class MintError extends TokenClientError {
         this.name = 'MintError';
     }
 }
+
+export class GrantError extends Error {
+    constructor(quantity: string, recipient: string, error: Error) {
+        super(`Failed to grant ${quantity} tokens to ${recipient}: ${error.message}`);
+        this.name = 'GrantError';
+    }
+}

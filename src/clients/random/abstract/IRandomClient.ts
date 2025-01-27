@@ -32,6 +32,13 @@ export interface IRandomClient {
     getRandomRequests(randomnessRequestIds: string[]): Promise<GetRandomRequestsResponse>;
 
     /**
+     * Retrieves a randomness request based on a callback ID.
+     * @param callbackId - The callback ID of the randomness request to retrieve.
+     * @returns - A promise that resolves with the requested randomness data.
+     */
+    getRandomRequestViaCallbackId(callbackId: string): Promise<GetRandomRequestsResponse>;
+
+    /**
      * Submits a Verifiable Delay Function (VDF) challenge, including input and modulus, for a specific randomness request.
      * @param randomnessRequestId - The ID of the randomness request.
      * @param modulus - The modulus to be used in the challenge.
