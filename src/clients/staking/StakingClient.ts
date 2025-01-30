@@ -81,7 +81,6 @@ export class StakingClient extends BaseClient implements IStakingClient {
             ];
             const data = JSON.stringify({ providerId });
             const result = await this.dryrun(data, tags);
-            Logger.debug(result)
             return this.getFirstMessageDataJson(result);
         } catch (error: any) {
             Logger.error(`Error getting stake for provider ${providerId}: ${error.message}`);
