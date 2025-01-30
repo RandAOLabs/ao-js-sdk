@@ -15,7 +15,8 @@
     "prepare": "npm run build",
     "test": "jest --runInBand ./test",
     "test:unit": "jest ./test/unit",
-    "test:integration": "jest --runInBand ./test/integration"
+    "test:integration": "jest --runInBand ./test/integration",
+    "test:integration:staking": "jest --runInBand ./test/integration/staking"
   },
   "repository": {
     "type": "git",

@@ -15,33 +15,45 @@ export class Logger {
         [LogLevel.DEBUG]: colors.fg.green,
     };
 
-    static log(level: LogLevel, message: string) {
+    private static formatMessage(message: string | any): string {
+        if (typeof message === 'string') {
+            return message;
+        }
+        try {
+            return JSON.stringify(message, null, 2);
+        } catch (error) {
+            return String(message);
+        }
+    }
+
+    static log(level: LogLevel, message: string | any) {
+        const formattedMessage = this.formatMessage(message);
         const color = this.logLevelColors[level] || colors.reset;
         const timestamp = new Date().toISOString();
         const fileLink = this.getFileLink();
 
         if (getEnvironment() === Environment.BROWSER) {
             // Browser context
-            console.log(`%c[${timestamp}] [${level.toUpperCase()}] ${message} %c${fileLink}`, `color: ${color}`, "color: gray");
+            console.log(`%c[${timestamp}] [${level.toUpperCase()}] ${formattedMessage} %c${fileLink}`, `color: ${color}`, "color: gray");
         } else {
             // Node context
-            console.log(`${color}[${timestamp}] [${level.toUpperCase()}] ${message} ${fileLink}${colors.reset}`);
+            console.log(`${color}[${timestamp}] [${level.toUpperCase()}] ${formattedMessage} ${fileLink}${colors.reset}`);
         }
     }
 
-    static info(message: string) {
+    static info(message: string | any) {
         this.log(LogLevel.INFO, message);
     }
 
-    static warn(message: string) {
+    static warn(message: string | any) {
         this.log(LogLevel.WARN, message);
     }
 
-    static error(message: string) {
+    static error(message: string | any) {
         this.log(LogLevel.ERROR, message);
     }
 
-    static debug(message: string) {
+    static debug(message: string | any) {
         this.log(LogLevel.DEBUG, message);
     }
 
