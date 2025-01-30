@@ -1,4 +1,5 @@
-import { message, result, results, createDataItemSigner, dryrun } from '@permaweb/aoconnect';
+import { message as aoMessage, result, results, createDataItemSigner, dryrun as aoDryrun } from '@permaweb/aoconnect';
+import { AoProcessLoader, testContext } from '../utils/ao';
 import { IBaseClient } from './abstract/IBaseClient';
 import { SortOrder, Tags } from './abstract/types';
 import { BaseClientConfig } from './abstract/BaseClientConfig';
@@ -15,6 +16,7 @@ export class BaseClient extends IBaseClient {
     /* Fields */
     readonly baseConfig: BaseClientConfig;
     readonly signer: ReturnType<typeof createDataItemSigner>;
+    private testLoader?: AoProcessLoader;
     /* Fields */
     /* Constructors */
     protected constructor(baseConfig: BaseClientConfig) {
@@ -30,7 +32,28 @@ export class BaseClient extends IBaseClient {
     /* Core AO Functions */
     async message(data: string = '', tags: Tags = [], anchor?: string): Promise<string> {
         try {
-            return await message({
+            if (testContext.isTestModeEnabled() && this.testLoader) {
+                const owner = await this.getCallingWalletAddress();
+                const result = await this.testLoader.message(null, {
+                    Owner: owner,
+                    From: owner,
+                    Tags: tags,
+                    Data: data,
+                    Target: this.baseConfig.processId,
+                    "Block-Height": "0",
+                    Timestamp: new Date().toISOString(),
+                    Cron: false,
+                }, {
+                    Process: {
+                        Id: this.baseConfig.processId,
+                        Owner: await this.getCallingWalletAddress(),
+                        Tags: []
+                    }
+                });
+                return result.Output;
+            }
+
+            return await aoMessage({
                 process: this.baseConfig.processId,
                 signer: this.signer,
                 data,
@@ -89,7 +112,27 @@ export class BaseClient extends IBaseClient {
      */
     async dryrun(data: any = '', tags: Tags = [], anchor?: string, id?: string, owner?: string): Promise<DryRunResult> {
         try {
-            const result = await dryrun({
+            if (testContext.isTestModeEnabled() && this.testLoader) {
+                const messageOwner = owner || await this.getCallingWalletAddress();
+                return await this.testLoader.dryrun(null, {
+                    Owner: messageOwner,
+                    From: messageOwner,
+                    Tags: tags,
+                    Data: data,
+                    Target: this.baseConfig.processId,
+                    "Block-Height": "0",
+                    Timestamp: new Date().toISOString(),
+                    Cron: false,
+                }, {
+                    Process: {
+                        Id: this.baseConfig.processId,
+                        Owner: await this.getCallingWalletAddress(),
+                        Tags: []
+                    }
+                });
+            }
+
+            const result = await aoDryrun({
                 process: this.baseConfig.processId,
                 data,
                 tags,
@@ -97,7 +140,7 @@ export class BaseClient extends IBaseClient {
                 id,
                 owner,
             });
-            return result
+            return result;
         } catch (error: any) {
             Logger.error(`Error performing dry run: ${JSON.stringify(error.message)}`);
             throw new DryRunError(error);
@@ -154,7 +197,7 @@ export class BaseClient extends IBaseClient {
 
     public async getCallingWalletAddress(): Promise<string> {
         const environment = getEnvironment();
-        
+
         switch (environment) {
             case Environment.BROWSER:
                 return await this.baseConfig.wallet.getActiveAddress();
@@ -164,6 +207,23 @@ export class BaseClient extends IBaseClient {
             default:
                 throw new UnknownEnvironmentError();
         }
+    }
+
+    /**
+     * Sets the test loader instance and enables test mode
+     * @param loader - The AoProcessLoader instance to use for testing
+     */
+    public setTestLoader(loader: AoProcessLoader): void {
+        this.testLoader = loader;
+        testContext.enableTestMode();
+    }
+
+    /**
+     * Disables test mode and removes the test loader
+     */
+    public disableTestMode(): void {
+        this.testLoader = undefined;
+        testContext.disableTestMode();
     }
     /* Utility */
 }
