@@ -1,6 +1,6 @@
 {
   "name": "ao-process-clients",
-  "version": "3.5.18",
+  "version": "3.5.19",
   "description": "A modular TypeScript API client library for AO Process interactions",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
@@ -15,7 +15,8 @@
     "prepare": "npm run build",
     "test": "jest --runInBand ./test",
     "test:unit": "jest ./test/unit",
-    "test:integration": "jest --runInBand ./test/integration"
+    "test:integration": "jest --runInBand ./test/integration",
+    "test:integration:staking": "jest --runInBand ./test/integration/staking"
   },
   "repository": {
     "type": "git",
