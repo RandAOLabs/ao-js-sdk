@@ -17,7 +17,7 @@ export function getEnvironment(): Environment {
 
 export function getEnvironmentVariable(variableName: string): string {
     const currentEnv = getEnvironment();
-    
+
     if (currentEnv === Environment.NODE) {
         try {
             // Use eval and require for dotenv to avoid webpack issues
@@ -25,7 +25,7 @@ export function getEnvironmentVariable(variableName: string): string {
         } catch (error) {
             console.warn('dotenv not available in Node environment');
         }
-        
+
         const value = process.env[variableName];
         if (value) return value;
     } else if (currentEnv === Environment.BROWSER) {
@@ -33,12 +33,12 @@ export function getEnvironmentVariable(variableName: string): string {
         if (typeof process !== 'undefined' && process.env && process.env[variableName]) {
             return process.env[variableName];
         }
-        
+
         // Check window.__env__ (runtime configuration)
         if (typeof window !== 'undefined' && (window as any).__env__ && (window as any).__env__[variableName]) {
             return (window as any).__env__[variableName];
         }
     }
-    
+
     throw new EnvironmentVariableError(variableName);
 }

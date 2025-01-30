@@ -41,6 +41,7 @@
     "typescript": "^5.6.3"
   },
   "dependencies": {
+    "@permaweb/ao-loader": "^0.0.46",
     "@permaweb/aoconnect": "^0.0.59",
     "arweave": "^1.15.5",
     "tsconfig-paths": "^4.2.0"
