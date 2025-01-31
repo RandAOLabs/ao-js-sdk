@@ -15,6 +15,7 @@ export class BaseClient extends IBaseClient {
     /* Fields */
     readonly baseConfig: BaseClientConfig;
     readonly signer: ReturnType<typeof createDataItemSigner>;
+    private useDryRunAsMessage: boolean = false;
     /* Fields */
     /* Constructors */
     protected constructor(baseConfig: BaseClientConfig) {
@@ -75,42 +76,48 @@ export class BaseClient extends IBaseClient {
         }
     }
 
-    /**
-     * Performs a dry run, executing the logic of a message without actually persisting the result.
-     *
-     * @param data Optional data to be passed to the message.
-     * @param tags Optional tags to be passed to the message.
-     * @param anchor Optional anchor to be passed to the message.
-     * @param id Optional ID to be passed to the message.
-     * @param owner Optional owner to be passed to the message.
-     * @returns A DryRunResult object containing the output of the message, including
-     * the result of any computations, and any spawned messages.
-     * @throws DryRunError if there is an error performing the dry run.
-     */
-    async dryrun(data: any = '', tags: Tags = [], anchor?: string, id?: string, owner?: string): Promise<DryRunResult> {
-        try {
-            const result = await dryrun({
-                process: this.baseConfig.processId,
-                data,
-                tags,
-                anchor,
-                id,
-                owner,
-            });
-            return result
-        } catch (error: any) {
-            Logger.error(`Error performing dry run: ${JSON.stringify(error.message)}`);
-            throw new DryRunError(error);
+    async dryrun(data: any = '', tags: Tags = [], anchor?: string, id?: string, owner?: string): Promise<DryRunResult | MessageResult> {
+        if (this.useDryRunAsMessage) {
+            Logger.warn(`Running dry run as message`);
+            return await this.messageResult(data, tags, anchor);
+        } else {
+            return await this._dryrun(data, tags, anchor, id, owner);
         }
     }
+
     /* Core AO Functions */
-    /* Utility */
+
+    /* Public Settings*/
+    public setDryRunAsMessage(enabled: boolean): void {
+        this.useDryRunAsMessage = enabled;
+    }
+    /* Public Utility */
+    public getProcessId(): string {
+        return this.baseConfig.processId
+    }
+
+    public async getCallingWalletAddress(): Promise<string> {
+        const environment = getEnvironment();
+
+        switch (environment) {
+            case Environment.BROWSER:
+                return await this.baseConfig.wallet.getActiveAddress();
+            case Environment.NODE:
+                const arweave = Arweave.init({});
+                return await arweave.wallets.jwkToAddress(this.baseConfig.wallet);
+            default:
+                throw new UnknownEnvironmentError();
+        }
+    }
+    /* Public Utility */
+
+    /* Protected Utility */
     protected findTagValue(tags: Tags, name: string): string | undefined {
         const tag = tags.find(tag => tag.name === name);
         return tag?.value;
     }
 
-    async messageResult(data: string = '', tags: Tags = [], anchor?: string): Promise<MessageResult> {
+    protected async messageResult(data: string = '', tags: Tags = [], anchor?: string): Promise<MessageResult> {
         const result_id = await this.message(
             data,
             tags,
@@ -146,24 +153,24 @@ export class BaseClient extends IBaseClient {
             throw new JsonParsingError(`Invalid JSON in message data at index ${n}: ${result.Messages[n]?.Data}`, error as Error);
         }
     }
+    /* Protected Utility */
 
-
-    public getProcessId(): string {
-        return this.baseConfig.processId
-    }
-
-    public async getCallingWalletAddress(): Promise<string> {
-        const environment = getEnvironment();
-        
-        switch (environment) {
-            case Environment.BROWSER:
-                return await this.baseConfig.wallet.getActiveAddress();
-            case Environment.NODE:
-                const arweave = Arweave.init({});
-                return await arweave.wallets.jwkToAddress(this.baseConfig.wallet);
-            default:
-                throw new UnknownEnvironmentError();
+    /* Private */
+    private async _dryrun(data: any = '', tags: Tags = [], anchor?: string, id?: string, owner?: string): Promise<DryRunResult> {
+        try {
+            const result = await dryrun({
+                process: this.baseConfig.processId,
+                data,
+                tags,
+                anchor,
+                id,
+                owner,
+            });
+            return result
+        } catch (error: any) {
+            Logger.error(`Error performing dry run: ${JSON.stringify(error.message)}`);
+            throw new DryRunError(error);
         }
     }
-    /* Utility */
+    /* Private */
 }
