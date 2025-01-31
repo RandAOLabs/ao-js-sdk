@@ -5,7 +5,7 @@ import { BaseClientConfig } from './abstract/BaseClientConfig';
 import { DryRunError, JsonParsingError, MessageError, MessageOutOfBoundsError, ResultError, ResultsError } from './BaseClientError';
 import { MessageResult } from '@permaweb/aoconnect/dist/lib/result';
 import { ResultsResponse } from '@permaweb/aoconnect/dist/lib/results';
-import { Logger } from '../utils/logger/logger';
+import { Logger, LogLevel } from '../utils/logger/logger';
 import { getBaseClientAutoConfiguration } from './BaseClientAutoConfiguration';
 import { DryRunResult } from '@permaweb/aoconnect/dist/lib/dryrun';
 import Arweave from 'arweave';
@@ -78,7 +78,7 @@ export class BaseClient extends IBaseClient {
 
     async dryrun(data: any = '', tags: Tags = [], anchor?: string, id?: string, owner?: string): Promise<DryRunResult | MessageResult> {
         if (this.useDryRunAsMessage) {
-            Logger.warn(`Running dry run as message`);
+            Logger.warn(`Action: Dry run triggered as message | Process ID: ${this.baseConfig.processId} | Subclass: ${this.constructor.name}`);
             return await this.messageResult(data, tags, anchor);
         } else {
             return await this._dryrun(data, tags, anchor, id, owner);
@@ -90,6 +90,9 @@ export class BaseClient extends IBaseClient {
     /* Public Settings*/
     public setDryRunAsMessage(enabled: boolean): void {
         this.useDryRunAsMessage = enabled;
+        const status = enabled ? 'TRUE' : 'FALSE';
+        const logLevel = enabled ? LogLevel.WARN : LogLevel.INFO;
+        Logger.log(logLevel, `Action: Dry run mode set to ${status} | Process ID: ${this.baseConfig.processId} | Subclass: ${this.constructor.name}`);
     }
     /* Public Utility */
     public getProcessId(): string {
