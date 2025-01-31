@@ -76,7 +76,7 @@ export class BaseClient extends IBaseClient {
         }
     }
 
-    async dryrun(data: any = '', tags: Tags = [], anchor?: string, id?: string, owner?: string): Promise<DryRunResult | MessageResult> {
+    async dryrun(data: any = '', tags: Tags = [], anchor?: string, id?: string, owner?: string): Promise<DryRunResult> {
         if (this.useDryRunAsMessage) {
             Logger.warn(`Action: Dry run triggered as message | Process ID: ${this.baseConfig.processId} | Subclass: ${this.constructor.name}`);
             return await this.messageResult(data, tags, anchor);
@@ -112,6 +112,10 @@ export class BaseClient extends IBaseClient {
                 throw new UnknownEnvironmentError();
         }
     }
+
+    public isRunningDryRunsAsMessages(): boolean {
+        return this.useDryRunAsMessage
+    }
     /* Public Utility */
 
     /* Protected Utility */
@@ -120,7 +124,7 @@ export class BaseClient extends IBaseClient {
         return tag?.value;
     }
 
-    protected async messageResult(data: string = '', tags: Tags = [], anchor?: string): Promise<MessageResult> {
+    async messageResult(data: string = '', tags: Tags = [], anchor?: string): Promise<MessageResult> {
         const result_id = await this.message(
             data,
             tags,

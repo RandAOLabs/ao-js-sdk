@@ -21,6 +21,24 @@ const dryRunResult: DryRunResult = {
 jest.spyOn(BaseClient.prototype, 'dryrun').mockResolvedValue(dryRunResult);
 jest.spyOn(BaseClient.prototype, 'messageResult').mockResolvedValue(messageResult);
 jest.mock("../../../src/clients/token/index");
+/*
+* Mocks the logger for tests to suppress log outputs.
+* Logs a warning that logging has been disabled for the current test suite.
+*/
+jest.mock('../../../src/utils/logger/logger', () => {
+    const actualLogger = jest.requireActual('../../../src/utils/logger/logger');
+    return {
+        ...actualLogger,
+        Logger: {
+            ...actualLogger.Logger,
+            info: jest.fn(),
+            warn: jest.fn(),
+            error: jest.fn(),
+            debug: jest.fn(),
+            log: jest.fn(),
+        },
+    };
+});
 
 describe("StakingClient Unit Test", () => {
     let client: StakingClient;
