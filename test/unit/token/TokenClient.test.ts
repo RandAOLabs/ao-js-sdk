@@ -4,6 +4,7 @@ import { Tags } from "../../../src/index";
 import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
 import { BaseClient } from "../../../src/index";
 
+
 // Mock the functions from '@permaweb/aoconnect'
 //mocks
 jest.mock('@permaweb/aoconnect', () => ({
@@ -13,7 +14,24 @@ jest.mock('@permaweb/aoconnect', () => ({
     dryrun: jest.fn(),
     createDataItemSigner: jest.fn(), // Create a Jest mock function here
 }));
-
+/*
+* Mocks the logger for tests to suppress log outputs.
+* Logs a warning that logging has been disabled for the current test suite.
+*/
+jest.mock('../../../src/utils/logger/logger', () => {
+    const actualLogger = jest.requireActual('../../../src/utils/logger/logger');
+    return {
+        ...actualLogger,
+        Logger: {
+            ...actualLogger.Logger,
+            info: jest.fn(),
+            warn: jest.fn(),
+            error: jest.fn(),
+            debug: jest.fn(),
+            log: jest.fn(),
+        },
+    };
+});
 describe("TokenClient", () => {
     let client: TokenClient;
 

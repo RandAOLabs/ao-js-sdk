@@ -51,7 +51,7 @@ export abstract class IBaseClient {
      * the result of any computations, and any spawned messages. Or a MessageResult if useDryRunAsMessage is true.
      * @throws DryRunError if there is an error performing the dry run.
      */
-    abstract dryrun(data: any, tags: Tags, anchor?: string, id?: string, owner?: string): Promise<DryRunResult | MessageResult>;
+    abstract dryrun(data: any, tags: Tags, anchor?: string, id?: string, owner?: string): Promise<DryRunResult>;
     /**
      * Controls whether dryrun executes as a message or simulation.
      * 
