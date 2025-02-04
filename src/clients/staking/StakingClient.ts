@@ -45,7 +45,6 @@ export class StakingClient extends BaseClient implements IStakingClient {
             ];
             const data = JSON.stringify({ providerDetails: JSON.stringify(providerDetails) });
             const result = await this.messageResult(data, tags);
-            Logger.debug(result)
             return this.getFirstMessageDataString(result);
         } catch (error: any) {
             Logger.error(`Error updating provider details: ${error.message}`);
@@ -120,7 +119,6 @@ export class StakingClient extends BaseClient implements IStakingClient {
             ];
             const result = await this.dryrun("", tags);
             const dtos = this.getFirstMessageDataJson<ProviderInfoDTO[]>(result);
-            Logger.debug(dtos)
             const providers = dtos.map(dto => this.parseProviderInfoDTO(dto));
             return providers;
         } catch (error: any) {
@@ -138,7 +136,6 @@ export class StakingClient extends BaseClient implements IStakingClient {
             const data = JSON.stringify({ providerId: targetId });
             const result = await this.dryrun(data, tags);
             const dto = this.getFirstMessageDataJson<ProviderInfoDTO>(result);
-            Logger.debug(dto)
             const info = this.parseProviderInfoDTO(dto);
             return info;
         } catch (error: any) {
