@@ -1,7 +1,9 @@
 export const RNG_TOKEN_PROCESS_ID: string = "yKVS1tYE3MajUpZqEIORmW1J8HTke-6o6o6tnlkFOZQ"
 export const RANDOM_PROCESS_ID: string = "KbaY8P4h9wdHYKHlBSLbXN_yd-9gxUDxSgBackUxTiQ"
+
 export const STAKING_PROCESS_ID: string = RNG_TOKEN_PROCESS_ID
 export const STAKING_TOKEN_PROCESS_ID: string = "5ZR9uegKoEhE9fJMbs-MvWLIztMNCVxgpzfeBVE3vqI"
+
 export const NFT_SALE_PROCESS_ID: string = "HQJhp5X57ZA-c9wNgHHIUIxg6TuuI5revy072hKa99M"
 export const PROFILE_REGISTRY_PROCESS_ID: string = "SNy4m-DrqxWl01YqGM4sxI8qCni-58re8uuJLvZPypY"
 export const ARCAO_TEST_TOKEN_PROCESS_ID: string = "MFkhHzNJolksLqLOhRIaHhSPY20GUPi32uRGG0dZWDw"
