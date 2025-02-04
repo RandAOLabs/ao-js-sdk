@@ -4,6 +4,7 @@ import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
 import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
 import { TokenClient } from "../../../src/index";
 import { ProviderDetails } from "../../../src/clients/staking/abstract/types";
+import { UnstakeError } from "../../../src/clients/staking/StakingClientError";
 
 // Mock individual methods of BaseClient using jest.spyOn
 jest.spyOn(BaseClient.prototype, 'message').mockResolvedValue("test-message-id");
@@ -115,11 +116,51 @@ describe("StakingClient Unit Test", () => {
     });
 
     describe("unstake()", () => {
-        it("should unstake tokens", async () => {
-            const providerId = "test-provider";
-            const response = await client.unstake(providerId);
+        const providerId = "test-provider";
 
-            expect(response).toBeDefined();
+        it("should return true when unstaking succeeds", async () => {
+            const successResult: MessageResult = {
+                Output: undefined,
+                Messages: [{ ID: "test-message-id", Data: "Stake successfully removed", Tags: [] }],
+                Spawns: []
+            };
+            jest.spyOn(BaseClient.prototype, 'messageResult').mockResolvedValueOnce(successResult);
+
+            const response = await client.unstake(providerId);
+            expect(response).toBe(true);
+            expect(BaseClient.prototype.messageResult).toHaveBeenCalled();
+        });
+
+        it("should return false when unstaking fails", async () => {
+            const failureResult: MessageResult = {
+                Output: undefined,
+                Messages: [{ ID: "test-message-id", Data: "Failed to unstake: insufficient balance", Tags: [] }],
+                Spawns: []
+            };
+            jest.spyOn(BaseClient.prototype, 'messageResult').mockResolvedValueOnce(failureResult);
+
+            const response = await client.unstake(providerId);
+            expect(response).toBe(false);
+            expect(BaseClient.prototype.messageResult).toHaveBeenCalled();
+        });
+
+        it("should throw UnstakeError when messageResult fails", async () => {
+            jest.spyOn(BaseClient.prototype, 'messageResult').mockRejectedValueOnce(new Error("Network error"));
+
+            await expect(client.unstake(providerId)).rejects.toThrow(UnstakeError);
+            expect(BaseClient.prototype.messageResult).toHaveBeenCalled();
+        });
+
+        it("should return false when response is empty", async () => {
+            const emptyResult: MessageResult = {
+                Output: undefined,
+                Messages: [{ ID: "test-message-id", Data: "", Tags: [] }],
+                Spawns: []
+            };
+            jest.spyOn(BaseClient.prototype, 'messageResult').mockResolvedValueOnce(emptyResult);
+
+            const response = await client.unstake(providerId);
+            expect(response).toBe(false);
             expect(BaseClient.prototype.messageResult).toHaveBeenCalled();
         });
     });
