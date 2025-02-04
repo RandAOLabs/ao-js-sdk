@@ -16,7 +16,9 @@
     "test": "jest --runInBand ./test",
     "test:unit": "jest ./test/unit",
     "test:integration": "jest --runInBand ./test/integration",
-    "test:integration:staking": "jest --runInBand ./test/integration/staking"
+    "test:integration:staking": "jest --runInBand ./test/integration/staking",
+    "test:integration:random": "jest --runInBand ./test/integration/random",
+    "test:integration:nftSale": "jest --runInBand ./test/integration/nft-sale"
   },
   "repository": {
     "type": "git",
