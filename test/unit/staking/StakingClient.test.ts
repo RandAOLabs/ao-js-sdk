@@ -121,7 +121,7 @@ describe("StakingClient Unit Test", () => {
         it("should return true when unstaking succeeds", async () => {
             const successResult: MessageResult = {
                 Output: undefined,
-                Messages: [{ ID: "test-message-id", Data: "Successfully unstaked", Tags: [] }],
+                Messages: [{ ID: "test-message-id", Data: "Stake successfully removed", Tags: [] }],
                 Spawns: []
             };
             jest.spyOn(BaseClient.prototype, 'messageResult').mockResolvedValueOnce(successResult);
@@ -148,6 +148,19 @@ describe("StakingClient Unit Test", () => {
             jest.spyOn(BaseClient.prototype, 'messageResult').mockRejectedValueOnce(new Error("Network error"));
 
             await expect(client.unstake(providerId)).rejects.toThrow(UnstakeError);
+            expect(BaseClient.prototype.messageResult).toHaveBeenCalled();
+        });
+
+        it("should return false when response is empty", async () => {
+            const emptyResult: MessageResult = {
+                Output: undefined,
+                Messages: [{ ID: "test-message-id", Data: "", Tags: [] }],
+                Spawns: []
+            };
+            jest.spyOn(BaseClient.prototype, 'messageResult').mockResolvedValueOnce(emptyResult);
+
+            const response = await client.unstake(providerId);
+            expect(response).toBe(false);
             expect(BaseClient.prototype.messageResult).toHaveBeenCalled();
         });
     });
