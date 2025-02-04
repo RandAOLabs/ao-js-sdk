@@ -1,6 +1,6 @@
 {
   "name": "ao-process-clients",
-  "version": "3.6.0",
+  "version": "3.7.1",
   "description": "A modular TypeScript API client library for AO Process interactions",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
@@ -18,7 +18,9 @@
     "test:integration": "jest --runInBand ./test/integration",
     "test:integration:staking": "jest --runInBand ./test/integration/staking",
     "test:integration:random": "jest --runInBand ./test/integration/random",
-    "test:integration:nftSale": "jest --runInBand ./test/integration/nft-sale"
+    "test:integration:nftSale": "jest --runInBand ./test/integration/nft-sale",
+    "test:integration:profileRegistry": "jest --runInBand ./test/integration/profile-registry",
+    "test:integration:profile": "jest --runInBand ./test/integration/profile"
   },
   "repository": {
     "type": "git",
