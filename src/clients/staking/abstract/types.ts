@@ -30,6 +30,8 @@ export interface ProviderDetails {
     discord?: string;
     /** Optional Telegram handle */
     telegram?: string;
+    /** Optional domain */
+    domain?: string;
 }
 
 export interface StakeInfo {
