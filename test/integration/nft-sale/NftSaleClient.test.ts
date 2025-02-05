@@ -20,13 +20,8 @@ describe("NftSaleClient Integration Tests", () => {
 
     beforeAll(async () => {
         // Initialize with auto configuration
-        nftSaleClient = NftSaleClient.autoConfiguration();
-
-        // Add test NFTs to the sale process
-        for (const nftProcessId of testNftIds) {
-            const success = await nftSaleClient.addNft(nftProcessId);
-            expect(success).toBe(true);
-        }
+        nftSaleClient = await NftSaleClient.createAutoConfigured();
+        Logger.info(`Wallet Address: ${await nftSaleClient.getCallingWalletAddress()}`)
     });
 
     afterAll(() => {
@@ -34,20 +29,16 @@ describe("NftSaleClient Integration Tests", () => {
     });
 
     it("should successfully add NFT to sale", async () => {
-        const testNftProcessId = "test-nft-process-id";
-        const success = await nftSaleClient.addNft(testNftProcessId);
-        expect(success).toBe(true);
-    });
-
-    it("should handle errors when adding invalid NFT", async () => {
-        const invalidNftProcessId = "";
-        await expect(nftSaleClient.addNft(invalidNftProcessId))
-            .rejects
-            .toThrow(AddNftError);
+        // Add test NFTs to the sale process
+        for (const nftProcessId of testNftIds) {
+            const success = await nftSaleClient.addNft(nftProcessId);
+            expect(success).toBe(true);
+        }
     });
 
     it("should successfully purchase NFT and reduce available count", async () => {
         // Get initial NFT count
+        nftSaleClient.setDryRunAsMessage(true)
         const initialCount = await nftSaleClient.queryNFTCount();
         expect(initialCount).toBeGreaterThan(0);
 

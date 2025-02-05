@@ -5,17 +5,18 @@ import { NftSaleClientConfig } from "./abstract/NftSaleClientConfig";
 import { PurchaseNftError, QueryNFTCountError, AddNftError } from "./NftSaleClientError";
 import { TokenClient } from "../token";
 import { TokenClientConfig } from "../token/abstract/TokenClientConfig";
-import { NftClient } from "../nft";
+import { ProfileClient } from "../profile";
 import { getNftSaleClientAutoConfiguration } from "./NftSaleClientAutoConfiguration";
 
 export class NftSaleClient extends BaseClient implements INftSaleClient {
     /* Fields */
     readonly tokenClient: TokenClient;
+    readonly profileClient: ProfileClient;
     readonly purchaseAmount: string;
     /* Fields */
 
     /* Constructors */
-    public constructor(config: NftSaleClientConfig) {
+    private constructor(config: NftSaleClientConfig, profileClient: ProfileClient) {
         super(config);
         const tokenConfig: TokenClientConfig = {
             processId: config.tokenProcessId,
@@ -23,11 +24,14 @@ export class NftSaleClient extends BaseClient implements INftSaleClient {
             environment: config.environment
         };
         this.tokenClient = new TokenClient(tokenConfig);
+        this.profileClient = profileClient;
         this.purchaseAmount = config.purchaseAmount;
     }
 
-    public static autoConfiguration(): NftSaleClient {
-        return new NftSaleClient(getNftSaleClientAutoConfiguration());
+    public static async createAutoConfigured(): Promise<NftSaleClient> {
+        const config = getNftSaleClientAutoConfiguration();
+        const profileClient = await ProfileClient.createAutoConfigured();
+        return new NftSaleClient(config, profileClient);
     }
     /* Constructors */
 
@@ -66,19 +70,15 @@ export class NftSaleClient extends BaseClient implements INftSaleClient {
 
     public async addNft(nftProcessId: string): Promise<boolean> {
         try {
-            // Create NFT client from the process ID
-            const nftClient = new NftClient({
-                processId: nftProcessId,
-                wallet: this.baseConfig.wallet,
-                environment: this.baseConfig.environment
-            });
-
-            // Transfer NFT to the sale process
-            const success = await nftClient.transfer(this.getProcessId());
+            // Transfer NFT to the sale process using profile client
+            const success = await this.profileClient.transferAsset(
+                nftProcessId,
+                this.getProcessId(),
+                "1"
+            );
             if (!success) {
                 throw new Error("NFT transfer failed");
             }
-
             return true;
         } catch (error: any) {
             Logger.error(`Error adding NFT from process ${nftProcessId}: ${error.message}`);
