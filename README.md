@@ -44,6 +44,9 @@ Provides NFT functionality including minting and transfers.
 ### [Staking Client](src/clients/staking/README.md)
 Handles staking operations including staking, unstaking, and stake status checks.
 
+### [NFT Sale Client](src/clients/nft-sale/README.md)
+Manages NFT sales including adding NFTs to sale, purchasing NFTs, and querying available NFT counts.
+
 ## Environment
 ### Node
 Create a `.env` file:
