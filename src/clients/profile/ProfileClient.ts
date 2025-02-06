@@ -3,7 +3,7 @@ import { Logger } from "../../utils/index";
 import { IProfileClient } from "./abstract/IProfileClient";
 import { ProfileInfo } from "./abstract/types";
 import { getProfileClientAutoConfiguration } from "./ProfileClientAutoConfiguration";
-import { AsyncInitializationRequiredError, GetProfileError, TransferError } from "./ProfileClientError";
+import { AsyncInitializationRequiredError, GetProfileError, ProfileTransferError } from "./ProfileClientError";
 
 /** @see {@link https://cookbook_ao.g8way.io/references/profile.html | specification} */
 export class ProfileClient extends BaseClient implements IProfileClient {
@@ -50,7 +50,7 @@ export class ProfileClient extends BaseClient implements IProfileClient {
             return actionValue !== "Transfer-Failed";
         } catch (error: any) {
             Logger.error(`Error transferring ${quantity} from ${assetToTransfer} to ${recipient}: ${error.message}`);
-            throw new TransferError(assetToTransfer, recipient, quantity, error);
+            throw new ProfileTransferError(assetToTransfer, recipient, quantity, error);
         }
     }
     /* Core Profile Functions */
