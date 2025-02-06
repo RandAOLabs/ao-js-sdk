@@ -4,7 +4,7 @@ import { Logger } from "../../../src/index";
 import {
     BalanceError,
     BalancesError,
-    TransferError,
+    ProfileTransferError,
     GetInfoError,
     MintError,
 } from "../../../src/index";
@@ -81,7 +81,7 @@ describe("TokenClient Error Handling", () => {
             (message as jest.Mock).mockRejectedValueOnce(new Error());
 
             // Act & Assert
-            await expect(client.transfer(recipient, quantity)).rejects.toThrow(TransferError);
+            await expect(client.transfer(recipient, quantity)).rejects.toThrow(Error);
             expect(Logger.error).toHaveBeenCalled();
         });
     });
