@@ -1,27 +1,25 @@
 import { NftSaleClient } from "../../../src/clients/nft-sale";
 import { AddNftError } from "../../../src/clients/nft-sale/NftSaleClientError";
 import { Logger } from "../../../src/utils";
+import { CollectionClient } from "../../../src/clients/collection";
 
 describe("NftSaleClient Integration Tests", () => {
     let nftSaleClient: NftSaleClient;
-    const testNftIds = [
-        "ND9mS61GK2fBXlZU_eVFrXwubHYNBHCTMJd6KdtWbiI",
-        "R9vilEqfERNwRw8M94coHfM7B1g-zpRV51BG5vOuWDE",
-        "EKbxPhCJfRifSccyeJnApg6fqJ8EFqZhOENWFtCBLxw",
-        "3pb1Bt7f9OEU4EXAQKGrdAiF950NuvRzxgjaDmjr7Aw",
-        "oi10f-aOyKI0R3Y4QtTSIrA52eCOd7BdV9xu7LFVi28",
-        "WzDJaLoGtazFc-M5lj9c-CUttYzhS7Vpjtfn4j9B2JE",
-        "BonaQR0Y6wgn831vpYMmGzIKtsCK3vPfP17YQjmKggc",
-        "JF9vOqNVxwU_PJUAg7Jc3xNg3WxzYfsJQ8jgBj1ddts",
-        "B0Pfw_H6OjS_3PFH_ppBUa4ebMoxywohZEyArvw0NAo",
-        "zCyGDe-gyARePupUr8t-kWdA2eIXhPkRmfO1tuzhPjA",
-        "tG29nprqDSeo2Z3w0KaSxKBiBy55xZT3hPnMTI9cmVM"
-    ];
+    let collectionClient: CollectionClient;
+    let testNftIds: string[];
 
     beforeAll(async () => {
-        // Initialize with auto configuration
+        // Initialize clients with auto configuration
         nftSaleClient = await NftSaleClient.createAutoConfigured();
-        Logger.info(`Wallet Address: ${await nftSaleClient.getCallingWalletAddress()}`)
+        collectionClient = CollectionClient.autoConfiguration();
+        
+        // Get NFT IDs from collection
+        const collectionInfo = await collectionClient.getInfo();
+        testNftIds = collectionInfo.Assets.slice(0, 13); // Only use first 5 NFTs
+        Logger.debug(testNftIds)
+        
+        Logger.info(`Wallet Address: ${await nftSaleClient.getCallingWalletAddress()}`);
+        Logger.info(`Using ${testNftIds.length} NFTs from collection for testing`);
     });
 
     afterAll(() => {
