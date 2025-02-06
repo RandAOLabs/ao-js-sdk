@@ -4,9 +4,9 @@ export const RANDOM_PROCESS_ID: string = "KbaY8P4h9wdHYKHlBSLbXN_yd-9gxUDxSgBack
 export const STAKING_PROCESS_ID: string = RNG_TOKEN_PROCESS_ID
 export const STAKING_TOKEN_PROCESS_ID: string = "5ZR9uegKoEhE9fJMbs-MvWLIztMNCVxgpzfeBVE3vqI"
 
-export const NFT_SALE_PROCESS_ID: string = "D4c1-5_oHjOdDg3_mmjpv5KHs5kzjXASlvDVtEfPDVg"
+export const NFT_SALE_PROCESS_ID: string = "M2GKaKvomE20cKuAoDMhjEB-Q-ZjQYpMBe0pXpJ2JoE"
 export const ARCAO_TEST_TOKEN_PROCESS_ID: string = "MFkhHzNJolksLqLOhRIaHhSPY20GUPi32uRGG0dZWDw"
-export const ARCAO_TEST_NFT_COLLECTION: string = ""
+export const ARCAO_TEST_NFT_COLLECTION: string = "U2_bhsYDXh6c-XY3xLcu29EbF3MsWDuHnvB-Jy2pzSk"
 
 /*In theory these never need to change*/
 export const PROFILE_REGISTRY_PROCESS_ID: string = "SNy4m-DrqxWl01YqGM4sxI8qCni-58re8uuJLvZPypY"

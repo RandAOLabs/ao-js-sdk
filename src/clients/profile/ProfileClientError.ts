@@ -29,7 +29,7 @@ export class GetProfileError extends ProfileClientError {
     }
 }
 
-export class TransferError extends ProfileClientError {
+export class ProfileTransferError extends ProfileClientError {
     constructor(target: string, recipient: string, quantity: string, originalError?: Error) {
         super(`Error transferring ${quantity} from ${target} to ${recipient}`, originalError);
         this.name = 'TransferError';
