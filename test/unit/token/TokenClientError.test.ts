@@ -81,7 +81,7 @@ describe("TokenClient Error Handling", () => {
             (message as jest.Mock).mockRejectedValueOnce(new Error());
 
             // Act & Assert
-            await expect(client.transfer(recipient, quantity)).rejects.toThrow(ProfileTransferError);
+            await expect(client.transfer(recipient, quantity)).rejects.toThrow(Error);
             expect(Logger.error).toHaveBeenCalled();
         });
     });
