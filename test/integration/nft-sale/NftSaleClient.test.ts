@@ -33,40 +33,40 @@ describe("NftSaleClient Integration Tests", () => {
         Logger.info("NFT Sale integration tests complete.");
     });
 
-    // it("should successfully add NFT to sale", async () => {
-    //     await sleep(1000);
-    //     // Add test NFTs to the sale process
-    //     for (const nftProcessId of testNftIds) {
-    //         const success = await nftSaleClient.addNft(nftProcessId);
-    //         expect(success).toBe(true);
-    //     }
-    // });
-
-    // it("should query available count", async () => {
-    //     await sleep(1000);
-    //     // Get initial NFT count
-    //     nftSaleClient.setDryRunAsMessage(true)
-    //     const initialCount = await nftSaleClient.queryNFTCount();
-    //     expect(initialCount).toBeGreaterThan(0);
-    // });
-
-    // it("should successfully purchase NFT", async () => {
-    //     await sleep(1000);
-    //     // Purchase an NFT
-    //     const purchaseSuccess = await nftSaleClient.purchaseNft();
-    //     expect(purchaseSuccess).toBe(true);
-    // });
-
-    it("should successfully return NFTs to specified recipient", async () => {
+    it("should successfully add NFT to sale", async () => {
         await sleep(1000);
-        // Set dry run as message to ensure we can test the functionality
-        nftSaleClient.setDryRunAsMessage(true);
-
-        // Get recipient address
-        await nftSaleClient.getCallingWalletAddress();
-
-        // Return NFTs
-        const returnSuccess = await nftSaleClient.returnNFTs();
-        expect(returnSuccess).toBe(true);
+        // Add test NFTs to the sale process
+        for (const nftProcessId of testNftIds) {
+            const success = await nftSaleClient.addNft(nftProcessId);
+            expect(success).toBe(true);
+        }
     });
+
+    it("should query available count", async () => {
+        await sleep(1000);
+        // Get initial NFT count
+        nftSaleClient.setDryRunAsMessage(true)
+        const initialCount = await nftSaleClient.queryNFTCount();
+        expect(initialCount).toBeGreaterThan(0);
+    });
+
+    it("should successfully purchase NFT", async () => {
+        await sleep(1000);
+        // Purchase an NFT
+        const purchaseSuccess = await nftSaleClient.purchaseNft();
+        expect(purchaseSuccess).toBe(true);
+    });
+
+    // it("should successfully return NFTs to specified recipient", async () => {
+    //     await sleep(1000);
+    //     // Set dry run as message to ensure we can test the functionality
+    //     nftSaleClient.setDryRunAsMessage(true);
+
+    //     // Get recipient address
+    //     await nftSaleClient.getCallingWalletAddress();
+
+    //     // Return NFTs
+    //     const returnSuccess = await nftSaleClient.returnNFTs();
+    //     expect(returnSuccess).toBe(true);
+    // });
 });

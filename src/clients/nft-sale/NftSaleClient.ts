@@ -22,7 +22,7 @@ export class NftSaleClient extends BaseClient implements INftSaleClient {
     /* Getters */
 
     /* Constructors */
-    private constructor(config: NftSaleClientConfig, profileClient: ProfileClient) {
+    public constructor(config: NftSaleClientConfig, profileClient: ProfileClient) {
         super(config);
         const tokenConfig: TokenClientConfig = {
             processId: config.tokenProcessId,
@@ -32,6 +32,12 @@ export class NftSaleClient extends BaseClient implements INftSaleClient {
         this.tokenClient = new TokenClient(tokenConfig);
         this.profileClient = profileClient;
         this.purchaseAmount = config.purchaseAmount;
+    }
+
+    public static async create(config?: NftSaleClientConfig, profileClient?: ProfileClient): Promise<NftSaleClient> {
+        const finalConfig = config ?? getNftSaleClientAutoConfiguration();
+        const finalProfileClient = profileClient ?? await ProfileClient.createAutoConfigured();
+        return new NftSaleClient(finalConfig, finalProfileClient);
     }
 
     public static async createAutoConfigured(): Promise<NftSaleClient> {
