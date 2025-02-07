@@ -2,7 +2,7 @@ import { Tags, BaseClient } from "../../core";
 import { Logger } from "../../utils";
 import { INftSaleClient } from "./abstract/INftSaleClient";
 import { NftSaleClientConfig } from "./abstract/NftSaleClientConfig";
-import { PurchaseNftError, QueryNFTCountError, AddNftError } from "./NftSaleClientError";
+import { PurchaseNftError, QueryNFTCountError, AddNftError, ReturnNFTsError } from "./NftSaleClientError";
 import { TokenClient } from "../token";
 import { TokenClientConfig } from "../token/abstract/TokenClientConfig";
 import { ProfileClient } from "../profile";
@@ -14,6 +14,12 @@ export class NftSaleClient extends BaseClient implements INftSaleClient {
     readonly profileClient: ProfileClient;
     readonly purchaseAmount: string;
     /* Fields */
+
+    /* Getters */
+    public getTokenClient(): TokenClient {
+        return this.tokenClient;
+    }
+    /* Getters */
 
     /* Constructors */
     private constructor(config: NftSaleClientConfig, profileClient: ProfileClient) {
@@ -66,7 +72,6 @@ export class NftSaleClient extends BaseClient implements INftSaleClient {
             throw new QueryNFTCountError(error);
         }
     }
-    /* Core NFT Sale Functions */
 
     public async addNft(nftProcessId: string): Promise<boolean> {
         try {
@@ -83,6 +88,22 @@ export class NftSaleClient extends BaseClient implements INftSaleClient {
         } catch (error: any) {
             Logger.error(`Error adding NFT from process ${nftProcessId}: ${error.message}`);
             throw new AddNftError(nftProcessId, error);
+        }
+    }
+
+    public async returnNFTs(recipient?: string): Promise<boolean> {
+        if (!recipient) {
+            recipient = this.profileClient.getProcessId()
+        }
+        try {
+            const result = await this.messageResult('', [
+                { name: "Action", value: "Return-NFTs" },
+                { name: "Recipient", value: recipient }
+            ]);
+            return true;
+        } catch (error: any) {
+            Logger.error(`Error returning NFTs to recipient ${recipient}: ${error.message}`);
+            throw new ReturnNFTsError(recipient, error);
         }
     }
 }

@@ -20,4 +20,11 @@ export interface INftSaleClient {
      * @returns boolean indicating if the NFT was successfully added
      */
     addNft(nftProcessId: string): Promise<boolean>;
+
+    /**
+     * Return NFTs to a specified recipient
+     * @param recipient The recipient address to return NFTs to
+     * @returns boolean indicating if the NFTs were successfully returned
+     */
+    returnNFTs(recipient: string): Promise<boolean>;
 }
