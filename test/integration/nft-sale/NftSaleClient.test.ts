@@ -1,5 +1,4 @@
 import { NftSaleClient } from "../../../src/clients/nft-sale";
-import { AddNftError, ReturnNFTsError } from "../../../src/clients/nft-sale/NftSaleClientError";
 import { Logger } from "../../../src/utils";
 import { CollectionClient } from "../../../src/clients/collection";
 
