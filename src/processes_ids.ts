@@ -14,3 +14,17 @@ export const WRAPPED_AR_TOKEN_PROCESS_ID: string = "xU9zFkq3X2ZQ6olwNVvr1vUWIjc3
 export const Q_ARWEAVE_TOKEN_PROCESS_ID: string = "NG-0lVX882MG5nhARrSzyprEK6ejonHpdUmaaMPsHE8"
 export const AO_TOKEN_PROCESS_ID: string = "UkS-mdoiG8hcAClhKK8ch4ZhEzla0mCPDOix9hpdSFE"
 
+// Also export as a single namespace object
+export const processIds = {
+    RNG_TOKEN_PROCESS_ID,
+    RANDOM_PROCESS_ID,
+    STAKING_PROCESS_ID,
+    STAKING_TOKEN_PROCESS_ID,
+    NFT_SALE_PROCESS_ID,
+    ARCAO_TEST_TOKEN_PROCESS_ID,
+    ARCAO_TEST_NFT_COLLECTION,
+    PROFILE_REGISTRY_PROCESS_ID,
+    WRAPPED_AR_TOKEN_PROCESS_ID,
+    Q_ARWEAVE_TOKEN_PROCESS_ID,
+    AO_TOKEN_PROCESS_ID
+} as const
