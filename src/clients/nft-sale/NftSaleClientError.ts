@@ -1,30 +1,25 @@
-export class NftSaleClientError extends Error {
-    constructor(message: string, originalError?: Error) {
-        super(message);
-        this.name = 'NftSaleClientError';
-        if (originalError) {
-            this.stack += '\nCaused by: ' + originalError.stack;
-        }
+import { BaseClientError } from "../../core";
+
+export class PurchaseNftError extends BaseClientError {
+    constructor(amount: string, cause?: Error) {
+        super(`Failed to purchase NFT for ${amount} tokens`, cause);
     }
 }
 
-export class PurchaseNftError extends NftSaleClientError {
-    constructor(amount: string, originalError?: Error) {
-        super(`Error purchasing NFT for ${amount} tokens`, originalError);
-        this.name = 'PurchaseNftError';
+export class QueryNFTCountError extends BaseClientError {
+    constructor(cause?: Error) {
+        super("Failed to query NFT count", cause);
     }
 }
 
-export class QueryNFTCountError extends NftSaleClientError {
-    constructor(originalError?: Error) {
-        super('Error querying NFT count', originalError);
-        this.name = 'QueryNFTCountError';
+export class AddNftError extends BaseClientError {
+    constructor(nftProcessId: string, cause?: Error) {
+        super(`Failed to add NFT from process ${nftProcessId}`, cause);
     }
 }
 
-export class AddNftError extends NftSaleClientError {
-    constructor(nftProcessId: string, originalError?: Error) {
-        super(`Error adding NFT from process ${nftProcessId}`, originalError);
-        this.name = 'AddNftError';
+export class ReturnNFTsError extends BaseClientError {
+    constructor(recipient: string, cause?: Error) {
+        super(`Failed to return NFTs to recipient ${recipient}`, cause);
     }
 }
