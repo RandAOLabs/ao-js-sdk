@@ -14,7 +14,7 @@ export class CollectionClient extends BaseClient implements ICollectionClient {
         return new CollectionClient(getCollectionClientAutoConfiguration());
     }
 
-    protected constructor(config: CollectionClientConfig) {
+    public constructor(config: CollectionClientConfig) {
         super(config);
     }
     /* Constructors */
