@@ -10,3 +10,4 @@ export * from "./clients/profile/index"
 export * from "./clients/profile-registry/index"
 
 export * from './utils/index'
+export { processIds } from './processes_ids'
