@@ -22,7 +22,7 @@ export class NftClient extends TokenClient implements INftClient {
     }
 
     public static autoConfiguration(): NftClient {
-        return new TokenClient(getNftClientAutoConfiguration());
+        return new NftClient(getNftClientAutoConfiguration());
     }
     /* Constructors */
 
