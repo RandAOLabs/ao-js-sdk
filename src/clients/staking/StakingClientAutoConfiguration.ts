@@ -1,4 +1,4 @@
-import { getBaseClientAutoConfiguration } from "../../core/BaseClientAutoConfiguration";
+import { getBaseClientAutoConfiguration } from "../../core/ao/BaseClientAutoConfiguration";
 import { StakingClientConfig } from "./abstract/StakingClientConfig";
 import { STAKING_PROCESS_ID, STAKING_TOKEN_PROCESS_ID } from "../../processes_ids";
 

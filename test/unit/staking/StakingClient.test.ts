@@ -1,5 +1,5 @@
 import { StakingClient } from "../../../src/index";
-import { BaseClient } from "../../../src/core/BaseClient";
+import { BaseClient } from "../../../src/core/ao/BaseClient";
 import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
 import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
 import { TokenClient } from "../../../src/index";

@@ -1,4 +1,4 @@
-import { Tags } from "../../../core/abstract/types";
+import { Tags } from "../../../core/ao/abstract/types";
 
 export interface WhitelistZone {
     [1]: string;  // Zone Purchase Price

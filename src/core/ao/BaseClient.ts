@@ -5,11 +5,11 @@ import { BaseClientConfig } from './abstract/BaseClientConfig';
 import { DryRunError, JsonParsingError, MessageError, MessageOutOfBoundsError, ResultError, ResultsError } from './BaseClientError';
 import { MessageResult } from '@permaweb/aoconnect/dist/lib/result';
 import { ResultsResponse } from '@permaweb/aoconnect/dist/lib/results';
-import { Logger, LogLevel } from '../utils/logger/logger';
+import { Logger, LogLevel } from '../../utils/logger/logger';
 import { getBaseClientAutoConfiguration } from './BaseClientAutoConfiguration';
 import { DryRunResult } from '@permaweb/aoconnect/dist/lib/dryrun';
 import Arweave from 'arweave';
-import { getEnvironment, Environment, UnknownEnvironmentError } from '../utils/environment';
+import { getEnvironment, Environment, UnknownEnvironmentError } from '../../utils/environment';
 
 export class BaseClient extends IBaseClient {
     /* Fields */

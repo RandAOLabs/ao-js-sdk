@@ -1,5 +1,5 @@
 // src/index.ts
-export * from "./core/index"
+export * from "./core/ao/index"
 export * from './clients/token/index';
 export * from "./clients/nft/index"
 export * from './clients/random/index';

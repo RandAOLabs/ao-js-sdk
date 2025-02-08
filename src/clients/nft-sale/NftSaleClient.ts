@@ -1,4 +1,4 @@
-import { Tags, BaseClient } from "../../core";
+import { Tags, BaseClient } from "../../core/ao";
 import { Logger } from "../../utils";
 import { INftSaleClient } from "./abstract/INftSaleClient";
 import { NftSaleClientConfig } from "./abstract/NftSaleClientConfig";
