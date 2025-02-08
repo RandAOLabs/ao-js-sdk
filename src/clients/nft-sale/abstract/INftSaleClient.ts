@@ -1,4 +1,4 @@
-import { Tags } from "../../../core/abstract/types";
+import { NftSaleInfo } from "./types";
 
 export interface INftSaleClient {
     /**
@@ -27,4 +27,16 @@ export interface INftSaleClient {
      * @returns boolean indicating if the NFTs were successfully returned
      */
     returnNFTs(recipient: string): Promise<boolean>;
+
+    /**
+     * Participate in lucky draw by sending a fixed amount of tokens to the process
+     * @returns boolean indicating if lucky draw participation was successful
+     */
+    luckyDraw(): Promise<boolean>;
+
+    /**
+     * Get detailed information about the NFT sale
+     * @returns NftSaleInfo containing sale statistics
+     */
+    getInfo(): Promise<NftSaleInfo>;
 }
