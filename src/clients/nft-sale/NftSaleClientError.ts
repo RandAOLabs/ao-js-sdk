@@ -23,3 +23,15 @@ export class ReturnNFTsError extends BaseClientError {
         super(`Failed to return NFTs to recipient ${recipient}`, cause);
     }
 }
+
+export class LuckyDrawError extends BaseClientError {
+    constructor(amount: string, cause?: Error) {
+        super(`Failed to participate in lucky draw for ${amount} tokens`, cause);
+    }
+}
+
+export class NftSaleInfoError extends BaseClientError {
+    constructor(cause?: Error) {
+        super("Failed to get NFT sale information", cause);
+    }
+}

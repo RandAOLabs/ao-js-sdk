@@ -2,7 +2,8 @@ import { Tags, BaseClient } from "../../core";
 import { Logger } from "../../utils";
 import { INftSaleClient } from "./abstract/INftSaleClient";
 import { NftSaleClientConfig } from "./abstract/NftSaleClientConfig";
-import { PurchaseNftError, QueryNFTCountError, AddNftError, ReturnNFTsError } from "./NftSaleClientError";
+import { PurchaseNftError, QueryNFTCountError, AddNftError, ReturnNFTsError, LuckyDrawError, NftSaleInfoError } from "./NftSaleClientError";
+import { NftSaleInfo } from "./abstract/types";
 import { TokenClient } from "../token";
 import { TokenClientConfig } from "../token/abstract/TokenClientConfig";
 import { ProfileClient } from "../profile";
@@ -13,6 +14,7 @@ export class NftSaleClient extends BaseClient implements INftSaleClient {
     readonly tokenClient: TokenClient;
     readonly profileClient: ProfileClient;
     readonly purchaseAmount: string;
+    readonly luckyDrawAmount: string;
     /* Fields */
 
     /* Getters */
@@ -32,6 +34,7 @@ export class NftSaleClient extends BaseClient implements INftSaleClient {
         this.tokenClient = new TokenClient(tokenConfig);
         this.profileClient = profileClient;
         this.purchaseAmount = config.purchaseAmount;
+        this.luckyDrawAmount = config.luckyDrawAmount;
     }
 
     public static async create(config?: NftSaleClientConfig, profileClient?: ProfileClient): Promise<NftSaleClient> {
@@ -99,7 +102,7 @@ export class NftSaleClient extends BaseClient implements INftSaleClient {
 
     public async returnNFTs(recipient?: string): Promise<boolean> {
         if (!recipient) {
-            recipient = this.profileClient.getProcessId()
+            recipient = this.profileClient.getProcessId();
         }
         try {
             const result = await this.messageResult('', [
@@ -110,6 +113,34 @@ export class NftSaleClient extends BaseClient implements INftSaleClient {
         } catch (error: any) {
             Logger.error(`Error returning NFTs to recipient ${recipient}: ${error.message}`);
             throw new ReturnNFTsError(recipient, error);
+        }
+    }
+
+    public async luckyDraw(): Promise<boolean> {
+        try {
+            const success = await this.tokenClient.transfer(this.getProcessId(), this.luckyDrawAmount, [
+                { name: "Action", value: "Lucky-Draw" }
+            ]);
+            if (!success) {
+                throw new Error("Token transfer failed");
+            }
+            return true;
+        } catch (error: any) {
+            Logger.error(`Error participating in lucky draw: ${error.message}`);
+            throw new LuckyDrawError(this.luckyDrawAmount, error);
+        }
+    }
+
+    public async getInfo(): Promise<NftSaleInfo> {
+        try {
+            const result = await this.dryrun('', [
+                { name: "Action", value: "Info" }
+            ]);
+
+            return this.getFirstMessageDataJson<NftSaleInfo>(result);
+        } catch (error: any) {
+            Logger.error(`Error getting NFT sale info: ${error.message}`);
+            throw new NftSaleInfoError(error);
         }
     }
 }
