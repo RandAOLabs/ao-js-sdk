@@ -22,7 +22,6 @@ describe("NftSaleClient Integration Tests", () => {
         // Get NFT IDs from collection
         const collectionInfo = await collectionClient.getInfo();
         testNftIds = collectionInfo.Assets.slice(0, 13); // Only use first 5 NFTs
-        Logger.debug(testNftIds)
 
         Logger.info(`Wallet Address: ${await nftSaleClient.getCallingWalletAddress()}`);
         Logger.info(`Using ${testNftIds.length} NFTs from collection for testing`);
@@ -60,7 +59,6 @@ describe("NftSaleClient Integration Tests", () => {
         await sleep(1000);
         // Get sale info
         const info = await nftSaleClient.getInfo();
-        Logger.debug(`NFT Sale Info: ${JSON.stringify(info)}`);
         expect(info).toBeDefined();
     });
 
