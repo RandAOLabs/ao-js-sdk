@@ -49,7 +49,7 @@ export class NftSaleClient extends BaseClient implements INftSaleClient {
     public async purchaseNft(): Promise<boolean> {
         let amount: string;
         try {
-            amount = await this._getPurchasePaymentAmount();
+            amount = await this.getPurchasePaymentAmount();
             return await this._pay(amount);
         } catch (error: any) {
             throw new PurchaseNftError(amount!, error);
@@ -59,7 +59,7 @@ export class NftSaleClient extends BaseClient implements INftSaleClient {
     public async luckyDraw(): Promise<boolean> {
         let amount: string;
         try {
-            amount = await this._getLuckyDrawPaymentAmount();
+            amount = await this.getPurchasePaymentAmount();
             return await this._pay(amount, [
                 { name: "Lucky-Draw", value: "true" }
             ]);
@@ -138,8 +138,7 @@ export class NftSaleClient extends BaseClient implements INftSaleClient {
         }
     }
 
-    /* Private */
-    private async _getPurchasePaymentAmount(): Promise<string> {
+    public async getPurchasePaymentAmount(): Promise<string> {
         const info = await this.getInfo();
         const currentZone = info.Current_Zone;
         const zoneInfo = info.MasterWhitelist[currentZone];
@@ -149,7 +148,7 @@ export class NftSaleClient extends BaseClient implements INftSaleClient {
         return zoneInfo[0]; // Zone Purchase Price
     }
 
-    private async _getLuckyDrawPaymentAmount(): Promise<string> {
+    public async getLuckyDrawPaymentAmount(): Promise<string> {
         const info = await this.getInfo();
         const currentZone = info.Current_Zone;
         const zoneInfo = info.MasterWhitelist[currentZone];
@@ -158,7 +157,7 @@ export class NftSaleClient extends BaseClient implements INftSaleClient {
         }
         return zoneInfo[1]; // Zone Lucky Price
     }
-
+    /* Private */
     private async _pay(amount: string, additionalTags: Tags = []): Promise<boolean> {
         const tags: Tags = [...additionalTags];
 
