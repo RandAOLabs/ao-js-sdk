@@ -59,7 +59,7 @@ export class NftSaleClient extends BaseClient implements INftSaleClient {
     public async luckyDraw(): Promise<boolean> {
         let amount: string;
         try {
-            amount = await this.getPurchasePaymentAmount();
+            amount = await this.getLuckyDrawPaymentAmount();
             return await this._pay(amount, [
                 { name: "Lucky-Draw", value: "true" }
             ]);
@@ -129,8 +129,14 @@ export class NftSaleClient extends BaseClient implements INftSaleClient {
             const result = await this.dryrun('', [
                 { name: "Action", value: "Info" }
             ]);
-            Logger.debug(result)
-            this._cachedInfo = this.getFirstMessageDataJson<NftSaleInfo>(result);
+            // Handle double-encoded JSON
+            const rawData = this.getFirstMessageDataString(result);
+            const parsedOnce = JSON.parse(rawData);
+            if (Array.isArray(parsedOnce) && parsedOnce.length > 0) {
+                this._cachedInfo = JSON.parse(parsedOnce[0]) as NftSaleInfo;
+            } else {
+                throw new Error("Invalid NFT sale info format");
+            }
             return this._cachedInfo;
         } catch (error: any) {
             Logger.error(`Error getting NFT sale info: ${error.message}`);
