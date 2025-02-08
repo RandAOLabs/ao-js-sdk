@@ -1,18 +1,18 @@
 import { Tags } from "../../../core/ao/abstract/types";
 
-export interface WhitelistZone {
-    [1]: string;  // Zone Purchase Price
-    [2]: string;  // Zone Lucky Price
-    [3]: {
-        [key: string]: boolean;  // Whitelist addresses mapping
-    };
-}
-
-export interface WhitelistMaster {
-    [key: number]: WhitelistZone;  // Zone number mapping
-}
+// Each zone in MasterWhitelist is an array with:
+// [0]: Purchase price
+// [1]: Lucky draw price
+// [2]: Whitelist addresses mapping
+export type WhitelistZone = [
+    string,  // Purchase price
+    string,  // Lucky draw price
+    { [key: string]: boolean }  // Whitelist addresses mapping
+];
 
 export interface NftSaleInfo {
+    MasterWhitelist: WhitelistZone[];
     Current_Zone: number;
-    MasterWhitelist: WhitelistMaster;
+    WhitelistZones: number[];  // Zone thresholds
+    PurchaseLimits: [number, any[]][];  // [limit, data][]
 }
