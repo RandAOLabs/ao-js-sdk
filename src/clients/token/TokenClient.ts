@@ -58,7 +58,6 @@ export class TokenClient extends BaseClient implements ITokenClient, IGrantToken
                 forwardedTags.forEach(tag => tags.push({ name: `X-${tag.name}`, value: tag.value }));
             }
             const result = await this.messageResult('', tags)
-            Logger.debug(result)
             const messageData: string = this.getFirstMessageDataString(result)
             return messageData.includes(TRANSFER_SUCCESS_MESSAGE);
         } catch (error: any) {
