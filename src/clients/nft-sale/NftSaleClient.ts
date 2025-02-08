@@ -2,7 +2,7 @@ import { Tags, BaseClient } from "../../core";
 import { Logger } from "../../utils";
 import { INftSaleClient } from "./abstract/INftSaleClient";
 import { NftSaleClientConfig } from "./abstract/NftSaleClientConfig";
-import { PurchaseNftError, QueryNFTCountError, AddNftError, ReturnNFTsError, LuckyDrawError, NftSaleInfoError } from "./NftSaleClientError";
+import { PurchaseNftError, QueryNFTCountError, AddNftError, ReturnNFTsError, LuckyDrawError, NftSaleInfoError, PaymentError } from "./NftSaleClientError";
 import { NftSaleInfo } from "./abstract/types";
 import { TokenClient } from "../token";
 import { TokenClientConfig } from "../token/abstract/TokenClientConfig";
@@ -53,17 +53,19 @@ export class NftSaleClient extends BaseClient implements INftSaleClient {
     /* Core NFT Sale Functions */
     public async purchaseNft(): Promise<boolean> {
         try {
-            const tags: Tags = [
-                { name: "", value: "" }
-            ]
-            const success = await this.tokenClient.transfer(this.getProcessId(), this.purchaseAmount, tags);
-            if (!success) {
-                throw new Error("Token transfer failed");
-            }
-            return true;
+            return await this._pay(this.purchaseAmount);
         } catch (error: any) {
-            Logger.error(`Error purchasing NFT: ${error.message}`);
             throw new PurchaseNftError(this.purchaseAmount, error);
+        }
+    }
+
+    public async luckyDraw(): Promise<boolean> {
+        try {
+            return await this._pay(this.luckyDrawAmount, [
+                { name: "Lucky-Draw", value: "true" }
+            ]);
+        } catch (error: any) {
+            throw new LuckyDrawError(this.luckyDrawAmount, error);
         }
     }
 
@@ -119,21 +121,6 @@ export class NftSaleClient extends BaseClient implements INftSaleClient {
         }
     }
 
-    public async luckyDraw(): Promise<boolean> {
-        try {
-            const success = await this.tokenClient.transfer(this.getProcessId(), this.luckyDrawAmount, [
-                { name: "Action", value: "Lucky-Draw" }
-            ]);
-            if (!success) {
-                throw new Error("Token transfer failed");
-            }
-            return true;
-        } catch (error: any) {
-            Logger.error(`Error participating in lucky draw: ${error.message}`);
-            throw new LuckyDrawError(this.luckyDrawAmount, error);
-        }
-    }
-
     public async getInfo(): Promise<NftSaleInfo> {
         try {
             const result = await this.dryrun('', [
@@ -144,6 +131,27 @@ export class NftSaleClient extends BaseClient implements INftSaleClient {
         } catch (error: any) {
             Logger.error(`Error getting NFT sale info: ${error.message}`);
             throw new NftSaleInfoError(error);
+        }
+    }
+
+    /* Private */
+    private async _pay(amount: string, additionalTags: Tags = []): Promise<boolean> {
+        const tags: Tags = [...additionalTags];
+
+        const profileId = this.profileClient?.getProcessId();
+        if (profileId) {
+            tags.push({ name: "Bazar-Profile", value: profileId });
+        }
+
+        try {
+            const success = await this.tokenClient.transfer(this.getProcessId(), amount, tags);
+            if (!success) {
+                throw new Error("Token transfer failed");
+            }
+            return true;
+        } catch (error: any) {
+            Logger.error(`Error processing payment: ${error.message}`);
+            throw new PaymentError(amount, error);
         }
     }
 }
