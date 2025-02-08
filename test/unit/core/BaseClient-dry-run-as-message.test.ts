@@ -1,5 +1,5 @@
 import { dryrun, message, result } from '@permaweb/aoconnect';
-import { BaseClient } from '../../../src/core/index';
+import { BaseClient } from '../../../src/core/ao/index';
 import { DryRunResult } from '@permaweb/aoconnect/dist/lib/dryrun';
 import { MessageResult } from '@permaweb/aoconnect/dist/lib/result';
 

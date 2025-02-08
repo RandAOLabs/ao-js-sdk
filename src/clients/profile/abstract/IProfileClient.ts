@@ -1,4 +1,4 @@
-import { Tags } from "../../../core";
+import { Tags } from "../../../core/ao";
 import { ProfileInfo } from "./types";
 
 /** @see {@link https://cookbook_ao.g8way.io/references/profile.html | specification} */

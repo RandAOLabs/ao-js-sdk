@@ -1,5 +1,5 @@
 import { ProfileClient } from "../../../src/clients/profile";
-import { BaseClient } from "../../../src/core/BaseClient";
+import { BaseClient } from "../../../src/core/ao/BaseClient";
 import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
 import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
 import { AsyncInitializationRequiredError } from "../../../src/clients/profile/ProfileClientError";
