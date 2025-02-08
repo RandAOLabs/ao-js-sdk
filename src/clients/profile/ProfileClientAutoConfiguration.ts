@@ -1,5 +1,5 @@
 import { ProfileClientConfig } from "./abstract/ProfileClientConfig";
-import { getBaseClientAutoConfiguration } from "../../core/BaseClientAutoConfiguration";
+import { getBaseClientAutoConfiguration } from "../../core/ao/BaseClientAutoConfiguration";
 import { ProfileRegistryClient } from "../profile-registry/ProfileRegistryClient";
 import { NoProfileFoundError } from "./ProfileClientError";
 

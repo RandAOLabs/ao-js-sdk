@@ -1,4 +1,4 @@
-import { BaseClient } from "../../core/index";
+import { BaseClient } from "../../core/ao/index";
 import { Logger } from "../../utils/index";
 import { IProfileRegistryClient } from "./abstract/IProfileRegistryClient";
 import { ProfileRegistryEntry } from "./abstract/types";

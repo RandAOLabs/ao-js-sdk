@@ -1,4 +1,4 @@
-import { BaseClientError } from "../../core";
+import { BaseClientError } from "../../core/ao";
 
 export class NftSaleClientError extends BaseClientError {
     constructor(message: string, cause?: Error) {

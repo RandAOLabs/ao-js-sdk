@@ -1,6 +1,6 @@
 // src/RandomClient.ts
 import { Tags } from '../../index';
-import { BaseClient } from '../../core/BaseClient';
+import { BaseClient } from '../../core/ao/BaseClient';
 import { IRandomClient } from './abstract/IRandomClient';
 import { Logger } from '../../index';
 import { PostVDFChallengeError, ProviderAvailableValuesError, UpdateProviderAvailableValuesError, OpenRandomRequestsError, RandomRequestsError, CreateRequestError, PostVDFOutputAndProofError } from './RandomClientError';
@@ -138,7 +138,7 @@ export class RandomClient extends BaseClient implements IRandomClient {
             if (requestedInputs !== undefined) {
                 tags.push({ name: "RequestedInputs", value: JSON.stringify({ requested_inputs: requestedInputs }) });
             }
-            
+
             return await this.tokenClient.transfer(this.getProcessId(), paymentAmount, tags);
         } catch (error: any) {
             Logger.error(`Error creating request: ${error.message}`);

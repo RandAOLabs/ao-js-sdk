@@ -1,4 +1,4 @@
-import { Tags } from "../../core/index";
+import { Tags } from "../../core/ao/index";
 import { TokenClient } from "../token/TokenClient";
 import { INftClient } from "./abstract/INftClient";
 import { getNftClientAutoConfiguration } from "./NftClientAutoConfiguration";

@@ -1,5 +1,5 @@
 import { message, result, results, createDataItemSigner, dryrun } from '@permaweb/aoconnect';
-import { BaseClient, SortOrder, MessageError, ResultError, ResultsError, DryRunError } from '../../../src/core/index';
+import { BaseClient, SortOrder, MessageError, ResultError, ResultsError, DryRunError } from '../../../src/core/ao/index';
 import { Logger } from '../../../src/utils/logger/logger';
 
 //mocks

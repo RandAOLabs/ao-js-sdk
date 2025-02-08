@@ -1,4 +1,4 @@
-import { Tags, BaseClient } from "../../core/index";
+import { Tags, BaseClient } from "../../core/ao/index";
 import { Logger } from "../../utils/index";
 import { IProfileClient } from "./abstract/IProfileClient";
 import { ProfileInfo } from "./abstract/types";
