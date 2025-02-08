@@ -1,4 +1,4 @@
-import { BaseClientConfig } from "../../../core/abstract/BaseClientConfig"
+import { BaseClientConfig } from "../../../core/ao/abstract/BaseClientConfig"
 
 export interface StakingClientConfig extends BaseClientConfig {
     /**

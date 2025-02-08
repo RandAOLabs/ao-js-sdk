@@ -1,4 +1,4 @@
-import { Tags } from "../../../core";
+import { Tags } from "../../../core/ao";
 import { ITokenClient } from "../../token/abstract/ITokenClient";
 
 export interface INftClient extends ITokenClient {

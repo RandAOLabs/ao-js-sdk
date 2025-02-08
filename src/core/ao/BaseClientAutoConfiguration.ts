@@ -4,7 +4,7 @@ import { BaseClientConfig } from "./abstract/BaseClientConfig";
 let lazyWallet: JWKInterface | null = null;
 const getWalletLazy = (): JWKInterface => {
     if (!lazyWallet) {
-        const { getWallet } = require("../utils/wallet/index");
+        const { getWallet } = require("../../utils/wallet/index");
         lazyWallet = getWallet();
     }
     return lazyWallet!;

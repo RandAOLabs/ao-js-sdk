@@ -1,5 +1,5 @@
-import { Tags } from '../../core/abstract/types';
-import { BaseClient } from '../../core/BaseClient';
+import { Tags } from '../../core/ao/abstract/types';
+import { BaseClient } from '../../core/ao/BaseClient';
 import { IStakingClient } from './abstract/IStakingClient';
 import { ProviderDetails, ProviderInfo, ProviderInfoDTO, StakeInfo } from './abstract/types';
 import { Logger } from '../../utils/logger/logger';

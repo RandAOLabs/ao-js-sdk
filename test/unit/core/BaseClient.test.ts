@@ -1,6 +1,6 @@
 import { message, results, result, dryrun } from '@permaweb/aoconnect';
-import { BaseClient } from '../../../src/core/index';
-import { SortOrder } from '../../../src/core/abstract/types';
+import { BaseClient } from '../../../src/core/ao/index';
+import { SortOrder } from '../../../src/core/ao/abstract/types';
 
 // Mocking external dependencies
 

@@ -1,4 +1,4 @@
-import { Tags, BaseClient } from "../../core/index";
+import { Tags, BaseClient } from "../../core/ao/index";
 import { Logger } from "../../utils/index"
 import { ITokenClient, IGrantToken } from "./abstract";
 import { getTokenClientAutoConfiguration } from "./TokenClientAutoConfiguration";

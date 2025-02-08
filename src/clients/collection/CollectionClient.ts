@@ -1,4 +1,4 @@
-import { BaseClient, BaseClientConfig, Tags } from "../../core";
+import { BaseClient, BaseClientConfig, Tags } from "../../core/ao";
 import { ICollectionClient } from "./abstract/ICollectionClient";
 import { CollectionInfo, UpdateAssetsRequest } from "./abstract/types";
 import { getCollectionClientAutoConfiguration } from "./CollectionClientAutoConfiguration";
