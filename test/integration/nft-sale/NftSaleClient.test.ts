@@ -56,6 +56,14 @@ describe("NftSaleClient Integration Tests", () => {
         expect(purchaseSuccess).toBe(true);
     });
 
+    it("should get NFT sale info", async () => {
+        await sleep(1000);
+        // Get sale info
+        const info = await nftSaleClient.getInfo();
+        Logger.debug(`NFT Sale Info: ${JSON.stringify(info)}`);
+        expect(info).toBeDefined();
+    });
+
     // it("should successfully return NFTs to specified recipient", async () => {
     //     await sleep(1000);
     //     // Set dry run as message to ensure we can test the functionality

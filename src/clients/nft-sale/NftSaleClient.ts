@@ -49,7 +49,7 @@ export class NftSaleClient extends BaseClient implements INftSaleClient {
     public async purchaseNft(): Promise<boolean> {
         let amount: string;
         try {
-            amount = await this._getPurchasePaymentAmount();
+            amount = await this.getPurchasePaymentAmount();
             return await this._pay(amount);
         } catch (error: any) {
             throw new PurchaseNftError(amount!, error);
@@ -59,7 +59,7 @@ export class NftSaleClient extends BaseClient implements INftSaleClient {
     public async luckyDraw(): Promise<boolean> {
         let amount: string;
         try {
-            amount = await this._getLuckyDrawPaymentAmount();
+            amount = await this.getPurchasePaymentAmount();
             return await this._pay(amount, [
                 { name: "Lucky-Draw", value: "true" }
             ]);
@@ -129,7 +129,7 @@ export class NftSaleClient extends BaseClient implements INftSaleClient {
             const result = await this.dryrun('', [
                 { name: "Action", value: "Info" }
             ]);
-
+            Logger.debug(result)
             this._cachedInfo = this.getFirstMessageDataJson<NftSaleInfo>(result);
             return this._cachedInfo;
         } catch (error: any) {
@@ -138,27 +138,26 @@ export class NftSaleClient extends BaseClient implements INftSaleClient {
         }
     }
 
+    public async getPurchasePaymentAmount(): Promise<string> {
+        const info = await this.getInfo();
+        const currentZone = info.Current_Zone;
+        const zoneInfo = info.MasterWhitelist[currentZone];
+        if (!zoneInfo) {
+            throw new Error(`No zone info found for zone ${currentZone}`);
+        }
+        return zoneInfo[0]; // Zone Purchase Price
+    }
+
+    public async getLuckyDrawPaymentAmount(): Promise<string> {
+        const info = await this.getInfo();
+        const currentZone = info.Current_Zone;
+        const zoneInfo = info.MasterWhitelist[currentZone];
+        if (!zoneInfo) {
+            throw new Error(`No zone info found for zone ${currentZone}`);
+        }
+        return zoneInfo[1]; // Zone Lucky Price
+    }
     /* Private */
-    private async _getPurchasePaymentAmount(): Promise<string> {
-        const info = await this.getInfo();
-        const currentZone = info.Current_Zone;
-        const zoneInfo = info.MasterWhitelist[currentZone];
-        if (!zoneInfo) {
-            throw new Error(`No zone info found for zone ${currentZone}`);
-        }
-        return zoneInfo[1]; // Zone Purchase Price
-    }
-
-    private async _getLuckyDrawPaymentAmount(): Promise<string> {
-        const info = await this.getInfo();
-        const currentZone = info.Current_Zone;
-        const zoneInfo = info.MasterWhitelist[currentZone];
-        if (!zoneInfo) {
-            throw new Error(`No zone info found for zone ${currentZone}`);
-        }
-        return zoneInfo[2]; // Zone Lucky Price
-    }
-
     private async _pay(amount: string, additionalTags: Tags = []): Promise<boolean> {
         const tags: Tags = [...additionalTags];
 
