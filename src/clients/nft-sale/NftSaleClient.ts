@@ -129,7 +129,7 @@ export class NftSaleClient extends BaseClient implements INftSaleClient {
             const result = await this.dryrun('', [
                 { name: "Action", value: "Info" }
             ]);
-
+            Logger.debug(result)
             this._cachedInfo = this.getFirstMessageDataJson<NftSaleInfo>(result);
             return this._cachedInfo;
         } catch (error: any) {
@@ -146,7 +146,7 @@ export class NftSaleClient extends BaseClient implements INftSaleClient {
         if (!zoneInfo) {
             throw new Error(`No zone info found for zone ${currentZone}`);
         }
-        return zoneInfo[1]; // Zone Purchase Price
+        return zoneInfo[0]; // Zone Purchase Price
     }
 
     private async _getLuckyDrawPaymentAmount(): Promise<string> {
@@ -156,7 +156,7 @@ export class NftSaleClient extends BaseClient implements INftSaleClient {
         if (!zoneInfo) {
             throw new Error(`No zone info found for zone ${currentZone}`);
         }
-        return zoneInfo[2]; // Zone Lucky Price
+        return zoneInfo[1]; // Zone Lucky Price
     }
 
     private async _pay(amount: string, additionalTags: Tags = []): Promise<boolean> {
