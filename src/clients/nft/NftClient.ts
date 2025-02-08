@@ -8,8 +8,13 @@ import { Logger } from "../../utils/index";
 
 export class NftClient extends TokenClient implements INftClient {
     /* Constructors */
+    public constructor(processId: string) {
+        const config = getNftClientAutoConfiguration();
+        config.processId = processId;
+        super(config);
+    }
     public static autoConfiguration(): NftClient {
-        return new NftClient(getNftClientAutoConfiguration());
+        return new TokenClient(getNftClientAutoConfiguration());
     }
     /* Constructors */
 
