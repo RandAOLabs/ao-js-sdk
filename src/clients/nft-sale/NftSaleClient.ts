@@ -13,8 +13,7 @@ export class NftSaleClient extends BaseClient implements INftSaleClient {
     /* Fields */
     readonly tokenClient: TokenClient;
     readonly profileClient: ProfileClient;
-    readonly purchaseAmount: string;
-    readonly luckyDrawAmount: string;
+    private _cachedInfo?: NftSaleInfo;
     /* Fields */
 
     /* Getters */
@@ -33,8 +32,6 @@ export class NftSaleClient extends BaseClient implements INftSaleClient {
         };
         this.tokenClient = new TokenClient(tokenConfig);
         this.profileClient = profileClient;
-        this.purchaseAmount = config.purchaseAmount;
-        this.luckyDrawAmount = config.luckyDrawAmount;
     }
 
     public static async create(config?: NftSaleClientConfig, profileClient?: ProfileClient): Promise<NftSaleClient> {
@@ -44,28 +41,30 @@ export class NftSaleClient extends BaseClient implements INftSaleClient {
     }
 
     public static async createAutoConfigured(): Promise<NftSaleClient> {
-        const config = getNftSaleClientAutoConfiguration();
-        const profileClient = await ProfileClient.createAutoConfigured();
-        return new NftSaleClient(config, profileClient);
+        return NftSaleClient.create()
     }
     /* Constructors */
 
     /* Core NFT Sale Functions */
     public async purchaseNft(): Promise<boolean> {
+        let amount: string;
         try {
-            return await this._pay(this.purchaseAmount);
+            amount = await this._getPurchasePaymentAmount();
+            return await this._pay(amount);
         } catch (error: any) {
-            throw new PurchaseNftError(this.purchaseAmount, error);
+            throw new PurchaseNftError(amount!, error);
         }
     }
 
     public async luckyDraw(): Promise<boolean> {
+        let amount: string;
         try {
-            return await this._pay(this.luckyDrawAmount, [
+            amount = await this._getLuckyDrawPaymentAmount();
+            return await this._pay(amount, [
                 { name: "Lucky-Draw", value: "true" }
             ]);
         } catch (error: any) {
-            throw new LuckyDrawError(this.luckyDrawAmount, error);
+            throw new LuckyDrawError(amount!, error);
         }
     }
 
@@ -123,11 +122,16 @@ export class NftSaleClient extends BaseClient implements INftSaleClient {
 
     public async getInfo(): Promise<NftSaleInfo> {
         try {
+            if (this._cachedInfo) {
+                return this._cachedInfo;
+            }
+
             const result = await this.dryrun('', [
                 { name: "Action", value: "Info" }
             ]);
 
-            return this.getFirstMessageDataJson<NftSaleInfo>(result);
+            this._cachedInfo = this.getFirstMessageDataJson<NftSaleInfo>(result);
+            return this._cachedInfo;
         } catch (error: any) {
             Logger.error(`Error getting NFT sale info: ${error.message}`);
             throw new NftSaleInfoError(error);
@@ -135,6 +139,26 @@ export class NftSaleClient extends BaseClient implements INftSaleClient {
     }
 
     /* Private */
+    private async _getPurchasePaymentAmount(): Promise<string> {
+        const info = await this.getInfo();
+        const currentZone = info.Current_Zone;
+        const zoneInfo = info.MasterWhitelist[currentZone];
+        if (!zoneInfo) {
+            throw new Error(`No zone info found for zone ${currentZone}`);
+        }
+        return zoneInfo[1]; // Zone Purchase Price
+    }
+
+    private async _getLuckyDrawPaymentAmount(): Promise<string> {
+        const info = await this.getInfo();
+        const currentZone = info.Current_Zone;
+        const zoneInfo = info.MasterWhitelist[currentZone];
+        if (!zoneInfo) {
+            throw new Error(`No zone info found for zone ${currentZone}`);
+        }
+        return zoneInfo[2]; // Zone Lucky Price
+    }
+
     private async _pay(amount: string, additionalTags: Tags = []): Promise<boolean> {
         const tags: Tags = [...additionalTags];
 
@@ -154,4 +178,5 @@ export class NftSaleClient extends BaseClient implements INftSaleClient {
             throw new PaymentError(amount, error);
         }
     }
+    /* Private */
 }
