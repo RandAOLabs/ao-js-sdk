@@ -1,5 +1,6 @@
 import { Tags } from "../../core/ao/index";
 import { TokenClient } from "../token/TokenClient";
+import { TokenClientConfig } from "../token/abstract/TokenClientConfig";
 import { INftClient } from "./abstract/INftClient";
 import { getNftClientAutoConfiguration } from "./NftClientAutoConfiguration";
 import { NftTransferError } from "./NftClientError";
@@ -8,6 +9,18 @@ import { Logger } from "../../utils/index";
 
 export class NftClient extends TokenClient implements INftClient {
     /* Constructors */
+    public constructor(configOrProcessId: TokenClientConfig | string) {
+        const config = getNftClientAutoConfiguration();
+
+        if (typeof configOrProcessId === 'string') {
+            config.processId = configOrProcessId;
+        } else {
+            Object.assign(config, configOrProcessId);
+        }
+
+        super(config);
+    }
+
     public static autoConfiguration(): NftClient {
         return new NftClient(getNftClientAutoConfiguration());
     }
