@@ -53,7 +53,10 @@ export class NftSaleClient extends BaseClient implements INftSaleClient {
     /* Core NFT Sale Functions */
     public async purchaseNft(): Promise<boolean> {
         try {
-            const success = await this.tokenClient.transfer(this.getProcessId(), this.purchaseAmount);
+            const tags: Tags = [
+                { name: "", value: "" }
+            ]
+            const success = await this.tokenClient.transfer(this.getProcessId(), this.purchaseAmount, tags);
             if (!success) {
                 throw new Error("Token transfer failed");
             }
