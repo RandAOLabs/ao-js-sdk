@@ -146,7 +146,7 @@ export class NftSaleClient extends BaseClient implements INftSaleClient {
 
     public async getPurchasePaymentAmount(): Promise<string> {
         const info = await this.getInfo();
-        const currentZone = info.Current_Zone;
+        const currentZone = info.Current_Zone - 1;
         const zoneInfo = info.MasterWhitelist[currentZone];
         if (!zoneInfo) {
             throw new Error(`No zone info found for zone ${currentZone}`);
@@ -156,7 +156,7 @@ export class NftSaleClient extends BaseClient implements INftSaleClient {
 
     public async getLuckyDrawPaymentAmount(): Promise<string> {
         const info = await this.getInfo();
-        const currentZone = info.Current_Zone;
+        const currentZone = info.Current_Zone - 1;
         const zoneInfo = info.MasterWhitelist[currentZone];
         if (!zoneInfo) {
             throw new Error(`No zone info found for zone ${currentZone}`);
