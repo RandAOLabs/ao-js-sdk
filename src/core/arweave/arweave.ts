@@ -28,7 +28,7 @@ class ArweaveInstance {
                     case Environment.NODE:
                         // For Node.js, connect to mainnet gateway
                         ArweaveInstance.instance = Arweave.init({
-                            host: 'arweave.net',
+                            host: 'arweave-search.goldsky.com',
                             port: 443,
                             protocol: 'https'
                         });

@@ -2,61 +2,6 @@ export enum ArweaveGQLSortOrder {
     HEIGHT_ASC = 'HEIGHT_ASC',
     HEIGHT_DESC = 'HEIGHT_DESC'
 }
-
-export interface ArweaveTransactionOwner {
-    address?: string;
-    key?: string;
-}
-
-export interface ArweaveTransactionAmount {
-    winston?: string;
-    ar?: string;
-}
-
-export interface ArweaveTransactionData {
-    size?: string;
-    type?: string;
-}
-
-export interface ArweaveTransactionTag {
-    name?: string;
-    value?: string;
-}
-
-export interface ArweaveTransactionBlock {
-    id?: string;
-    timestamp?: string;
-    height?: string;
-    previous?: string;
-}
-
-export interface ArweaveTransactionParent {
-    id?: string;
-}
-
-export interface ArweaveTransactionNode {
-    id?: string;
-    anchor?: string;
-    signature?: string;
-    recipient?: string;
-    owner?: ArweaveTransactionOwner;
-    fee?: ArweaveTransactionAmount;
-    quantity?: ArweaveTransactionAmount;
-    data?: ArweaveTransactionData;
-    tags?: ArweaveTransactionTag[];
-    block?: ArweaveTransactionBlock;
-    parent?: ArweaveTransactionParent;
-}
-
-export interface ArweaveTransactionEdge {
-    cursor?: string;
-    node?: ArweaveTransactionNode;
-}
-
-export interface ArweaveTransactionConnection {
-    edges?: ArweaveTransactionEdge[];
-}
-
 export interface ArweaveGQLQuery {
     query: string;
 }
