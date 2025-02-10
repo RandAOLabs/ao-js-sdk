@@ -8,6 +8,7 @@ export * from "./clients/collection/index"
 export * from "./clients/nft-sale/index"
 export * from "./clients/profile/index"
 export * from "./clients/profile-registry/index"
+export * from "./core/arweave"
 
 export * from './utils/index'
 export { processIds } from './processes_ids'
