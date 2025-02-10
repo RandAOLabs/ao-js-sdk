@@ -14,6 +14,15 @@ jest.mock('../../../../src/core/arweave/arweave', () => ({
     }))
 }));
 
+jest.mock('../../../src/utils/logger/logger', () => ({
+    Logger: {
+        info: jest.fn(),
+        warn: jest.fn(),
+        error: jest.fn(),
+        debug: jest.fn(),
+    },
+}));
+
 describe('ArweaveBaseClient', () => {
     let client: ArweaveBaseClient;
 
