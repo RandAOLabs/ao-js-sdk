@@ -1,6 +1,5 @@
 import { ArweaveBaseClient } from '../../../../src/core/arweave/ArweaveBaseClient';
 import { ArweaveGraphQLError } from '../../../../src/core/arweave/ArweaveBaseClientError';
-import { getArweave } from '../../../../src/core/arweave/arweave';
 
 // Create a proper mock response object
 const mockApiPost = jest.fn();
@@ -14,7 +13,8 @@ jest.mock('../../../../src/core/arweave/arweave', () => ({
     }))
 }));
 
-jest.mock('../../../src/utils/logger/logger', () => ({
+// Mock the logger
+jest.mock('../../../../src/utils/logger/logger', () => ({
     Logger: {
         info: jest.fn(),
         warn: jest.fn(),
