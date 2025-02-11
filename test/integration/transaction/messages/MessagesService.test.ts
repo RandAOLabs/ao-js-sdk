@@ -1,5 +1,5 @@
-import { MessagesService } from "../../../../src/clients/transaction/messages";
-import { Logger } from "../../../../src";
+import { MessagesService } from "src/services/messages";
+import { Logger } from "src/utils";
 
 describe('MessagesService Integration Tests', () => {
     let client: MessagesService;

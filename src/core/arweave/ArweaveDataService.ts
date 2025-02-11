@@ -1,10 +1,10 @@
 import Arweave from 'arweave';
-import { IBaseArweaveDataService } from './abstract/IArweaveBaseClient';
-import { ArweaveGraphQLError } from './ArweaveDataServiceError';
-import { Logger } from '../../utils/logger/logger';
-import { getArweave } from './arweave';
-import { ArweaveGQLBuilder } from './gql/ArweaveGQLBuilder';
-import { ArweaveGQLResponse, ArweaveTransaction } from './abstract/types';
+import { IBaseArweaveDataService } from 'src/core/arweave/abstract/IArweaveBaseClient';
+import { ArweaveGraphQLError } from 'src/core/arweave/ArweaveDataServiceError';
+import { Logger } from 'src/utils/logger/logger';
+import { getArweave } from 'src/core/arweave/arweave';
+import { ArweaveGQLBuilder } from 'src/core/arweave/gql/ArweaveGQLBuilder';
+import { ArweaveGQLResponse, ArweaveTransaction } from 'src/core/arweave/abstract/types';
 
 export class BaseArweaveDataService implements IBaseArweaveDataService {
     private readonly arweave: Arweave;

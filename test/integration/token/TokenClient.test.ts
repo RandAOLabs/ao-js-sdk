@@ -1,7 +1,6 @@
-import { TokenClient } from "../../../src/index";
-import { Logger } from "../../../src/index";
-
 // Integration test for the getInfo function in TokenClient
+
+import { TokenClient, Logger } from "src";
 
 describe("TokenClient Integration Test", () => {
     let client: TokenClient;
@@ -48,17 +47,17 @@ describe("TokenClient Integration Test", () => {
         it("should increase balance after granting tokens", async () => {
             const initialBalance = await client.balance();
             const grantAmount = "100";
-            
+
             await client.grant(grantAmount);
-            
+
             // Wait a bit for the grant to process
             await new Promise(resolve => setTimeout(resolve, 2000));
-            
+
             const finalBalance = await client.balance();
             const initialNum = BigInt(initialBalance);
             const finalNum = BigInt(finalBalance);
             const difference = finalNum - initialNum;
-            
+
             expect(difference).toBe(BigInt(grantAmount));
         });
 
