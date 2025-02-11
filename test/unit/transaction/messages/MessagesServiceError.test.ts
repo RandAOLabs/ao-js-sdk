@@ -1,17 +1,17 @@
-import { MessagesClientError, GetLatestMessagesError } from "../../../../src/clients/transaction/messages";
+import { MessagesServiceError, GetLatestMessagesError } from "../../../../src/clients/transaction/messages";
 
-describe("MessagesClientError", () => {
+describe("MessagesServiceError", () => {
     it("should create error with original error stack", () => {
         const originalError = new Error("Original error");
-        const error = new MessagesClientError("Test error", originalError);
-        expect(error.name).toBe("MessagesClientError");
+        const error = new MessagesServiceError("Test error", originalError);
+        expect(error.name).toBe("MessagesServiceError");
         expect(error.message).toBe("Test error");
         expect(error.stack).toContain("Original error");
     });
 
     it("should create error without original error", () => {
-        const error = new MessagesClientError("Test error");
-        expect(error.name).toBe("MessagesClientError");
+        const error = new MessagesServiceError("Test error");
+        expect(error.name).toBe("MessagesServiceError");
         expect(error.message).toBe("Test error");
     });
 });

@@ -1,8 +1,8 @@
 import { BaseArweaveDataService } from "../../../core/arweave/ArweaveDataService";
 import { ArweaveGQLBuilder } from "../../../core/arweave/gql/ArweaveGQLBuilder";
 import { Logger } from "../../../utils/logger/logger";
-import { IMessagesClient } from "./abstract/IMessagesClient";
-import { GetLatestMessagesError } from "./MessagesClientError";
+import { IMessagesService } from "./abstract/IMessagesService";
+import { GetLatestMessagesError } from "./MessagesServiceError";
 import {
     GetLatestMessagesParams,
     GetLatestMessagesResponse,
@@ -15,7 +15,7 @@ import {
 import { ArweaveGQLSortOrder } from "../../../core/arweave/gql/types";
 import { ArweaveTransaction } from "../../../core/arweave/abstract/types";
 
-export class MessagesClient extends BaseArweaveDataService implements IMessagesClient {
+export class MessagesService extends BaseArweaveDataService implements IMessagesService {
     constructor() {
         super();
     }

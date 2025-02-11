@@ -1,11 +1,11 @@
-import { MessagesClient } from "../../../../src/clients/transaction/messages";
+import { MessagesService } from "../../../../src/clients/transaction/messages";
 import { Logger } from "../../../../src";
 
-describe('MessagesClient Integration Tests', () => {
-    let client: MessagesClient;
+describe('MessagesService Integration Tests', () => {
+    let client: MessagesService;
 
     beforeAll(() => {
-        client = new MessagesClient();
+        client = new MessagesService();
     });
 
     // it('should get latest AO messages with pagination', async () => {
