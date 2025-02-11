@@ -4,7 +4,7 @@ import { ArweaveGraphQLError } from './ArweaveBaseClientError';
 import { Logger } from '../../utils/logger/logger';
 import { getArweave } from './arweave';
 import { ArweaveGQLBuilder } from './gql/ArweaveGQLBuilder';
-import { ArweaveGQLResponse } from './abstract/types';
+import { ArweaveGQLResponse, ArweaveTransaction } from './abstract/types';
 
 /**
  * @inheritdoc
@@ -48,5 +48,24 @@ export class ArweaveBaseClient implements IArweaveBaseClient {
 
         const builtQuery = builder.build();
         return this.graphQuery<ArweaveGQLResponse>(builtQuery.query);
+    }
+
+    public async getTransactionById(id: string): Promise<ArweaveTransaction> {
+        if (!id) {
+            throw new ArweaveGraphQLError('No transaction ID provided');
+        }
+
+        const builder = new ArweaveGQLBuilder()
+            .id(id)
+            .withAllFields();
+
+        const response = await this.query(builder);
+        const transaction = response.data.transactions.edges[0]?.node;
+
+        if (!transaction) {
+            throw new ArweaveGraphQLError(`Transaction not found with ID: ${id}`);
+        }
+
+        return transaction;
     }
 }

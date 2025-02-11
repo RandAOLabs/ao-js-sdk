@@ -21,10 +21,14 @@ export class ArweaveGQLBuilder {
     };
 
     // Filter methods
-    public id(id: string): this {
-        if (!id) throw ArweaveGQLBuilderError.invalidId();
-        this.filters.id = id;
+    public ids(ids: string[]): this {
+        if (!ids || ids.length === 0) throw ArweaveGQLBuilderError.invalidId();
+        this.filters.ids = ids;
         return this;
+    }
+
+    public id(id: string): this {
+        return this.ids([id]);
     }
 
     public recipient(address: string): this {
@@ -95,6 +99,23 @@ export class ArweaveGQLBuilder {
         return this;
     }
 
+    /**
+     * Includes all available fields in the query
+     * @returns this builder instance
+     */
+    public withAllFields(): this {
+        return this
+            .withAnchor()
+            .withSignature()
+            .withOwner()
+            .withFee()
+            .withQuantity()
+            .withData()
+            .withTags()
+            .withBlock()
+            .withParent();
+    }
+
     // Pagination and sorting options
     public limit(count: number): this {
         if (count < 1) throw ArweaveGQLBuilderError.invalidLimit();
@@ -154,6 +175,8 @@ export class ArweaveGQLBuilder {
                     }
                 } else if (key === 'owner' && value.address) {
                     filterConditions.push(`owners: ["${value.address}"]`);
+                } else if (key === 'ids') {
+                    filterConditions.push(`ids: ["${(value as string[]).join('", "')}"]`);
                 }
             } else if (typeof value === 'string') {
                 filterConditions.push(`${key}: "${value}"`);
