@@ -1,7 +1,8 @@
 import { dryrun, message, result } from '@permaweb/aoconnect';
-import { BaseClient } from '../../../src/core/ao/index';
+import { BaseClient } from 'src/core/ao/index';
 import { DryRunResult } from '@permaweb/aoconnect/dist/lib/dryrun';
 import { MessageResult } from '@permaweb/aoconnect/dist/lib/result';
+import { DEFAULT_TAGS } from 'src/core/ao/constants';
 
 // Mocking external dependencies
 jest.mock('@permaweb/aoconnect', () => ({
@@ -77,11 +78,15 @@ describe("BaseClient Dry Run Tests", () => {
             const response = await client.dryrun(data, tags);
 
             // Assert
+            const expectedTags = [
+                ...DEFAULT_TAGS,
+                { name: 'tag1', value: 'value1' }
+            ];
             expect(message).toHaveBeenCalledWith({
                 process: client.baseConfig.processId,
                 signer: undefined,
                 data,
-                tags,
+                tags: expectedTags,
                 anchor: undefined,
             });
             expect(result).toHaveBeenCalledWith({
@@ -107,10 +112,14 @@ describe("BaseClient Dry Run Tests", () => {
             const response = await client.dryrun(data, tags);
 
             // Assert
+            const expectedTags = [
+                ...DEFAULT_TAGS,
+                { name: 'tag1', value: 'value1' }
+            ];
             expect(dryrun).toHaveBeenCalledWith({
                 process: client.baseConfig.processId,
                 data,
-                tags,
+                tags: expectedTags,
                 anchor: undefined,
                 id: undefined,
                 owner: undefined,

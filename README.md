@@ -22,8 +22,7 @@ const tokenClient = TokenClient.autoConfiguration()
 // Transfer tokens
 const success = await tokenClient.transfer(
     "recipient-address",
-    "100000000000000000000", // 100 tokens (with 18 decimals)
-    [{ name: "CustomTag", value: "CustomValue" }] // Optional forwarded tags
+    "100000000000000000000"
 )
 console.log(success) // true if successful
 ```
