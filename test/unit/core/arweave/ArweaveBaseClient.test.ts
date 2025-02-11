@@ -35,7 +35,7 @@ describe('ArweaveBaseClient', () => {
         mockApiPost.mockClear();
 
         // Get a new instance
-        client = ArweaveBaseClient.getInstance();
+        client = new ArweaveBaseClient();
     });
 
     afterEach(() => {
@@ -43,12 +43,6 @@ describe('ArweaveBaseClient', () => {
     });
 
     describe('getInstance', () => {
-        it('should return the same instance on multiple calls', () => {
-            const instance1 = ArweaveBaseClient.getInstance();
-            const instance2 = ArweaveBaseClient.getInstance();
-            expect(instance1).toBe(instance2);
-        });
-
         describe('query', () => {
             it('should successfully execute a query using GQL builder', async () => {
                 const mockResponse = {

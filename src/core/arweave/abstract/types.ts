@@ -1,8 +1,9 @@
-export interface ArweaveTransaction {
+export interface FullArweaveTransaction {
     id: string;
     anchor: string;
     signature: string;
     recipient: string;
+    ingested_at: number;
     owner: {
         address: string;
         key: string;
@@ -33,6 +34,9 @@ export interface ArweaveTransaction {
         id: string;
     };
 }
+
+// Alias for backward compatibility
+export type ArweaveTransaction = Partial<FullArweaveTransaction>;
 
 export interface ArweaveGQLResponse {
     data: {

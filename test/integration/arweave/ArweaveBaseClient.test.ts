@@ -23,7 +23,7 @@ describe('ArweaveBaseClient Integration Tests', () => {
     let client: ArweaveBaseClient;
 
     beforeAll(() => {
-        client = ArweaveBaseClient.getInstance();
+        client = new ArweaveBaseClient();
     });
 
     // it('should collect all AO process IDs', async () => {

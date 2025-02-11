@@ -28,13 +28,19 @@ export class ArweaveGQLBuilder {
     }
 
     public id(id: string): this {
+        if (!id) throw ArweaveGQLBuilderError.invalidId();
         return this.ids([id]);
+    }
+
+    public recipients(addresses: string[]): this {
+        if (!addresses || addresses.length === 0) throw ArweaveGQLBuilderError.invalidRecipient();
+        this.filters.recipients = addresses;
+        return this;
     }
 
     public recipient(address: string): this {
         if (!address) throw ArweaveGQLBuilderError.invalidRecipient();
-        this.filters.recipient = address;
-        return this;
+        return this.recipients([address]);
     }
 
     public owner(address: string): this {
@@ -61,6 +67,16 @@ export class ArweaveGQLBuilder {
 
     public withSignature(): this {
         this.fields.signature = true;
+        return this;
+    }
+
+    public withRecipient(): this {
+        this.fields.recipient = true;
+        return this;
+    }
+
+    public withIngestedAt(): this {
+        this.fields.ingested_at = true;
         return this;
     }
 
@@ -105,6 +121,8 @@ export class ArweaveGQLBuilder {
      */
     public withAllFields(): this {
         return this
+            .withRecipient()
+            .withIngestedAt()
             .withAnchor()
             .withSignature()
             .withOwner()
@@ -163,23 +181,21 @@ export class ArweaveGQLBuilder {
         Object.entries(this.filters).forEach(([key, value]) => {
             if (!value) return; // Skip null/undefined values
 
-            if (typeof value === 'object') {
-                if (key === 'tags') {
-                    // Combine all tags into a single condition
-                    const tags = value as { name: string; value: string }[];
-                    const tagConditions = tags.map(tag =>
-                        `{name: "${tag.name}", values: ["${tag.value}"]}`
-                    );
-                    if (tagConditions.length > 0) {
-                        filterConditions.push(`tags: [${tagConditions.join(', ')}]`);
-                    }
-                } else if (key === 'owner' && value.address) {
-                    filterConditions.push(`owners: ["${value.address}"]`);
-                } else if (key === 'ids') {
-                    filterConditions.push(`ids: ["${(value as string[]).join('", "')}"]`);
+            if (key === 'tags') {
+                // Handle tags
+                const tags = value as { name: string; value: string }[];
+                const tagConditions = tags.map(tag =>
+                    `{name: "${tag.name}", values: ["${tag.value}"]}`
+                );
+                if (tagConditions.length > 0) {
+                    filterConditions.push(`tags: [${tagConditions.join(', ')}]`);
                 }
-            } else if (typeof value === 'string') {
-                filterConditions.push(`${key}: "${value}"`);
+            } else if (key === 'owner' && typeof value === 'object' && value.address) {
+                // Handle owner
+                filterConditions.push(`owners: ["${value.address}"]`);
+            } else if (Array.isArray(value)) {
+                // Handle arrays (ids, recipients)
+                filterConditions.push(`${key}: ["${value.join('", "')}"]`);
             }
         });
 
@@ -199,17 +215,15 @@ export class ArweaveGQLBuilder {
         const nodeFields = this.buildFieldSelection(this.fields);
 
         // Construct the final query
-        const filterString = filterConditions.length > 0
-            ? `(${filterConditions.join(', ')})`
-            : '';
-
-        const optionsString = optionsArray.length > 0
-            ? `(${optionsArray.join(', ')})`
+        // Combine filter conditions and options
+        const queryParams = [...filterConditions, ...optionsArray];
+        const queryString = queryParams.length > 0
+            ? `(${queryParams.join(', ')})`
             : '';
 
         const query = `
             query {
-                transactions${filterString}${optionsString} {
+                transactions${queryString} {
                     edges {
                         cursor
                         node {
