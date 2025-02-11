@@ -2,6 +2,8 @@ import { message, result, results, createDataItemSigner, dryrun } from '@permawe
 import { IBaseClient } from 'src/core/ao/abstract/IBaseClient';
 import { SortOrder, Tags } from 'src/core/ao/abstract/types';
 import { BaseClientConfig } from 'src/core/ao/abstract/BaseClientConfig';
+import { mergeLists } from 'src/utils/lists';
+import { DEFAULT_TAGS } from './constants';
 import { DryRunError, JsonParsingError, MessageError, MessageOutOfBoundsError, ResultError, ResultsError } from 'src/core/ao/BaseClientError';
 import { MessageResult } from '@permaweb/aoconnect/dist/lib/result';
 import { ResultsResponse } from '@permaweb/aoconnect/dist/lib/results';
@@ -31,11 +33,12 @@ export class BaseClient extends IBaseClient {
     /* Core AO Functions */
     async message(data: string = '', tags: Tags = [], anchor?: string): Promise<string> {
         try {
+            const mergedTags = mergeLists(DEFAULT_TAGS, tags, tag => tag.name);
             return await message({
                 process: this.baseConfig.processId,
                 signer: this.signer,
                 data,
-                tags,
+                tags: mergedTags,
                 anchor,
             });
         } catch (error: any) {
@@ -162,10 +165,11 @@ export class BaseClient extends IBaseClient {
     /* Private */
     private async _dryrun(data: any = '', tags: Tags = [], anchor?: string, id?: string, owner?: string): Promise<DryRunResult> {
         try {
+            const mergedTags = mergeLists(DEFAULT_TAGS, tags, tag => tag.name);
             const result = await dryrun({
                 process: this.baseConfig.processId,
                 data,
-                tags,
+                tags: mergedTags,
                 anchor,
                 id,
                 owner,
