@@ -1,4 +1,4 @@
-import { MessagesServiceError, GetLatestMessagesError } from "../../../../src/clients/transaction/messages";
+import { MessagesServiceError, GetLatestMessagesError } from "src";
 
 describe("MessagesServiceError", () => {
     it("should create error with original error stack", () => {

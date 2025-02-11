@@ -1,4 +1,4 @@
-import { EnvironmentVariableError, UnknownEnvironmentError } from "./EnvironmentError";
+import { EnvironmentVariableError, UnknownEnvironmentError } from "src/utils/environment/EnvironmentError";
 
 export enum Environment {
     NODE = 'node',

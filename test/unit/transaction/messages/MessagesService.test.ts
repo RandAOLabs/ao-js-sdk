@@ -1,5 +1,5 @@
-import { MessagesService } from "../../../../src/clients/transaction/messages";
-import { ArweaveGQLResponse } from "../../../../src/core/arweave/abstract/types";
+import { MessagesService } from "src";
+
 
 // Mock ArweaveInstance.getInstance()
 jest.mock("../../../../src/core/arweave/arweave", () => {

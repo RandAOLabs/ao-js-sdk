@@ -1,8 +1,7 @@
-import { ProfileClient } from "../../../src/index";
-import { BaseClient } from "../../../src/core/ao/BaseClient";
 import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
 import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
-import { AsyncInitializationRequiredError } from "../../../src/index";
+import { BaseClient, ProfileClient, AsyncInitializationRequiredError } from "src";
+
 
 // Mock BaseClient methods
 const mockDryRunResult: DryRunResult = {
@@ -30,7 +29,7 @@ jest.spyOn(BaseClient.prototype, 'messageResult').mockResolvedValue(mockMessageR
 jest.spyOn(BaseClient.prototype, 'getCallingWalletAddress').mockResolvedValue("test-wallet");
 
 // Mock the getProfileClientAutoConfiguration
-jest.mock("../../../src/clients/process/profile/ProfileClientAutoConfiguration", () => ({
+jest.mock("src/clients/profile/ProfileClientAutoConfiguration", () => ({
     getProfileClientAutoConfiguration: jest.fn().mockResolvedValue({
         processId: "test-process-id",
         wallet: {},
