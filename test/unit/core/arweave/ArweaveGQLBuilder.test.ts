@@ -18,12 +18,17 @@ describe('ArweaveGQLBuilder', () => {
     describe('Filter Methods', () => {
         it('should add id filter', () => {
             const result = builder.id('test-id').build();
-            expect(result.query).toContain('id: "test-id"');
+            expect(result.query).toContain('ids: ["test-id"]');
         });
 
-        it('should add recipient filter', () => {
+        it('should add single recipient filter', () => {
             const result = builder.recipient('test-address').build();
-            expect(result.query).toContain('recipient: "test-address"');
+            expect(result.query).toContain('recipients: ["test-address"]');
+        });
+
+        it('should add multiple recipients filter', () => {
+            const result = builder.recipients(['address1', 'address2']).build();
+            expect(result.query).toContain('recipients: ["address1", "address2"]');
         });
 
         it('should add owner filter', () => {
@@ -136,7 +141,7 @@ describe('ArweaveGQLBuilder', () => {
     describe('Complex Queries', () => {
         it('should combine multiple filters and fields', () => {
             const result = builder
-                .recipient('test-address')
+                .recipients(['test-address'])
                 .withOwner({ address: true })
                 .withBlock({ height: true })
                 .limit(5)
@@ -144,11 +149,11 @@ describe('ArweaveGQLBuilder', () => {
                 .build();
 
             const query = result.query;
-            expect(query).toContain('recipient: "test-address"');
-            expect(query).toContain('owner { address }');
-            expect(query).toContain('block { height }');
-            expect(query).toContain('first: 5');
-            expect(query).toContain('sort: HEIGHT_ASC');
+            expect(query).toMatch(/recipients: \["test-address"\]/);
+            expect(query).toMatch(/owner \{ address \}/);
+            expect(query).toMatch(/block \{ height \}/);
+            expect(query).toMatch(/first: 5/);
+            expect(query).toMatch(/sort: HEIGHT_ASC/);
         });
     });
 });

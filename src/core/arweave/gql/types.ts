@@ -1,6 +1,6 @@
 export interface ArweaveGQLFilter {
     ids?: string[];
-    recipient?: string;
+    recipients?: string[];
     owner?: {
         address: string;
     };
@@ -25,6 +25,7 @@ export interface NodeFields {
     anchor?: boolean;
     signature?: boolean;
     recipient?: boolean;
+    ingested_at?: boolean;
     owner?: OwnerFields;
     fee?: AmountFields;
     quantity?: AmountFields;

@@ -6,27 +6,11 @@ import { getArweave } from './arweave';
 import { ArweaveGQLBuilder } from './gql/ArweaveGQLBuilder';
 import { ArweaveGQLResponse, ArweaveTransaction } from './abstract/types';
 
-/**
- * @inheritdoc
- * Implements singleton pattern to ensure only one instance exists throughout the application.
- */
 export class ArweaveBaseClient implements IArweaveBaseClient {
-    /**
-     * Singleton instance of ArweaveBaseClient.
-     * Initialized on first getInstance() call.
-     */
-    private static instance: ArweaveBaseClient | null = null;
     private readonly arweave: Arweave;
 
-    private constructor() {
+    public constructor() {
         this.arweave = getArweave();
-    }
-
-    public static getInstance(): ArweaveBaseClient {
-        if (!ArweaveBaseClient.instance) {
-            ArweaveBaseClient.instance = new ArweaveBaseClient();
-        }
-        return ArweaveBaseClient.instance;
     }
 
     public async graphQuery<T = any>(query: string): Promise<T> {
