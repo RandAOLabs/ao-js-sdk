@@ -1,9 +1,9 @@
-import { Tags, BaseClient } from "../../core/ao/index";
-import { Logger } from "../../utils/index";
-import { IProfileClient } from "./abstract/IProfileClient";
-import { ProfileInfo } from "./abstract/types";
-import { getProfileClientAutoConfiguration } from "./ProfileClientAutoConfiguration";
-import { AsyncInitializationRequiredError, GetProfileError, ProfileTransferError } from "./ProfileClientError";
+import { IProfileClient, ProfileInfo } from "src/clients/profile/abstract";
+import { getProfileClientAutoConfiguration } from "src/clients/profile/ProfileClientAutoConfiguration";
+import { AsyncInitializationRequiredError, GetProfileError, ProfileTransferError } from "src/clients/profile/ProfileClientError";
+import { Tags, BaseClient } from "src/core/ao/index";
+import { Logger } from "src/utils/index";
+
 
 /** @see {@link https://cookbook_ao.g8way.io/references/profile.html | specification} */
 export class ProfileClient extends BaseClient implements IProfileClient {

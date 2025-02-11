@@ -1,4 +1,3 @@
-import { Tags } from "../../../core/ao/abstract/types";
 
 // Each zone in MasterWhitelist is an array with:
 // [0]: Purchase price

@@ -1,6 +1,6 @@
 {
   "name": "ao-process-clients",
-  "version": "3.8.4",
+  "version": "4.0.0",
   "description": "A modular TypeScript API client library for AO Process interactions",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
@@ -21,7 +21,8 @@
     "test:integration:nftSale": "jest --runInBand ./test/integration/nft-sale",
     "test:integration:profileRegistry": "jest --runInBand ./test/integration/profile-registry",
     "test:integration:profile": "jest --runInBand ./test/integration/profile",
-    "test:integration:ArweaveBaseClient": "jest --runInBand ./test/integration/arweave/ArweaveBaseClient.test.ts"
+    "test:integration:ArweaveBaseClient": "jest --runInBand ./test/integration/arweave/ArweaveBaseClient.test.ts",
+    "test:integration:messages": "jest --runInBand ./test/integration/transaction/messages/"
   },
   "repository": {
     "type": "git",

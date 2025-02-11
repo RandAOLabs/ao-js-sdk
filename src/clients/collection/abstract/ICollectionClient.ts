@@ -1,4 +1,4 @@
-import { CollectionInfo, UpdateAssetsRequest } from "./types";
+import { CollectionInfo, UpdateAssetsRequest } from "src/clients/collection/abstract/types";
 
 export interface ICollectionClient {
     /**

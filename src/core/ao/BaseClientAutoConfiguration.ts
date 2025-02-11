@@ -1,5 +1,5 @@
 import { JWKInterface } from "arweave/node/lib/wallet";
-import { BaseClientConfig } from "./abstract/BaseClientConfig";
+import { BaseClientConfig } from "src/core/ao/abstract/BaseClientConfig";
 
 let lazyWallet: JWKInterface | null = null;
 const getWalletLazy = (): JWKInterface => {

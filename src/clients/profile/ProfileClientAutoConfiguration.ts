@@ -1,7 +1,8 @@
-import { ProfileClientConfig } from "./abstract/ProfileClientConfig";
-import { getBaseClientAutoConfiguration } from "../../core/ao/BaseClientAutoConfiguration";
-import { ProfileRegistryClient } from "../profile-registry/ProfileRegistryClient";
-import { NoProfileFoundError } from "./ProfileClientError";
+import { ProfileRegistryClient } from "src/clients/profile-registry";
+import { ProfileClientConfig } from "src/clients/profile/abstract";
+import { NoProfileFoundError } from "src/clients/profile/ProfileClientError";
+import { getBaseClientAutoConfiguration } from "src/core/ao/BaseClientAutoConfiguration";
+
 
 export const getProfileClientAutoConfiguration = async (): Promise<ProfileClientConfig> => {
     const registryClient = ProfileRegistryClient.autoConfiguration();

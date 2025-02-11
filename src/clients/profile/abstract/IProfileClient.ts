@@ -1,5 +1,5 @@
-import { Tags } from "../../../core/ao";
-import { ProfileInfo } from "./types";
+import { ProfileInfo } from "src/clients/profile/abstract/types";
+import { Tags } from "src/core/ao";
 
 /** @see {@link https://cookbook_ao.g8way.io/references/profile.html | specification} */
 export interface IProfileClient {

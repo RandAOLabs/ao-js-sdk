@@ -1,4 +1,4 @@
-import { ProviderDetails, ProviderInfo } from './types';
+import { ProviderDetails, ProviderInfo } from "src/clients/staking/abstract/types";
 
 export interface IStakingClient {
     /**

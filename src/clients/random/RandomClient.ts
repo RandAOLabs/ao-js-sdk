@@ -1,17 +1,13 @@
-// src/RandomClient.ts
-import { Tags } from '../../index';
-import { BaseClient } from '../../core/ao/BaseClient';
-import { IRandomClient } from './abstract/IRandomClient';
-import { Logger } from '../../index';
-import { PostVDFChallengeError, ProviderAvailableValuesError, UpdateProviderAvailableValuesError, OpenRandomRequestsError, RandomRequestsError, CreateRequestError, PostVDFOutputAndProofError } from './RandomClientError';
-import { getRandomClientAutoConfiguration } from './RandomClientAutoConfiguration';
-import { RandomClientConfig } from './abstract/RandomClientConfig';
-import { TokenClientConfig } from '../token/abstract/TokenClientConfig';
-import { TokenClient } from '../token';
-import { MessageResult } from '@permaweb/aoconnect/dist/lib/result';
-import { RandomProcessError } from './RandomProcessError';
-import { DryRunResult } from '@permaweb/aoconnect/dist/lib/dryrun';
-import { GetOpenRandomRequestsResponse, GetProviderAvailableValuesResponse, GetRandomRequestsResponse } from './abstract/types';
+import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
+import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
+import { IRandomClient, RandomClientConfig, GetProviderAvailableValuesResponse, GetOpenRandomRequestsResponse, GetRandomRequestsResponse } from "src/clients/random/abstract";
+import { getRandomClientAutoConfiguration } from "src/clients/random/RandomClientAutoConfiguration";
+import { PostVDFChallengeError, ProviderAvailableValuesError, UpdateProviderAvailableValuesError, OpenRandomRequestsError, RandomRequestsError, CreateRequestError, PostVDFOutputAndProofError } from "src/clients/random/RandomClientError";
+import { RandomProcessError } from "src/clients/random/RandomProcessError";
+import { TokenClient, TokenClientConfig } from "src/clients/token";
+import { BaseClient, Tags } from "src/core/ao";
+import { Logger } from "src/utils";
+
 
 
 /** @see {@link https://github.com/RandAOLabs/Random-Process | specification} */
