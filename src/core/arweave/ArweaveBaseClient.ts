@@ -3,6 +3,8 @@ import { IArweaveBaseClient } from './abstract/IArweaveBaseClient';
 import { ArweaveGraphQLError } from './ArweaveBaseClientError';
 import { Logger } from '../../utils/logger/logger';
 import { getArweave } from './arweave';
+import { ArweaveGQLBuilder } from './gql/ArweaveGQLBuilder';
+import { ArweaveGQLResponse } from './abstract/types';
 
 /**
  * @inheritdoc
@@ -37,5 +39,14 @@ export class ArweaveBaseClient implements IArweaveBaseClient {
             Logger.error(`GraphQL query error: ${error.message}`);
             throw new ArweaveGraphQLError(query, error);
         }
+    }
+
+    public async query(builder: ArweaveGQLBuilder): Promise<ArweaveGQLResponse> {
+        if (!builder) {
+            throw new ArweaveGraphQLError('No GQL builder provided');
+        }
+
+        const builtQuery = builder.build();
+        return this.graphQuery<ArweaveGQLResponse>(builtQuery.query);
     }
 }
