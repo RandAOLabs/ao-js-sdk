@@ -1,7 +1,7 @@
 import { ArweaveGQLBuilder } from "../gql/ArweaveGQLBuilder";
 import { ArweaveGQLResponse, ArweaveTransaction } from "./types";
 
-export interface IArweaveBaseClient {
+export interface IBaseArweaveDataService {
     /**
      * Executes a raw GraphQL query
      * @param query The GraphQL query string

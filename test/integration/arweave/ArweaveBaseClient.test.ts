@@ -1,5 +1,5 @@
 import { Logger } from '../../../src';
-import { ArweaveBaseClient } from '../../../src/core/arweave';
+import { BaseArweaveDataService } from '../../../src/core/arweave';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -20,10 +20,10 @@ interface ProcessQueryResult {
 }
 
 describe('ArweaveBaseClient Integration Tests', () => {
-    let client: ArweaveBaseClient;
+    let client: BaseArweaveDataService;
 
     beforeAll(() => {
-        client = new ArweaveBaseClient();
+        client = new BaseArweaveDataService();
     });
 
     // it('should collect all AO process IDs', async () => {
