@@ -1,4 +1,4 @@
-import { TokenClient } from "../../../src/clients/token";
+import { TokenClient } from "../../../src/index";
 import { dryrun, message } from "@permaweb/aoconnect";
 import { Tags } from "../../../src/index";
 import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";

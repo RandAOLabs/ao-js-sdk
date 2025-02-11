@@ -1,5 +1,6 @@
 import { ArweaveBaseClient } from '../../../../src/core/arweave/ArweaveBaseClient';
 import { ArweaveGraphQLError } from '../../../../src/core/arweave/ArweaveBaseClientError';
+import { ArweaveGQLBuilder } from '../../../../src/core/arweave/gql/ArweaveGQLBuilder';
 
 // Create a proper mock response object
 const mockApiPost = jest.fn();
@@ -46,6 +47,70 @@ describe('ArweaveBaseClient', () => {
             const instance1 = ArweaveBaseClient.getInstance();
             const instance2 = ArweaveBaseClient.getInstance();
             expect(instance1).toBe(instance2);
+        });
+
+        describe('query', () => {
+            it('should successfully execute a query using GQL builder', async () => {
+                const mockResponse = {
+                    data: {
+                        transactions: {
+                            edges: [
+                                {
+                                    cursor: 'cursor1',
+                                    node: {
+                                        id: 'test-id',
+                                        owner: {
+                                            address: 'owner-address'
+                                        },
+                                        tags: [
+                                            {
+                                                name: 'Content-Type',
+                                                value: 'text/plain'
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                };
+
+                mockApiPost.mockResolvedValueOnce({
+                    ok: true,
+                    status: 200,
+                    data: mockResponse
+                });
+
+                const builder = new ArweaveGQLBuilder()
+                    .withOwner()
+                    .withTags()
+                    .limit(1);
+
+                const result = await client.query(builder);
+
+                expect(mockApiPost).toHaveBeenCalledWith('/graphql', {
+                    query: expect.stringContaining('transactions')
+                });
+                expect(result).toEqual(mockResponse);
+            });
+
+            it('should throw ArweaveGraphQLError when builder is not provided', async () => {
+                await expect(client.query(undefined as any))
+                    .rejects
+                    .toThrow(ArweaveGraphQLError);
+            });
+
+            it('should throw ArweaveGraphQLError when query execution fails', async () => {
+                mockApiPost.mockRejectedValueOnce(new Error('Query failed'));
+
+                const builder = new ArweaveGQLBuilder()
+                    .withOwner()
+                    .limit(1);
+
+                await expect(client.query(builder))
+                    .rejects
+                    .toThrow(ArweaveGraphQLError);
+            });
         });
     });
 

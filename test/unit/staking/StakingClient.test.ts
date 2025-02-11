@@ -3,8 +3,8 @@ import { BaseClient } from "../../../src/core/ao/BaseClient";
 import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
 import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
 import { TokenClient } from "../../../src/index";
-import { ProviderDetails } from "../../../src/clients/staking/abstract/types";
-import { UnstakeError } from "../../../src/clients/staking/StakingClientError";
+import { ProviderDetails } from "../../../src/clients/process/staking/abstract/types";
+import { UnstakeError } from "../../../src/index";
 
 // Mock individual methods of BaseClient using jest.spyOn
 jest.spyOn(BaseClient.prototype, 'message').mockResolvedValue("test-message-id");
@@ -21,7 +21,7 @@ const dryRunResult: DryRunResult = {
 }
 jest.spyOn(BaseClient.prototype, 'dryrun').mockResolvedValue(dryRunResult);
 jest.spyOn(BaseClient.prototype, 'messageResult').mockResolvedValue(messageResult);
-jest.mock("../../../src/clients/token/index");
+jest.mock("../../../src/clients/process/token/index");
 /*
 * Mocks the logger for tests to suppress log outputs.
 * Logs a warning that logging has been disabled for the current test suite.
