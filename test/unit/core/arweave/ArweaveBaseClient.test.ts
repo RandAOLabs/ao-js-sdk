@@ -1,5 +1,5 @@
-import { ArweaveBaseClient } from '../../../../src/core/arweave/ArweaveBaseClient';
-import { ArweaveGraphQLError } from '../../../../src/core/arweave/ArweaveBaseClientError';
+import { BaseArweaveDataService } from '../../../../src/core/arweave/ArweaveDataService';
+import { ArweaveGraphQLError } from '../../../../src/core/arweave/ArweaveDataServiceError';
 import { ArweaveGQLBuilder } from '../../../../src/core/arweave/gql/ArweaveGQLBuilder';
 
 // Create a proper mock response object
@@ -25,17 +25,17 @@ jest.mock('../../../../src/utils/logger/logger', () => ({
 }));
 
 describe('ArweaveBaseClient', () => {
-    let client: ArweaveBaseClient;
+    let client: BaseArweaveDataService;
 
     beforeEach(() => {
         // Reset the singleton instance
-        (ArweaveBaseClient as any).instance = null;
+        (BaseArweaveDataService as any).instance = null;
 
         // Clear mock data
         mockApiPost.mockClear();
 
         // Get a new instance
-        client = new ArweaveBaseClient();
+        client = new BaseArweaveDataService();
     });
 
     afterEach(() => {

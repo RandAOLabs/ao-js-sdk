@@ -1,6 +1,6 @@
 import Arweave from 'arweave';
 import { getEnvironment, Environment, UnknownEnvironmentError } from '../../utils/environment';
-import { ArweaveInitializationError } from './ArweaveBaseClientError';
+import { ArweaveInitializationError } from './ArweaveDataServiceError';
 import { Logger } from '../../utils/logger/logger';
 
 /**

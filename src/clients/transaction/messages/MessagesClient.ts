@@ -1,4 +1,4 @@
-import { ArweaveBaseClient } from "../../../core/arweave/ArweaveBaseClient";
+import { BaseArweaveDataService } from "../../../core/arweave/ArweaveDataService";
 import { ArweaveGQLBuilder } from "../../../core/arweave/gql/ArweaveGQLBuilder";
 import { Logger } from "../../../utils/logger/logger";
 import { IMessagesClient } from "./abstract/IMessagesClient";
@@ -15,7 +15,7 @@ import {
 import { ArweaveGQLSortOrder } from "../../../core/arweave/gql/types";
 import { ArweaveTransaction } from "../../../core/arweave/abstract/types";
 
-export class MessagesClient extends ArweaveBaseClient implements IMessagesClient {
+export class MessagesClient extends BaseArweaveDataService implements IMessagesClient {
     constructor() {
         super();
     }
