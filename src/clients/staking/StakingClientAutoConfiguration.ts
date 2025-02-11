@@ -1,6 +1,7 @@
-import { getBaseClientAutoConfiguration } from "../../core/ao/BaseClientAutoConfiguration";
-import { StakingClientConfig } from "./abstract/StakingClientConfig";
-import { STAKING_PROCESS_ID, STAKING_TOKEN_PROCESS_ID } from "../../processes_ids";
+import { StakingClientConfig } from "src/clients/staking/abstract";
+import { getBaseClientAutoConfiguration } from "src/core/ao/BaseClientAutoConfiguration";
+
+import { STAKING_PROCESS_ID, STAKING_TOKEN_PROCESS_ID } from "src/processes_ids";
 
 export const getStakingClientAutoConfiguration = (): StakingClientConfig => ({
     ...getBaseClientAutoConfiguration(),

@@ -1,9 +1,9 @@
-import { BaseClient } from "../../core/ao/index";
-import { Logger } from "../../utils/index";
-import { IProfileRegistryClient } from "./abstract/IProfileRegistryClient";
-import { ProfileRegistryEntry } from "./abstract/types";
-import { getProfileRegistryClientAutoConfiguration } from "./ProfileRegistryClientAutoConfiguration";
-import { GetProfilesError } from "./RegistryClientError";
+import { IProfileRegistryClient, ProfileRegistryEntry } from "src/clients/profile-registry/abstract";
+import { getProfileRegistryClientAutoConfiguration } from "src/clients/profile-registry/ProfileRegistryClientAutoConfiguration";
+import { GetProfilesError } from "src/clients/profile-registry/RegistryClientError";
+import { BaseClient } from "src/core/ao/index";
+import { Logger } from "src/utils/index";
+
 
 /** @see {@link https://cookbook_ao.g8way.io/references/profile-registry.html | specification} */
 export class ProfileRegistryClient extends BaseClient implements IProfileRegistryClient {

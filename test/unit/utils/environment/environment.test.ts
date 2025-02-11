@@ -1,4 +1,4 @@
-import { Environment, getEnvironment, getEnvironmentVariable } from '../../../../src/index';
+import { getEnvironment, Environment, getEnvironmentVariable } from "src";
 
 describe('Environment Functions', () => {
     afterEach(() => {

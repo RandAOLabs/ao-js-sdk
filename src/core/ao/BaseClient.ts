@@ -1,15 +1,15 @@
 import { message, result, results, createDataItemSigner, dryrun } from '@permaweb/aoconnect';
-import { IBaseClient } from './abstract/IBaseClient';
-import { SortOrder, Tags } from './abstract/types';
-import { BaseClientConfig } from './abstract/BaseClientConfig';
-import { DryRunError, JsonParsingError, MessageError, MessageOutOfBoundsError, ResultError, ResultsError } from './BaseClientError';
+import { IBaseClient } from 'src/core/ao/abstract/IBaseClient';
+import { SortOrder, Tags } from 'src/core/ao/abstract/types';
+import { BaseClientConfig } from 'src/core/ao/abstract/BaseClientConfig';
+import { DryRunError, JsonParsingError, MessageError, MessageOutOfBoundsError, ResultError, ResultsError } from 'src/core/ao/BaseClientError';
 import { MessageResult } from '@permaweb/aoconnect/dist/lib/result';
 import { ResultsResponse } from '@permaweb/aoconnect/dist/lib/results';
-import { Logger, LogLevel } from '../../utils/logger/logger';
-import { getBaseClientAutoConfiguration } from './BaseClientAutoConfiguration';
+import { Logger, LogLevel } from 'src/utils/logger/logger';
+import { getBaseClientAutoConfiguration } from 'src/core/ao/BaseClientAutoConfiguration';
 import { DryRunResult } from '@permaweb/aoconnect/dist/lib/dryrun';
-import { getArweave } from '../arweave/arweave';
-import { getEnvironment, Environment } from '../../utils/environment';
+import { getArweave } from 'src/core/arweave/arweave';
+import { getEnvironment, Environment } from 'src/utils/environment';
 
 export class BaseClient extends IBaseClient {
     /* Fields */

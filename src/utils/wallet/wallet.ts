@@ -1,7 +1,7 @@
 import { JWKInterface } from "arweave/node/lib/wallet";
-import { Environment, EnvironmentVariableError, getEnvironment, getEnvironmentVariable } from "../environment/index"
-import { BrowserWalletError, FileReadError } from "./WalletError";
-import { Logger } from "../logger/logger";
+import { Environment, EnvironmentVariableError, getEnvironment, getEnvironmentVariable } from "src/utils/environment/index"
+import { BrowserWalletError, FileReadError } from "src/utils/wallet/WalletError";
+import { Logger } from "src/utils/logger/logger";
 
 export function getWallet(): JWKInterface | undefined { 
     const environment = getEnvironment();

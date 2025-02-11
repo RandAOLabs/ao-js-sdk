@@ -1,6 +1,6 @@
-import { TokenClientConfig } from "../token/abstract/TokenClientConfig";
-import { getBaseClientAutoConfiguration } from "../../core/ao/BaseClientAutoConfiguration";
-import { RNG_TOKEN_PROCESS_ID } from "../../processes_ids";
+import { TokenClientConfig } from "src/clients/token";
+import { getBaseClientAutoConfiguration } from "src/core/ao/BaseClientAutoConfiguration";
+import { RNG_TOKEN_PROCESS_ID } from "src/processes_ids";
 
 export const getNftClientAutoConfiguration = (): TokenClientConfig => ({
     ...getBaseClientAutoConfiguration(),

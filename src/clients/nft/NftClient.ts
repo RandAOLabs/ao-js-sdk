@@ -1,11 +1,11 @@
-import { Tags } from "../../core/ao/index";
-import { TokenClient } from "../token/TokenClient";
-import { TokenClientConfig } from "../token/abstract/TokenClientConfig";
-import { INftClient } from "./abstract/INftClient";
-import { getNftClientAutoConfiguration } from "./NftClientAutoConfiguration";
-import { NftTransferError } from "./NftClientError";
-import { NFT_QUANTITY } from "./constants";
-import { Logger } from "../../utils/index";
+import { INftClient } from "src/clients/nft/abstract/INftClient";
+import { NFT_QUANTITY } from "src/clients/nft/constants";
+import { getNftClientAutoConfiguration } from "src/clients/nft/NftClientAutoConfiguration";
+import { NftTransferError } from "src/clients/nft/NftClientError";
+import { TokenClient, TokenClientConfig } from "src/clients/token";
+import { Tags } from "src/core/ao/index";
+
+import { Logger } from "src/utils/index";
 
 export class NftClient extends TokenClient implements INftClient {
     /* Constructors */

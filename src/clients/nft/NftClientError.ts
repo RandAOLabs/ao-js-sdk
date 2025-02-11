@@ -1,4 +1,4 @@
-import { TokenClientError } from "../token/TokenClientError";
+import { TokenClientError } from "src/clients/token";
 
 export class NftClientError extends TokenClientError {
     constructor(message: string, originalError?: Error) {

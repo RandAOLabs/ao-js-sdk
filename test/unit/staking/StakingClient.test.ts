@@ -1,10 +1,8 @@
-import { StakingClient } from "../../../src/index";
-import { BaseClient } from "../../../src/core/ao/BaseClient";
-import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
 import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
-import { TokenClient } from "../../../src/index";
-import { ProviderDetails } from "../../../src/clients/staking/abstract/types";
-import { UnstakeError } from "../../../src/clients/staking/StakingClientError";
+import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
+import { BaseClient, StakingClient, TokenClient, UnstakeError } from "src";
+import { ProviderDetails } from "src/clients/staking/abstract";
+
 
 // Mock individual methods of BaseClient using jest.spyOn
 jest.spyOn(BaseClient.prototype, 'message').mockResolvedValue("test-message-id");
@@ -21,12 +19,20 @@ const dryRunResult: DryRunResult = {
 }
 jest.spyOn(BaseClient.prototype, 'dryrun').mockResolvedValue(dryRunResult);
 jest.spyOn(BaseClient.prototype, 'messageResult').mockResolvedValue(messageResult);
-jest.mock("../../../src/clients/token/index");
+// Mock the token client module
+jest.mock("src/clients/token/TokenClient", () => {
+    return {
+        TokenClient: jest.fn().mockImplementation(() => ({
+            transfer: jest.fn().mockResolvedValue(true)
+        }))
+    };
+});
+
 /*
 * Mocks the logger for tests to suppress log outputs.
 * Logs a warning that logging has been disabled for the current test suite.
 */
-jest.mock('../../../src/utils/logger/logger', () => {
+jest.mock('src/utils/logger', () => {
     const actualLogger = jest.requireActual('../../../src/utils/logger/logger');
     return {
         ...actualLogger,

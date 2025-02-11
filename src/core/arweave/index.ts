@@ -1,3 +1,3 @@
-export { ArweaveBaseClient } from './ArweaveBaseClient';
-export { IArweaveBaseClient } from './abstract/IArweaveBaseClient';
-export * from './ArweaveBaseClientError';
+export * from './ArweaveDataService';
+export * from './abstract/IArweaveBaseClient';
+export * from './ArweaveDataServiceError';

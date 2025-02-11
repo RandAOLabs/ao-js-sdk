@@ -1,11 +1,12 @@
-import { TokenClient } from "../../../src/clients/token";
-import { dryrun, message } from "@permaweb/aoconnect";
-import { Tags } from "../../../src/index";
+
+import { dryrun } from "@permaweb/aoconnect";
 import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
-import { BaseClient } from "../../../src/index";
+import { TokenClient, Tags, BaseClient } from "src";
 
 
 // Mock the functions from '@permaweb/aoconnect'
+
+
 //mocks
 jest.mock('@permaweb/aoconnect', () => ({
     message: jest.fn(),

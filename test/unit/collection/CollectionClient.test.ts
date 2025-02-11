@@ -1,6 +1,6 @@
-import { CollectionClient } from '../../../src/clients/collection/CollectionClient';
-import { CollectionInfoError, UpdateAssetsError, AddToProfileError, AuthorizationError, InputValidationError } from '../../../src/clients/collection/CollectionClientError';
-import { ACTIONS, RESPONSE_ACTIONS, STATUS, TAG_NAMES } from '../../../src/clients/collection/constants';
+import { CollectionClient } from '../../../src/index';
+import { CollectionInfoError, UpdateAssetsError, AddToProfileError, AuthorizationError, InputValidationError } from '../../../src/index';
+import { ACTIONS, RESPONSE_ACTIONS, STATUS, TAG_NAMES } from '../../../src/index';
 import { MessageResult } from '@permaweb/aoconnect/dist/lib/result';
 import { Logger } from '../../../src/utils';
 

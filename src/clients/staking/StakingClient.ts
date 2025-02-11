@@ -1,13 +1,11 @@
-import { Tags } from '../../core/ao/abstract/types';
-import { BaseClient } from '../../core/ao/BaseClient';
-import { IStakingClient } from './abstract/IStakingClient';
-import { ProviderDetails, ProviderInfo, ProviderInfoDTO, StakeInfo } from './abstract/types';
-import { Logger } from '../../utils/logger/logger';
-import { StakeError, GetStakeError, UnstakeError } from './StakingClientError';
-import { getStakingClientAutoConfiguration } from './StakingClientAutoConfiguration';
-import { StakingClientConfig } from './abstract/StakingClientConfig';
-import { TokenClient } from '../token';
-import { TokenClientConfig } from '../token/abstract/TokenClientConfig';
+import { IStakingClient, StakingClientConfig, ProviderDetails, StakeInfo, ProviderInfo, ProviderInfoDTO } from 'src/clients/staking/abstract';
+import { getStakingClientAutoConfiguration } from 'src/clients/staking/StakingClientAutoConfiguration';
+import { StakeError, GetStakeError, UnstakeError } from 'src/clients/staking/StakingClientError';
+import { TokenClient, TokenClientConfig } from 'src/clients/token';
+import { Tags } from 'src/core/ao/abstract/types';
+import { BaseClient } from 'src/core/ao/BaseClient';
+import { Logger } from 'src/utils';
+
 
 /** @see {@link https://cookbook_ao.g8way.io/references/staking.html | specification} */
 export class StakingClient extends BaseClient implements IStakingClient {

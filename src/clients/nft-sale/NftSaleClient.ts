@@ -1,13 +1,12 @@
-import { Tags, BaseClient } from "../../core/ao";
-import { Logger } from "../../utils";
-import { INftSaleClient } from "./abstract/INftSaleClient";
-import { NftSaleClientConfig } from "./abstract/NftSaleClientConfig";
-import { PurchaseNftError, QueryNFTCountError, AddNftError, ReturnNFTsError, LuckyDrawError, NftSaleInfoError, PaymentError } from "./NftSaleClientError";
-import { NftSaleInfo } from "./abstract/types";
-import { TokenClient } from "../token";
-import { TokenClientConfig } from "../token/abstract/TokenClientConfig";
-import { ProfileClient } from "../profile";
-import { getNftSaleClientAutoConfiguration } from "./NftSaleClientAutoConfiguration";
+import { INftSaleClient, NftSaleClientConfig } from "src/clients/nft-sale/abstract";
+import { NftSaleInfo } from "src/clients/nft-sale/abstract/types";
+import { getNftSaleClientAutoConfiguration } from "src/clients/nft-sale/NftSaleClientAutoConfiguration";
+import { PurchaseNftError, LuckyDrawError, QueryNFTCountError, AddNftError, ReturnNFTsError, NftSaleInfoError, PaymentError } from "src/clients/nft-sale/NftSaleClientError";
+import { ProfileClient } from "src/clients/profile";
+import { TokenClient, TokenClientConfig } from "src/clients/token";
+import { Tags, BaseClient } from "src/core/ao";
+import { Logger } from "src/utils";
+
 
 export class NftSaleClient extends BaseClient implements INftSaleClient {
     /* Fields */

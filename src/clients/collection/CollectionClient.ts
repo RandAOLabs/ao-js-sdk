@@ -1,12 +1,11 @@
-import { BaseClient, BaseClientConfig, Tags } from "../../core/ao";
-import { ICollectionClient } from "./abstract/ICollectionClient";
-import { CollectionInfo, UpdateAssetsRequest } from "./abstract/types";
-import { getCollectionClientAutoConfiguration } from "./CollectionClientAutoConfiguration";
-import { CollectionClientConfig } from "./abstract/CollectionClientConfig";
-import { ACTIONS, RESPONSE_ACTIONS, STATUS, TAG_NAMES, TRANSFER_RATE_LIMIT, TRANSFER_BATCH_DELAY } from "./constants";
-import { AddToProfileError, AuthorizationError, CollectionInfoError, InputValidationError, TransferAllAssetsError, UpdateAssetsError } from "./CollectionClientError";
-import { Logger } from "../../utils/index";
-import { NftClient } from "../nft";
+import { BaseClient, BaseClientConfig, Tags } from "src/core/ao";
+import { ICollectionClient } from "src/clients/collection/abstract/ICollectionClient";
+import { Logger } from "src/utils/index";
+import { CollectionClientConfig, CollectionInfo, UpdateAssetsRequest } from "src/clients/collection/abstract";
+import { getCollectionClientAutoConfiguration } from "src/clients/collection/CollectionClientAutoConfiguration";
+import { CollectionInfoError, AuthorizationError, InputValidationError, UpdateAssetsError, AddToProfileError, TransferAllAssetsError } from "src/clients/collection/CollectionClientError";
+import { TAG_NAMES, ACTIONS, RESPONSE_ACTIONS, STATUS, TRANSFER_RATE_LIMIT, TRANSFER_BATCH_DELAY } from "src/clients/collection/constants";
+import { NftClient } from "src/clients/nft";
 
 export class CollectionClient extends BaseClient implements ICollectionClient {
     /* Constructors */

@@ -1,4 +1,4 @@
-import { NftSaleInfo } from "./types";
+import { NftSaleInfo } from "src/clients/nft-sale/abstract/types";
 
 export interface INftSaleClient {
     /**

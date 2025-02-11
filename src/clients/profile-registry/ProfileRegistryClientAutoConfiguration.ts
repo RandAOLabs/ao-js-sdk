@@ -1,6 +1,6 @@
-import { ProfileRegistryClientConfig } from "./abstract/ProfileRegistryClientConfig";
-import { getBaseClientAutoConfiguration } from "../../core/ao/BaseClientAutoConfiguration";
-import { PROFILE_REGISTRY_PROCESS_ID } from "../../processes_ids";
+import { ProfileRegistryClientConfig } from "src/clients/profile-registry/abstract";
+import { getBaseClientAutoConfiguration } from "src/core/ao/BaseClientAutoConfiguration";
+import { PROFILE_REGISTRY_PROCESS_ID } from "src/processes_ids";
 
 export const getProfileRegistryClientAutoConfiguration = (): ProfileRegistryClientConfig => ({
     ...getBaseClientAutoConfiguration(),

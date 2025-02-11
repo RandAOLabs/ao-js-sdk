@@ -1,6 +1,6 @@
 // src/ITokenClient.ts
 import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
-import { Tags } from "../../../core/ao/abstract/types";
+import { Tags } from "src/core/ao/abstract/types";
 
 /** @see {@link https://cookbook_ao.g8way.io/references/token.html | specification} */
 export interface ITokenClient {
