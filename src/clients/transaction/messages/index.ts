@@ -1,4 +1,4 @@
-export * from "./MessagesClient"
-export * from "./MessagesClientError"
+export * from "./MessagesService"
+export * from "./MessagesServiceError"
 export * from "./abstract/types"
-export * from "./abstract/IMessagesClient"
+export * from "./abstract/IMessagesService"
