@@ -1,5 +1,6 @@
 import { message, results, result, dryrun } from '@permaweb/aoconnect';
 import { BaseClient, SortOrder } from 'src';
+import { DEFAULT_TAGS } from 'src/core/ao/constants';
 
 
 // Mocking external dependencies
@@ -60,11 +61,15 @@ describe("BaseClient", () => {
             await expect(client.message(data, tags, anchor)).resolves.toBeUndefined();
 
             // Assert
+            const expectedTags = [
+                ...DEFAULT_TAGS,
+                { name: 'tag1', value: 'value1' }
+            ];
             expect(message).toHaveBeenCalledWith({
                 process: client.baseConfig.processId,
                 signer: undefined,
                 data,
-                tags,
+                tags: expectedTags,
                 anchor,
             });
         });
@@ -137,10 +142,14 @@ describe("BaseClient", () => {
             const response = await client.dryrun(data, tags, anchor, id, owner);
 
             // Assert
+            const expectedTags = [
+                ...DEFAULT_TAGS,
+                { name: 'tag1', value: 'value1' }
+            ];
             expect(dryrun).toHaveBeenCalledWith({
                 process: client.baseConfig.processId,
                 data,
-                tags,
+                tags: expectedTags,
                 anchor,
                 id,
                 owner,
