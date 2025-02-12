@@ -1,5 +1,6 @@
 import { message, results, result, dryrun } from '@permaweb/aoconnect';
-import { BaseClient, SortOrder } from 'src';
+import { SortOrder, SyncBaseClient } from 'src';
+import { BaseClient } from 'src/core/ao/BaseClient';
 import { DEFAULT_TAGS } from 'src/core/ao/constants';
 
 
@@ -29,7 +30,7 @@ describe("BaseClient", () => {
 
     // Setting up mocks and BaseClient instance before each test
     beforeEach(() => {
-        client = BaseClient.autoConfiguration()
+        client = SyncBaseClient.autoConfiguration()
     });
 
     // Reset mocks after each test

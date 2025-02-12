@@ -2,13 +2,13 @@ import { IStakingClient, StakingClientConfig, ProviderDetails, StakeInfo, Provid
 import { getStakingClientAutoConfiguration } from 'src/clients/staking/StakingClientAutoConfiguration';
 import { StakeError, GetStakeError, UnstakeError } from 'src/clients/staking/StakingClientError';
 import { TokenClient, TokenClientConfig } from 'src/clients/token';
+import { SyncBaseClient } from 'src/core/ao';
 import { Tags } from 'src/core/ao/abstract/types';
-import { BaseClient } from 'src/core/ao/BaseClient';
 import { Logger } from 'src/utils';
 
 
 /** @see {@link https://cookbook_ao.g8way.io/references/staking.html | specification} */
-export class StakingClient extends BaseClient implements IStakingClient {
+export class StakingClient extends SyncBaseClient implements IStakingClient {
     /* Fields */
     readonly tokenClient: TokenClient;
     /* Fields */

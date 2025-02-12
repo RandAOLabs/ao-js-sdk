@@ -60,10 +60,13 @@ function findTestPath(type: TestType, searchPath: string): string | undefined {
     }
 
     // For integration tests, try service/searchPath
-    if (type === 'integration' && searchPath === 'arns') {
-        const servicePath = join(TEST_ROOT, type, 'service', searchPath);
-        if (existsSync(servicePath)) {
-            return servicePath;
+    if (type === 'integration') {
+        const commonParents = ['services', 'clients', 'core', 'utils'];
+        for (const parent of commonParents) {
+            const parentPath = join(TEST_ROOT, type, parent, searchPath);
+            if (existsSync(parentPath)) {
+                return parentPath;
+            }
         }
     }
 

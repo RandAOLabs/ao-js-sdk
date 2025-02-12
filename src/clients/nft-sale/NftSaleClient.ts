@@ -4,11 +4,11 @@ import { getNftSaleClientAutoConfiguration } from "src/clients/nft-sale/NftSaleC
 import { PurchaseNftError, LuckyDrawError, QueryNFTCountError, AddNftError, ReturnNFTsError, NftSaleInfoError, PaymentError } from "src/clients/nft-sale/NftSaleClientError";
 import { ProfileClient } from "src/clients/profile";
 import { TokenClient, TokenClientConfig } from "src/clients/token";
-import { Tags, BaseClient } from "src/core/ao";
+import { Tags, ASyncBaseClient } from "src/core/ao";
 import { Logger } from "src/utils";
 
 
-export class NftSaleClient extends BaseClient implements INftSaleClient {
+export class NftSaleClient extends ASyncBaseClient implements INftSaleClient {
     /* Fields */
     readonly tokenClient: TokenClient;
     readonly profileClient: ProfileClient;
