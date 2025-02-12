@@ -25,10 +25,6 @@ export class BaseClient extends IBaseClient {
         this.baseConfig = baseConfig;
         this.signer = createDataItemSigner(baseConfig.wallet);
     }
-
-    public static autoConfiguration(): BaseClient {
-        return new BaseClient(getBaseClientAutoConfiguration())
-    }
     /* Constructors */
     /* Core AO Functions */
     async message(data: string = '', tags: Tags = [], anchor?: string): Promise<string> {

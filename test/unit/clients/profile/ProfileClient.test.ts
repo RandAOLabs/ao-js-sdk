@@ -1,6 +1,7 @@
 import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
 import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
-import { BaseClient, ProfileClient, AsyncInitializationRequiredError } from "src";
+import { ProfileClient, AsyncInitializationRequiredError } from "src";
+import { BaseClient } from "src/core/ao/BaseClient";
 
 
 // Mock BaseClient methods
@@ -46,14 +47,6 @@ describe("ProfileClient Unit Tests", () => {
 
     afterEach(() => {
         jest.clearAllMocks();
-    });
-
-    describe("constructors", () => {
-        it("should throw AsyncInitializationRequiredError when using autoConfiguration", () => {
-            // Reset the mock to test actual behavior
-            jest.spyOn(ProfileClient, 'autoConfiguration').mockRestore();
-            expect(() => ProfileClient.autoConfiguration()).toThrow(AsyncInitializationRequiredError);
-        });
     });
 
     describe("getProfileInfo", () => {

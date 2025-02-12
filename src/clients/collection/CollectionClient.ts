@@ -1,4 +1,4 @@
-import { BaseClient, BaseClientConfig, Tags } from "src/core/ao";
+import { SyncBaseClient, BaseClientConfig, Tags } from "src/core/ao";
 import { ICollectionClient } from "src/clients/collection/abstract/ICollectionClient";
 import { Logger } from "src/utils/index";
 import { CollectionClientConfig, CollectionInfo, UpdateAssetsRequest } from "src/clients/collection/abstract";
@@ -7,7 +7,7 @@ import { CollectionInfoError, AuthorizationError, InputValidationError, UpdateAs
 import { TAG_NAMES, ACTIONS, RESPONSE_ACTIONS, STATUS, TRANSFER_RATE_LIMIT, TRANSFER_BATCH_DELAY } from "src/clients/collection/constants";
 import { NftClient } from "src/clients/nft";
 
-export class CollectionClient extends BaseClient implements ICollectionClient {
+export class CollectionClient extends SyncBaseClient implements ICollectionClient {
     /* Constructors */
     public static autoConfiguration(): CollectionClient {
         return new CollectionClient(getCollectionClientAutoConfiguration());

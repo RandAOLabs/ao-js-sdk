@@ -1,8 +1,11 @@
 import { RandomClientConfig } from "src/clients/random/abstract";
 import { getBaseClientAutoConfiguration } from "src/core/ao/BaseClientAutoConfiguration";
-import { RANDOM_PROCESS_ID, RNG_TOKEN_PROCESS_ID } from "src/processes_ids"
-export const getRandomClientAutoConfiguration = (): RandomClientConfig => ({
+import { RNG_TOKEN_PROCESS_ID } from "src/processes_ids"
+import ARIOService from "src/services/ario/ARIOService";
+import { DOMAINS } from "src/services/ario/domains";
+
+export const getRandomClientAutoConfiguration = async (): Promise<RandomClientConfig> => ({
     ...getBaseClientAutoConfiguration(),
-    processId: RANDOM_PROCESS_ID,
+    processId: await ARIOService.getProcessIdForDomain(DOMAINS.RANDAO_API),
     tokenProcessId: RNG_TOKEN_PROCESS_ID,
 });

@@ -15,7 +15,7 @@ describe("ARIOService Integration Tests", () => {
         expect(simpleResult).toBeDefined();
 
         // Test domain with underscore
-        const underscoreResult = await service.getProcessIdForDomain("rng_randao");
+        const underscoreResult = await service.getProcessIdForDomain("api_randao");
         Logger.info(`Process ID for 'rng_randao': ${underscoreResult}`);
         expect(underscoreResult).toBeDefined();
     });
