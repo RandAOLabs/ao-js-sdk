@@ -1,6 +1,6 @@
 {
   "name": "ao-process-clients",
-  "version": "4.0.1",
+  "version": "4.0.2",
   "description": "A modular TypeScript API client library for AO Process interactions",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
@@ -13,16 +13,8 @@
   "scripts": {
     "build": "tsc",
     "prepare": "npm run build",
-    "test": "jest --runInBand ./test",
-    "test:unit": "jest ./test/unit",
-    "test:integration": "jest --runInBand ./test/integration",
-    "test:integration:staking": "jest --runInBand ./test/integration/staking",
-    "test:integration:random": "jest --runInBand ./test/integration/random",
-    "test:integration:nftSale": "jest --runInBand ./test/integration/nft-sale",
-    "test:integration:profileRegistry": "jest --runInBand ./test/integration/profile-registry",
-    "test:integration:profile": "jest --runInBand ./test/integration/profile",
-    "test:integration:ArweaveBaseClient": "jest --runInBand ./test/integration/arweave/ArweaveBaseClient.test.ts",
-    "test:integration:messages": "jest --runInBand ./test/integration/transaction/messages/"
+    "test:unit": "ts-node -P test/scripts/tsconfig.json test/scripts/run-tests.ts unit",
+    "test:integration": "ts-node -P test/scripts/tsconfig.json test/scripts/run-tests.ts integration"
   },
   "repository": {
     "type": "git",
@@ -45,12 +37,15 @@
     "@types/node": "^22.8.6",
     "jest": "^29.7.0",
     "ts-jest": "^29.2.5",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.6.3"
   },
   "dependencies": {
+    "@ar.io/sdk": "^3.5.1",
     "@permaweb/aoconnect": "^0.0.59",
     "arweave": "^1.15.5",
-    "tsconfig-paths": "^4.2.0"
+    "lru-cache": "^11.0.2"
   },
   "optionalDependencies": {
     "dotenv": "^16.4.5"
