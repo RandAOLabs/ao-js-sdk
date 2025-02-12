@@ -1,0 +1,16 @@
+{
+    "$schema": "https://typedoc.org/schema.json",
+    "entryPoints": [
+        "src/index.ts"
+    ],
+    "out": "docs-generated",
+    "excludePrivate": true,
+    "excludeInternal": true,
+    "theme": "default",
+    "name": "AO Process Clients Documentation",
+    "readme": "README.md",
+    "plugin": [
+        "typedoc-plugin-markdown"
+    ],
+    "githubPages": true
+}

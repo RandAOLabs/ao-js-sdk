@@ -14,7 +14,8 @@
     "build": "tsc",
     "prepare": "npm run build",
     "test:unit": "ts-node -P test/scripts/tsconfig.json test/scripts/run-tests.ts unit",
-    "test:integration": "ts-node -P test/scripts/tsconfig.json test/scripts/run-tests.ts integration"
+    "test:integration": "ts-node -P test/scripts/tsconfig.json test/scripts/run-tests.ts integration",
+    "docs": "typedoc --out docs-generated src/index.ts --excludePrivate --excludeInternal"
   },
   "repository": {
     "type": "git",
@@ -39,6 +40,8 @@
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
+    "typedoc": "^0.25.8",
+    "typedoc-plugin-markdown": "^3.17.1",
     "typescript": "^5.6.3"
   },
   "dependencies": {
