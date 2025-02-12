@@ -1,8 +1,8 @@
-import { BrowserWalletError, FileReadError, getWallet } from '../../../../src/index';
-import { Environment, getEnvironment, getEnvironmentVariable } from '../../../../src/index';
 import fs from 'fs';
+import { getEnvironment, Environment, getEnvironmentVariable, FileReadError, BrowserWalletError } from 'src';
+import { getWallet } from 'src/utils/wallet/environmentWallet';
 
-jest.mock('../../../../src/utils/environment/environment');
+jest.mock('src/utils/environment/environment');
 
 describe('getWallet', () => {
     afterEach(() => {

@@ -1,4 +1,4 @@
-import { Environment, getEnvironment } from "src/utils/environment/environment";
+import { getEnvironment, Environment } from "src/utils/environment";
 import { colors } from "src/utils/logger/colors";
 
 export enum LogLevel {

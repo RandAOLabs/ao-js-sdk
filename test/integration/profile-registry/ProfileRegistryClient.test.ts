@@ -1,5 +1,5 @@
-import { ProfileRegistryClient, ProfileRegistryEntry } from "../../../src/clients/profile-registry";
-import { Logger } from "../../../src/index";
+import { ProfileRegistryClient, ProfileRegistryEntry } from "src/clients";
+import { Logger } from "src/utils";
 
 describe("ProfileRegistryClient Integration Test", () => {
     let client: ProfileRegistryClient;

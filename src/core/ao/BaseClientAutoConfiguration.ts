@@ -1,14 +1,5 @@
-import { JWKInterface } from "arweave/node/lib/wallet";
 import { BaseClientConfig } from "src/core/ao/abstract/BaseClientConfig";
-
-let lazyWallet: JWKInterface | null = null;
-const getWalletLazy = (): JWKInterface => {
-    if (!lazyWallet) {
-        const { getWallet } = require("../../utils/wallet/index");
-        lazyWallet = getWallet();
-    }
-    return lazyWallet!;
-};
+import { getWalletLazy } from "src/utils";
 
 // Function-based configuration
 export const getBaseClientAutoConfiguration = (): BaseClientConfig => ({
