@@ -5,6 +5,7 @@ yarn.lock
 
 # Compiled output
 dist/
+docs-generated/
 
 # TypeScript
 *.tsbuildinfo
