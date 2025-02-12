@@ -5,13 +5,13 @@ import { getRandomClientAutoConfiguration } from "src/clients/random/RandomClien
 import { PostVDFChallengeError, ProviderAvailableValuesError, UpdateProviderAvailableValuesError, OpenRandomRequestsError, RandomRequestsError, CreateRequestError, PostVDFOutputAndProofError } from "src/clients/random/RandomClientError";
 import { RandomProcessError } from "src/clients/random/RandomProcessError";
 import { TokenClient, TokenClientConfig } from "src/clients/token";
-import { BaseClient, Tags } from "src/core/ao";
+import { ASyncBaseClient, Tags } from "src/core/ao";
 import { Logger } from "src/utils";
 
 
 
 /** @see {@link https://github.com/RandAOLabs/Random-Process | specification} */
-export class RandomClient extends BaseClient implements IRandomClient {
+export class RandomClient extends ASyncBaseClient implements IRandomClient {
     /* Fields */
     readonly tokenClient: TokenClient;
     /* Fields */
@@ -27,8 +27,8 @@ export class RandomClient extends BaseClient implements IRandomClient {
         this.tokenClient = new TokenClient(tokenConfig)
     }
 
-    public static autoConfiguration(): RandomClient {
-        return new RandomClient(getRandomClientAutoConfiguration());
+    public static async autoConfiguration(): Promise<RandomClient> {
+        return new RandomClient(await getRandomClientAutoConfiguration());
     }
     /* Constructors */
 

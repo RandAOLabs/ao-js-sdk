@@ -1,12 +1,12 @@
 import { IProfileRegistryClient, ProfileRegistryEntry } from "src/clients/profile-registry/abstract";
 import { getProfileRegistryClientAutoConfiguration } from "src/clients/profile-registry/ProfileRegistryClientAutoConfiguration";
 import { GetProfilesError } from "src/clients/profile-registry/RegistryClientError";
-import { BaseClient } from "src/core/ao/index";
+import { SyncBaseClient } from "src/core/ao/index";
 import { Logger } from "src/utils/index";
 
 
 /** @see {@link https://cookbook_ao.g8way.io/references/profile-registry.html | specification} */
-export class ProfileRegistryClient extends BaseClient implements IProfileRegistryClient {
+export class ProfileRegistryClient extends SyncBaseClient implements IProfileRegistryClient {
     /* Constructors */
     public static autoConfiguration(): ProfileRegistryClient {
         return new ProfileRegistryClient(getProfileRegistryClientAutoConfiguration());
