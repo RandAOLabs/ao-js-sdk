@@ -1,6 +1,6 @@
 {
   "name": "ao-process-clients",
-  "version": "4.1.2",
+  "version": "4.1.3",
   "description": "A modular TypeScript API client library for AO Process interactions",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
@@ -14,7 +14,8 @@
     "build": "tsc",
     "prepare": "npm run build",
     "test:unit": "ts-node -P test/scripts/tsconfig.json test/scripts/run-tests.ts unit",
-    "test:integration": "ts-node -P test/scripts/tsconfig.json test/scripts/run-tests.ts integration"
+    "test:integration": "ts-node -P test/scripts/tsconfig.json test/scripts/run-tests.ts integration",
+    "docs": "npx typedoc src/** --plugin typedoc-material-theme --themeColor '#cb9820' --out docs-generated"
   },
   "repository": {
     "type": "git",
