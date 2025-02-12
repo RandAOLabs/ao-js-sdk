@@ -3,8 +3,6 @@ import { ANTCachingService } from './ANTCachingService';
 import { ArnsCashingService } from './ARNCachingService';
 import { ICache, ICacheConfig, newCache } from 'src/utils/cache';
 import { ANTRecordNotFoundError, ARNSRecordNotFoundError, InvalidDomainError } from './ARIOError';
-import { AoArNSNameData } from '@ar.io/sdk/lib/types/types/io.js';
-import { AoANTRecord } from '@ar.io/sdk';
 import { DOMAIN_SEPARATOR, ARN_ROOT_NAME } from './constants';
 import { Logger } from 'src/utils';
 
