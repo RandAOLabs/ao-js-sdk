@@ -6,6 +6,7 @@ import { ANTRecordNotFoundError, ARNSRecordNotFoundError, InvalidDomainError } f
 import { AoArNSNameData } from '@ar.io/sdk/lib/types/types/io.js';
 import { AoANTRecord } from '@ar.io/sdk';
 import { DOMAIN_SEPARATOR, ARN_ROOT_NAME } from './constants';
+import { Logger } from 'src/utils';
 
 /**
  * Service for handling ARIO operations, including ANT and ARNS record management.
@@ -46,16 +47,21 @@ export class ARIOService implements IARIOService {
         // Get the ANT name and undername from the domain
         const antName = this._getAntName(domain);
         const undername = this._getUnderName(domain);
-        const hasUndername = undername !== antName;
+        const hasUndername = undername !== undefined;
+        Logger.debug(antName);
+        Logger.debug(undername);
 
         // Get or create the ANT service for this domain
         const antService = await this._getOrCreateAntService(domain, antName);
 
         // Get process ID - if we have an undername, use it, otherwise use root name (@)
-        const processId = await antService.getProcessId(hasUndername ? undername : ARN_ROOT_NAME);
+        const searchName = hasUndername ? undername : ARN_ROOT_NAME;
+        Logger.debug(searchName)
+        const processId = await antService.getProcessId(searchName);
         if (!processId) {
             throw new ANTRecordNotFoundError(hasUndername ? undername : ARN_ROOT_NAME);
         }
+        Logger.debug(processId)
 
         return processId;
     }
@@ -97,9 +103,9 @@ export class ARIOService implements IARIOService {
      * If the domain contains an underscore, returns everything before it.
      * Otherwise, returns the entire domain.
      */
-    private _getUnderName(domain: string): string {
+    private _getUnderName(domain: string): string | undefined {
         const parts = domain.split(DOMAIN_SEPARATOR);
-        return parts.length > 1 ? parts[0] : domain;
+        return parts.length > 1 ? parts[0] : undefined;
     }
 
     /**
@@ -115,6 +121,7 @@ export class ARIOService implements IARIOService {
 
         // Get ARNS record to get process ID
         const arnsRecord = await this.arnsService.getArNSRecord({ name: domain });
+        Logger.debug(arnsRecord)
         if (!arnsRecord?.processId) {
             throw new ARNSRecordNotFoundError(domain);
         }

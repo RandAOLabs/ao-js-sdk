@@ -48,12 +48,22 @@ function findTestPath(type: TestType, searchPath: string): string | undefined {
         return directPath;
     }
 
-    // Search in common parent directories
-    const commonParents = ['services', 'clients', 'core', 'utils'];
-    for (const parent of commonParents) {
-        const parentPath = join(TEST_ROOT, type, parent, searchPath);
-        if (existsSync(parentPath)) {
-            return parentPath;
+    // For unit tests, search in common parent directories
+    if (type === 'unit') {
+        const commonParents = ['services', 'clients', 'core', 'utils'];
+        for (const parent of commonParents) {
+            const parentPath = join(TEST_ROOT, type, parent, searchPath);
+            if (existsSync(parentPath)) {
+                return parentPath;
+            }
+        }
+    }
+
+    // For integration tests, try service/searchPath
+    if (type === 'integration' && searchPath === 'arns') {
+        const servicePath = join(TEST_ROOT, type, 'service', searchPath);
+        if (existsSync(servicePath)) {
+            return servicePath;
         }
     }
 
