@@ -1,7 +1,8 @@
 
 import { dryrun } from "@permaweb/aoconnect";
 import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
-import { TokenClient, Tags, BaseClient } from "src";
+import { TokenClient, Tags } from "src";
+import { BaseClient } from "src/core/ao/BaseClient";
 
 
 // Mock the functions from '@permaweb/aoconnect'

@@ -1,6 +1,12 @@
 import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
 import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
-import { BaseClient, RandomClient, TokenClient } from "src";
+import { RandomClient, TokenClient } from "src/clients";
+import { BaseClient } from "src/core/ao/BaseClient";
+import ARIOService from "src/services/ario/ARIOService";
+
+jest.mock("src/services/ario/ARIOService", () => ({
+    getProcessIdForDomain: jest.fn().mockResolvedValue("test-process-id")
+}));
 
 
 
@@ -25,9 +31,9 @@ describe("RandomClient Unit Test", () => {
     let client: RandomClient;
     let mockTokenClient: jest.Mocked<TokenClient>;
 
-    beforeAll(() => {
+    beforeAll(async () => {
         // Initialize the RandomClient with actual configuration for integration testing
-        client = RandomClient.autoConfiguration();
+        client = await RandomClient.autoConfiguration();
 
         mockTokenClient = {
             transfer: jest.fn().mockResolvedValue(true), // Mock the transfer method
