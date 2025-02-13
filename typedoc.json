@@ -1,0 +1,40 @@
+{
+    "$schema": "https://typedoc.org/schema.json",
+    "entryPoints": [
+        "./src/index.ts"
+    ],
+    "plugin": [
+        "typedoc-material-theme"
+    ],
+    "themeColor": "#939393",
+    "out": "docs-generated",
+    "navigation": {
+        "includeCategories": true,
+        "includeGroups": false,
+        "includeFolders": false
+    },
+    "categoryOrder": [
+        "Clients",
+        "Services",
+        "Utility",
+        "Core",
+        "Other"
+    ],
+    "includeVersion": true,
+    "basePath": "./src",
+    "preserveWatchOutput": true,
+    "cleanOutputDir": true,
+    "readme": "./docs/docsWelcome.md",
+    "validation": {
+        "invalidLink": true,
+        "notDocumented": true
+    },
+    "treatWarningsAsErrors": false,
+    "treatValidationWarningsAsErrors": false,
+    "logLevel": "Verbose",
+    "disableSources": false,
+    "sourceLinkTemplate": "https://github.com/RandAOLabs/ao-process-clients/blob/main/{path}#L{line}",
+    "navigationLinks": {
+        "GitHub": "https://github.com/RandAOLabs/ao-process-clients"
+    }
+}

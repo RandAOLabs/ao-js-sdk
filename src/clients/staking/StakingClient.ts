@@ -6,14 +6,20 @@ import { SyncBaseClient } from 'src/core/ao';
 import { Tags } from 'src/core/ao/abstract/types';
 import { Logger } from 'src/utils';
 
-
-/** @see {@link https://cookbook_ao.g8way.io/references/staking.html | specification} */
+/**
+ * @category Clients
+ * @see {@link https://cookbook_ao.g8way.io/references/staking.html | specification}
+ */
 export class StakingClient extends SyncBaseClient implements IStakingClient {
     /* Fields */
     readonly tokenClient: TokenClient;
     /* Fields */
 
     /* Constructors */
+    /**
+     * @override
+     * @param stakingConfig 
+     */
     public constructor(stakingConfig: StakingClientConfig) {
         super(stakingConfig);
         const tokenConfig: TokenClientConfig = {

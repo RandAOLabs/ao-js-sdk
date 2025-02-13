@@ -8,15 +8,19 @@ import { TokenClient, TokenClientConfig } from "src/clients/token";
 import { ASyncBaseClient, Tags } from "src/core/ao";
 import { Logger } from "src/utils";
 
-
-
-/** @see {@link https://github.com/RandAOLabs/Random-Process | specification} */
+/**
+ * @category Clients
+ * @see {@link https://github.com/RandAOLabs/Random-Process | specification}
+ */
 export class RandomClient extends ASyncBaseClient implements IRandomClient {
     /* Fields */
     readonly tokenClient: TokenClient;
     /* Fields */
 
     /* Constructors */
+    /**
+     * @override
+     */
     public constructor(randomConfig: RandomClientConfig) {
         super(randomConfig)
         const tokenConfig: TokenClientConfig = {

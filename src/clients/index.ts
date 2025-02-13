@@ -1,3 +1,9 @@
+/**
+ * @categoryDescription Clients
+ * Clients provide easy interaction with AO.
+ * @showCategories
+ * @module
+ */
 export * from "./collection"
 export * from "./nft"
 export * from "./nft-sale"

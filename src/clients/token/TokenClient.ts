@@ -6,8 +6,10 @@ import { BalanceError, BalancesError, TransferError, GetInfoError, MintError, Gr
 import { Tags, SyncBaseClient } from "src/core/ao/index";
 import { Logger } from "src/utils/index"
 
-
-/** @see {@link https://cookbook_ao.g8way.io/references/token.html | specification} */
+/**
+ * @category Clients
+ * @see {@link https://cookbook_ao.g8way.io/references/token.html | specification}
+ */
 export class TokenClient extends SyncBaseClient implements ITokenClient, IGrantToken {
     /* Constructors */
     public static autoConfiguration(): TokenClient {
