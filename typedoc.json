@@ -29,6 +29,7 @@
         "invalidLink": true,
         "notDocumented": true
     },
+    "includeInherited": true,
     "treatWarningsAsErrors": false,
     "treatValidationWarningsAsErrors": false,
     "logLevel": "Verbose",
