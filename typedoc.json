@@ -29,7 +29,6 @@
         "invalidLink": true,
         "notDocumented": true
     },
-    "includeInherited": true,
     "treatWarningsAsErrors": false,
     "treatValidationWarningsAsErrors": false,
     "logLevel": "Verbose",
@@ -37,5 +36,13 @@
     "sourceLinkTemplate": "https://github.com/RandAOLabs/ao-process-clients/blob/main/{path}#L{line}",
     "navigationLinks": {
         "GitHub": "https://github.com/RandAOLabs/ao-process-clients"
+    },
+    "visibilityFilters": {
+        "protected": false,
+        "private": false,
+        "inherited": true,
+        "external": false,
+        "@alpha": false,
+        "@beta": false
     }
 }
