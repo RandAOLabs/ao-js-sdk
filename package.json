@@ -15,7 +15,7 @@
     "prepare": "npm run build",
     "test:unit": "ts-node -P test/scripts/tsconfig.json test/scripts/run-tests.ts unit",
     "test:integration": "ts-node -P test/scripts/tsconfig.json test/scripts/run-tests.ts integration",
-    "docs": "npx typedoc src/** --plugin typedoc-material-theme --themeColor '#cb9820' --out docs-generated"
+    "docs": "npx typedoc"
   },
   "repository": {
     "type": "git",

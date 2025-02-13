@@ -2,6 +2,9 @@ import { IAsyncAutoConfiguration } from "src/core/ao/abstract/IAsyncAutoConfigur
 import { BaseClient } from "src/core/ao/BaseClient";
 import { getBaseClientAutoConfiguration } from "src/core/ao/BaseClientAutoConfiguration";
 
+/**
+ * @category Core
+ */
 export class ASyncBaseClient extends BaseClient implements IAsyncAutoConfiguration {
     public static autoConfiguration(): Promise<ASyncBaseClient> {
         const config = getBaseClientAutoConfiguration()

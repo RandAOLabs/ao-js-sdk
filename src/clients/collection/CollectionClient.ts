@@ -7,6 +7,9 @@ import { CollectionInfoError, AuthorizationError, InputValidationError, UpdateAs
 import { TAG_NAMES, ACTIONS, RESPONSE_ACTIONS, STATUS, TRANSFER_RATE_LIMIT, TRANSFER_BATCH_DELAY } from "src/clients/collection/constants";
 import { NftClient } from "src/clients/nft";
 
+/**
+ * @category Clients
+ */
 export class CollectionClient extends SyncBaseClient implements ICollectionClient {
     /* Constructors */
     public static autoConfiguration(): CollectionClient {

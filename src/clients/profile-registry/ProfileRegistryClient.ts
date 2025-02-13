@@ -5,7 +5,9 @@ import { SyncBaseClient } from "src/core/ao/index";
 import { Logger } from "src/utils/index";
 
 
-/** @see {@link https://cookbook_ao.g8way.io/references/profile-registry.html | specification} */
+/**
+ * @category Clients
+ */
 export class ProfileRegistryClient extends SyncBaseClient implements IProfileRegistryClient {
     /* Constructors */
     public static autoConfiguration(): ProfileRegistryClient {

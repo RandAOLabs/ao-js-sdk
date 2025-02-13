@@ -1,3 +1,9 @@
+/**
+ * @categoryDescription Utility
+ * Common Utility for all of our services and clients.
+ * @showCategories
+ * @module
+ */
 export * from "./environment"
 export * from "./logger"
 export * from "./wallet"
