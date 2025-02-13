@@ -13,6 +13,9 @@ import {
 } from 'src/core/arweave/gql/types';
 import { ArweaveGQLBuilderError } from 'src/core/arweave/gql/ArweaveGQLBuilderError';
 
+/**
+ * @category Core
+ */
 export class ArweaveGQLBuilder {
     private filters: ArweaveGQLFilter = {};
     private options: ArweaveGQLOptions = {};

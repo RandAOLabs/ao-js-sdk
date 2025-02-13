@@ -1,3 +1,5 @@
+import { Domain } from '../domains';
+
 /**
  * Interface for ARIO (Arweave Resource Identifier Oracle) service operations.
  * Provides functionality for resolving domain names to process IDs using ANT and ARNS services.
@@ -28,11 +30,11 @@ export interface IARIOService {
      *    - Creates and caches new ANT service
      * 5. Gets process ID from ANT record
      * 
-     * @param domain - The domain to resolve (e.g., "randao" or "nft_randao")
+     * @param domain - The domain to resolve. Can be either a Domain enum value or a custom domain string
      * @returns Promise resolving to the process ID string
      * @throws {InvalidDomainError} If the domain format is invalid
      * @throws {ARNSRecordNotFoundError} If no ARNS record exists for the domain
      * @throws {ANTRecordNotFoundError} If no ANT record exists for the ANT name
      */
-    getProcessIdForDomain(domain: string): Promise<string>;
+    getProcessIdForDomain(domain: Domain | string): Promise<string>;
 }

@@ -5,10 +5,12 @@ import { ICache, ICacheConfig, newCache } from 'src/utils/cache';
 import { ANTRecordNotFoundError, ARNSRecordNotFoundError, InvalidDomainError } from './ARIOError';
 import { DOMAIN_SEPARATOR, ARN_ROOT_NAME } from './constants';
 import { Logger } from 'src/utils';
+import { Domain } from './domains';
 
 /**
  * Service for handling ARIO operations, including ANT and ARNS record management.
  * Implements a singleton pattern to ensure only one instance exists.
+ * @category Services
  */
 export class ARIOService implements IARIOService {
     private static instance: ARIOService;
@@ -38,7 +40,7 @@ export class ARIOService implements IARIOService {
      * @throws {ARNSRecordNotFoundError} If no ARNS record is found for the domain
      * @throws {ANTRecordNotFoundError} If no ANT record is found for the ANT name
      */
-    async getProcessIdForDomain(domain: string): Promise<string> {
+    async getProcessIdForDomain(domain: Domain | string): Promise<string> {
         // Validate domain
         this._validateDomain(domain);
 

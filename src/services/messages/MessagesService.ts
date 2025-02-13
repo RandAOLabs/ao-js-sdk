@@ -15,6 +15,9 @@ import {
 import { ArweaveGQLSortOrder } from "src/core/arweave/gql/types";
 import { ArweaveTransaction } from "src/core/arweave/abstract/types";
 
+/**
+ * @category Services
+ */
 export class MessagesService extends BaseArweaveDataService implements IMessagesService {
     constructor() {
         super();

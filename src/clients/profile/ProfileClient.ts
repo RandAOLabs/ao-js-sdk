@@ -4,8 +4,10 @@ import { AsyncInitializationRequiredError, GetProfileError, ProfileTransferError
 import { Tags, ASyncBaseClient } from "src/core/ao/index";
 import { Logger } from "src/utils/index";
 
-
-/** @see {@link https://cookbook_ao.g8way.io/references/profile.html | specification} */
+/**
+ * @category Clients
+ * @see {@link https://cookbook_ao.g8way.io/references/profile.html | specification}
+ */
 export class ProfileClient extends ASyncBaseClient implements IProfileClient {
     /* Constructors */
     public static async autoConfiguration(): Promise<ProfileClient> {
@@ -13,7 +15,10 @@ export class ProfileClient extends ASyncBaseClient implements IProfileClient {
         return new ProfileClient(config);
     }
 
-    public static async createAutoConfigured(): Promise<ProfileClient> { //Unnessecary function but keeping the interface for backwards compatability
+    /**
+     * @deprecated Will be removed in next major version in favor of autoConfiguration()
+     */
+    public static async createAutoConfigured(): Promise<ProfileClient> {
         return ProfileClient.autoConfiguration()
     }
     /* Constructors */

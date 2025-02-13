@@ -7,6 +7,9 @@ import { Tags } from "src/core/ao/index";
 
 import { Logger } from "src/utils/index";
 
+/**
+ * @category Clients
+ */
 export class NftClient extends TokenClient implements INftClient {
     /* Constructors */
     public constructor(configOrProcessId: TokenClientConfig | string) {

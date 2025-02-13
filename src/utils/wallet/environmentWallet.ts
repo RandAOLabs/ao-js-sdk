@@ -3,6 +3,9 @@ import { Environment, EnvironmentVariableError, getEnvironment, getEnvironmentVa
 import { BrowserWalletError, FileReadError } from "src/utils/wallet/WalletError";
 import { Logger } from "src/utils/logger/logger";
 
+/**
+ * @category Utility
+ */
 export function getWallet(): JWKInterface | undefined {
     const environment = getEnvironment();
 
