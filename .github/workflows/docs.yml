@@ -34,14 +34,8 @@ jobs:
       - name: Generate documentation
         run: npm run docs
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+      - name: Deploy documentation to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
-          path: 'docs-generated'
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+          folder: docs-generated
+          branch: gh-pages
