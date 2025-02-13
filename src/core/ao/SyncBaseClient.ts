@@ -2,6 +2,9 @@ import { ISyncAutoConfiguration } from "src/core/ao/abstract/ISyncAutoConfigurai
 import { BaseClient } from "src/core/ao/BaseClient";
 import { getBaseClientAutoConfiguration } from "src/core/ao/BaseClientAutoConfiguration";
 
+/**
+ * @category Core
+ */
 export class SyncBaseClient extends BaseClient implements ISyncAutoConfiguration {
     public static autoConfiguration(): SyncBaseClient {
         const config = getBaseClientAutoConfiguration()

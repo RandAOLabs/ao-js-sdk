@@ -7,6 +7,9 @@ export enum LogLevel {
     ERROR = "error",
     DEBUG = "debug"
 }
+/**
+ * @category Utility
+ */
 export class Logger {
     static logLevelColors = {
         [LogLevel.INFO]: colors.fg.blue,

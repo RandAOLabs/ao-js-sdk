@@ -6,6 +6,9 @@ import { getArweave } from 'src/core/arweave/arweave';
 import { ArweaveGQLBuilder } from 'src/core/arweave/gql/ArweaveGQLBuilder';
 import { ArweaveGQLResponse, ArweaveTransaction } from 'src/core/arweave/abstract/types';
 
+/**
+ * @category Core
+ */
 export class BaseArweaveDataService implements IBaseArweaveDataService {
     private readonly arweave: Arweave;
 

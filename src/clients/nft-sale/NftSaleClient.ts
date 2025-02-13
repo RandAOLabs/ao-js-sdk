@@ -7,7 +7,9 @@ import { TokenClient, TokenClientConfig } from "src/clients/token";
 import { Tags, ASyncBaseClient } from "src/core/ao";
 import { Logger } from "src/utils";
 
-
+/**
+ * @category Clients
+ */
 export class NftSaleClient extends ASyncBaseClient implements INftSaleClient {
     /* Fields */
     readonly tokenClient: TokenClient;

@@ -2,6 +2,7 @@ import { LRUCache } from 'lru-cache';
 import { ICache } from './abstract/ICache';
 import { ICacheConfig } from './abstract/ICacheConfig';
 
+
 export class LRUCacheWrapper<K extends {} = string, V extends {} = any> implements ICache<K, V> {
     protected cache: LRUCache<K, V>;
 

@@ -20,7 +20,7 @@ export class BaseClient extends IBaseClient {
     private useDryRunAsMessage: boolean = false;
     /* Fields */
     /* Constructors */
-    protected constructor(baseConfig: BaseClientConfig) {
+    public constructor(baseConfig: BaseClientConfig) {
         super()
         this.baseConfig = baseConfig;
         this.signer = createDataItemSigner(baseConfig.wallet);
