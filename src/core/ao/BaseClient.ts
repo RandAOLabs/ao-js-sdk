@@ -15,7 +15,9 @@ import { getEnvironment, Environment } from 'src/utils/environment';
 
 export class BaseClient extends IBaseClient {
     /* Fields */
+    /** @protected */
     readonly baseConfig: BaseClientConfig;
+    /** @protected */
     readonly signer: ReturnType<typeof createDataItemSigner>;
     private useDryRunAsMessage: boolean = false;
     /* Fields */
@@ -27,6 +29,7 @@ export class BaseClient extends IBaseClient {
     }
     /* Constructors */
     /* Core AO Functions */
+    /** @protected */
     async message(data: string = '', tags: Tags = [], anchor?: string): Promise<string> {
         try {
             const mergedTags = mergeLists(DEFAULT_TAGS, tags, tag => tag.name);
@@ -43,6 +46,7 @@ export class BaseClient extends IBaseClient {
         }
     }
 
+    /** @protected */
     async results(
         from?: string,
         to?: string,
@@ -63,6 +67,7 @@ export class BaseClient extends IBaseClient {
         }
     }
 
+    /** @protected */
     async result(messageId: string): Promise<MessageResult> {
         try {
             return await result({
@@ -75,6 +80,7 @@ export class BaseClient extends IBaseClient {
         }
     }
 
+    /** @protected */
     async dryrun(data: any = '', tags: Tags = [], anchor?: string, id?: string, owner?: string): Promise<DryRunResult> {
         if (this.useDryRunAsMessage) {
             Logger.warn(`Action: Dry run triggered as message | Process ID: ${this.baseConfig.processId} | Subclass: ${this.constructor.name}`);

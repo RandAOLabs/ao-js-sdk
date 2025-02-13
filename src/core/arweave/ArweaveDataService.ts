@@ -15,7 +15,7 @@ export class BaseArweaveDataService implements IBaseArweaveDataService {
     public constructor() {
         this.arweave = getArweave();
     }
-
+    /** @protected */
     public async graphQuery<T = any>(query: string): Promise<T> {
         try {
             const response = await this.arweave.api.post('/graphql', {
@@ -27,7 +27,7 @@ export class BaseArweaveDataService implements IBaseArweaveDataService {
             throw new ArweaveGraphQLError(query, error);
         }
     }
-
+    /** @protected */
     public async query(builder: ArweaveGQLBuilder): Promise<ArweaveGQLResponse> {
         if (!builder) {
             throw new ArweaveGraphQLError('No GQL builder provided');
@@ -36,7 +36,7 @@ export class BaseArweaveDataService implements IBaseArweaveDataService {
         const builtQuery = builder.build();
         return this.graphQuery<ArweaveGQLResponse>(builtQuery.query);
     }
-
+    /** @protected */
     public async getTransactionById(id: string): Promise<ArweaveTransaction> {
         if (!id) {
             throw new ArweaveGraphQLError('No transaction ID provided');
