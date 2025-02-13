@@ -6,7 +6,9 @@
 [![GitHub stars](https://img.shields.io/github/stars/RandAOLabs/ao-process-clients?style=social)](https://github.com/RandAOLabs/ao-process-clients)
 [![Documentation](https://img.shields.io/badge/docs-online-blue)](https://randaolabs.github.io/ao-process-clients/)
 
-📚 [Read the Documentation](https://randaolabs.github.io/ao-process-clients/)
+<p align="center">
+  📚 <a href="https://randaolabs.github.io/ao-process-clients/">Read the Documentation</a>
+</p>
 
 A modular TypeScript Process client library for AO Process interactions. This library simplifies interactions with various AO processes.
 ---
