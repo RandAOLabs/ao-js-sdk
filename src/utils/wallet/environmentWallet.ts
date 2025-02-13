@@ -2,6 +2,7 @@ import { JWKInterface } from "arweave/node/lib/wallet";
 import { Environment, EnvironmentVariableError, getEnvironment, getEnvironmentVariable } from "src/utils/environment/index"
 import { BrowserWalletError, FileReadError } from "src/utils/wallet/WalletError";
 import { Logger } from "src/utils/logger/logger";
+import { DEFAULT_WALLET_PATH } from "./constants";
 
 /**
  * @category Utility
@@ -13,7 +14,16 @@ export function getWallet(): JWKInterface | undefined {
         case Environment.NODE: {
             let pathToWallet = "MissingWalletPath";
             try {
-                pathToWallet = getEnvironmentVariable('PATH_TO_WALLET'); // May throw EnvironmentVariableError
+                try {
+                    pathToWallet = getEnvironmentVariable('PATH_TO_WALLET'); // May throw EnvironmentVariableError
+                } catch (envError) {
+                    if (envError instanceof EnvironmentVariableError) {
+                        Logger.warn(`Warning: Missing environment variable PATH_TO_WALLET, trying default wallet path`);
+                        pathToWallet = DEFAULT_WALLET_PATH;
+                    } else {
+                        throw envError;
+                    }
+                }
 
                 let fs;
                 try {

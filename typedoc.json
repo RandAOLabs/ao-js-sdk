@@ -24,7 +24,7 @@
     "basePath": "./src",
     "preserveWatchOutput": true,
     "cleanOutputDir": true,
-    "readme": "none",
+    "readme": "./docs/docsWelcome.md",
     "validation": {
         "invalidLink": true,
         "notDocumented": true
