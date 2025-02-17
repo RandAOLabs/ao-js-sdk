@@ -33,7 +33,6 @@ export class ARNSClient extends SyncInitDryRunCachingClient implements IARNSClie
                 { name: "Action", value: "Record" },
                 { name: "Name", value: name }
             ]);
-            Logger.debug(result)
             return this.getFirstMessageDataJson<ARNSRecord>(result);
         } catch (error: any) {
             throw new GetRecordError(name, error);

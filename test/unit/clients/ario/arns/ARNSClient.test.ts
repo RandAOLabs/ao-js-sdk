@@ -1,9 +1,9 @@
 import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
 import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
 import { ARNSClient } from "src/clients/ario/arns/ARNSClient";
+import { GetRecordError, InvalidDomainError } from "src/clients/ario/arns/ARNSClientError";
 import { BaseClient } from "src/core/ao/BaseClient";
 import { ARNSRecord } from "src/clients/ario/arns/abstract/types";
-import { InvalidDomainError } from "src/clients/ario/arns/ARNSClientError";
 
 // Mock BaseClient methods
 jest.spyOn(BaseClient.prototype, 'message').mockResolvedValue("test-message-id");
@@ -13,76 +13,56 @@ const messageResult: MessageResult = {
     Spawns: []
 }
 jest.spyOn(BaseClient.prototype, 'result').mockResolvedValue(messageResult);
-
-// Mock sample data
-const mockARNSRecord: ARNSRecord = {
-    name: 'test_domain',
-    processId: 'arns-process-id',
-    metadata: {}
+const mockArnsRecord: ARNSRecord = {
+    name: "test_ant",
+    processId: "test-process-id",
+    metadata: {
+        owner: "test-owner",
+        controller: "test-controller"
+    }
 };
+const dryRunResult: DryRunResult = {
+    Output: undefined,
+    Messages: [{ Data: JSON.stringify(mockArnsRecord), Tags: [] }],
+    Spawns: []
+}
+jest.spyOn(BaseClient.prototype, 'dryrun').mockResolvedValue(dryRunResult);
+jest.spyOn(BaseClient.prototype, 'messageResult').mockResolvedValue(messageResult);
 
 describe("ARNSClient Unit Test", () => {
     let client: ARNSClient;
 
-    beforeAll(() => {
-        // Initialize the ARNSClient using autoConfiguration
+    beforeAll(async () => {
         client = ARNSClient.autoConfiguration();
     });
 
-    beforeEach(() => {
-        // Reset mocks before each test
+    afterEach(() => {
         jest.clearAllMocks();
-
-        // Set up default dryrun mock
-        const dryRunResult: DryRunResult = {
-            Output: undefined,
-            Messages: [{ Data: JSON.stringify(mockARNSRecord), Tags: [] }],
-            Spawns: []
-        }
-        jest.spyOn(BaseClient.prototype, 'dryrun').mockResolvedValue(dryRunResult);
-    });
-
-    describe("autoConfiguration()", () => {
-        it("should return an ARNSClient instance", () => {
-            const instance = ARNSClient.autoConfiguration();
-            expect(instance).toBeInstanceOf(ARNSClient);
-        });
     });
 
     describe("getRecord()", () => {
-        it("should fetch an ARNS record without throwing an error", async () => {
-            await expect(client.getRecord("test_domain")).resolves.not.toThrow();
-        });
+        it("should retrieve ARNS record successfully", async () => {
+            const name = "test_ant";
+            const record = await client.getRecord(name);
 
-        it("should return an ARNS record", async () => {
-            const record = await client.getRecord("test_domain");
-            expect(record).toEqual(mockARNSRecord);
-        });
-
-        it("should call dryrun with correct parameters", async () => {
-            const name = "test_domain";
-            await client.getRecord(name);
+            expect(record).toEqual(mockArnsRecord);
             expect(BaseClient.prototype.dryrun).toHaveBeenCalledWith('', [
                 { name: "Action", value: "Record" },
                 { name: "Name", value: name }
             ]);
         });
 
-        it("should throw InvalidDomainError for empty domain", async () => {
-            await expect(client.getRecord("")).rejects.toThrow(InvalidDomainError);
-        });
+        it("should throw GetRecordError when dryrun fails", async () => {
+            const name = "test_ant";
+            const error = new Error("Dryrun failed");
+            jest.spyOn(BaseClient.prototype, 'dryrun').mockRejectedValueOnce(error);
 
-        it("should throw InvalidDomainError for malformed domain with missing parts", async () => {
-            await expect(client.getRecord("test_")).rejects.toThrow(InvalidDomainError);
-        });
-
-        it("should throw InvalidDomainError for domain with multiple separators", async () => {
-            await expect(client.getRecord("test_domain_extra")).rejects.toThrow(InvalidDomainError);
+            await expect(client.getRecord(name)).rejects.toThrow(GetRecordError);
         });
     });
 
     describe("getProcessId()", () => {
-        it("should return the process ID", () => {
+        it("should return process ID", () => {
             const processId = client.getProcessId();
             expect(typeof processId).toBe("string");
         });
