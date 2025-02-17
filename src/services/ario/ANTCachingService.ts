@@ -9,7 +9,7 @@ import { CACHE_KEYS, ARN_ROOT_NAME } from './constants';
  */
 export class ANTCachingService {
     private cache: ICache<string, ANTRecords>;
-    private ant: AoANTRead;
+    private readonly processId: string;
 
     /**
      * Creates a new ANTCachingService instance.
@@ -17,8 +17,8 @@ export class ANTCachingService {
      * @param config - Optional cache configuration
      */
     constructor(processId: string, config: ICacheConfig = {}) {
-        this.ant = getANT(processId);
         this.cache = newCache<string, ANTRecords>(config);
+        this.processId = processId;
     }
 
     /**
@@ -27,9 +27,10 @@ export class ANTCachingService {
      */
     async getRecords(): Promise<ANTRecords> {
         const cached = this.cache.get(CACHE_KEYS.ANT.GET_RECORDS);
-        if (cached !== undefined) return cached
+        if (cached !== undefined) return cached;
 
-        const records = await this.ant.getRecords()
+        const ant = await getANT(this.processId);
+        const records = await ant.getRecords();
         if (records !== undefined) {
             this.cache.set(CACHE_KEYS.ANT.GET_RECORDS, records);
         }
