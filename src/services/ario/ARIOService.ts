@@ -19,7 +19,6 @@ export class ARIOService implements IARIOService {
 
     private constructor(config: ICacheConfig = {}) {
         this.arnsClient = ARNSClient.autoConfiguration();
-        this.arnsClient.setDryRunAsMessage(true)
         this.antClientCache = newCache<string, ANTClient>(config);
     }
 
