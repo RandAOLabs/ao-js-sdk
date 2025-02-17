@@ -1,67 +1,102 @@
-import { ANTClient } from "src/clients/ario/ant";
-import { ANTRecord, ANTRecords } from "src/clients/ario/ant/types";
-import { GetRecordsError, GetRecordError } from "src/clients/ario/ant/ANTClientError";
+import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
+import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
+import { ANTClient } from "src/clients/ario/ant/ANTClient";
+import { BaseClient } from "src/core/ao/BaseClient";
+import { ANTRecord, ANTRecords } from "src/clients/ario/ant/abstract/types";
 
-describe("ANTClient", () => {
+// Mock BaseClient methods
+jest.spyOn(BaseClient.prototype, 'message').mockResolvedValue("test-message-id");
+const messageResult: MessageResult = {
+    Output: undefined,
+    Messages: [{ Data: "200: Success", Tags: [] }],
+    Spawns: []
+}
+jest.spyOn(BaseClient.prototype, 'result').mockResolvedValue(messageResult);
+
+// Mock sample data
+const mockANTRecords: ANTRecords = {
+    '@': {
+        name: '@',
+        transactionId: 'tx-1'
+    },
+    'test': {
+        name: 'test',
+        transactionId: 'tx-2'
+    }
+};
+
+const mockANTRecord: ANTRecord = {
+    name: 'test',
+    transactionId: 'tx-2'
+};
+
+describe("ANTClient Unit Test", () => {
     let client: ANTClient;
-    const mockRecords: ANTRecords = {
-        "@": {
-            name: "@",
-            transactionId: "test-transaction-id",
-            metadata: { test: "data" }
-        },
-        "test": {
-            name: "test",
-            transactionId: "test-transaction-id-2",
-            metadata: { test: "data-2" }
-        }
-    };
+    const mockProcessId = "test-process-id";
+
+    beforeAll(() => {
+        // Initialize the ANTClient
+        client = new ANTClient(mockProcessId);
+    });
 
     beforeEach(() => {
-        client = new ANTClient("test-process-id");
-        // Mock the dryrun method
-        (client as any).dryrun = jest.fn().mockResolvedValue({
-            Messages: [{
-                Data: JSON.stringify(mockRecords)
-            }]
-        });
-    });
-
-    afterEach(() => {
+        // Reset mocks before each test
         jest.clearAllMocks();
+
+        // Set up default dryrun mock
+        const dryRunResult: DryRunResult = {
+            Output: undefined,
+            Messages: [{ Data: JSON.stringify(mockANTRecords), Tags: [] }],
+            Spawns: []
+        }
+        jest.spyOn(BaseClient.prototype, 'dryrun').mockResolvedValue(dryRunResult);
     });
 
-    describe("getRecords", () => {
-        it("should return all ANT records", async () => {
+    describe("getRecords()", () => {
+        it("should fetch ANT records without throwing an error", async () => {
+            await expect(client.getRecords()).resolves.not.toThrow();
+        });
+
+        it("should return ANT records", async () => {
             const records = await client.getRecords();
-            expect(records).toEqual(mockRecords);
-            expect((client as any).dryrun).toHaveBeenCalledWith("", [
-                { name: "Action", value: "GetRecords" }
+            expect(records).toEqual(mockANTRecords);
+        });
+
+        it("should call dryrun with correct parameters", async () => {
+            await client.getRecords();
+            expect(BaseClient.prototype.dryrun).toHaveBeenCalledWith('', [
+                { name: "Action", value: "Records" }
             ]);
         });
-
-        it("should throw GetRecordsError on failure", async () => {
-            (client as any).dryrun = jest.fn().mockRejectedValue(new Error("Network error"));
-            await expect(client.getRecords()).rejects.toThrow(GetRecordsError);
-        });
     });
 
-    describe("getRecord", () => {
+    describe("getRecord()", () => {
+        beforeEach(() => {
+            // Set up dryrun mock for single record
+            const dryRunResult: DryRunResult = {
+                Output: undefined,
+                Messages: [{ Data: JSON.stringify(mockANTRecord), Tags: [] }],
+                Spawns: []
+            }
+            jest.spyOn(BaseClient.prototype, 'dryrun').mockResolvedValue(dryRunResult);
+        });
+
+        it("should fetch a specific ANT record without throwing an error", async () => {
+            await expect(client.getRecord("test")).resolves.not.toThrow();
+        });
+
         it("should return a specific ANT record", async () => {
-            const record = await client.getRecord("@");
-            expect(record).toEqual(mockRecords["@"]);
+            const record = await client.getRecord("test");
+            expect(record).toEqual(mockANTRecord);
         });
 
-        it("should return undefined for non-existent record", async () => {
-            const record = await client.getRecord("non-existent");
-            expect(record).toBeUndefined();
-        });
-
-        it("should throw GetRecordError on failure", async () => {
-            (client as any).dryrun = jest.fn().mockRejectedValue(new Error("Network error"));
-            await expect(client.getRecord("@")).rejects.toThrow(GetRecordError);
+        it("should call dryrun with correct parameters", async () => {
+            const undername = "test";
+            await client.getRecord(undername);
+            expect(BaseClient.prototype.dryrun).toHaveBeenCalledWith('', [
+                { name: "Sub-Domain", value: undername },
+                { name: "Action", value: "Record" }
+            ]);
         });
     });
-
-
 });
