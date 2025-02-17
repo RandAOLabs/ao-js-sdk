@@ -13,6 +13,7 @@ export const PROFILE_REGISTRY_PROCESS_ID: string = "SNy4m-DrqxWl01YqGM4sxI8qCni-
 export const WRAPPED_AR_TOKEN_PROCESS_ID: string = "xU9zFkq3X2ZQ6olwNVvr1vUWIjc3kXTWr7xKQD6dh10"
 export const Q_ARWEAVE_TOKEN_PROCESS_ID: string = "NG-0lVX882MG5nhARrSzyprEK6ejonHpdUmaaMPsHE8"
 export const AO_TOKEN_PROCESS_ID: string = "UkS-mdoiG8hcAClhKK8ch4ZhEzla0mCPDOix9hpdSFE"
+export const ARNS_REGISTRY_PROCESS_ID: string = "i_le_yKKPVstLTDSmkHRqf-wYphMnwB9OhleiTgMkWc" // TODO: Replace when ARNS hits mainnet
 
 // Also export as a single namespace object
 export const processIds = {
@@ -26,5 +27,6 @@ export const processIds = {
     PROFILE_REGISTRY_PROCESS_ID,
     WRAPPED_AR_TOKEN_PROCESS_ID,
     Q_ARWEAVE_TOKEN_PROCESS_ID,
-    AO_TOKEN_PROCESS_ID
+    AO_TOKEN_PROCESS_ID,
+    ARNS_PROCESS_ID: ARNS_REGISTRY_PROCESS_ID
 } as const

@@ -1,9 +1,8 @@
-import { ANT, AoANTRead } from '@ar.io/sdk';
+import { ANTClient } from 'src/clients/ario/ant';
 import { ANTCachingService } from 'src/services/ario/ANTCachingService';
 import { ARN_ROOT_NAME } from 'src/services/ario/constants';
-import { getANT } from 'src/services/ario/ario';
 
-jest.mock('src/services/ario/ario');
+jest.mock('src/clients/ario/ant');
 
 describe('ANTCachingService', () => {
     let service: ANTCachingService;
@@ -11,26 +10,24 @@ describe('ANTCachingService', () => {
     const mockRecords = {
         '@': {
             name: '@',
-            transactionId: 'tx-1'
+            transactionId: 'tx-1',
+            metadata: {}
         },
         'test': {
             name: 'test',
-            transactionId: 'tx-2'
+            transactionId: 'tx-2',
+            metadata: {}
         }
     };
-    let mockAnt: jest.Mocked<AoANTRead>;
 
     beforeEach(() => {
-        mockAnt = {
-            getRecords: jest.fn().mockResolvedValue(mockRecords)
-        } as any;
-
-        (getANT as jest.Mock).mockResolvedValue(mockAnt);
-        service = new ANTCachingService(mockProcessId);
-    });
-
-    afterEach(() => {
+        // Reset and setup mocks
         jest.clearAllMocks();
+        (ANTClient as jest.Mock).mockImplementation(() => ({
+            getRecords: jest.fn().mockResolvedValue(mockRecords)
+        }));
+
+        service = new ANTCachingService(mockProcessId);
     });
 
     describe('getRecords', () => {
@@ -38,8 +35,8 @@ describe('ANTCachingService', () => {
             const result = await service.getRecords();
 
             expect(result).toEqual(mockRecords);
-            expect(getANT).toHaveBeenCalledTimes(1);
-            expect(mockAnt.getRecords).toHaveBeenCalledTimes(1);
+            expect(ANTClient).toHaveBeenCalledWith(mockProcessId);
+            expect((service as any).client.getRecords).toHaveBeenCalledTimes(1);
         });
 
         it('should return data from cache when available', async () => {
@@ -50,8 +47,8 @@ describe('ANTCachingService', () => {
             const result = await service.getRecords();
 
             expect(result).toEqual(mockRecords);
-            expect(getANT).toHaveBeenCalledTimes(1);
-            expect(mockAnt.getRecords).toHaveBeenCalledTimes(1);
+            expect(ANTClient).toHaveBeenCalledTimes(1);
+            expect((service as any).client.getRecords).toHaveBeenCalledTimes(1);
         });
     });
 
@@ -60,24 +57,24 @@ describe('ANTCachingService', () => {
             const result = await service.getRecord('test');
 
             expect(result).toEqual(mockRecords['test']);
-            expect(getANT).toHaveBeenCalledTimes(1);
-            expect(mockAnt.getRecords).toHaveBeenCalledTimes(1);
+            expect(ANTClient).toHaveBeenCalledTimes(1);
+            expect((service as any).client.getRecords).toHaveBeenCalledTimes(1);
         });
 
         it('should return root record when ARN_ROOT_NAME is used', async () => {
             const result = await service.getRecord(ARN_ROOT_NAME);
 
             expect(result).toEqual(mockRecords['@']);
-            expect(getANT).toHaveBeenCalledTimes(1);
-            expect(mockAnt.getRecords).toHaveBeenCalledTimes(1);
+            expect(ANTClient).toHaveBeenCalledTimes(1);
+            expect((service as any).client.getRecords).toHaveBeenCalledTimes(1);
         });
 
         it('should return undefined for non-existent record', async () => {
             const result = await service.getRecord('non-existent');
 
             expect(result).toBeUndefined();
-            expect(getANT).toHaveBeenCalledTimes(1);
-            expect(mockAnt.getRecords).toHaveBeenCalledTimes(1);
+            expect(ANTClient).toHaveBeenCalledTimes(1);
+            expect((service as any).client.getRecords).toHaveBeenCalledTimes(1);
         });
     });
 
@@ -86,16 +83,16 @@ describe('ANTCachingService', () => {
             const result = await service.getProcessId('test');
 
             expect(result).toBe('tx-2');
-            expect(getANT).toHaveBeenCalledTimes(1);
-            expect(mockAnt.getRecords).toHaveBeenCalledTimes(1);
+            expect(ANTClient).toHaveBeenCalledTimes(1);
+            expect((service as any).client.getRecords).toHaveBeenCalledTimes(1);
         });
 
         it('should return undefined for non-existent record', async () => {
             const result = await service.getProcessId('non-existent');
 
             expect(result).toBeUndefined();
-            expect(getANT).toHaveBeenCalledTimes(1);
-            expect(mockAnt.getRecords).toHaveBeenCalledTimes(1);
+            expect(ANTClient).toHaveBeenCalledTimes(1);
+            expect((service as any).client.getRecords).toHaveBeenCalledTimes(1);
         });
     });
 });
