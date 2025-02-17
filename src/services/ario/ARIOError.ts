@@ -9,16 +9,6 @@ export class ARIOError extends Error {
 }
 
 /**
- * Error thrown when a domain format is invalid
- */
-export class InvalidDomainError extends ARIOError {
-    constructor(domain: string, reason: string) {
-        super(`Invalid domain format: ${domain}. ${reason}`);
-        this.name = 'InvalidDomainError';
-    }
-}
-
-/**
  * Error thrown when an ARNS record is not found
  */
 export class ARNSRecordNotFoundError extends ARIOError {

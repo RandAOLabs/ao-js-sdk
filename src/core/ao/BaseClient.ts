@@ -8,7 +8,6 @@ import { DryRunError, JsonParsingError, MessageError, MessageOutOfBoundsError, R
 import { MessageResult } from '@permaweb/aoconnect/dist/lib/result';
 import { ResultsResponse } from '@permaweb/aoconnect/dist/lib/results';
 import { Logger, LogLevel } from 'src/utils/logger/logger';
-import { getBaseClientAutoConfiguration } from 'src/core/ao/BaseClientAutoConfiguration';
 import { DryRunResult } from '@permaweb/aoconnect/dist/lib/dryrun';
 import { getArweave } from 'src/core/arweave/arweave';
 import { getEnvironment, Environment } from 'src/utils/environment';
@@ -90,6 +89,24 @@ export class BaseClient extends IBaseClient {
         }
     }
 
+    protected async _dryrun(data: any = '', tags: Tags = [], anchor?: string, id?: string, owner?: string): Promise<DryRunResult> {
+        try {
+            const mergedTags = mergeLists(DEFAULT_TAGS, tags, tag => tag.name);
+            const result = await dryrun({
+                process: this.baseConfig.processId,
+                data,
+                tags: mergedTags,
+                anchor,
+                id,
+                owner,
+            });
+            return result
+        } catch (error: any) {
+            Logger.error(`Error performing dry run: ${JSON.stringify(error.message)}`);
+            throw new DryRunError(error);
+        }
+    }
+
     /* Core AO Functions */
 
     /* Public Settings*/
@@ -165,22 +182,6 @@ export class BaseClient extends IBaseClient {
     /* Protected Utility */
 
     /* Private */
-    private async _dryrun(data: any = '', tags: Tags = [], anchor?: string, id?: string, owner?: string): Promise<DryRunResult> {
-        try {
-            const mergedTags = mergeLists(DEFAULT_TAGS, tags, tag => tag.name);
-            const result = await dryrun({
-                process: this.baseConfig.processId,
-                data,
-                tags: mergedTags,
-                anchor,
-                id,
-                owner,
-            });
-            return result
-        } catch (error: any) {
-            Logger.error(`Error performing dry run: ${JSON.stringify(error.message)}`);
-            throw new DryRunError(error);
-        }
-    }
+
     /* Private */
 }
