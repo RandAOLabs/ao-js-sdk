@@ -9,14 +9,12 @@ import { ICache, ICacheConfig, newCache } from 'src/utils/cache';
  */
 export class ArnsCashingService {
     private cache: ICache<string, AoArNSNameData>;
-    private ario: AoARIORead;
 
     /**
      * Creates a new ARNSCachingService instance.
      * @param config - Optional cache configuration
      */
     constructor(config: ICacheConfig = {}) {
-        this.ario = getARIO();
         this.cache = newCache<string, AoArNSNameData>(config);
     }
 
@@ -29,7 +27,8 @@ export class ArnsCashingService {
         const cached = this.cache.get(name);
         if (cached !== undefined) return cached;
 
-        const arnsRecord = await this.ario.getArNSRecord({ name });
+        const ario = await getARIO();
+        const arnsRecord = await ario.getArNSRecord({ name });
         if (arnsRecord !== undefined) {
             this.cache.set(name, arnsRecord);
         }
