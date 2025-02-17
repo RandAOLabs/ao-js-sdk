@@ -50,8 +50,7 @@ export class ARIOService implements IARIOService {
         const hasUndername = undername !== undefined;
 
         // Get or create the ANT client for this domain
-        const antClient = await this._getOrCreateAntClient(domain, antName);
-
+        const antClient = await this._getOrCreateAntClient(antName);
         // Get process ID - if we have an undername, use it, otherwise use root name (@)
         const searchName = hasUndername ? undername : ARN_ROOT_NAME;
         const record = await antClient.getRecord(searchName);
@@ -108,7 +107,7 @@ export class ARIOService implements IARIOService {
      * Gets an existing ANT client from cache or creates a new one.
      * @throws {ARNSRecordNotFoundError} If no ARNS record is found or it lacks a process ID
      */
-    private async _getOrCreateAntClient(domain: string, antName: string): Promise<ANTClient> {
+    private async _getOrCreateAntClient(antName: string): Promise<ANTClient> {
         // Check cache first
         const cachedClient = this.antClientCache.get(antName);
         if (cachedClient) {
@@ -116,9 +115,9 @@ export class ARIOService implements IARIOService {
         }
 
         // Get ARNS record to get process ID
-        const arnsRecord = await this.arnsClient.getRecord(domain);
+        const arnsRecord = await this.arnsClient.getRecord(antName);
         if (!arnsRecord?.processId) {
-            throw new ARNSRecordNotFoundError(domain);
+            throw new ARNSRecordNotFoundError(antName);
         }
 
         // Create and cache new client
