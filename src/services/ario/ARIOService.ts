@@ -1,11 +1,11 @@
 import { IARIOService } from './abstract/IARIOService';
 import { ANTClient } from 'src/clients/ario/ant';
-import { ARNSClient } from 'src/clients/ario/arns';
+import { ARNSClient, InvalidDomainError } from 'src/clients/ario/arns';
 import { ICache, ICacheConfig, newCache } from 'src/utils/cache';
-import { ANTRecordNotFoundError, ARNSRecordNotFoundError, InvalidDomainError } from './ARIOError';
 import { DOMAIN_SEPARATOR, ARN_ROOT_NAME } from './constants';
 import { Logger } from 'src/utils';
 import { Domain } from './domains';
+import { ANTRecordNotFoundError, ARNSRecordNotFoundError } from 'src/services/ario/ARIOError';
 
 /**
  * Service for handling ARIO operations, including ANT and ARNS record management.
@@ -48,20 +48,16 @@ export class ARIOService implements IARIOService {
         const antName = this._getAntName(domain);
         const undername = this._getUnderName(domain);
         const hasUndername = undername !== undefined;
-        Logger.debug(antName);
-        Logger.debug(undername);
 
         // Get or create the ANT client for this domain
         const antClient = await this._getOrCreateAntClient(domain, antName);
 
         // Get process ID - if we have an undername, use it, otherwise use root name (@)
         const searchName = hasUndername ? undername : ARN_ROOT_NAME;
-        Logger.debug(searchName);
         const record = await antClient.getRecord(searchName);
         if (!record?.transactionId) {
             throw new ANTRecordNotFoundError(hasUndername ? undername : ARN_ROOT_NAME);
         }
-        Logger.debug(record.transactionId);
 
         return record.transactionId;
     }
@@ -121,7 +117,6 @@ export class ARIOService implements IARIOService {
 
         // Get ARNS record to get process ID
         const arnsRecord = await this.arnsClient.getRecord(domain);
-        Logger.debug(arnsRecord);
         if (!arnsRecord?.processId) {
             throw new ARNSRecordNotFoundError(domain);
         }

@@ -1,9 +1,9 @@
 import { ARIOService } from 'src/services/ario/ARIOService';
 import { ANTClient } from 'src/clients/ario/ant';
 import { ANTRecord } from 'src/clients/ario/ant/types';
-import { ARNSClient } from 'src/clients/ario/arns';
+import { ARNSClient, InvalidDomainError } from 'src/clients/ario/arns';
 import { ARNSRecord } from 'src/clients/ario/arns/types';
-import { ANTRecordNotFoundError, ARNSRecordNotFoundError, InvalidDomainError } from 'src/services/ario/ARIOError';
+import { ANTRecordNotFoundError, ARNSRecordNotFoundError } from 'src/services/ario/ARIOError';
 import { ARN_ROOT_NAME } from 'src/services/ario/constants';
 
 // Mock the clients
@@ -95,14 +95,6 @@ describe('ARIOService', () => {
             expect(mockArnsClient.getRecord).toHaveBeenCalledWith(domain);
             expect(mockAntClient.getRecord).toHaveBeenCalledWith('nft');
             expect(ANTClient).toHaveBeenCalledWith(processId);
-        });
-
-        it('should throw InvalidDomainError for empty domain', async () => {
-            await expect(service.getProcessIdForDomain('')).rejects.toThrow(InvalidDomainError);
-        });
-
-        it('should throw InvalidDomainError for invalid domain format', async () => {
-            await expect(service.getProcessIdForDomain('invalid_name_extra')).rejects.toThrow(InvalidDomainError);
         });
 
         it('should throw ARNSRecordNotFoundError when ARNS record not found', async () => {

@@ -32,7 +32,6 @@ function listAvailableTests(type: TestType): void {
             if (item.isDirectory()) {
                 const fullPath = join(dir, item.name);
                 const relativePath = relative(join(TEST_ROOT, type), fullPath);
-                Logger.debug(`${indent}${relativePath}`);
                 traverseDir(fullPath, `${indent}  `);
             }
         });
@@ -41,36 +40,25 @@ function listAvailableTests(type: TestType): void {
     traverseDir(join(TEST_ROOT, type));
 }
 
-function findTestPath(type: TestType, searchPath: string): string | undefined {
+function findTestPaths(type: TestType, searchPath: string): string[] {
+    const paths: string[] = [];
+
     // Direct match first
     const directPath = join(TEST_ROOT, type, searchPath);
     if (existsSync(directPath)) {
-        return directPath;
+        paths.push(directPath);
     }
 
-    // For unit tests, search in common parent directories
-    if (type === 'unit') {
-        const commonParents = ['services', 'clients', 'core', 'utils'];
-        for (const parent of commonParents) {
-            const parentPath = join(TEST_ROOT, type, parent, searchPath);
-            if (existsSync(parentPath)) {
-                return parentPath;
-            }
+    // Search in common parent directories for both unit and integration tests
+    const commonParents = ['services', 'clients', 'core', 'utils'];
+    for (const parent of commonParents) {
+        const parentPath = join(TEST_ROOT, type, parent, searchPath);
+        if (existsSync(parentPath)) {
+            paths.push(parentPath);
         }
     }
 
-    // For integration tests, try service/searchPath
-    if (type === 'integration') {
-        const commonParents = ['services', 'clients', 'core', 'utils'];
-        for (const parent of commonParents) {
-            const parentPath = join(TEST_ROOT, type, parent, searchPath);
-            if (existsSync(parentPath)) {
-                return parentPath;
-            }
-        }
-    }
-
-    return undefined;
+    return paths;
 }
 
 function runTests(testPath: string, isIntegration: boolean = false) {
@@ -103,16 +91,25 @@ if (!pathParts.length) {
     process.exit(result.status ?? 1);
 }
 
-// Find the test path
-const fullTestPath = findTestPath(testType as TestType, searchPath);
-if (!fullTestPath) {
+// Find all matching test paths
+const testPaths = findTestPaths(testType as TestType, searchPath);
+if (testPaths.length === 0) {
     Logger.error(`Could not find tests for '${searchPath}'`);
     Logger.error('Available test paths:');
     listAvailableTests(testType as TestType);
     process.exit(1);
 }
 
-// Run tests for specific path
+// Run tests for all found paths
 Logger.info(`Running ${testType} tests for ${searchPath}...`);
-const result = runTests(fullTestPath, isIntegration);
-process.exit(result.status ?? 1);
+let hasFailures = false;
+
+for (const testPath of testPaths) {
+    Logger.info(`Running tests in: ${relative(process.cwd(), testPath)}`);
+    const result = runTests(testPath, isIntegration);
+    if (result.status !== 0) {
+        hasFailures = true;
+    }
+}
+
+process.exit(hasFailures ? 1 : 0);
