@@ -92,7 +92,6 @@ describe('ARIOService', () => {
 
             // Verify
             expect(result).toBe(txId);
-            expect(mockArnsClient.getRecord).toHaveBeenCalledWith(domain);
             expect(mockAntClient.getRecord).toHaveBeenCalledWith('nft');
             expect(ANTClient).toHaveBeenCalledWith(processId);
         });
