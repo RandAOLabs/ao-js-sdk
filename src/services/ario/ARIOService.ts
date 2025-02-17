@@ -1,6 +1,6 @@
 import { IARIOService } from './abstract/IARIOService';
-import { ANTCachingService } from './ANTCachingService';
-import { ArnsCashingService } from './ARNCachingService';
+import { ANTClient } from 'src/clients/ario/ant';
+import { ARNSClient } from 'src/clients/ario/arns';
 import { ICache, ICacheConfig, newCache } from 'src/utils/cache';
 import { ANTRecordNotFoundError, ARNSRecordNotFoundError, InvalidDomainError } from './ARIOError';
 import { DOMAIN_SEPARATOR, ARN_ROOT_NAME } from './constants';
@@ -14,12 +14,13 @@ import { Domain } from './domains';
  */
 export class ARIOService implements IARIOService {
     private static instance: ARIOService;
-    private arnsService: ArnsCashingService;
-    private antServiceCache: ICache<string, ANTCachingService>;
+    private arnsClient: ARNSClient;
+    private antClientCache: ICache<string, ANTClient>;
 
     private constructor(config: ICacheConfig = {}) {
-        this.arnsService = new ArnsCashingService(config);
-        this.antServiceCache = newCache<string, ANTCachingService>(config);
+        this.arnsClient = ARNSClient.autoConfiguration();
+        this.arnsClient.setDryRunAsMessage(true)
+        this.antClientCache = newCache<string, ANTClient>(config);
     }
 
     public static getInstance(config: ICacheConfig = {}): ARIOService {
@@ -51,19 +52,19 @@ export class ARIOService implements IARIOService {
         Logger.debug(antName);
         Logger.debug(undername);
 
-        // Get or create the ANT service for this domain
-        const antService = await this._getOrCreateAntService(domain, antName);
+        // Get or create the ANT client for this domain
+        const antClient = await this._getOrCreateAntClient(domain, antName);
 
         // Get process ID - if we have an undername, use it, otherwise use root name (@)
         const searchName = hasUndername ? undername : ARN_ROOT_NAME;
-        Logger.debug(searchName)
-        const processId = await antService.getProcessId(searchName);
-        if (!processId) {
+        Logger.debug(searchName);
+        const record = await antClient.getRecord(searchName);
+        if (!record?.transactionId) {
             throw new ANTRecordNotFoundError(hasUndername ? undername : ARN_ROOT_NAME);
         }
-        Logger.debug(processId)
+        Logger.debug(record.transactionId);
 
-        return processId;
+        return record.transactionId;
     }
 
     /* Private functions */
@@ -109,27 +110,27 @@ export class ARIOService implements IARIOService {
     }
 
     /**
-     * Gets an existing ANT service from cache or creates a new one.
+     * Gets an existing ANT client from cache or creates a new one.
      * @throws {ARNSRecordNotFoundError} If no ARNS record is found or it lacks a process ID
      */
-    private async _getOrCreateAntService(domain: string, antName: string): Promise<ANTCachingService> {
+    private async _getOrCreateAntClient(domain: string, antName: string): Promise<ANTClient> {
         // Check cache first
-        const cachedService = this.antServiceCache.get(antName);
-        if (cachedService) {
-            return cachedService;
+        const cachedClient = this.antClientCache.get(antName);
+        if (cachedClient) {
+            return cachedClient;
         }
 
         // Get ARNS record to get process ID
-        const arnsRecord = await this.arnsService.getArNSRecord({ name: domain });
-        Logger.debug(arnsRecord)
+        const arnsRecord = await this.arnsClient.getRecord(domain);
+        Logger.debug(arnsRecord);
         if (!arnsRecord?.processId) {
             throw new ARNSRecordNotFoundError(domain);
         }
 
-        // Create and cache new service
-        const antService = new ANTCachingService(arnsRecord.processId);
-        this.antServiceCache.set(antName, antService);
-        return antService;
+        // Create and cache new client
+        const antClient = new ANTClient(arnsRecord.processId);
+        this.antClientCache.set(antName, antClient);
+        return antClient;
     }
 }
 

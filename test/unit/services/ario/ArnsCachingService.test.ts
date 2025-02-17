@@ -1,31 +1,24 @@
-import { ARIO } from '@ar.io/sdk';
+import { ARNSClient } from 'src/clients/ario/arns';
 import { ArnsCashingService } from 'src/services/ario/ARNCachingService';
 
-// Mock ARIO
-jest.mock('@ar.io/sdk', () => ({
-    ARIO: {
-        init: jest.fn().mockReturnValue({
-            getArNSRecord: jest.fn()
-        })
-    }
-}));
+jest.mock('src/clients/ario/arns');
 
-describe('ArnCashingService', () => {
+describe('ArnsCashingService', () => {
     let service: ArnsCashingService;
     const mockData = {
-        name: 'test.ar'
+        name: 'test.ar',
+        processId: 'test-process-id',
+        metadata: {}
     };
-    let mockGetArNSRecord: jest.Mock;
 
     beforeEach(() => {
-        service = new ArnsCashingService();
-        const mockArio = ARIO.init();
-        mockGetArNSRecord = mockArio.getArNSRecord as jest.Mock;
-        mockGetArNSRecord.mockResolvedValue(mockData);
-    });
-
-    afterEach(() => {
+        // Reset and setup mocks
         jest.clearAllMocks();
+        (ARNSClient.autoConfiguration as jest.Mock).mockReturnValue({
+            getRecord: jest.fn().mockResolvedValue(mockData)
+        });
+
+        service = new ArnsCashingService();
     });
 
     it('should return data from cache when available', async () => {
@@ -36,14 +29,15 @@ describe('ArnCashingService', () => {
         const result = await service.getArNSRecord({ name: 'test.ar' });
 
         expect(result).toEqual(mockData);
-        expect(mockGetArNSRecord).toHaveBeenCalledTimes(1);
+        expect(ARNSClient.autoConfiguration).toHaveBeenCalledTimes(1);
+        expect((service as any).client.getRecord).toHaveBeenCalledTimes(1);
     });
 
     it('should fetch and cache data when not in cache', async () => {
         const result = await service.getArNSRecord({ name: 'test.ar' });
 
         expect(result).toEqual(mockData);
-        expect(mockGetArNSRecord).toHaveBeenCalledTimes(1);
-        expect(mockGetArNSRecord).toHaveBeenCalledWith({ name: 'test.ar' });
+        expect(ARNSClient.autoConfiguration).toHaveBeenCalledTimes(1);
+        expect((service as any).client.getRecord).toHaveBeenCalledWith('test.ar');
     });
 });
