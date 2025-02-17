@@ -10,9 +10,9 @@ describe("RandomClient Integration Test", () => {
     let availableValues = 100
     let openRandomRequestId: string | null = null;
 
-    beforeAll(() => {
+    beforeAll(async () => {
         // Initialize the RandomClient with actual configuration for integration testing
-        client = RandomClient.autoConfiguration();
+        client = await RandomClient.autoConfiguration();
     });
 
     afterAll(() => {
