@@ -1,5 +1,5 @@
 import { RandomClient } from "src/clients";
-import { Logger } from "src/utils";
+import { Logger, sleep } from "src/utils";
 
 // Integration test for all functions in RandomClient
 jest.setTimeout(60000); // Set timeout to 60 seconds for all tests// Integration test for all functions in RandomClient
@@ -46,6 +46,7 @@ describe("RandomClient Integration Test", () => {
             // Assert that the response (request ID) is a non-empty string
             expect(response).toBeTruthy();
             expect(typeof response).toBe("boolean");
+            await sleep(10)
         });
     });
 

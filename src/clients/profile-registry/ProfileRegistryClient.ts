@@ -2,7 +2,7 @@ import { IProfileRegistryClient, ProfileRegistryEntry } from "src/clients/profil
 import { getProfileRegistryClientAutoConfiguration } from "src/clients/profile-registry/ProfileRegistryClientAutoConfiguration";
 import { GetProfilesError } from "src/clients/profile-registry/RegistryClientError";
 import { SyncInitDryRunCachingClient } from "src/core/ao/client-variants";
-import { SyncBaseClient } from "src/core/ao/index";
+import { SyncInitClient } from "src/core/ao/index";
 import { Logger } from "src/utils/index";
 
 

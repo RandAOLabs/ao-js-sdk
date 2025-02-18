@@ -50,3 +50,7 @@ export type RandomRequestResponse = {
 export type GetRandomRequestsResponse = {
     randomRequestResponses: RandomRequestResponse[];
 };
+
+export type ProviderActivity = {
+
+}

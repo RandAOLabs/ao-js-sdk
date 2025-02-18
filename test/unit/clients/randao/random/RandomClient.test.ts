@@ -2,7 +2,6 @@ import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
 import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
 import { RandomClient, TokenClient } from "src/clients";
 import { BaseClient } from "src/core/ao/BaseClient";
-import ARIOService from "src/services/ario/ARIOService";
 
 jest.mock("src/services/ario/ARIOService", () => ({
     getProcessIdForDomain: jest.fn().mockResolvedValue("test-process-id")

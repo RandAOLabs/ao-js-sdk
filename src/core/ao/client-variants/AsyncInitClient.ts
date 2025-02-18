@@ -5,8 +5,8 @@ import { getBaseClientAutoConfiguration } from "src/core/ao/BaseClientAutoConfig
 /**
  * @category Core
  */
-export class ASyncBaseClient extends BaseClient implements IAsyncAutoConfiguration {
-    public static autoConfiguration(): Promise<ASyncBaseClient> {
+export class ASyncInitClient extends BaseClient implements IAsyncAutoConfiguration {
+    public static autoConfiguration(): Promise<ASyncInitClient> {
         const config = getBaseClientAutoConfiguration()
         return Promise.resolve(new BaseClient(config))
     }

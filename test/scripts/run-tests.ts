@@ -12,7 +12,7 @@
 import { spawnSync } from 'child_process';
 import { existsSync, readdirSync } from 'fs';
 import { join, relative } from 'path';
-import { Logger } from '../../src/utils/logger';
+import { Logger, LogLevel } from '../../src/utils/logger';
 
 // Types
 type TestType = 'unit' | 'integration';
@@ -20,6 +20,7 @@ type TestType = 'unit' | 'integration';
 // Constants
 const TEST_TYPES: TestType[] = ['unit', 'integration'];
 const TEST_ROOT = join(process.cwd(), 'test');
+Logger.setLogLevel(LogLevel.DEBUG)
 
 // Helper to list available test paths
 function listAvailableTests(type: TestType): void {
@@ -50,7 +51,7 @@ function findTestPaths(type: TestType, searchPath: string): string[] {
     }
 
     // Search in common parent directories for both unit and integration tests
-    const commonParents = ['services', 'clients', 'core', 'utils'];
+    const commonParents = ['services', 'clients', 'core', 'utils, clients/randao'];
     for (const parent of commonParents) {
         const parentPath = join(TEST_ROOT, type, parent, searchPath);
         if (existsSync(parentPath)) {
