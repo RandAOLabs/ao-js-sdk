@@ -37,7 +37,7 @@ export class NftSaleClient extends ASyncBaseClient implements INftSaleClient {
 
     public static async create(config?: NftSaleClientConfig, profileClient?: ProfileClient): Promise<NftSaleClient> {
         const finalConfig = config ?? getNftSaleClientAutoConfiguration();
-        const finalProfileClient = profileClient ?? await ProfileClient.createAutoConfigured();
+        const finalProfileClient = profileClient ?? await ProfileClient.autoConfiguration();
         return new NftSaleClient(finalConfig, finalProfileClient);
     }
 
