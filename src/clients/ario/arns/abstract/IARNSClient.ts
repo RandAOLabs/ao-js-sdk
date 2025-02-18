@@ -2,7 +2,6 @@ import { ARNSRecord } from "src/clients/ario/arns/abstract/types";
 
 /**
  * Interface for ARNS (Arweave Name Service) client operations
- * @category Clients
  */
 export interface IARNSClient {
     /**
