@@ -6,3 +6,4 @@
  */
 export * from "./messages"
 export * from "./ario"
+export * from "./profiles"
