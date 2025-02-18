@@ -2,6 +2,8 @@ import { ProfileRegistryClient } from "src/clients/profile-registry";
 import { ProfileClientConfig } from "src/clients/profile/abstract";
 import { NoProfileFoundError } from "src/clients/profile/ProfileClientError";
 import { getBaseClientAutoConfiguration } from "src/core/ao/BaseClientAutoConfiguration";
+import { getDryRunCachineClientAutoConfiguration } from "src/core/ao/client-variants";
+import { ICacheConfig } from "src/utils";
 
 
 export const getProfileClientAutoConfiguration = async (): Promise<ProfileClientConfig> => {
@@ -13,8 +15,10 @@ export const getProfileClientAutoConfiguration = async (): Promise<ProfileClient
         throw new NoProfileFoundError(walletAddress);
     }
 
-    return {
+    const config: ProfileClientConfig = {
         ...getBaseClientAutoConfiguration(),
-        processId: profiles[0].ProfileId
-    };
+        processId: profiles[0].ProfileId,
+    }
+
+    return config
 }

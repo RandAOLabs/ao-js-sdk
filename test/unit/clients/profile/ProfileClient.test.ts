@@ -42,7 +42,7 @@ describe("ProfileClient Unit Tests", () => {
     let client: ProfileClient;
 
     beforeAll(async () => {
-        client = await ProfileClient.createAutoConfigured();
+        client = await ProfileClient.autoConfiguration();
     });
 
     afterEach(() => {
@@ -55,7 +55,7 @@ describe("ProfileClient Unit Tests", () => {
             const address = "test-address";
             const dryrunSpy = jest.spyOn(client, 'dryrun');
 
-            await client.getProfileInfo(address);
+            await client.getProfileInfo();
 
             expect(dryrunSpy).toHaveBeenCalledWith('', [
                 { name: "Action", value: "Info" }
@@ -84,7 +84,7 @@ describe("ProfileClient Unit Tests", () => {
         let client: ProfileClient;
 
         beforeAll(async () => {
-            client = await ProfileClient.createAutoConfigured();
+            client = await ProfileClient.autoConfiguration();
         });
 
         afterEach(() => {
