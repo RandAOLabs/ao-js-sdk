@@ -1,6 +1,7 @@
 import { IProfileRegistryClient, ProfileRegistryEntry } from "src/clients/profile-registry/abstract";
 import { getProfileRegistryClientAutoConfiguration } from "src/clients/profile-registry/ProfileRegistryClientAutoConfiguration";
 import { GetProfilesError } from "src/clients/profile-registry/RegistryClientError";
+import { SyncInitDryRunCachingClient } from "src/core/ao/client-variants";
 import { SyncBaseClient } from "src/core/ao/index";
 import { Logger } from "src/utils/index";
 
@@ -8,7 +9,7 @@ import { Logger } from "src/utils/index";
 /**
  * @category Clients
  */
-export class ProfileRegistryClient extends SyncBaseClient implements IProfileRegistryClient {
+export class ProfileRegistryClient extends SyncInitDryRunCachingClient implements IProfileRegistryClient {
     /* Constructors */
     public static autoConfiguration(): ProfileRegistryClient {
         return new ProfileRegistryClient(getProfileRegistryClientAutoConfiguration());

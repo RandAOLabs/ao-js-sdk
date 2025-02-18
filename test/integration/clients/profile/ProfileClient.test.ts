@@ -5,7 +5,7 @@ describe("ProfileClient Integration Tests", () => {
     let client: ProfileClient;
 
     beforeAll(async () => {
-        client = await ProfileClient.createAutoConfigured();
+        client = await ProfileClient.autoConfiguration();
     });
 
     describe("getProfileInfo", () => {

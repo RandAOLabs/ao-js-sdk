@@ -5,11 +5,10 @@ import { Tags } from "src/core/ao";
 export interface IProfileClient {
     /**
      * Get profile information for a given address
-     * @param address Optional address to get profile for, defaults to calling wallet address
      * @returns Promise resolving to profile information
      * @throws {GetProfileError} If profile fetch fails
      */
-    getProfileInfo(address?: string): Promise<ProfileInfo>;
+    getProfileInfo(): Promise<ProfileInfo>;
 
     /**
      * Transfer tokens from a target contract

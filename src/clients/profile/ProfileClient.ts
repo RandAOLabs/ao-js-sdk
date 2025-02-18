@@ -1,6 +1,7 @@
 import { IProfileClient, ProfileInfo } from "src/clients/profile/abstract";
 import { getProfileClientAutoConfiguration } from "src/clients/profile/ProfileClientAutoConfiguration";
 import { AsyncInitializationRequiredError, GetProfileError, ProfileTransferError } from "src/clients/profile/ProfileClientError";
+import { AsyncInitDryRunCachingClient } from "src/core/ao/client-variants";
 import { Tags, ASyncBaseClient } from "src/core/ao/index";
 import { Logger } from "src/utils/index";
 
@@ -8,26 +9,18 @@ import { Logger } from "src/utils/index";
  * @category Clients
  * @see {@link https://cookbook_ao.g8way.io/references/profile.html | specification}
  */
-export class ProfileClient extends ASyncBaseClient implements IProfileClient {
+export class ProfileClient extends AsyncInitDryRunCachingClient implements IProfileClient {
     /* Constructors */
     public static async autoConfiguration(): Promise<ProfileClient> {
         const config = await getProfileClientAutoConfiguration();
         return new ProfileClient(config);
     }
-
-    /**
-     * @deprecated Will be removed in next major version in favor of autoConfiguration()
-     */
-    public static async createAutoConfigured(): Promise<ProfileClient> {
-        return ProfileClient.autoConfiguration()
-    }
     /* Constructors */
 
     /* Core Profile Functions */
-    public async getProfileInfo(address?: string): Promise<ProfileInfo> {
-        if (!address) {
-            address = await this.getCallingWalletAddress();
-        }
+    public async getProfileInfo(): Promise<ProfileInfo> {
+        const address = await this.getCallingWalletAddress();
+
         try {
             const response = await this.dryrun('', [
                 { name: "Action", value: "Info" },
