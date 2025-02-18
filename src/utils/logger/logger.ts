@@ -1,20 +1,38 @@
 import { getEnvironment, Environment } from "src/utils/environment";
 import { colors } from "src/utils/logger/colors";
+import { DEFAULT_LOG_LEVELS } from "./config";
+import { LogLevel } from "src/utils/logger/types";
 
-export enum LogLevel {
-    INFO = "info",
-    WARN = "warn",
-    ERROR = "error",
-    DEBUG = "debug"
-}
+
 /**
  * @category Utility
  */
 export class Logger {
+    private static _logLevel: LogLevel;
+
+    static {
+        try {
+            const environment = getEnvironment();
+            Logger._logLevel = DEFAULT_LOG_LEVELS[environment];
+        } catch (error) {
+            // If environment detection fails, default to most restrictive level
+            Logger._logLevel = LogLevel.ERROR;
+            console.warn('Failed to detect environment, defaulting to ERROR log level');
+        }
+    }
+
+    static get logLevel(): LogLevel {
+        return Logger._logLevel;
+    }
+
+    static set logLevel(level: LogLevel) {
+        Logger._logLevel = level;
+    }
     static logLevelColors = {
-        [LogLevel.INFO]: colors.fg.blue,
-        [LogLevel.WARN]: colors.fg.yellow,
+        [LogLevel.NONE]: colors.reset,
         [LogLevel.ERROR]: colors.fg.red,
+        [LogLevel.WARN]: colors.fg.yellow,
+        [LogLevel.INFO]: colors.fg.blue,
         [LogLevel.DEBUG]: colors.fg.green,
     };
 
@@ -29,7 +47,21 @@ export class Logger {
         }
     }
 
+    private static shouldLog(level: LogLevel): boolean {
+        const levels = [LogLevel.NONE, LogLevel.ERROR, LogLevel.WARN, LogLevel.INFO, LogLevel.DEBUG];
+        const currentLevelIndex = levels.indexOf(this.logLevel);
+        const messageLevelIndex = levels.indexOf(level);
+        // For NONE, don't log anything
+        if (this.logLevel === LogLevel.NONE) return false;
+        // Otherwise, only log if message level is less severe or equal to current level
+        return messageLevelIndex <= currentLevelIndex;
+    }
+
     static log(level: LogLevel, message: string | any) {
+        if (!this.shouldLog(level)) {
+            return;
+        }
+
         const formattedMessage = this.formatMessage(message);
         const color = this.logLevelColors[level] || colors.reset;
         const timestamp = new Date().toISOString();
@@ -58,6 +90,12 @@ export class Logger {
 
     static debug(message: string | any) {
         this.log(LogLevel.DEBUG, message);
+    }
+
+    static setLogLevel(newLoglevel: LogLevel) {
+        Logger._logLevel = newLoglevel;
+        // Don't use info() here as it might be filtered out based on the new level
+        Logger.log(LogLevel.INFO, `Log level set to ${newLoglevel}`);
     }
 
     private static getFileLink(): string {

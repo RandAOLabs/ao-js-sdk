@@ -1,18 +1,18 @@
 import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
 import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
-import { IRandomClient, RandomClientConfig, GetProviderAvailableValuesResponse, GetOpenRandomRequestsResponse, GetRandomRequestsResponse } from "src/clients/random/abstract";
-import { getRandomClientAutoConfiguration } from "src/clients/random/RandomClientAutoConfiguration";
-import { PostVDFChallengeError, ProviderAvailableValuesError, UpdateProviderAvailableValuesError, OpenRandomRequestsError, RandomRequestsError, CreateRequestError, PostVDFOutputAndProofError } from "src/clients/random/RandomClientError";
-import { RandomProcessError } from "src/clients/random/RandomProcessError";
+import { IRandomClient, RandomClientConfig, GetProviderAvailableValuesResponse, GetOpenRandomRequestsResponse, GetRandomRequestsResponse, ProviderActivity } from "src/clients/randao/random/abstract";
+import { getRandomClientAutoConfiguration } from "src/clients/randao/random/RandomClientAutoConfiguration";
+import { PostVDFChallengeError, ProviderAvailableValuesError, UpdateProviderAvailableValuesError, OpenRandomRequestsError, RandomRequestsError, CreateRequestError, PostVDFOutputAndProofError } from "src/clients/randao/random/RandomClientError";
+import { RandomProcessError } from "src/clients/randao/random/RandomProcessError";
 import { TokenClient, TokenClientConfig } from "src/clients/token";
-import { ASyncBaseClient, Tags } from "src/core/ao";
+import { ASyncInitClient, Tags } from "src/core/ao";
 import { Logger } from "src/utils";
 
 /**
  * @category Clients
  * @see {@link https://github.com/RandAOLabs/Random-Process | specification}
  */
-export class RandomClient extends ASyncBaseClient implements IRandomClient {
+export class RandomClient extends ASyncInitClient implements IRandomClient {
     /* Fields */
     readonly tokenClient: TokenClient;
     /* Fields */
@@ -156,6 +156,35 @@ export class RandomClient extends ASyncBaseClient implements IRandomClient {
             const result = await this.messageResult(data, tags);
             this.checkResultForErrors(result)
             return true
+        } catch (error: any) {
+            Logger.error(`Error posting VDF output and proof: ${error.message}`);
+            throw new PostVDFOutputAndProofError(error);
+        }
+    }
+
+    async getAllProviderActivity(): Promise<ProviderActivity[]> {
+        try {
+            const tags: Tags = [
+                { name: "Action", value: "Get-All-Providers" },
+            ];
+            const result = await this.messageResult(undefined, tags);
+            this.checkResultForErrors(result)
+            return this.getFirstMessageDataJson(result)
+        } catch (error: any) {
+            Logger.error(`Error posting VDF output and proof: ${error.message}`);
+            throw new PostVDFOutputAndProofError(error);
+        }
+    }
+
+    async getProviderActivity(providerId: String): Promise<ProviderActivity> {
+        try {
+            const tags: Tags = [
+                { name: "Action", value: "Get-Provider" },
+            ];
+            const data = JSON.stringify({ providerId: providerId })
+            const result = await this.messageResult(data, tags);
+            this.checkResultForErrors(result)
+            return this.getFirstMessageDataJson(result)
         } catch (error: any) {
             Logger.error(`Error posting VDF output and proof: ${error.message}`);
             throw new PostVDFOutputAndProofError(error);

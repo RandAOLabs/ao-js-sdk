@@ -3,14 +3,14 @@ import { ITokenClient, IGrantToken } from "src/clients/token/abstract";
 import { TRANSFER_SUCCESS_MESSAGE } from "src/clients/token/constants";
 import { getTokenClientAutoConfiguration } from "src/clients/token/TokenClientAutoConfiguration";
 import { BalanceError, BalancesError, TransferError, GetInfoError, MintError, GrantError } from "src/clients/token/TokenClientError";
-import { Tags, SyncBaseClient } from "src/core/ao/index";
+import { Tags, SyncInitClient } from "src/core/ao/index";
 import { Logger } from "src/utils/index"
 
 /**
  * @category Clients
  * @see {@link https://cookbook_ao.g8way.io/references/token.html | specification}
  */
-export class TokenClient extends SyncBaseClient implements ITokenClient, IGrantToken {
+export class TokenClient extends SyncInitClient implements ITokenClient, IGrantToken {
     /* Constructors */
     public static autoConfiguration(): TokenClient {
         return new TokenClient(getTokenClientAutoConfiguration());

@@ -7,10 +7,10 @@ import { DEFAULT_TAGS } from './constants';
 import { DryRunError, JsonParsingError, MessageError, MessageOutOfBoundsError, ResultError, ResultsError } from 'src/core/ao/BaseClientError';
 import { MessageResult } from '@permaweb/aoconnect/dist/lib/result';
 import { ResultsResponse } from '@permaweb/aoconnect/dist/lib/results';
-import { Logger, LogLevel } from 'src/utils/logger/logger';
 import { DryRunResult } from '@permaweb/aoconnect/dist/lib/dryrun';
 import { getArweave } from 'src/core/arweave/arweave';
 import { getEnvironment, Environment } from 'src/utils/environment';
+import { Logger, LogLevel } from 'src/utils';
 
 export class BaseClient extends IBaseClient {
     /* Fields */

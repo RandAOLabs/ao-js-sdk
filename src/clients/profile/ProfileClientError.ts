@@ -8,13 +8,6 @@ export class ProfileClientError extends Error {
     }
 }
 
-export class AsyncInitializationRequiredError extends ProfileClientError {
-    constructor() {
-        super("Use createAutoConfigured() instead - this client requires async initialization");
-        this.name = 'AsyncInitializationRequiredError';
-    }
-}
-
 export class NoProfileFoundError extends ProfileClientError {
     constructor(address: string) {
         super(`No profile found for wallet address ${address}`);

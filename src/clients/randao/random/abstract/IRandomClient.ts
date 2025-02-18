@@ -1,4 +1,4 @@
-import { GetProviderAvailableValuesResponse, GetOpenRandomRequestsResponse, GetRandomRequestsResponse } from "src/clients/random/abstract/types";
+import { GetProviderAvailableValuesResponse, GetOpenRandomRequestsResponse, GetRandomRequestsResponse, ProviderActivity } from "src/clients/randao/random/abstract/types";
 
 // src/interfaces/IRandomClient.ts
 export interface IRandomClient {
@@ -64,4 +64,17 @@ export interface IRandomClient {
      * @returns - A promise that resolves with a boolean indicating success.
      */
     createRequest(providersIds: string[], requestedInputs: number, callbackId: string): Promise<boolean>;
+
+    /**
+     * Gets a list of all provider activity
+     * @returns - A promise that resolves with a list of provider activity.
+     */
+    getAllProviderActivity(): Promise<ProviderActivity[]>
+
+    /**
+     * Gets provider activity for a given provider
+     * @param providersId - An array of provider IDs to include in the request.
+     * @returns - A promise that resolves with a provider activity for the given providerId
+     */
+    getProviderActivity(providerId: String): Promise<ProviderActivity>
 }
