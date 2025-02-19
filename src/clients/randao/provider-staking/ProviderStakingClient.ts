@@ -7,6 +7,9 @@ import { StakingClient } from "src/clients/staking";
 import { SyncInitClient, Tags } from "src/core";
 import { Logger } from "src/utils";
 
+/**
+ * @category Clients
+ */
 export class ProviderStakingClient extends StakingClient implements IProviderStakingClient, SyncInitClient {
     public static autoConfiguration(): ProviderStakingClient {
         return new ProviderStakingClient(getProviderStakingClientAutoConfiguration());
