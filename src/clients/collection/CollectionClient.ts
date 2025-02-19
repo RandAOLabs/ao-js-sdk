@@ -1,4 +1,4 @@
-import { SyncBaseClient, BaseClientConfig, Tags } from "src/core/ao";
+import { SyncInitClient, BaseClientConfig } from "src/core/ao";
 import { ICollectionClient } from "src/clients/collection/abstract/ICollectionClient";
 import { Logger } from "src/utils/index";
 import { CollectionClientConfig, CollectionInfo, UpdateAssetsRequest } from "src/clients/collection/abstract";
@@ -10,7 +10,7 @@ import { NftClient } from "src/clients/nft";
 /**
  * @category Clients
  */
-export class CollectionClient extends SyncBaseClient implements ICollectionClient {
+export class CollectionClient extends SyncInitClient implements ICollectionClient {
     /* Constructors */
     public static autoConfiguration(): CollectionClient {
         return new CollectionClient(getCollectionClientAutoConfiguration());

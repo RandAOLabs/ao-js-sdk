@@ -1,7 +1,6 @@
 import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
 import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
-import { StakingClient, TokenClient, UnstakeError } from "src";
-import { ProviderDetails } from "src/clients/staking/abstract";
+import { StakingClient, StakingClientConfig, TokenClient, UnstakeError } from "src";
 import { BaseClient } from "src/core/ao/BaseClient";
 
 
@@ -53,7 +52,13 @@ describe("StakingClient Unit Test", () => {
     let mockTokenClient: jest.Mocked<TokenClient>;
 
     beforeAll(() => {
-        client = StakingClient.autoConfiguration();
+        const config: StakingClientConfig = {
+            tokenProcessId: "Testing Token",
+            processId: "Testing Staking Process ID",
+            wallet: undefined,
+            environment: "local"
+        }
+        client = new StakingClient(config);
 
         mockTokenClient = {
             transfer: jest.fn().mockResolvedValue(true),
@@ -70,21 +75,8 @@ describe("StakingClient Unit Test", () => {
     describe("stake()", () => {
         const quantity = "100000000000000000000";
 
-        it("should stake tokens without provider details", async () => {
+        it("should stake tokens", async () => {
             const response = await client.stake(quantity);
-            expect(response).toBe(true);
-
-            expect(mockTokenClient.transfer).toHaveBeenCalled();
-        });
-
-        it("should stake tokens with provider details", async () => {
-            const providerDetails: ProviderDetails = {
-                name: "Test Provider",
-                commission: 10,
-                description: "Test Description"
-            };
-
-            const response = await client.stake(quantity, providerDetails);
             expect(response).toBe(true);
 
             expect(mockTokenClient.transfer).toHaveBeenCalled();
@@ -93,32 +85,6 @@ describe("StakingClient Unit Test", () => {
         it("should throw error if token transfer fails", async () => {
             mockTokenClient.transfer.mockResolvedValueOnce(false);
             await expect(client.stake(quantity)).rejects.toThrow();
-        });
-    });
-
-    describe("updateDetails()", () => {
-        it("should update provider details", async () => {
-            const providerDetails: ProviderDetails = {
-                name: "Test Provider",
-                commission: 10,
-                description: "Test Description",
-                twitter: "@test"
-            };
-
-            const response = await client.updateDetails(providerDetails);
-            expect(response).toBe("200: Success");
-
-            expect(BaseClient.prototype.messageResult).toHaveBeenCalled();
-        });
-    });
-
-    describe("getStake()", () => {
-        it("should fetch stake information", async () => {
-            const providerId = "test-provider";
-            const response = await client.getStake(providerId);
-
-            expect(response).toBeDefined();
-            expect(BaseClient.prototype.dryrun).toHaveBeenCalled();
         });
     });
 

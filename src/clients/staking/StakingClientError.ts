@@ -15,16 +15,9 @@ export class StakeError extends StakingClientError {
     }
 }
 
-export class GetStakeError extends StakingClientError {
-    constructor(providerId: string, originalError?: Error) {
-        super(`Error getting stake for provider ${providerId}`, originalError);
-        this.name = 'GetStakeError';
-    }
-}
-
 export class UnstakeError extends StakingClientError {
-    constructor(providerId: string, originalError?: Error) {
-        super(`Error unstaking for provider ${providerId}`, originalError);
+    constructor(originalError?: Error) {
+        super(`Error unstaking`, originalError);
         this.name = 'UnstakeError';
     }
 }

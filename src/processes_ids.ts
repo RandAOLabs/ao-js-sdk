@@ -1,8 +1,12 @@
-export const RNG_TOKEN_PROCESS_ID: string = "yKVS1tYE3MajUpZqEIORmW1J8HTke-6o6o6tnlkFOZQ"
-export const RANDOM_PROCESS_ID: string = "KbaY8P4h9wdHYKHlBSLbXN_yd-9gxUDxSgBackUxTiQ"
+//Randao
+export const RNG_TOKEN_PROCESS_ID: string = "5ZR9uegKoEhE9fJMbs-MvWLIztMNCVxgpzfeBVE3vqI"
+export const RANDOM_PROCESS_ID: string = "1dnDvaDRQ7Ao6o1ohTr7NNrN5mp1CpsXFrWm3JJFEs8"
+export const RANDAO_STAKING_TOKEN_PROCESS_ID: string = RNG_TOKEN_PROCESS_ID
+export const RANDAO_STAKING_PROCESS_ID: string = "EIQJoqVWonlxsEe8xGpQZhh54wrmgE3q0tAsVIhKYQU"
+export const RANDAO_PROFILE_PROCESS_ID: string = RANDAO_STAKING_PROCESS_ID
 
-export const STAKING_PROCESS_ID: string = RNG_TOKEN_PROCESS_ID
-export const STAKING_TOKEN_PROCESS_ID: string = "5ZR9uegKoEhE9fJMbs-MvWLIztMNCVxgpzfeBVE3vqI"
+export const STAKING_PROCESS_ID: string = "EIQJoqVWonlxsEe8xGpQZhh54wrmgE3q0tAsVIhKYQU"
+export const STAKING_TOKEN_PROCESS_ID: string = RNG_TOKEN_PROCESS_ID
 
 export const NFT_SALE_PROCESS_ID: string = "ewO-sg8QM8xK_yM_ERzvbOZ4DCbTGoBK51uZnc3MENw"
 export const ARCAO_TEST_TOKEN_PROCESS_ID: string = STAKING_TOKEN_PROCESS_ID
