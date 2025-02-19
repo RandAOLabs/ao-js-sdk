@@ -1,30 +1,53 @@
+import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
+import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
 import { ProviderStakingClient } from "src/clients/randao/provider-staking/ProviderStakingClient";
-import { StakingClient } from "src/clients/staking";
 import { ProviderDetails } from "src/clients/randao/provider-profile";
 import { StakeWithDetailsError, GetStakeError, ProviderUnstakeError } from "src/clients/randao/provider-staking/ProviderStakingError";
-import { error } from "console";
+import { UnstakeError } from "src/clients/staking/StakingClientError";
+import { BaseClient } from "src/core/ao/BaseClient";
+import { TokenClient } from "src/clients/token";
+import { Logger, LogLevel } from "src/utils";
 
-jest.mock("src/clients/staking/StakingClient");
+// Mock BaseClient methods
+jest.spyOn(BaseClient.prototype, 'message').mockResolvedValue("test-message-id");
+const messageResult: MessageResult = {
+    Output: undefined,
+    Messages: [{ ID: "test-message-id", Data: "200: Success", Tags: [] }],
+    Spawns: []
+};
+jest.spyOn(BaseClient.prototype, 'result').mockResolvedValue(messageResult);
+const dryRunResult: DryRunResult = {
+    Output: undefined,
+    Messages: [{ Data: JSON.stringify({ providerId: "test-provider", stake: "1000" }), Tags: [] }],
+    Spawns: []
+};
+jest.spyOn(BaseClient.prototype, 'dryrun').mockResolvedValue(dryRunResult);
+jest.spyOn(BaseClient.prototype, 'messageResult').mockResolvedValue(messageResult);
+
+// Mock TokenClient
+jest.mock("src/clients/token/TokenClient", () => {
+    return {
+        TokenClient: jest.fn().mockImplementation(() => ({
+            transfer: jest.fn().mockResolvedValue(true)
+        }))
+    };
+});
 
 describe("ProviderStakingClient", () => {
     let client: ProviderStakingClient;
-    const mockStake = jest.fn();
-    const mockUnstake = jest.fn();
-    const mockDryrun = jest.fn();
-    const mockGetFirstMessageDataJson = jest.fn();
-
+    let mockTokenClient: jest.Mocked<TokenClient>;
+    Logger.setLogLevel(LogLevel.DEBUG)
     beforeEach(() => {
         jest.clearAllMocks();
 
-        // Mock StakingClient methods
-        (StakingClient as jest.Mock).mockImplementation(() => ({
-            stake: mockStake,
-            unstake: mockUnstake,
-            dryrun: mockDryrun,
-            getFirstMessageDataJson: mockGetFirstMessageDataJson
-        }));
-
         client = ProviderStakingClient.autoConfiguration();
+        
+        mockTokenClient = {
+            transfer: jest.fn().mockResolvedValue(true),
+        } as unknown as jest.Mocked<TokenClient>;
+
+        // Inject the mocked tokenClient
+        (client as any).tokenClient = mockTokenClient;
     });
 
     describe("stakeWithDetails", () => {
@@ -36,19 +59,20 @@ describe("ProviderStakingClient", () => {
         };
 
         it("should stake with provider details successfully", async () => {
-            mockStake.mockResolvedValue(true);
-
             const result = await client.stakeWithDetails(quantity, providerDetails);
             expect(result).toBe(true);
-            expect(mockStake).toHaveBeenCalledWith(quantity, [{
-                name: "ProviderDetails",
-                value: JSON.stringify(providerDetails)
-            }]);
+            expect(mockTokenClient.transfer).toHaveBeenCalledWith(
+                expect.any(String),
+                quantity,
+                expect.arrayContaining([
+                    { name: "Stake", value: "true" },
+                    { name: "ProviderDetails", value: JSON.stringify(providerDetails) }
+                ])
+            );
         });
 
         it("should handle staking errors", async () => {
-            const error = new Error("Stake failed");
-            mockStake.mockRejectedValue(error);
+            mockTokenClient.transfer.mockRejectedValueOnce(new Error("Transfer failed"));
 
             await expect(client.stakeWithDetails(quantity, providerDetails))
                 .rejects.toThrow(StakeWithDetailsError);
@@ -60,19 +84,23 @@ describe("ProviderStakingClient", () => {
         const mockStakeInfo = { amount: "1000", timestamp: 123456789 };
 
         it("should get stake info successfully", async () => {
-            mockDryrun.mockResolvedValue({});
-            mockGetFirstMessageDataJson.mockReturnValue(mockStakeInfo);
+            const customDryRunResult: DryRunResult = {
+                Output: undefined,
+                Messages: [{ Data: JSON.stringify(mockStakeInfo), Tags: [] }],
+                Spawns: []
+            };
+            jest.spyOn(BaseClient.prototype, 'dryrun').mockResolvedValueOnce(customDryRunResult);
 
             const result = await client.getStake(providerId);
             expect(result).toEqual(mockStakeInfo);
-            expect(mockDryrun).toHaveBeenCalledWith(
+            expect(BaseClient.prototype.dryrun).toHaveBeenCalledWith(
                 JSON.stringify({ providerId }),
                 [{ name: "Action", value: "Get-Provider-Stake" }]
             );
         });
 
         it("should handle get stake errors", async () => {
-            mockDryrun.mockRejectedValue(new GetStakeError("id", new Error("Failed to get stake")));
+            jest.spyOn(BaseClient.prototype, 'dryrun').mockRejectedValueOnce(new Error("Failed to get stake"));
 
             await expect(client.getStake(providerId))
                 .rejects.toThrow(GetStakeError);
@@ -83,14 +111,16 @@ describe("ProviderStakingClient", () => {
         const providerId = "test-provider-id";
 
         it("should unstake successfully", async () => {
-            mockUnstake.mockResolvedValue(true);
-
             const result = await client.unstake(providerId);
             expect(result).toBe(true);
+            expect(BaseClient.prototype.messageResult).toHaveBeenCalledWith(
+                JSON.stringify({ providerId }),
+                [{ name: "Action", value: "Unstake" }]
+            );
         });
 
         it("should handle unstake errors", async () => {
-            mockUnstake.mockRejectedValue(new ProviderUnstakeError(new Error()));
+            jest.spyOn(BaseClient.prototype, 'messageResult').mockRejectedValueOnce(new Error("Failed to unstake"));
 
             await expect(client.unstake(providerId))
                 .rejects.toThrow(ProviderUnstakeError);

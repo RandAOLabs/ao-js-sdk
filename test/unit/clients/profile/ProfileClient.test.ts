@@ -1,6 +1,6 @@
 import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
 import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
-import { ProfileClient, AsyncInitializationRequiredError } from "src";
+import { ProfileClient } from "src";
 import { BaseClient } from "src/core/ao/BaseClient";
 
 

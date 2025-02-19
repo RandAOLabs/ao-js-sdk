@@ -12,24 +12,27 @@ describe("ProviderStaking Integration Tests", () => {
         providerId = await client.getCallingWalletAddress();
     });
 
-    // it("should stake without provider details", async () => {
-    //     const stakeAmount = PROVIDER_MINIMUM_STAKE;
-    //     const result = await client.stakeWithDetails(stakeAmount);
-    //     expect(result).toBe(true);
-    //     await sleep(10)
-    // });
+    it("should stake without provider details", async () => {
+        const stakeAmount = PROVIDER_MINIMUM_STAKE;
+        const result = await client.stakeWithDetails(stakeAmount);
+        expect(result).toBe(true);
+        await sleep(10)
+    });
 
-    // it("should get stake and verify amount", async () => {
+    it("should get stake and verify amount", async () => {
 
-    //     const stakeInfo = await client.getStake(providerId);
-    //     Logger.debug(stakeInfo.amount)
-    //     Logger.debug(typeof (stakeInfo.amount))
-    //     expect(stakeInfo.amount).toBeGreaterThan(0);
+        const stakeInfo = await client.getStake(providerId);
+        Logger.debug("----------------")
+        Logger.debug(stakeInfo)
+        Logger.debug(stakeInfo.provider_id)
+        Logger.debug(stakeInfo.amount)
+        Logger.debug(typeof (stakeInfo.amount))
+        expect(stakeInfo.amount).toBeGreaterThan(0);
 
-    // });
+    });
 
-    // it("should unstake successfully", async () => {
-    //     const result = await client.unstake(providerId);
-    //     expect(result).toBe(true);
-    // });
+//     it("should unstake successfully", async () => {
+//         const result = await client.unstake(providerId);
+//         expect(result).toBe(true);
+//     });
 });
