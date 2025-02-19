@@ -1,5 +1,5 @@
 import { message, result, results, createDataItemSigner, dryrun } from '@permaweb/aoconnect';
-import { MessageError, Logger, SortOrder, ResultsError, ResultError, DryRunError, SyncBaseClient } from 'src';
+import { MessageError, Logger, SortOrder, ResultsError, ResultError, DryRunError, SyncInitClient } from 'src';
 import { BaseClient } from 'src/core/ao/BaseClient';
 
 
@@ -27,7 +27,7 @@ describe("BaseClient Error Handling", () => {
     // Setting up mocks and BaseClient instance before each test
     beforeEach(() => {
         (createDataItemSigner as jest.Mock).mockReturnValue("mockSigner");
-        client = SyncBaseClient.autoConfiguration();
+        client = SyncInitClient.autoConfiguration();
     });
 
     // Reset mocks after each test

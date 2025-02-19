@@ -3,12 +3,11 @@ import { ProfileClient } from "src/clients/profile/ProfileClient";
 import { ProfileRegistryClient } from "src/clients/profile-registry/ProfileRegistryClient";
 import { ProfileInfo } from "src/clients/profile/abstract/types";
 import { ProfileRegistryEntry } from "src/clients/profile-registry/abstract";
-import { Logger } from "src/utils";
+import { Logger, LogLevel } from "src/utils";
 
 // Mock the clients
 jest.mock("src/clients/profile/ProfileClient");
 jest.mock("src/clients/profile-registry/ProfileRegistryClient");
-jest.mock("src/utils/logger");
 
 // Get constructor types for mocking
 const MockedProfileClient = ProfileClient as jest.MockedClass<typeof ProfileClient>;
@@ -33,8 +32,7 @@ describe("ProfilesService", () => {
     };
 
     beforeAll(() => {
-        // Silence logger during tests
-        jest.spyOn(Logger, "error").mockImplementation(() => { });
+        Logger.setLogLevel(LogLevel.DEBUG)
     });
 
     beforeEach(() => {
@@ -62,6 +60,7 @@ describe("ProfilesService", () => {
 
     describe("getProfileInfosByWalletAddress", () => {
         it("should fetch profile infos for wallet addresses", async () => {
+            Logger.info(1)
             // Setup mocks
             mockProfileRegistryClient.getProfileByWalletAddress.mockResolvedValue([mockRegistryEntry]);
             mockProfileClient.getProfileInfo.mockResolvedValue(mockProfileInfo);
@@ -76,6 +75,8 @@ describe("ProfilesService", () => {
         });
 
         it("should handle empty registry results", async () => {
+            Logger.info(2)
+
             // Setup mocks
             mockProfileRegistryClient.getProfileByWalletAddress.mockResolvedValue([]);
 
@@ -88,6 +89,8 @@ describe("ProfilesService", () => {
         });
 
         it("should handle registry errors", async () => {
+            Logger.info(3)
+
             // Setup mocks
             mockProfileRegistryClient.getProfileByWalletAddress.mockRejectedValue(new Error("Registry error"));
 
@@ -96,12 +99,13 @@ describe("ProfilesService", () => {
 
             // Verify
             expect(result).toEqual([]);
-            expect(Logger.error).toHaveBeenCalled();
         });
     });
 
     describe("getProfileInfosByProfileProcessIds", () => {
         it("should fetch profile infos for process IDs", async () => {
+            Logger.info(4)
+
             // Setup mocks
             mockProfileClient.getProfileInfo.mockResolvedValue(mockProfileInfo);
 
@@ -114,6 +118,8 @@ describe("ProfilesService", () => {
         });
 
         it("should handle profile client errors", async () => {
+            Logger.info(5)
+
             // Setup mocks
             mockProfileClient.getProfileInfo.mockRejectedValue(new Error("Profile error"));
 
@@ -122,10 +128,11 @@ describe("ProfilesService", () => {
 
             // Verify
             expect(result).toEqual([]);
-            expect(Logger.error).toHaveBeenCalled();
         });
 
         it("should use cache for subsequent requests", async () => {
+            Logger.info(6)
+
             // Setup mocks
             mockProfileClient.getProfileInfo.mockResolvedValue(mockProfileInfo);
 

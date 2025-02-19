@@ -4,7 +4,7 @@ export interface ProviderStakeInfo {
     /** Status of the stake (active, unstaking) */
     status: string;
     /** Amount staked */
-    amount: BigInteger;
+    amount: string;
     /** Token ID */
     token: string;
     /** Provider ID */

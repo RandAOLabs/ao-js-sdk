@@ -33,7 +33,7 @@ export class StakingClient extends BaseClient implements IStakingClient {
     /* Constructors */
 
     /* Interface Staking Functions */
-    async stake(quantity: string, additionaForwardedlTags?: Tags): Promise<boolean> {
+    public async stake(quantity: string, additionaForwardedlTags?: Tags): Promise<boolean> {
         try {
             const tags: Tags = [
                 { name: "Stake", value: "true" }
@@ -54,7 +54,7 @@ export class StakingClient extends BaseClient implements IStakingClient {
         }
     }
 
-    async unstake(data: string): Promise<boolean> {
+    public async unstake(data: string): Promise<boolean> {
         try {
             const tags: Tags = [
                 { name: "Action", value: "Unstake" }

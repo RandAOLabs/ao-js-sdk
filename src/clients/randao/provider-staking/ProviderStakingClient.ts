@@ -12,7 +12,7 @@ export class ProviderStakingClient extends StakingClient implements IProviderSta
         return new ProviderStakingClient(getProviderStakingClientAutoConfiguration());
     }
 
-    async stakeWithDetails(quantity: string, providerDetails?: ProviderDetails): Promise<boolean> {
+    public async stakeWithDetails(quantity: string, providerDetails?: ProviderDetails): Promise<boolean> {
         try {
 
             const additionaForwardedlTags = providerDetails
@@ -21,22 +21,25 @@ export class ProviderStakingClient extends StakingClient implements IProviderSta
                     value: JSON.stringify(providerDetails)
                 }]
                 : undefined
-            super.stake(quantity, additionaForwardedlTags)
-            return true;
+            const success = await super.stake(quantity, additionaForwardedlTags);
+            return success
         } catch (error: any) {
             Logger.error(`Error staking with provider details ${quantity} tokens: ${error.message}`);
             throw new StakeWithDetailsError(error, providerDetails);
         }
     }
 
-    async getStake(providerId: string): Promise<ProviderStakeInfo> {
+    public async getStake(providerId: string): Promise<ProviderStakeInfo> {
         try {
             const tags: Tags = [
                 { name: "Action", value: "Get-Provider-Stake" }
             ];
             const requestData = JSON.stringify({ providerId });
             const result = await this.dryrun(requestData, tags);
-            const stake = this.getFirstMessageDataJson<ProviderStakeInfo>(result);
+            Logger.debug(result)
+            const stakeStringJson = this.getFirstMessageDataString(result);
+            const stake: ProviderStakeInfo = JSON.parse(stakeStringJson)
+            
             return stake;
         } catch (error: any) {
             Logger.error(`Error getting stake for provider ${providerId}: ${error.message}`);
@@ -44,15 +47,17 @@ export class ProviderStakingClient extends StakingClient implements IProviderSta
         }
     }
 
-    async unstake(providerId: string): Promise<boolean> {
+    /** @Override  */
+    public async unstake(providerId: string): Promise<boolean> {
         try {
             const tags: Tags = [
                 { name: "Action", value: "Unstake" }
-            ];;
+            ];
             const data = JSON.stringify({ providerId })
-            return super.unstake(data)
+            const result = await super.unstake(data)
+            return result
         } catch (error: any) {
-            Logger.error(`Error unstaking for: ${error.message}`);
+            Logger.error(`Provider Error unstaking for: ${error.message}`);
             throw new ProviderUnstakeError(error);
         }
     }

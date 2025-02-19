@@ -174,7 +174,8 @@ export class BaseClient extends IBaseClient {
                 throw new MessageOutOfBoundsError(n, result.Messages.length);
             }
             const data = result.Messages[n].Data;
-            return JSON.parse(data) as T;
+            const parsedObject = JSON.parse(data) as T;
+            return parsedObject;
         } catch (error) {
             throw new JsonParsingError(`Invalid JSON in message data at index ${n}: ${result.Messages[n]?.Data}`, error as Error);
         }

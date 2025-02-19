@@ -45,6 +45,10 @@ export class ProviderProfileClient extends SyncInitDryRunCachingClient implement
         }
     }
 
+    /** 
+     * @inheritdoc
+     * Known issues with return value on this method TODO fix
+     */
     async getProviderInfo(providerId?: string): Promise<ProviderInfo> {
         let providerWalletAddress;
         try {
@@ -54,9 +58,8 @@ export class ProviderProfileClient extends SyncInitDryRunCachingClient implement
             providerWalletAddress = providerId || await this.getCallingWalletAddress();
             const data = JSON.stringify({ providerId: providerWalletAddress });
             const result = await this.dryrun(data, tags);
-            Logger.debug(result)
             const dto = this.getFirstMessageDataJson<ProviderInfoDTO>(result);
-
+            Logger.debug(result)
             const info = this._parseProviderInfoDTO(dto);
             return info;
         } catch (error: any) {
