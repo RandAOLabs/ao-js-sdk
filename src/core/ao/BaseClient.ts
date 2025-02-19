@@ -7,10 +7,10 @@ import { DEFAULT_TAGS } from './constants';
 import { DryRunError, JsonParsingError, MessageError, MessageOutOfBoundsError, ResultError, ResultsError } from 'src/core/ao/BaseClientError';
 import { MessageResult } from '@permaweb/aoconnect/dist/lib/result';
 import { ResultsResponse } from '@permaweb/aoconnect/dist/lib/results';
-import { Logger, LogLevel } from 'src/utils/logger/logger';
 import { DryRunResult } from '@permaweb/aoconnect/dist/lib/dryrun';
 import { getArweave } from 'src/core/arweave/arweave';
 import { getEnvironment, Environment } from 'src/utils/environment';
+import { Logger, LogLevel } from 'src/utils';
 
 export class BaseClient extends IBaseClient {
     /* Fields */
@@ -174,7 +174,8 @@ export class BaseClient extends IBaseClient {
                 throw new MessageOutOfBoundsError(n, result.Messages.length);
             }
             const data = result.Messages[n].Data;
-            return JSON.parse(data) as T;
+            const parsedObject = JSON.parse(data) as T;
+            return parsedObject;
         } catch (error) {
             throw new JsonParsingError(`Invalid JSON in message data at index ${n}: ${result.Messages[n]?.Data}`, error as Error);
         }

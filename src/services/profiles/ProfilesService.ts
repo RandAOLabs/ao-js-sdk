@@ -20,7 +20,7 @@ export class ProfilesService implements IProfilesService {
     private static readonly retryOptions = {
         retries: MAX_RETRIES,
         onFailedAttempt: (error: { attemptNumber: number; retriesLeft: number; message: string }) => {
-            Logger.error(`Operation failed. Attempt ${error.attemptNumber}/${MAX_RETRIES + 1}. ${error.message}`);
+            Logger.warn(`Profile Retrieval failed. Attempt ${error.attemptNumber}/${MAX_RETRIES + 1}. ${error.message}`);
         }
     };
 

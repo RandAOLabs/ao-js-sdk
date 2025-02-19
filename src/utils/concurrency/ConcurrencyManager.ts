@@ -10,11 +10,11 @@ export interface RetryOptions {
 // Convert our options to p-retry options
 function toPRetryOptions(options: RetryOptions): PRetryOptions {
     return {
-        // @ts-ignore - p-retry's types are incorrect, it does accept retries
+        // @ts-ignore - p-retry's types are incorrect, it does accept retries // Double Verified
         retries: options.retries ?? 3,
         onFailedAttempt: (error: FailedAttemptError) => {
             const message = `Operation failed. Attempt ${error.attemptNumber}/${(options.retries ?? 3) + 1}. ${error.message}`;
-            Logger.error(message);
+            Logger.warn(message);
 
             if (options.onFailedAttempt) {
                 options.onFailedAttempt({
@@ -63,7 +63,7 @@ export class ConcurrencyManager {
                 )
             );
         } catch (error: any) {
-            Logger.error(`Operation failed after all retries: ${error.message}`);
+            Logger.warn(`Operation failed after all retries: ${error.message}`);
             return null;
         }
     }
