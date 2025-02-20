@@ -1,9 +1,8 @@
 import { message, result, results, createDataItemSigner, dryrun } from '@permaweb/aoconnect';
 import { IBaseClient } from 'src/core/ao/abstract/IBaseClient';
-import { SortOrder, Tags } from 'src/core/ao/abstract/types';
 import { BaseClientConfig } from 'src/core/ao/abstract/BaseClientConfig';
 import { mergeLists } from 'src/utils/lists';
-import { DEFAULT_TAGS } from './constants';
+import { DEFAULT_TAGS } from 'src/core/ao/constants';
 import { DryRunError, JsonParsingError, MessageError, MessageOutOfBoundsError, ResultError, ResultsError } from 'src/core/ao/BaseClientError';
 import { MessageResult } from '@permaweb/aoconnect/dist/lib/result';
 import { ResultsResponse } from '@permaweb/aoconnect/dist/lib/results';
@@ -11,6 +10,8 @@ import { DryRunResult } from '@permaweb/aoconnect/dist/lib/dryrun';
 import { getArweave } from 'src/core/arweave/arweave';
 import { getEnvironment, Environment } from 'src/utils/environment';
 import { Logger, LogLevel } from 'src/utils';
+import { Tags } from 'src/core/common';
+import { SortOrder } from 'src/core/ao/abstract';
 
 export class BaseClient extends IBaseClient {
     /* Fields */

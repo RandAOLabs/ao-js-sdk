@@ -48,21 +48,20 @@ export class MessagesService extends BaseArweaveDataService implements IMessages
             // Always include Data-Protocol:ao tag
             const requiredTags = [{ name: "Data-Protocol", value: "ao" }];
 
-            // Add recipient tag if specified
-            if (params.recipient) {
-                requiredTags.push({ name: "Recipient", value: params.recipient });
-            }
-
             // Combine with user provided tags if any
             const allTags = params.tags
                 ? [...requiredTags, ...params.tags]
                 : requiredTags;
-
             const builder = new ArweaveGQLBuilder()
                 .withAllFields()
                 .sortBy(ArweaveGQLSortOrder.HEIGHT_DESC)
                 .limit(params.limit || 100)
                 .tags(allTags);
+
+                            // Add recipient tag if specified
+            if (params.recipient) {
+                builder.recipient(params.recipient)
+            }
 
             if (params.cursor) {
                 builder.after(params.cursor);
@@ -74,7 +73,7 @@ export class MessagesService extends BaseArweaveDataService implements IMessages
 
             const response = await this.query(builder);
             const edges = response.data.transactions.edges;
-
+            
             return {
                 messages: edges.map(edge => edge.node),
                 cursor: edges[edges.length - 1]?.cursor || "",
@@ -96,7 +95,7 @@ export class MessagesService extends BaseArweaveDataService implements IMessages
     public async getLatestMessagesReceivedBy(params: GetLatestMessagesByRecipientParams): Promise<GetLatestMessagesResponse> {
         return this.getLatestMessages({
             ...params,
-            recipient: params.id
+            recipient: params.recipientId
         });
     }
 
@@ -114,7 +113,7 @@ export class MessagesService extends BaseArweaveDataService implements IMessages
     public async getAllMessagesReceivedBy(params: GetAllMessagesByRecipientParams): Promise<ArweaveTransaction[]> {
         return this.getAllMessagesPaginated({
             ...params,
-            recipient: params.id
+            recipient: params.recipientId
         });
     }
 }

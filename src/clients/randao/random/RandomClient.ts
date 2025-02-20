@@ -5,7 +5,7 @@ import { getRandomClientAutoConfiguration } from "src/clients/randao/random/Rand
 import { PostVDFChallengeError, ProviderAvailableValuesError, UpdateProviderAvailableValuesError, OpenRandomRequestsError, RandomRequestsError, CreateRequestError, PostVDFOutputAndProofError } from "src/clients/randao/random/RandomClientError";
 import { RandomProcessError } from "src/clients/randao/random/RandomProcessError";
 import { TokenClient, TokenClientConfig } from "src/clients/token";
-import { ASyncInitClient, Tags } from "src/core/ao";
+import { ASyncInitClient, Tags } from "src/core";
 import { Logger } from "src/utils";
 
 /**

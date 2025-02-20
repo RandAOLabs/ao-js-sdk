@@ -1,9 +1,9 @@
 // src/IBaseClient.ts
 
 import { ResultsResponse } from "@permaweb/aoconnect/dist/lib/results";
-import { Tags } from "src/core/ao/abstract/types";
 import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
 import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
+import { Tags } from "src/core/common";
 
 export abstract class IBaseClient {
     /**

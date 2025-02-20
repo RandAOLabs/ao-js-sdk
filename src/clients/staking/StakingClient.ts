@@ -1,11 +1,9 @@
 import { IStakingClient, StakingClientConfig } from 'src/clients/staking/abstract';
-import { getProviderStakingClientAutoConfiguration } from 'src/clients/randao/provider-staking/ProviderStakingClientAutoConfiguration';
 import { StakeError, UnstakeError } from 'src/clients/staking/StakingClientError';
 import { TokenClient, TokenClientConfig } from 'src/clients/token';
-import { SyncInitClient } from 'src/core/ao';
-import { Tags } from 'src/core/ao/abstract/types';
 import { Logger } from 'src/utils';
 import { BaseClient } from 'src/core/ao/BaseClient';
+import { Tags } from 'src/core/common/types';
 
 /**
  * @category Clients

@@ -1,4 +1,4 @@
-import { ICacheConfig } from './ICacheConfig';
+import { ICacheConfig } from 'src/utils/cache/abstract/ICacheConfig';
 
 /**
  * Generic interface for cache implementations.

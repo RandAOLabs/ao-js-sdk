@@ -62,7 +62,7 @@ describe('MessagesService Integration Tests', () => {
 
         if (testAddress) {
             const result = await client.getAllMessagesReceivedBy({
-                id: testAddress
+                recipientId: testAddress
             });
 
             // Log the result for inspection

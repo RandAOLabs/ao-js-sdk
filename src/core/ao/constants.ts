@@ -1,4 +1,4 @@
-import { Tags } from './abstract/types';
+import { Tags } from "../common";
 
 /**
  * Default tags that will be added to all AO messages
