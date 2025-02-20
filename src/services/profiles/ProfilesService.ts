@@ -2,7 +2,7 @@ import { ProfileClient } from "src/clients/profile/ProfileClient";
 import { ProfileInfo } from "src/clients/profile/abstract/types";
 import { ProfileRegistryClient } from "src/clients/profile-registry/ProfileRegistryClient";
 import { ProfileRegistryEntry } from "src/clients/profile-registry/abstract";
-import { IProfilesService } from "./abstract/IProfilesService";
+import { IProfilesService } from "src/services/profiles/abstract/IProfilesService";
 import { Logger } from "src/utils";
 import { getBaseClientAutoConfiguration } from "src/core/ao/BaseClientAutoConfiguration";
 import { ICache, newCache } from "src/utils/cache";

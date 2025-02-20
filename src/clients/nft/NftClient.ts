@@ -3,7 +3,7 @@ import { NFT_QUANTITY } from "src/clients/nft/constants";
 import { getNftClientAutoConfiguration } from "src/clients/nft/NftClientAutoConfiguration";
 import { NftTransferError } from "src/clients/nft/NftClientError";
 import { TokenClient, TokenClientConfig } from "src/clients/token";
-import { Tags } from "src/core/ao/index";
+import { Tags } from "src/core";
 
 import { Logger } from "src/utils/index";
 

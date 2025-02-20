@@ -3,7 +3,7 @@ import { ITokenClient, IGrantToken } from "src/clients/token/abstract";
 import { TRANSFER_SUCCESS_MESSAGE } from "src/clients/token/constants";
 import { getTokenClientAutoConfiguration } from "src/clients/token/TokenClientAutoConfiguration";
 import { BalanceError, BalancesError, TransferError, GetInfoError, MintError, GrantError } from "src/clients/token/TokenClientError";
-import { Tags, SyncInitClient } from "src/core/ao/index";
+import { SyncInitClient, Tags } from "src/core";
 import { Logger } from "src/utils/index"
 
 /**
