@@ -1,6 +1,6 @@
 import { LRUCache } from 'lru-cache';
-import { ICache } from './abstract/ICache';
-import { ICacheConfig } from './abstract/ICacheConfig';
+import { ICache } from 'src/utils/cache/abstract/ICache';
+import { ICacheConfig } from 'src/utils/cache/abstract/ICacheConfig';
 
 
 export class LRUCacheWrapper<K extends {} = string, V extends {} = any> implements ICache<K, V> {

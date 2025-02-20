@@ -1,10 +1,10 @@
-import { IARIOService } from './abstract/IARIOService';
+import { IARIOService } from 'src/services/ario/abstract/IARIOService';
 import { ANTClient } from 'src/clients/ario/ant';
 import { ARNSClient, InvalidDomainError } from 'src/clients/ario/arns';
 import { ICache, ICacheConfig, newCache } from 'src/utils/cache';
-import { DOMAIN_SEPARATOR, ARN_ROOT_NAME } from './constants';
+import { DOMAIN_SEPARATOR, ARN_ROOT_NAME } from 'src/services/ario/constants';
 import { Logger } from 'src/utils';
-import { Domain } from './domains';
+import { Domain } from 'src/services/ario/domains';
 import { ANTRecordNotFoundError, ARNSRecordNotFoundError } from 'src/services/ario/ARIOError';
 
 /**

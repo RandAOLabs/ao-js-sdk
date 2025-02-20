@@ -1,8 +1,8 @@
 import { IProfileClient, ProfileInfo } from "src/clients/profile/abstract";
 import { getProfileClientAutoConfiguration } from "src/clients/profile/ProfileClientAutoConfiguration";
 import { GetProfileError, ProfileTransferError } from "src/clients/profile/ProfileClientError";
+import { Tags } from "src/core";
 import { AsyncInitDryRunCachingClient } from "src/core/ao/client-variants";
-import { Tags } from "src/core/ao/index";
 import { Logger } from "src/utils/index";
 
 /**

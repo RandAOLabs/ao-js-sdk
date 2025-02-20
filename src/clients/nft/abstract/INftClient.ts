@@ -1,5 +1,5 @@
 import { ITokenClient } from "src/clients/token";
-import { Tags } from "src/core/ao";
+import { Tags } from "src/core";
 
 export interface INftClient extends ITokenClient {
     /**

@@ -1,4 +1,4 @@
-import { Domain } from '../domains';
+import { Domain } from 'src/services/ario/domains';
 
 /**
  * Interface for ARIO (Arweave Resource Identifier Oracle) service operations.

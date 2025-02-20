@@ -22,11 +22,6 @@ describe("ProviderStaking Integration Tests", () => {
     it("should get stake and verify amount", async () => {
 
         const stakeInfo = await client.getStake(providerId);
-        Logger.debug("----------------")
-        Logger.debug(stakeInfo)
-        Logger.debug(stakeInfo.provider_id)
-        Logger.debug(stakeInfo.amount)
-        Logger.debug(typeof (stakeInfo.amount))
         expect(stakeInfo.amount).toBeGreaterThan(0);
 
     });
