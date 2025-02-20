@@ -38,11 +38,28 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Provider Staking Client Test",
+            "name": "Provider Staking Client",
             "program": "${workspaceFolder}/node_modules/jest/bin/jest",
             "args": [
                 "--runInBand",
                 "--testPathPattern=test/integration/clients/randao/provider-staking/ProviderStaking.test.ts",
+                "--config=test/jest.config.js"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "disableOptimisticBPs": true,
+            "windows": {
+                "program": "${workspaceFolder}/node_modules/jest/bin/jest"
+            }
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Credit Notice Unit",
+            "program": "${workspaceFolder}/node_modules/jest/bin/jest",
+            "args": [
+                "--runInBand",
+                "--testPathPattern=test/unit/services/credit-notices",
                 "--config=test/jest.config.js"
             ],
             "console": "integratedTerminal",

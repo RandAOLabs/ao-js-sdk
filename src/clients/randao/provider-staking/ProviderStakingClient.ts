@@ -39,7 +39,6 @@ export class ProviderStakingClient extends StakingClient implements IProviderSta
             ];
             const requestData = JSON.stringify({ providerId });
             const result = await this.dryrun(requestData, tags);
-            Logger.debug(result)
             const stakeStringJson = this.getFirstMessageDataString(result);
             const stake: ProviderStakeInfo = JSON.parse(stakeStringJson)
             

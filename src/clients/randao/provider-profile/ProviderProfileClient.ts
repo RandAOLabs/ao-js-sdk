@@ -59,7 +59,6 @@ export class ProviderProfileClient extends SyncInitDryRunCachingClient implement
             const data = JSON.stringify({ providerId: providerWalletAddress });
             const result = await this.dryrun(data, tags);
             const dto = this.getFirstMessageDataJson<ProviderInfoDTO>(result);
-            Logger.debug(result)
             const info = this._parseProviderInfoDTO(dto);
             return info;
         } catch (error: any) {

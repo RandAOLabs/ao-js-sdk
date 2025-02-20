@@ -1,3 +1,4 @@
+import { Tags } from "src/core";
 import { ArweaveTransaction } from "src/core/arweave/abstract/types";
 
 /**
@@ -17,10 +18,7 @@ interface BaseMessageQueryParams {
     /**
      * Tags to filter messages by
      */
-    tags?: {
-        name: string;
-        value: string;
-    }[];
+    tags?: Tags;
 }
 
 /**
@@ -60,7 +58,7 @@ export interface GetLatestMessagesByRecipientParams extends BaseMessageQueryPara
     /**
      * The recipient's address
      */
-    id: string;
+    recipientId: string;
 
     /**
      * Optional sender address to filter by

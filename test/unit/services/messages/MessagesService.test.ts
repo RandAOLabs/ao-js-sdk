@@ -72,7 +72,7 @@ describe("MessagesService", () => {
 
     describe("getLatestMessagesReceivedBy", () => {
         it("should return messages received by an address", async () => {
-            const result = await client.getLatestMessagesReceivedBy({ id: "recipient" });
+            const result = await client.getLatestMessagesReceivedBy({ recipientId: "recipient" });
             expect(result).toBeDefined();
             expect(result.messages).toBeDefined();
             // Get the mock instance and verify the GraphQL query
@@ -80,8 +80,7 @@ describe("MessagesService", () => {
             const mockArweave = getArweave();
             const postCall = mockArweave.api.post.mock.calls[0];
             expect(postCall[0]).toBe('/graphql');
-            expect(postCall[1].query).toContain('Recipient');
-            expect(postCall[1].query).toContain('recipient');
+            expect(postCall[1].query).toContain('recipients');
         });
     });
 
@@ -109,7 +108,7 @@ describe("MessagesService", () => {
 
     describe("getAllMessagesReceivedBy", () => {
         it("should return all messages received by an address", async () => {
-            const result = await client.getAllMessagesReceivedBy({ id: "recipient" });
+            const result = await client.getAllMessagesReceivedBy({ recipientId: "recipient" });
             expect(result).toBeDefined();
             expect(Array.isArray(result)).toBe(true);
             // Get the mock instance and verify the GraphQL query
@@ -117,8 +116,7 @@ describe("MessagesService", () => {
             const mockArweave = getArweave();
             const postCall = mockArweave.api.post.mock.calls[0];
             expect(postCall[0]).toBe('/graphql');
-            expect(postCall[1].query).toContain('Recipient');
-            expect(postCall[1].query).toContain('recipient');
+            expect(postCall[1].query).toContain('recipients');
         });
     });
 });

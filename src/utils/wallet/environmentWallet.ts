@@ -2,7 +2,7 @@ import { JWKInterface } from "arweave/node/lib/wallet";
 import { Environment, EnvironmentVariableError, getEnvironment, getEnvironmentVariable } from "src/utils/environment/index"
 import { BrowserWalletError, FileReadError } from "src/utils/wallet/WalletError";
 import { Logger } from "src/utils/logger/logger";
-import { DEFAULT_WALLET_PATH } from "./constants";
+import { DEFAULT_WALLET_PATH } from "src/utils/wallet/constants";
 
 /**
  * @category Utility
