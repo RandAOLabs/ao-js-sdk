@@ -1,4 +1,5 @@
 import { ProfileClient, ProfileInfo } from "src/clients";
+import { Logger, LogLevel } from "src/utils";
 
 
 describe("ProfileClient Integration Tests", () => {

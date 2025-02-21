@@ -6,7 +6,7 @@ import { SyncInitDryRunCachingClient } from "src/core/ao/client-variants";
 import { Logger } from "src/utils";
 
 /**
- * @category Clients
+ * @category RandAO
  */
 export class ProviderProfileClient extends SyncInitDryRunCachingClient implements IProviderProfileClient {
 
