@@ -1,4 +1,4 @@
-import { message, result, results, createDataItemSigner, dryrun } from '@permaweb/aoconnect';
+import { createDataItemSigner } from '@permaweb/aoconnect';
 import { IBaseClient } from 'src/core/ao/abstract/IBaseClient';
 import { BaseClientConfig } from 'src/core/ao/abstract/BaseClientConfig';
 import { mergeLists } from 'src/utils/lists';
@@ -12,13 +12,14 @@ import { getEnvironment, Environment } from 'src/utils/environment';
 import { Logger, LogLevel } from 'src/utils';
 import { Tags } from 'src/core/common';
 import { SortOrder } from 'src/core/ao/abstract';
+import { AO } from 'src/core/ao/ao';
 
 export class BaseClient extends IBaseClient {
     /* Fields */
     /** @protected */
     readonly baseConfig: BaseClientConfig;
     /** @protected */
-    readonly signer: ReturnType<typeof createDataItemSigner>;
+    readonly ao: AO;
     private useDryRunAsMessage: boolean = false;
     /* Fields */
     /* Constructors */
@@ -26,7 +27,7 @@ export class BaseClient extends IBaseClient {
         super()
         this.baseConfig = baseConfig;
         Logger.debug(baseConfig)
-        this.signer = createDataItemSigner(baseConfig.wallet);
+        this.ao = new AO(createDataItemSigner(baseConfig.wallet));
     }
     /* Constructors */
     /* Core AO Functions */
@@ -34,13 +35,12 @@ export class BaseClient extends IBaseClient {
     async message(data: string = '', tags: Tags = [], anchor?: string): Promise<string> {
         try {
             const mergedTags = mergeLists(DEFAULT_TAGS, tags, tag => tag.name);
-            return await message({
-                process: this.baseConfig.processId,
-                signer: this.signer,
+            return await this.ao.message(
+                this.baseConfig.processId,
                 data,
-                tags: mergedTags,
-                anchor,
-            });
+                mergedTags,
+                anchor
+            );
         } catch (error: any) {
             Logger.error(`Error sending message: ${error.message}`);
             throw new MessageError(error);
@@ -55,13 +55,13 @@ export class BaseClient extends IBaseClient {
         sort: SortOrder = SortOrder.ASCENDING
     ): Promise<ResultsResponse> {
         try {
-            return await results({
-                process: this.baseConfig.processId,
+            return await this.ao.results(
+                this.baseConfig.processId,
                 from,
                 to,
                 limit,
-                sort,
-            });
+                sort
+            );
         } catch (error: any) {
             Logger.error(`Error fetching results: ${error.message}`);
             throw new ResultsError(error);
@@ -71,10 +71,10 @@ export class BaseClient extends IBaseClient {
     /** @protected */
     async result(messageId: string): Promise<MessageResult> {
         try {
-            return await result({
-                process: this.baseConfig.processId,
-                message: messageId,
-            });
+            return await this.ao.result(
+                this.baseConfig.processId,
+                messageId
+            );
         } catch (error: any) {
             Logger.error(`Error fetching result: ${error.message}`);
             throw new ResultError(error);
@@ -94,15 +94,14 @@ export class BaseClient extends IBaseClient {
     protected async _dryrun(data: any = '', tags: Tags = [], anchor?: string, id?: string, owner?: string): Promise<DryRunResult> {
         try {
             const mergedTags = mergeLists(DEFAULT_TAGS, tags, tag => tag.name);
-            const result = await dryrun({
-                process: this.baseConfig.processId,
+            return await this.ao.dryrun(
+                this.baseConfig.processId,
                 data,
-                tags: mergedTags,
+                mergedTags,
                 anchor,
                 id,
-                owner,
-            });
-            return result
+                owner
+            );
         } catch (error: any) {
             Logger.error(`Error performing dry run: ${JSON.stringify(error.message)}`);
             throw new DryRunError(error);

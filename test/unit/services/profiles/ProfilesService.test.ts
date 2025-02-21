@@ -3,7 +3,6 @@ import { ProfileClient } from "src/clients/profile/ProfileClient";
 import { ProfileRegistryClient } from "src/clients/profile-registry/ProfileRegistryClient";
 import { ProfileInfo } from "src/clients/profile/abstract/types";
 import { ProfileRegistryEntry } from "src/clients/profile-registry/abstract";
-import { Logger, LogLevel } from "src/utils";
 
 // Mock the clients
 jest.mock("src/clients/profile/ProfileClient");

@@ -44,7 +44,7 @@ describe("ProfileClient Unit Tests", () => {
     let client: ProfileClient;
 
     beforeAll(async () => {
-        Logger.setLogLevel(LogLevel.DEBUG)
+        // Logger.setLogLevel(LogLevel.DEBUG)
         client = await ProfileClient.autoConfiguration();
     });
 
