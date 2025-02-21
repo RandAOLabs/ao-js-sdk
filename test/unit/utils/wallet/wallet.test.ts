@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { Environment, getEnvironment, getEnvironmentVariable } from 'src';
+import { Environment, getEnvironment, getEnvironmentVariable } from 'src/utils';
 import { getWallet } from 'src/utils/wallet/environmentWallet';
 
 jest.mock('src/utils/environment/environment');

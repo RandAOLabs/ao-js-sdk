@@ -25,6 +25,7 @@ export class BaseClient extends IBaseClient {
     public constructor(baseConfig: BaseClientConfig) {
         super()
         this.baseConfig = baseConfig;
+        Logger.debug(baseConfig)
         this.signer = createDataItemSigner(baseConfig.wallet);
     }
     /* Constructors */

@@ -1,5 +1,6 @@
 import fs from 'fs';
-import { getEnvironment, Environment, getEnvironmentVariable, FileReadError, BrowserWalletError } from 'src';
+import { FileReadError, BrowserWalletError } from 'src/utils';
+import { Environment, getEnvironment, getEnvironmentVariable } from 'src/utils/environment';
 import { getWallet } from 'src/utils/wallet/environmentWallet';
 
 jest.mock('src/utils/environment/environment');
