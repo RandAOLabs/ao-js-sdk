@@ -36,12 +36,12 @@ jest.mock("src/clients/token/TokenClient", () => {
 describe("ProviderStakingClient", () => {
     let client: ProviderStakingClient;
     let mockTokenClient: jest.Mocked<TokenClient>;
-    Logger.setLogLevel(LogLevel.DEBUG)
+    // Logger.setLogLevel(LogLevel.DEBUG)
     beforeEach(() => {
         jest.clearAllMocks();
 
         client = ProviderStakingClient.autoConfiguration();
-        
+
         mockTokenClient = {
             transfer: jest.fn().mockResolvedValue(true),
         } as unknown as jest.Mocked<TokenClient>;
