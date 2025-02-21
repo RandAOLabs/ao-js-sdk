@@ -3,10 +3,9 @@ import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
 import { ProviderStakingClient } from "src/clients/randao/provider-staking/ProviderStakingClient";
 import { ProviderDetails } from "src/clients/randao/provider-profile";
 import { StakeWithDetailsError, GetStakeError, ProviderUnstakeError } from "src/clients/randao/provider-staking/ProviderStakingError";
-import { UnstakeError } from "src/clients/staking/StakingClientError";
 import { BaseClient } from "src/core/ao/BaseClient";
-import { TokenClient } from "src/clients/token";
 import { Logger, LogLevel } from "src/utils";
+import { TokenClient } from "src/clients";
 
 // Mock BaseClient methods
 jest.spyOn(BaseClient.prototype, 'message').mockResolvedValue("test-message-id");
@@ -25,7 +24,7 @@ jest.spyOn(BaseClient.prototype, 'dryrun').mockResolvedValue(dryRunResult);
 jest.spyOn(BaseClient.prototype, 'messageResult').mockResolvedValue(messageResult);
 
 // Mock TokenClient
-jest.mock("src/clients/token/TokenClient", () => {
+jest.mock("src/clients/ao/token/TokenClient", () => {
     return {
         TokenClient: jest.fn().mockImplementation(() => ({
             transfer: jest.fn().mockResolvedValue(true)
@@ -36,6 +35,7 @@ jest.mock("src/clients/token/TokenClient", () => {
 describe("ProviderStakingClient", () => {
     let client: ProviderStakingClient;
     let mockTokenClient: jest.Mocked<TokenClient>;
+    Logger.setLogLevel(LogLevel.NONE)
     // Logger.setLogLevel(LogLevel.DEBUG)
     beforeEach(() => {
         jest.clearAllMocks();

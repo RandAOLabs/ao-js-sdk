@@ -1,12 +1,11 @@
+import { ProfileClient, ProfileInfo, ProfileRegistryClient, ProfileRegistryEntry } from "src/clients";
 import { ProfilesService } from "src/services/profiles";
-import { ProfileClient } from "src/clients/profile/ProfileClient";
-import { ProfileRegistryClient } from "src/clients/profile-registry/ProfileRegistryClient";
-import { ProfileInfo } from "src/clients/profile/abstract/types";
-import { ProfileRegistryEntry } from "src/clients/profile-registry/abstract";
+import { Logger, LogLevel } from "src/utils";
+
 
 // Mock the clients
-jest.mock("src/clients/profile/ProfileClient");
-jest.mock("src/clients/profile-registry/ProfileRegistryClient");
+jest.mock("src/clients/bazar/profile/ProfileClient");
+jest.mock("src/clients/bazar/profile-registry/ProfileRegistryClient");
 
 // Get constructor types for mocking
 const MockedProfileClient = ProfileClient as jest.MockedClass<typeof ProfileClient>;
@@ -31,6 +30,8 @@ describe("ProfilesService", () => {
     };
 
     beforeAll(() => {
+        Logger.setLogLevel(LogLevel.NONE)
+
         // Logger.setLogLevel(LogLevel.DEBUG)
     });
 

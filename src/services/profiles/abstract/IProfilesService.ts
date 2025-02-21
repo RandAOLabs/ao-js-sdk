@@ -1,4 +1,5 @@
-import { ProfileInfo } from "src/clients/profile/abstract/types";
+import { ProfileInfo } from "src/clients";
+
 
 /**
  * Interface for the Profiles service

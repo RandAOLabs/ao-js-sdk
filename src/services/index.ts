@@ -1,5 +1,5 @@
 /**
- * @categoryDescription Services
+ * @categoryDescription On-chain-data
  * Services provide data for our clients
  * @showCategories
  * @module

@@ -14,10 +14,15 @@
         "includeFolders": false
     },
     "categoryOrder": [
-        "Clients",
-        "Services",
+        "RandAO",
+        "ARIO",
+        "Bazar",
+        "ao-standards",
+        "Miscellaneous",
         "Utility",
         "Core",
+        "Utility",
+        "on-chain-data",
         "Other"
     ],
     "includeVersion": true,

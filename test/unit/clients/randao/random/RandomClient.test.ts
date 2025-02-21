@@ -24,7 +24,7 @@ const dryRunResult: DryRunResult = {
 }
 jest.spyOn(BaseClient.prototype, 'dryrun').mockResolvedValue(dryRunResult);
 jest.spyOn(BaseClient.prototype, 'messageResult').mockResolvedValue(messageResult);
-jest.mock("src/clients/token/index");
+jest.mock("src/clients/ao/token/index");
 
 describe("RandomClient Unit Test", () => {
     let client: RandomClient;

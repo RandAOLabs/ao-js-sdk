@@ -10,7 +10,7 @@ import CreditNoticeConverter from "src/services/credit-notices/CreditNoticeConve
 import { Tags } from "src/core";
 
 /**
- * @category Services
+ * @category On-chain-data
  */
 export class CreditNoticeService implements ICreditNoticeService {
     private readonly messagesService: MessagesService;

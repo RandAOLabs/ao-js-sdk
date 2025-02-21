@@ -16,7 +16,7 @@ import { ArweaveGQLSortOrder } from "src/core/arweave/gql/types";
 import { ArweaveTransaction } from "src/core/arweave/abstract/types";
 
 /**
- * @category Services
+ * @category On-chain-data
  */
 export class MessagesService extends BaseArweaveDataService implements IMessagesService {
     constructor() {
@@ -58,7 +58,7 @@ export class MessagesService extends BaseArweaveDataService implements IMessages
                 .limit(params.limit || 100)
                 .tags(allTags);
 
-                            // Add recipient tag if specified
+            // Add recipient tag if specified
             if (params.recipient) {
                 builder.recipient(params.recipient)
             }
@@ -73,7 +73,7 @@ export class MessagesService extends BaseArweaveDataService implements IMessages
 
             const response = await this.query(builder);
             const edges = response.data.transactions.edges;
-            
+
             return {
                 messages: edges.map(edge => edge.node),
                 cursor: edges[edges.length - 1]?.cursor || "",
