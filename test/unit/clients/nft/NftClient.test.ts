@@ -1,5 +1,5 @@
 import { NftClient, TokenClient } from "src";
-import { NFT_QUANTITY } from "src/clients/nft/constants";
+import { NFT_QUANTITY } from "src/clients/bazar/nft/constants";
 
 jest.mock('@permaweb/aoconnect', () => ({
     message: jest.fn(),

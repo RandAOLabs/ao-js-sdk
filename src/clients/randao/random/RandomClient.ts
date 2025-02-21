@@ -1,10 +1,10 @@
 import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
 import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
+import { TokenClient, TokenClientConfig } from "src/clients/ao";
 import { IRandomClient, RandomClientConfig, GetProviderAvailableValuesResponse, GetOpenRandomRequestsResponse, GetRandomRequestsResponse, ProviderActivity } from "src/clients/randao/random/abstract";
 import { getRandomClientAutoConfiguration } from "src/clients/randao/random/RandomClientAutoConfiguration";
 import { PostVDFChallengeError, ProviderAvailableValuesError, UpdateProviderAvailableValuesError, OpenRandomRequestsError, RandomRequestsError, CreateRequestError, PostVDFOutputAndProofError } from "src/clients/randao/random/RandomClientError";
 import { RandomProcessError } from "src/clients/randao/random/RandomProcessError";
-import { TokenClient, TokenClientConfig } from "src/clients/token";
 import { ASyncInitClient, Tags } from "src/core";
 import { Logger } from "src/utils";
 
@@ -25,8 +25,7 @@ export class RandomClient extends ASyncInitClient implements IRandomClient {
         super(randomConfig)
         const tokenConfig: TokenClientConfig = {
             processId: randomConfig.tokenProcessId,
-            wallet: randomConfig.wallet,
-            environment: randomConfig.environment
+            wallet: randomConfig.wallet
         }
         this.tokenClient = new TokenClient(tokenConfig)
     }

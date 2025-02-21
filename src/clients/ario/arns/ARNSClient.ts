@@ -8,7 +8,7 @@ import { Logger, LogLevel } from "src/utils";
 
 /**
  * Client for interacting with ARNS (Arweave Name Service) records.
- * @category Clients
+ * @category ARIO
  */
 export class ARNSClient extends SyncInitDryRunCachingClient implements IARNSClient {
     constructor() {

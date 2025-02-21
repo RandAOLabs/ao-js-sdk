@@ -16,7 +16,7 @@ jest.spyOn(BaseClient.prototype, 'dryrun').mockResolvedValue(mockDryRunResult);
 jest.spyOn(BaseClient.prototype, 'getCallingWalletAddress').mockResolvedValue("test-wallet");
 
 // Mock the getProfileRegistryClientAutoConfiguration
-jest.mock("src/clients/profile-registry/ProfileRegistryClientAutoConfiguration", () => ({
+jest.mock("src/clients/bazar/profile-registry/ProfileRegistryClientAutoConfiguration", () => ({
     getProfileRegistryClientAutoConfiguration: () => ({
         processId: "test-process-id",
         wallet: getWalletLazy(),

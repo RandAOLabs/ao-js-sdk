@@ -1,3 +1,9 @@
+/**
+ * @categoryDescription ARIO
+ * ARIO integrations
+ * @showCategories
+ * @module
+ */
 // Export ANT client types and interfaces
 export * from "src/clients/ario/ant/abstract";
 export * from "src/clients/ario/ant/constants";

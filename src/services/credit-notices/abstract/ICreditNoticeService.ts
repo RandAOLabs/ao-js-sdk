@@ -3,7 +3,6 @@ import { CreditNotice } from "src/services/credit-notices/types";
 
 /**
  * Interface for credit notice service operations
- * @category Services
  */
 export interface ICreditNoticeService {
     /**
