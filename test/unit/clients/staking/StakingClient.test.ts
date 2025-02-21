@@ -2,6 +2,7 @@ import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
 import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
 import { StakingClient, StakingClientConfig, TokenClient, UnstakeError } from "src";
 import { BaseClient } from "src/core/ao/BaseClient";
+import { getWallet } from "src/utils/wallet/environmentWallet";
 
 
 // Mock individual methods of BaseClient using jest.spyOn
@@ -55,7 +56,7 @@ describe("StakingClient Unit Test", () => {
         const config: StakingClientConfig = {
             tokenProcessId: "Testing Token",
             processId: "Testing Staking Process ID",
-            wallet: undefined,
+            wallet: getWallet(),
             environment: "local"
         }
         client = new StakingClient(config);

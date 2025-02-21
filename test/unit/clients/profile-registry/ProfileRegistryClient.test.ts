@@ -1,6 +1,7 @@
 import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
-import { ProfileRegistryClient } from "src";
 import { BaseClient } from "src/core/ao/BaseClient";
+import { ProfileRegistryClient } from "src/index";
+import { getWallet } from "src/utils/wallet/environmentWallet";
 
 
 // Mock BaseClient methods
