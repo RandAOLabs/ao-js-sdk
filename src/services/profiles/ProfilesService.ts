@@ -1,19 +1,19 @@
-import { ProfileClient } from "src/clients/profile/ProfileClient";
-import { ProfileInfo } from "src/clients/profile/abstract/types";
-import { ProfileRegistryClient } from "src/clients/profile-registry/ProfileRegistryClient";
-import { ProfileRegistryEntry } from "src/clients/profile-registry/abstract";
+
+import { ProfileRegistryClient } from "src/clients/bazar/profile-registry/ProfileRegistryClient";
+import { ProfileRegistryEntry } from "src/clients/bazar/profile-registry/abstract";
 import { IProfilesService } from "src/services/profiles/abstract/IProfilesService";
 import { Logger } from "src/utils";
 import { getBaseClientAutoConfiguration } from "src/core/ao/BaseClientAutoConfiguration";
 import { ICache, newCache } from "src/utils/cache";
 import { ConcurrencyManager } from "src/utils/concurrency";
+import { ProfileInfo, ProfileClient } from "src/clients";
 
 const MAX_RETRIES = 3;
 
 /**
  * Service for handling Profile operations
  * Implements a singleton pattern to ensure only one instance exists
- * @category Services
+ * @category Bazar
  */
 export class ProfilesService implements IProfilesService {
     private static instance: ProfilesService;

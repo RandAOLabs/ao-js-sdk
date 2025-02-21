@@ -1,6 +1,6 @@
-import { RaffleClient } from "src/clients/randao/raffle";
-import { RafflePull } from "src/clients/randao/raffle/abstract";
-import { ViewPullError } from "src/clients/randao/raffle/RaffleClientError";
+
+import { RaffleClient, RafflePull } from "src/clients";
+import { ViewPullError } from "src/clients/miscellaneous/raffle/RaffleClientError";
 import { Logger, LogLevel } from "src/utils";
 import { MockBaseClient } from "test/unit/clients/MockBaseClient";
 

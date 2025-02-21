@@ -1,4 +1,4 @@
-import { StakingClientConfig } from "src/clients/staking/abstract";
+import { StakingClientConfig } from "src/clients";
 import { getBaseClientAutoConfiguration } from "src/core/ao/BaseClientAutoConfiguration";
 
 import { RANDAO_STAKING_TOKEN_PROCESS_ID, RANDAO_STAKING_PROCESS_ID } from "src/processes_ids";

@@ -6,7 +6,7 @@ import { DryRunCachingClient } from "src/core/ao/client-variants";
 
 /**
  * Client for interacting with ANT (Arweave Name Token) records.
- * @category Clients
+ * @category ARIO
  */
 export class ANTClient extends DryRunCachingClient implements IANTClient {
     constructor(processId: string) {

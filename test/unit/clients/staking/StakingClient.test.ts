@@ -21,7 +21,7 @@ const dryRunResult: DryRunResult = {
 jest.spyOn(BaseClient.prototype, 'dryrun').mockResolvedValue(dryRunResult);
 jest.spyOn(BaseClient.prototype, 'messageResult').mockResolvedValue(messageResult);
 // Mock the token client module
-jest.mock("src/clients/token/TokenClient", () => {
+jest.mock("src/clients/ao/token/TokenClient", () => {
     return {
         TokenClient: jest.fn().mockImplementation(() => ({
             transfer: jest.fn().mockResolvedValue(true)
