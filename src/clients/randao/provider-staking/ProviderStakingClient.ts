@@ -1,9 +1,9 @@
+import { StakingClient } from "src/clients/ao";
 import { ProviderDetails } from "src/clients/randao/provider-profile";
 import { IProviderStakingClient } from "src/clients/randao/provider-staking/abstract/IProviderStakingClient";
 import { ProviderStakeInfo } from "src/clients/randao/provider-staking/abstract/types";
 import { getProviderStakingClientAutoConfiguration } from "src/clients/randao/provider-staking/ProviderStakingClientAutoConfiguration";
 import { GetStakeError, ProviderUnstakeError, StakeWithDetailsError } from "src/clients/randao/provider-staking/ProviderStakingError";
-import { StakingClient } from "src/clients/staking";
 import { SyncInitClient, Tags } from "src/core";
 import { Logger } from "src/utils";
 

@@ -10,7 +10,7 @@ import { ANTRecordNotFoundError, ARNSRecordNotFoundError } from 'src/services/ar
 /**
  * Service for handling ARIO operations, including ANT and ARNS record management.
  * Implements a singleton pattern to ensure only one instance exists.
- * @category Services
+ * @category ARIO
  */
 export class ARIOService implements IARIOService {
     private static instance: ARIOService;
