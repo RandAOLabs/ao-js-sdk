@@ -1,11 +1,16 @@
 {
     "version": "0.2.0",
     "configurations": [
-
         {
             "type": "node",
             "request": "launch",
             "name": "ANTCachingService",
+            "runtimeArgs": [
+                "-r",
+                "ts-node/register",
+                "-r",
+                "tsconfig-paths/register"
+            ],
             "program": "${workspaceFolder}/node_modules/jest/bin/jest",
             "args": [
                 "--runInBand",
@@ -17,12 +22,21 @@
             "disableOptimisticBPs": true,
             "windows": {
                 "program": "${workspaceFolder}/node_modules/jest/bin/jest"
+            },
+            "env": {
+                "TS_NODE_PROJECT": "test/tsconfig.json"
             }
         },
         {
             "type": "node",
             "request": "launch",
             "name": "ArnCachingService",
+            "runtimeArgs": [
+                "-r",
+                "ts-node/register",
+                "-r",
+                "tsconfig-paths/register"
+            ],
             "program": "${workspaceFolder}/node_modules/jest/bin/jest",
             "args": [
                 "--runInBand",
@@ -33,12 +47,21 @@
             "disableOptimisticBPs": true,
             "windows": {
                 "program": "${workspaceFolder}/node_modules/jest/bin/jest"
+            },
+            "env": {
+                "TS_NODE_PROJECT": "test/tsconfig.json"
             }
         },
         {
             "type": "node",
             "request": "launch",
             "name": "Provider Staking Client",
+            "runtimeArgs": [
+                "-r",
+                "ts-node/register",
+                "-r",
+                "tsconfig-paths/register"
+            ],
             "program": "${workspaceFolder}/node_modules/jest/bin/jest",
             "args": [
                 "--runInBand",
@@ -50,12 +73,21 @@
             "disableOptimisticBPs": true,
             "windows": {
                 "program": "${workspaceFolder}/node_modules/jest/bin/jest"
+            },
+            "env": {
+                "TS_NODE_PROJECT": "test/tsconfig.json"
             }
         },
         {
             "type": "node",
             "request": "launch",
             "name": "Credit Notice Unit",
+            "runtimeArgs": [
+                "-r",
+                "ts-node/register",
+                "-r",
+                "tsconfig-paths/register"
+            ],
             "program": "${workspaceFolder}/node_modules/jest/bin/jest",
             "args": [
                 "--runInBand",
@@ -67,6 +99,35 @@
             "disableOptimisticBPs": true,
             "windows": {
                 "program": "${workspaceFolder}/node_modules/jest/bin/jest"
+            },
+            "env": {
+                "TS_NODE_PROJECT": "test/tsconfig.json"
+            }
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Profile Unit",
+            "runtimeArgs": [
+                "-r",
+                "ts-node/register",
+                "-r",
+                "tsconfig-paths/register"
+            ],
+            "program": "${workspaceFolder}/node_modules/jest/bin/jest",
+            "args": [
+                "--runInBand",
+                "--testPathPattern=test/unit/clients/profile",
+                "--config=test/jest.config.js"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "disableOptimisticBPs": true,
+            "windows": {
+                "program": "${workspaceFolder}/node_modules/jest/bin/jest"
+            },
+            "env": {
+                "TS_NODE_PROJECT": "test/tsconfig.json"
             }
         },
     ]

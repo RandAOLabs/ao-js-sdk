@@ -9,7 +9,7 @@ import { ASyncInitClient, Tags } from "src/core";
 import { Logger } from "src/utils";
 
 /**
- * @category Clients
+ * @category RandAO
  * @see {@link https://github.com/RandAOLabs/Random-Process | specification}
  */
 export class RandomClient extends ASyncInitClient implements IRandomClient {

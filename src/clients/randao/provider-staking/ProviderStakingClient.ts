@@ -8,7 +8,7 @@ import { SyncInitClient, Tags } from "src/core";
 import { Logger } from "src/utils";
 
 /**
- * @category Clients
+ * @category RandAO
  */
 export class ProviderStakingClient extends StakingClient implements IProviderStakingClient, SyncInitClient {
     public static autoConfiguration(): ProviderStakingClient {
@@ -41,7 +41,7 @@ export class ProviderStakingClient extends StakingClient implements IProviderSta
             const result = await this.dryrun(requestData, tags);
             const stakeStringJson = this.getFirstMessageDataString(result);
             const stake: ProviderStakeInfo = JSON.parse(stakeStringJson)
-            
+
             return stake;
         } catch (error: any) {
             Logger.error(`Error getting stake for provider ${providerId}: ${error.message}`);
