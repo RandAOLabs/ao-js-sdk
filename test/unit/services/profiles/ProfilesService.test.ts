@@ -59,7 +59,6 @@ describe("ProfilesService", () => {
 
     describe("getProfileInfosByWalletAddress", () => {
         it("should fetch profile infos for wallet addresses", async () => {
-            Logger.info(1)
             // Setup mocks
             mockProfileRegistryClient.getProfileByWalletAddress.mockResolvedValue([mockRegistryEntry]);
             mockProfileClient.getProfileInfo.mockResolvedValue(mockProfileInfo);
@@ -74,8 +73,6 @@ describe("ProfilesService", () => {
         });
 
         it("should handle empty registry results", async () => {
-            Logger.info(2)
-
             // Setup mocks
             mockProfileRegistryClient.getProfileByWalletAddress.mockResolvedValue([]);
 
@@ -88,8 +85,6 @@ describe("ProfilesService", () => {
         });
 
         it("should handle registry errors", async () => {
-            Logger.info(3)
-
             // Setup mocks
             mockProfileRegistryClient.getProfileByWalletAddress.mockRejectedValue(new Error("Registry error"));
 
@@ -103,8 +98,6 @@ describe("ProfilesService", () => {
 
     describe("getProfileInfosByProfileProcessIds", () => {
         it("should fetch profile infos for process IDs", async () => {
-            Logger.info(4)
-
             // Setup mocks
             mockProfileClient.getProfileInfo.mockResolvedValue(mockProfileInfo);
 
@@ -117,8 +110,6 @@ describe("ProfilesService", () => {
         });
 
         it("should handle profile client errors", async () => {
-            Logger.info(5)
-
             // Setup mocks
             mockProfileClient.getProfileInfo.mockRejectedValue(new Error("Profile error"));
 
@@ -130,8 +121,6 @@ describe("ProfilesService", () => {
         });
 
         it("should use cache for subsequent requests", async () => {
-            Logger.info(6)
-
             // Setup mocks
             mockProfileClient.getProfileInfo.mockResolvedValue(mockProfileInfo);
 
