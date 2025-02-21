@@ -1,6 +1,6 @@
 import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
 import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
-import { Logger, LogLevel } from "src/utils";
+import { getWalletLazy, Logger, LogLevel } from "src/utils";
 import { BaseClient } from "src/core/ao/BaseClient";
 import { ProfileClient } from "src/index";
 import { getWallet } from "src/utils/wallet/environmentWallet";
@@ -35,7 +35,7 @@ jest.spyOn(BaseClient.prototype, 'getCallingWalletAddress').mockResolvedValue("t
 jest.mock("src/clients/profile/ProfileClientAutoConfiguration", () => ({
     getProfileClientAutoConfiguration: jest.fn().mockResolvedValue({
         processId: "test-process-id",
-        wallet: getWallet(),
+        wallet: getWalletLazy(),
         environment: "node"
     })
 }));

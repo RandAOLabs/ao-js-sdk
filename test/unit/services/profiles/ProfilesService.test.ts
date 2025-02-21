@@ -32,7 +32,7 @@ describe("ProfilesService", () => {
     };
 
     beforeAll(() => {
-        Logger.setLogLevel(LogLevel.DEBUG)
+        // Logger.setLogLevel(LogLevel.DEBUG)
     });
 
     beforeEach(() => {
