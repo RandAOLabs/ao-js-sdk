@@ -16,7 +16,7 @@ const MAX_RETRIES = 3;
  * @category Bazar
  */
 export class ProfilesService implements IProfilesService {
-    private static instance: ProfilesService;
+    private static instance: ProfilesService | null = null;
     private static readonly retryOptions = {
         retries: MAX_RETRIES,
         onFailedAttempt: (error: { attemptNumber: number; retriesLeft: number; message: string }) => {
@@ -140,6 +140,3 @@ export class ProfilesService implements IProfilesService {
             .filter((id): id is string => id !== null && id !== undefined);
     }
 }
-
-// Export singleton instance
-export default ProfilesService.getInstance();
