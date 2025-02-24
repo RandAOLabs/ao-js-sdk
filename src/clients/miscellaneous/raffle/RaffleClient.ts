@@ -4,7 +4,7 @@ import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
 import { SyncInitClient } from "src/core/ao/client-variants/SyncInitClient";
 import { Tags } from "src/core";
 import { Logger } from "src/utils";
-import { getRaffleClientAutoConfiguration, IRaffleClient, RaffleClientConfig, RafflePull, ViewPullsResponse, ViewEntrantsResponse, ViewRaffleOwnersResponse } from "src/clients";
+import { IRaffleClient, RaffleClientConfig, RafflePull, ViewPullsResponse, ViewEntrantsResponse, ViewRaffleOwnersResponse, getRaffleClientAutoConfiguration } from "src/clients";
 import { SetRaffleEntrantsError, PullRaffleError, ViewPullsError, ViewPullError, ViewEntrantsError, ViewUserPullError, ViewUserPullsError, ViewRaffleOwnersError } from "src/clients/miscellaneous/raffle/RaffleClientError";
 import { RaffleProcessError } from "src/clients/miscellaneous/raffle/RaffleProcessError";
 
@@ -43,61 +43,10 @@ export class RaffleClient extends SyncInitClient implements IRaffleClient {
                 { name: "Action", value: "Raffle" },
             ];
             const result = await this.messageResult(undefined, tags);
-            this.checkResultForErrors(result)
             return true
         } catch (error: any) {
             Logger.error(`Error pulling raffle: ${error.message}`);
             throw new PullRaffleError(error);
-        }
-    }
-
-    async viewPulls(): Promise<ViewPullsResponse> {
-        try {
-            const tags: Tags = [
-                { name: "Action", value: "View-Pulls" },
-            ];
-            const result = await this.dryrun(undefined, tags);
-            this.checkResultForErrors(result)
-            const pulls = this.getFirstMessageDataJson(result) as RafflePull[];
-            return { pulls };
-        } catch (error: any) {
-            Logger.error(`Error viewing pulls: ${error.message}`);
-            throw new ViewPullsError(error);
-        }
-    }
-
-    async viewPull(pullId: string): Promise<RafflePull> {
-        try {
-            const tags: Tags = [
-                { name: "Action", value: "View-Pull" },
-                { name: "PullId", value: pullId },
-            ];
-            const result = await this.dryrun(undefined, tags);
-            this.checkResultForErrors(result)
-            return this.getFirstMessageDataJson(result)
-        } catch (error: any) {
-            Logger.error(`Error viewing pull: ${error.message}`);
-            throw new ViewPullError(error);
-        }
-    }
-    /* Core Raffle Functions */
-
-
-
-    async viewMostRecentPull(): Promise<RafflePull> {
-        try {
-            const { pulls } = await this.viewPulls();
-            if (pulls.length === 0) {
-                throw new ViewPullError(new Error("No pulls found"));
-            }
-            // Find pull with highest ID
-            const mostRecent = pulls.reduce((max, current) =>
-                current.Id > max.Id ? current : max
-            );
-            return mostRecent;
-        } catch (error: any) {
-            Logger.error(`Error viewing most recent pull: ${error.message}`);
-            throw new ViewPullError(error);
         }
     }
 
@@ -132,12 +81,14 @@ export class RaffleClient extends SyncInitClient implements IRaffleClient {
         }
     }
 
-    async viewUserPulls(userId: string): Promise<ViewPullsResponse> {
+    async viewUserPulls(_userId?: string): Promise<ViewPullsResponse> {
+        const userId: string = _userId ? _userId : await this.getCallingWalletAddress();
         try {
             const tags: Tags = [
                 { name: "Action", value: "View-Pulls" },
                 { name: "UserId", value: userId },
             ];
+
             const result = await this.dryrun(undefined, tags);
             this.checkResultForErrors(result);
             const pulls = this.getFirstMessageDataJson(result) as RafflePull[];
@@ -162,7 +113,27 @@ export class RaffleClient extends SyncInitClient implements IRaffleClient {
         }
     }
 
+    /* Core Raffle Functions */
+
     /* Utilities */
+    async viewMostRecentPull(): Promise<RafflePull> {
+        try {
+            const { pulls } = await this.viewUserPulls();
+            if (pulls.length === 0) {
+                throw new ViewPullError(new Error("No pulls found"));
+            }
+            // Find pull with highest ID
+            const mostRecent = pulls.reduce((max, current) =>
+                current.Id > max.Id ? current : max
+            );
+            return mostRecent;
+        } catch (error: any) {
+            Logger.error(`Error viewing most recent pull: ${error.message}`);
+            throw new ViewPullError(error);
+        }
+    }
+    /* Utilities */
+    /* Private */
     private checkResultForErrors(result: MessageResult | DryRunResult) {
         for (let msg of result.Messages) {
             const tags: Tags = msg.Tags;
@@ -173,5 +144,6 @@ export class RaffleClient extends SyncInitClient implements IRaffleClient {
             }
         }
     }
-    /* Utilities */
+    /* Private */
+
 }

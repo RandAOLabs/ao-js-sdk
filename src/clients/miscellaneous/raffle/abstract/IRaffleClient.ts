@@ -19,19 +19,6 @@ export interface IRaffleClient {
     pullRaffle(): Promise<boolean>;
 
     /**
-     * Retrieves all raffle pulls.
-     * @returns Promise resolving to an object containing array of pulls
-     */
-    viewPulls(): Promise<ViewPullsResponse>;
-
-    /**
-     * Retrieves details of a specific raffle pull.
-     * @param pullId ID of the pull to view
-     * @returns Promise resolving to pull details
-     */
-    viewPull(pullId: string): Promise<RafflePull>;
-
-    /**
      * Retrieves the most recent raffle pull by finding the one with the highest ID.
      * @returns Promise resolving to the most recent pull details
      */
