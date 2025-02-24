@@ -1,4 +1,4 @@
-import { RaffleClient } from "src/clients/randao/raffle";
+import { RaffleClient } from "src/clients";
 import { Logger } from "src/utils";
 
 describe("RaffleClient Integration Tests", () => {
