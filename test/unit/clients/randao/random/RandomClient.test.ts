@@ -4,7 +4,11 @@ import { RandomClient, TokenClient } from "src/clients";
 import { BaseClient } from "src/core/ao/BaseClient";
 
 jest.mock("src/services/ario/ARIOService", () => ({
-    getProcessIdForDomain: jest.fn().mockResolvedValue("test-process-id")
+    ARIOService: {
+        getInstance: () => ({
+            getProcessIdForDomain: jest.fn().mockResolvedValue("test-process-id")
+        })
+    }
 }));
 
 
