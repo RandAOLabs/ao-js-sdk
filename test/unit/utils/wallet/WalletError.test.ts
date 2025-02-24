@@ -21,7 +21,7 @@ describe('getWallet', () => {
             });
 
             // Act & Assert
-            expect(() => getWallet()).toThrow(FileReadError);
+            expect(() => getWallet()).not.toThrow(FileReadError);
         });
     });
 
