@@ -9,11 +9,11 @@ import { ANTRecordNotFoundError, ARNSRecordNotFoundError } from 'src/services/ar
 
 /**
  * Service for handling ARIO operations, including ANT and ARNS record management.
- * Implements a singleton pattern to ensure only one instance exists.
+ * Implements a singleton pattern with lazy initialization to ensure only one instance exists.
  * @category ARIO
  */
 export class ARIOService implements IARIOService {
-    private static instance: ARIOService;
+    private static instance: ARIOService | null = null;
     private arnsClient: ARNSClient;
     private antClientCache: ICache<string, ANTClient>;
 
@@ -126,6 +126,3 @@ export class ARIOService implements IARIOService {
         return antClient;
     }
 }
-
-// Export singleton instance
-export default ARIOService.getInstance();
