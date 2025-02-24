@@ -41,6 +41,7 @@ export function getWallet(): JWKInterface | undefined {
                     return undefined;
                 } else if (error instanceof Error) {
                     Logger.warn(`Error while getting environment wallet: ${error.message}`)
+                    return undefined
                 } else {
                     throw new FileReadError(pathToWallet, 'Unknown error');
                 }
