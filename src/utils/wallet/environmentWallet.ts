@@ -40,7 +40,7 @@ export function getWallet(): JWKInterface | undefined {
                     Logger.warn(`Warning: Missing environment variable: ${error.message}`)
                     return undefined;
                 } else if (error instanceof Error) {
-                    throw new FileReadError(pathToWallet, error.message);
+                    Logger.warn(`Error while getting environment wallet: ${error.message}`)
                 } else {
                     throw new FileReadError(pathToWallet, 'Unknown error');
                 }
