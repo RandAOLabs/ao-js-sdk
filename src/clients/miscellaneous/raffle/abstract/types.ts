@@ -14,3 +14,7 @@ export interface RafflePull {
 export interface ViewPullsResponse {
     pulls: RafflePull[];
 }
+
+export type ViewEntrantsResponse = string[];
+
+export type ViewRaffleOwnersResponse = string[];

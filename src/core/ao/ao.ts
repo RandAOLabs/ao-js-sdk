@@ -4,6 +4,8 @@ import { ResultsResponse } from '@permaweb/aoconnect/dist/lib/results';
 import { DryRunResult } from '@permaweb/aoconnect/dist/lib/dryrun';
 import { Tags } from 'src/core/common';
 import { SortOrder } from 'src/core/ao/abstract';
+import { Logger } from 'src/utils';
+import { Tag } from 'arweave/node/lib/transaction';
 
 /**
  * AO class provides a wrapper for interacting with the Arweave Operating System (AO).
@@ -105,7 +107,7 @@ export class AO {
         id?: string,
         owner?: string
     ): Promise<DryRunResult> {
-        return await dryrun({
+        const result = await dryrun({
             process,
             data,
             tags,
@@ -113,5 +115,6 @@ export class AO {
             id,
             owner,
         });
+        return result
     }
 }

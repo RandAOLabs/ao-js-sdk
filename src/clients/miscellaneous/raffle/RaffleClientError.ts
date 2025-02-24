@@ -36,3 +36,31 @@ export class ViewPullError extends RaffleClientError {
         this.name = 'ViewPullError';
     }
 }
+
+export class ViewEntrantsError extends RaffleClientError {
+    constructor(originalError?: Error) {
+        super('Error viewing raffle entrants', originalError);
+        this.name = 'ViewEntrantsError';
+    }
+}
+
+export class ViewUserPullError extends RaffleClientError {
+    constructor(originalError?: Error) {
+        super('Error viewing user raffle pull', originalError);
+        this.name = 'ViewUserPullError';
+    }
+}
+
+export class ViewUserPullsError extends RaffleClientError {
+    constructor(originalError?: Error) {
+        super('Error viewing user raffle pulls', originalError);
+        this.name = 'ViewUserPullsError';
+    }
+}
+
+export class ViewRaffleOwnersError extends RaffleClientError {
+    constructor(originalError?: Error) {
+        super('Error viewing raffle owners', originalError);
+        this.name = 'ViewRaffleOwnersError';
+    }
+}
