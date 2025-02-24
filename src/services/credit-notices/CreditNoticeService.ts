@@ -33,7 +33,6 @@ export class CreditNoticeService implements ICreditNoticeService {
             }
 
             const transactions = await this.messagesService.getAllMessagesReceivedBy(messageQueryParams);
-            Logger.debug(typeof transactions)
             return transactions.map(tx => CreditNoticeConverter.convert(tx));
         } catch (error: any) {
             Logger.error(`Error retrieving credit notices: ${error.message}`);

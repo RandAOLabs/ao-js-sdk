@@ -24,7 +24,6 @@ export function getWallet(): JWKInterface | undefined {
                         throw envError;
                     }
                 }
-                Logger.debug("======================================")
                 let fs;
                 try {
                     fs = eval('require("fs")');
@@ -33,7 +32,6 @@ export function getWallet(): JWKInterface | undefined {
                 }
 
                 const walletData = fs.readFileSync(pathToWallet, 'utf-8'); // May throw FS errors
-                Logger.debug(walletData)
                 return JSON.parse(walletData); // May throw SyntaxError if JSON is malformed
             } catch (error: unknown) {
                 if (error instanceof EnvironmentVariableError) {
