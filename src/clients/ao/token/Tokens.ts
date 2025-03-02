@@ -28,7 +28,7 @@ const NUMBER_ALWAYS_BIGGER = "OsK9Vgjxo0ypX_HLz2iJJuh4hp3I80yA9KArsJjIloU";
 const TRUNK = "wOrb8b_V8QixWyXZub48Ki5B6OIDyf_p1ngoonsaRpQ";
 
 // Export all tokens in a single namespace
-export const Tokens = {
+export const TOKENS = {
     RUNE_REALM: RuneRealmTokens,
     NUMBER_ALWAYS_BIGGER,
     TRUNK
