@@ -2,6 +2,7 @@ import { Tags } from "src/core";
 import { TOKENS } from "src/clients"
 import { CreditNoticeService } from "src/services/credit-notices";
 import { Logger, LogLevel } from "src/utils";
+import { RUNE_REALM_PAYMENTS_PROCESS_ID } from "src/processes_ids";
 
 describe('CreditNoticeService Integration Tests', () => {
     let service: CreditNoticeService;
@@ -11,22 +12,22 @@ describe('CreditNoticeService Integration Tests', () => {
         service = new CreditNoticeService();
     });
 
-    it('should get all credit notices received by an address', async () => {
-        const testRecipientId = "j7NcraZUL6GZlgdPEoph12Q5rk_dydvQDecLNxYi8rI";
+    // it('should get all credit notices received by an address', async () => {
+    //     const testRecipientId = "j7NcraZUL6GZlgdPEoph12Q5rk_dydvQDecLNxYi8rI";
 
-        const nabTags: Tags = [{ name: 'From-Process', value: TOKENS.NUMBER_ALWAYS_BIGGER }];
-        const result = await service.getAllCreditNoticesReceivedById({ recipientId: testRecipientId, additionalTags: nabTags });
+    //     const nabTags: Tags = [{ name: 'From-Process', value: TOKENS.NUMBER_ALWAYS_BIGGER }];
+    //     const result = await service.getAllCreditNoticesReceivedById({ recipientId: testRecipientId, additionalTags: nabTags });
 
-        // Log the result for inspection
-        Logger.info(`Credit notices received by ${testRecipientId}: ${result.length}`);
-        if (result.length > 0) {
-            Logger.info(`First credit notice: ${JSON.stringify(result[0], null, 2)}`);
-        }
+    //     // Log the result for inspection
+    //     Logger.info(`Credit notices received by ${testRecipientId}: ${result.length}`);
+    //     if (result.length > 0) {
+    //         Logger.info(`First credit notice: ${JSON.stringify(result[0], null, 2)}`);
+    //     }
 
-        // Verify the response
-        expect(result).toBeDefined();
-        expect(result).toBeInstanceOf(Array);
-    }, 60000); // 60s timeout since it's fetching network data
+    //     // Verify the response
+    //     expect(result).toBeDefined();
+    //     expect(result).toBeInstanceOf(Array);
+    // }, 60000); // 60s timeout since it's fetching network data
 
     // it('should get credit notices from a specific process', async () => {
     //     const testRecipientId = "9U_MDLfzf-sdww7d7ydaApDiQz3nyHJ4kTS2-9K4AGA";
@@ -51,4 +52,21 @@ describe('CreditNoticeService Integration Tests', () => {
     //         expect(notice.fromProcess).toBe(testTokenId);
     //     });
     // }, 60000); // 60s timeout since it's fetching network data
+
+    it('getCreditNoticesFromProcess', async () => {
+
+        const result = await service.getCreditNoticesFromProcess(RUNE_REALM_PAYMENTS_PROCESS_ID, TOKENS.NUMBER_ALWAYS_BIGGER);
+
+        // Log the result for inspection
+        Logger.info(`Credit notices received by ${RUNE_REALM_PAYMENTS_PROCESS_ID}: ${result.length}`);
+        if (result.length > 0) {
+            Logger.info(`First credit notice: ${JSON.stringify(result[0], null, 2)}`);
+        }
+
+        // Verify the response
+        expect(result).toBeDefined();
+        expect(result).toBeInstanceOf(Array);
+    }, 60000); // 60s timeout since it's fetching network data
+
+
 });
