@@ -21,6 +21,7 @@ export class BaseArweaveDataService implements IBaseArweaveDataService {
             const response = await this.arweave.api.post('/graphql', {
                 query: query
             });
+            Logger.debug(response)
             return response.data as T;
         } catch (error: any) {
             Logger.error(`GraphQL query error: ${error.message}`);
