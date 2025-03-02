@@ -2,6 +2,7 @@ import Arweave from 'arweave';
 import { getEnvironment, Environment, UnknownEnvironmentError } from 'src/utils/environment';
 import { ArweaveInitializationError } from 'src/core/arweave/ArweaveDataServiceError';
 import { Logger } from 'src/utils/logger/logger';
+import { ARWEAVE_CONFIG } from './constants';
 
 /**
  * ArweaveInstance manages the singleton Arweave instance.
@@ -23,15 +24,11 @@ class ArweaveInstance {
                 switch (environment) {
                     case Environment.BROWSER:
                         // For browser, use current URL path by default
-                        ArweaveInstance.instance = Arweave.init({});
+                        ArweaveInstance.instance = Arweave.init(ARWEAVE_CONFIG);
                         break;
                     case Environment.NODE:
                         // For Node.js, connect to mainnet gateway
-                        ArweaveInstance.instance = Arweave.init({
-                            host: 'arweave-search.goldsky.com',
-                            port: 443,
-                            protocol: 'https'
-                        });
+                        ArweaveInstance.instance = Arweave.init(ARWEAVE_CONFIG);
                         break;
                     default:
                         throw new UnknownEnvironmentError();
