@@ -23,6 +23,7 @@
         "Core",
         "Utility",
         "on-chain-data",
+        "Autonomous-Finance",
         "Other"
     ],
     "includeVersion": true,
