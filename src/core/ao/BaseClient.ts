@@ -13,6 +13,8 @@ import { Logger, LogLevel } from 'src/utils';
 import { Tags } from 'src/core/common';
 import { SortOrder } from 'src/core/ao/abstract';
 import { AO } from 'src/core/ao/ao';
+import { ArweaveDataCachingService } from 'src/core/arweave/ArweaveDataCachingService';
+import { ArweaveTransaction } from 'src/core/arweave/abstract/types';
 
 export class BaseClient extends IBaseClient {
     /* Fields */
@@ -21,12 +23,18 @@ export class BaseClient extends IBaseClient {
     /** @protected */
     readonly ao: AO;
     private useDryRunAsMessage: boolean = false;
+    private readonly arweaveService: ArweaveDataCachingService;
     /* Fields */
     /* Constructors */
     public constructor(baseConfig: BaseClientConfig) {
         super()
         this.baseConfig = baseConfig;
         this.ao = new AO(createDataItemSigner(baseConfig.wallet));
+        this.arweaveService = new ArweaveDataCachingService();
+    }
+
+    public async getProcessInfo(): Promise<ArweaveTransaction> {
+        return await this.arweaveService.getTransactionById(this.baseConfig.processId);
     }
     /* Constructors */
     /* Core AO Functions */
