@@ -51,7 +51,7 @@ function findTestPaths(type: TestType, searchPath: string): string[] {
     }
 
     // Search in common parent directories for both unit and integration tests
-    const commonParents = ['services', 'clients', 'core', 'utils, clients/randao', 'clients/miscellaneous'];
+    const commonParents = ['services', 'clients', 'core', 'utils, clients/randao', 'clients/miscellaneous', "clients/autonomous-finance/botega/"];
     for (const parent of commonParents) {
         const parentPath = join(TEST_ROOT, type, parent, searchPath);
         if (existsSync(parentPath)) {

@@ -4,3 +4,4 @@ export * from "./ario";
 export * from "./ao"
 export * from "./bazar"
 export * from "./miscellaneous"
+export * from "./autonomous-finance"
