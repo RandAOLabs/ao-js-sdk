@@ -57,8 +57,12 @@ describe('CreditNoticeService Integration Tests', () => {
 
         const result = await service.getCreditNoticesFromProcess(RUNE_REALM_PAYMENTS_PROCESS_ID, TOKENS.NUMBER_ALWAYS_BIGGER);
 
-        // Log the result for inspection
+        // Get distinct quantity values
+        const distinctQuantities = [...new Set(result.map(notice => notice.quantity))].sort();
+
+        // Log the results
         Logger.info(`Credit notices received by ${RUNE_REALM_PAYMENTS_PROCESS_ID}: ${result.length}`);
+        Logger.info(`Distinct quantities: ${JSON.stringify(distinctQuantities, null, 2)}`);
         if (result.length > 0) {
             Logger.info(`First credit notice: ${JSON.stringify(result[0], null, 2)}`);
         }

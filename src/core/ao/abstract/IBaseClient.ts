@@ -4,6 +4,7 @@ import { ResultsResponse } from "@permaweb/aoconnect/dist/lib/results";
 import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
 import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
 import { Tags } from "src/core/common";
+import { ArweaveTransaction } from "src/core/arweave/abstract/types";
 
 export abstract class IBaseClient {
     /**
@@ -58,4 +59,13 @@ export abstract class IBaseClient {
      * @param enabled When true, dryrun will execute as a real message. When false (default), executes as a simulation.
      */
     abstract setDryRunAsMessage(enabled: boolean): void;
+
+    /**
+     * Retrieves the transaction that created this process. This transaction contains
+     * the initial state and configuration of the process in its tags.
+     * 
+     * @returns Promise resolving to the transaction data containing process creation details
+     * @throws ArweaveGraphQLError if there is an error retrieving the transaction
+     */
+    abstract getProcessInfo(): Promise<ArweaveTransaction>;
 }
