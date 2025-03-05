@@ -4,7 +4,7 @@ import { GetAllMessagesByRecipientParams } from "src/services/messages";
 /**
  * Parameters for retrieving all credit notices
  */
-export interface GetAllCreditNoticesParams extends Omit<GetAllMessagesByRecipientParams, "owner" | "tags">{
+export interface GetAllCreditNoticesParams extends Omit<GetAllMessagesByRecipientParams, "owner" | "tags"> {
     /** Optional additional tags to filter by */
     additionalTags?: Tags;
 }
@@ -23,6 +23,6 @@ export interface CreditNotice {
     sender: string;
     /** Process ID that sent the credit notice */
     fromProcess: string;
-    /** Timestamp when the transaction was ingested */
-    ingestedAt: number;
+    /** Timestamp of the block this transaction was included in */
+    blockTimeStamp: number | undefined;
 }
