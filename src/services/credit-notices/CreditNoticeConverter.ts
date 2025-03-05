@@ -38,7 +38,7 @@ export default class CreditNoticeConverter {
             quantity,
             sender,
             fromProcess,
-            ingestedAt: source.ingested_at
+            blockTimeStamp: source.block?.timestamp
         };
     }
 
