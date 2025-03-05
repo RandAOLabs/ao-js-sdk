@@ -18,9 +18,6 @@ export const RUNE_REALM_PAYMENTS_PROCESS_ID: string = "j7NcraZUL6GZlgdPEoph12Q5r
 
 /*In theory these never need to change*/
 export const PROFILE_REGISTRY_PROCESS_ID: string = "SNy4m-DrqxWl01YqGM4sxI8qCni-58re8uuJLvZPypY"
-export const WRAPPED_AR_TOKEN_PROCESS_ID: string = "xU9zFkq3X2ZQ6olwNVvr1vUWIjc3kXTWr7xKQD6dh10"
-export const Q_ARWEAVE_TOKEN_PROCESS_ID: string = "NG-0lVX882MG5nhARrSzyprEK6ejonHpdUmaaMPsHE8"
-export const AO_TOKEN_PROCESS_ID: string = "UkS-mdoiG8hcAClhKK8ch4ZhEzla0mCPDOix9hpdSFE"
 export const ARNS_REGISTRY_PROCESS_ID: string = "agYcCFJtrMG6cqMuZfskIkFTGvUPddICmtQSBIoPdiA" // TODO: Replace when ARNS hits mainnet
 
 // Also export as a single namespace object
@@ -33,9 +30,6 @@ export const processIds = {
     ARCAO_TEST_TOKEN_PROCESS_ID,
     ARCAO_TEST_NFT_COLLECTION,
     PROFILE_REGISTRY_PROCESS_ID,
-    WRAPPED_AR_TOKEN_PROCESS_ID,
-    Q_ARWEAVE_TOKEN_PROCESS_ID,
-    AO_TOKEN_PROCESS_ID,
     ARNS_PROCESS_ID: ARNS_REGISTRY_PROCESS_ID,
     RUNE_REALM_PAYMENTS_PROCESS_ID,
 } as const
