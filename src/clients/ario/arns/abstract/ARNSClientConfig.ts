@@ -5,8 +5,5 @@ import { DryRunCachingClientConfig } from "src/core/ao/configuration";
  * @extends DryRunCachingClientConfig
  */
 export interface ARNSClientConfig extends DryRunCachingClientConfig {
-    /**
-     * The process ID for the ARNS service
-     */
-    processId: string;
+
 }
