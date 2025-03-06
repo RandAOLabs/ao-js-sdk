@@ -4,6 +4,7 @@ import { ANTClient } from "src/clients/ario/ant/ANTClient";
 import { GetRecordError, GetRecordsError } from "src/clients/ario/ant/ANTClientError";
 import { BaseClient } from "src/core/ao/BaseClient";
 import { ANTRecord, ANTRecords } from "src/clients/ario/ant/abstract/types";
+import { DryRunCachingClientConfigBuilder } from "src/core/ao/configuration/builder";
 
 // Mock BaseClient methods
 jest.spyOn(BaseClient.prototype, 'message').mockResolvedValue("test-message-id");
@@ -52,7 +53,11 @@ describe("ANTClient Unit Test", () => {
     let client: ANTClient;
 
     beforeAll(() => {
-        client = new ANTClient("test-process-id");
+        const config = new DryRunCachingClientConfigBuilder()
+            .withProcessId("test-process-id")
+            .build()
+
+        client = new ANTClient(config);
     });
 
     afterEach(() => {
