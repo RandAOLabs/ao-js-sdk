@@ -3,14 +3,15 @@ import { IProfileClient, ProfileInfo } from "src/clients/bazar/profile/abstract"
 import { getProfileClientAutoConfiguration } from "src/clients/bazar/profile/ProfileClientAutoConfiguration";
 import { GetProfileError, ProfileTransferError } from "src/clients/bazar/profile/ProfileClientError";
 import { Tags } from "src/core";
-import { AsyncInitDryRunCachingClient } from "src/core/ao/client-variants";
+import { IAsyncAutoConfiguration } from "src/core/ao/abstract";
+import { DryRunCachingClient } from "src/core/ao/client-variants";
 import { Logger } from "src/utils/index";
 
 /**
  * @category Bazar
  * @see {@link https://cookbook_ao.g8way.io/references/profile.html | specification}
  */
-export class ProfileClient extends AsyncInitDryRunCachingClient implements IProfileClient {
+export class ProfileClient extends DryRunCachingClient implements IProfileClient, IAsyncAutoConfiguration {
     /* Constructors */
     public static async autoConfiguration(): Promise<ProfileClient> {
         const config = await getProfileClientAutoConfiguration();

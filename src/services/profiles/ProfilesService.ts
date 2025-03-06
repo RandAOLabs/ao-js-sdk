@@ -3,10 +3,10 @@ import { ProfileRegistryClient } from "src/clients/bazar/profile-registry/Profil
 import { ProfileRegistryEntry } from "src/clients/bazar/profile-registry/abstract";
 import { IProfilesService } from "src/services/profiles/abstract/IProfilesService";
 import { Logger } from "src/utils";
-import { getBaseClientAutoConfiguration } from "src/core/ao/BaseClientAutoConfiguration";
 import { ICache, newCache } from "src/utils/cache";
 import { ConcurrencyManager } from "src/utils/concurrency";
 import { ProfileInfo, ProfileClient } from "src/clients";
+import { BaseClientConfigBuilder } from "src/core/ao/configuration/builder";
 
 const MAX_RETRIES = 3;
 
@@ -104,10 +104,11 @@ export class ProfilesService implements IProfilesService {
      * Gets profile info for a process ID
      */
     private async _getProfileInfoForProcessId(processId: string): Promise<ProfileInfo> {
-        const config = {
-            ...getBaseClientAutoConfiguration(),
-            processId
-        };
+
+        const builder = new BaseClientConfigBuilder()
+        const config = builder
+            .withProcessId(processId)
+            .build()
         const client = new ProfileClient(config);
         return await client.getProfileInfo();
     }

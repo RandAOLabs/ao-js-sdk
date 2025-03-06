@@ -9,7 +9,7 @@ import { getWalletLazy } from 'src/utils/wallet';
  */
 export class BaseClientConfigBuilder implements IBuilder<BaseClientConfig> {
     private config: Partial<BaseClientConfig> = {};
-    private useDefaults: boolean = false;
+    private useDefaults: boolean = true;
 
     // ==========================================
     // Interface Methods (IBuilder)

@@ -6,12 +6,14 @@ import {
     GetLPInfoError,
     GetPriceError
 } from "src/clients/autonomous-finance/botega/liquidity-pool/BotegaLiquidityPoolClientError";
+import { Logger, LogLevel } from "src/utils";
 
 describe("BotegaLiquidityPoolClient Unit Tests", () => {
     let client: BotegaLiquidityPoolClient;
     let mockBaseClient: MockBaseClient;
 
     beforeEach(() => {
+        Logger.setLogLevel(LogLevel.NONE)
         client = new BotegaLiquidityPoolClient("test-process-id");
         mockBaseClient = new MockBaseClient();
         mockBaseClient.bindToClient(client);

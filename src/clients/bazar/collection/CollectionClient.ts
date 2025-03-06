@@ -5,13 +5,14 @@ import { TAG_NAMES, ACTIONS, RESPONSE_ACTIONS, STATUS, TRANSFER_RATE_LIMIT, TRAN
 import { NftClient } from "src/clients/bazar/nft";
 import { BaseClientConfig } from "src/core";
 import { ISyncAutoConfiguration } from "src/core/ao/abstract";
+import { BaseClient } from "src/core/ao/BaseClient";
 import { Logger } from "src/utils";
 
 
 /**
  * @category Bazar
  */
-export class CollectionClient extends ISyncAutoConfiguration implements ICollectionClient {
+export class CollectionClient extends BaseClient implements ICollectionClient, ISyncAutoConfiguration {
     /* Constructors */
     public static autoConfiguration(): CollectionClient {
         return new CollectionClient(getCollectionClientAutoConfiguration());

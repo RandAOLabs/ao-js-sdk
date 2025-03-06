@@ -1,8 +1,9 @@
+
 import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
 import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
-import { ProviderProfileClient } from "src/clients/randao/provider-profile/ProviderProfileClient";
-import { ProviderDetails, ProviderInfoDTO } from "src/clients/randao/provider-profile/abstract/types";
+import { ProviderDetails, ProviderInfoDTO, ProviderProfileClient } from "src/clients";
 import { BaseClient } from "src/core/ao/BaseClient";
+
 
 jest.mock("src/services/ario/ARIOService", () => ({
     getProcessIdForDomain: jest.fn().mockResolvedValue("test-process-id")
@@ -51,7 +52,7 @@ describe("ProviderProfileClient Unit Test", () => {
             };
 
             const messageSpy = jest.spyOn(BaseClient.prototype, 'messageResult');
-            
+
             await client.updateDetails(mockDetails);
 
             // Verify the data was properly stringified (double JSON.stringify for nested objects)
@@ -68,7 +69,7 @@ describe("ProviderProfileClient Unit Test", () => {
             };
 
             const clearCacheSpy = jest.spyOn(client as any, 'clearCache');
-            
+
             await client.updateDetails(mockDetails);
 
             expect(clearCacheSpy).toHaveBeenCalled();
@@ -114,7 +115,7 @@ describe("ProviderProfileClient Unit Test", () => {
         it("should use provided providerId when available", async () => {
             const providerId = "specific-provider-id";
             const dryrunSpy = jest.spyOn(BaseClient.prototype, 'dryrun');
-            
+
             await client.getProviderInfo(providerId);
 
             // Verify the correct providerId was used in the message data
@@ -127,7 +128,7 @@ describe("ProviderProfileClient Unit Test", () => {
         it("should fall back to calling wallet address when providerId not provided", async () => {
             const dryrunSpy = jest.spyOn(BaseClient.prototype, 'dryrun');
             const getWalletSpy = jest.spyOn(BaseClient.prototype, 'getCallingWalletAddress');
-            
+
             await client.getProviderInfo();
 
             expect(getWalletSpy).toHaveBeenCalled();
