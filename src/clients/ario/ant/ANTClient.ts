@@ -9,14 +9,6 @@ import { DryRunCachingClientConfigBuilder } from "src/core/ao/configuration/buil
  * @category ARIO
  */
 export class ANTClient extends DryRunCachingClient implements IANTClient {
-    constructor(processId: string) {
-        const builder = new DryRunCachingClientConfigBuilder()
-        const config = builder
-            .withProcessId(processId)
-            .build()
-        super(config);
-    }
-
     /**
      * Retrieves all ANT records.
      * @returns Promise resolving to a record of ANT records
