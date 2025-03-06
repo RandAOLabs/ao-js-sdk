@@ -3,9 +3,11 @@ import { ANTClient } from 'src/clients/ario/ant';
 import { ARNSClient, InvalidDomainError } from 'src/clients/ario/arns';
 import { ICache, ICacheConfig, newCache } from 'src/utils/cache';
 import { DOMAIN_SEPARATOR, ARN_ROOT_NAME } from 'src/services/ario/constants';
-import { Logger } from 'src/utils';
 import { Domain } from 'src/services/ario/domains';
 import { ANTRecordNotFoundError, ARNSRecordNotFoundError } from 'src/services/ario/ARIOError';
+import { ARIOServiceConfig } from 'src/services/ario/abstract/ARIOServiceConfig';
+import { getARNSClientAutoConfiguration } from 'src/clients/ario/arns/ARNSClientAutoConfiguration';
+import { DryRunCachingClientConfigBuilder } from 'src/core/ao/configuration/builder';
 
 /**
  * Service for handling ARIO operations, including ANT and ARNS record management.
@@ -16,15 +18,23 @@ export class ARIOService implements IARIOService {
     private static instance: ARIOService | null = null;
     private arnsClient: ARNSClient;
     private antClientCache: ICache<string, ANTClient>;
+    private config: ARIOServiceConfig;
 
-    private constructor(config: ICacheConfig = {}) {
-        this.arnsClient = ARNSClient.autoConfiguration();
-        this.antClientCache = newCache<string, ANTClient>(config);
+    private constructor(config: ARIOServiceConfig) {
+        this.arnsClient = new ARNSClient(config.arnsClientConfig)
+        this.antClientCache = newCache<string, ANTClient>(config.cacheConfig);
+        this.config = config
     }
 
-    public static getInstance(config: ICacheConfig = {}): ARIOService {
+    public static getInstance(config?: ARIOServiceConfig): ARIOService {
         if (!ARIOService.instance) {
-            ARIOService.instance = new ARIOService(config);
+            if (config) {
+                ARIOService.instance = new ARIOService(config);
+            } else {
+                ARIOService.instance = new ARIOService({
+                    arnsClientConfig: getARNSClientAutoConfiguration()
+                });
+            }
         }
         return ARIOService.instance;
     }
@@ -121,7 +131,11 @@ export class ARIOService implements IARIOService {
         }
 
         // Create and cache new client
-        const antClient = new ANTClient(arnsRecord.processId);
+        const config = new DryRunCachingClientConfigBuilder()
+            .withProcessId(arnsRecord.processId)
+            .withWallet(this.config.arnsClientConfig.wallet)
+            .build()
+        const antClient = new ANTClient(config);
         this.antClientCache.set(antName, antClient);
         return antClient;
     }

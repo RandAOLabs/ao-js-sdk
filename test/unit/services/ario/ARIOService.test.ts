@@ -5,6 +5,7 @@ import { ARNSClient, InvalidDomainError } from 'src/clients/ario/arns';
 import { ARNSRecord } from 'src/clients/ario/arns/types';
 import { ANTRecordNotFoundError, ARNSRecordNotFoundError } from 'src/services/ario/ARIOError';
 import { ARN_ROOT_NAME } from 'src/services/ario/constants';
+import { BaseClientConfig } from 'src/core/ao/configuration';
 
 // Mock the clients
 jest.mock('src/clients/ario/ant');
@@ -19,24 +20,50 @@ describe('ARIOService', () => {
         // Clear singleton instance
         (ARIOService as any).instance = undefined;
 
-        // Setup mocks
+        // Setup mocks with required DryRunCachingClient methods
         mockArnsClient = {
             getRecord: jest.fn(),
-            autoConfiguration: jest.fn(),
+            dryrun: jest.fn(),
+            getFirstMessageDataJson: jest.fn(),
+            getProcessId: jest.fn(),
+            message: jest.fn(),
+            messageResult: jest.fn(),
+            result: jest.fn(),
+            results: jest.fn(),
+            setDryRunAsMessage: jest.fn(),
+            getProcessInfo: jest.fn(),
+            getCallingWalletAddress: jest.fn(),
+            isRunningDryRunsAsMessages: jest.fn(),
+            clearCache: jest.fn()
         } as any;
 
         mockAntClient = {
             getRecord: jest.fn(),
+            dryrun: jest.fn(),
+            getFirstMessageDataJson: jest.fn(),
+            getProcessId: jest.fn(),
+            message: jest.fn(),
+            messageResult: jest.fn(),
+            result: jest.fn(),
+            results: jest.fn(),
+            setDryRunAsMessage: jest.fn(),
+            getProcessInfo: jest.fn(),
+            getCallingWalletAddress: jest.fn(),
+            isRunningDryRunsAsMessages: jest.fn(),
+            clearCache: jest.fn()
         } as any;
 
-        // Mock ARNSClient.autoConfiguration to return our mock
-        (ARNSClient as any).autoConfiguration = jest.fn().mockReturnValue(mockArnsClient);
-
-        // Mock ANTClient constructor
-        (ANTClient as any).mockImplementation(() => mockAntClient);
+        // Mock the constructors to return our mocks
+        jest.mocked(ARNSClient).mockImplementation((config: BaseClientConfig) => mockArnsClient);
+        jest.mocked(ANTClient).mockImplementation((config: BaseClientConfig) => mockAntClient);
 
         // Create service instance with empty cache config
-        service = ARIOService.getInstance({ maxAge: 0 });
+        service = ARIOService.getInstance({
+            arnsClientConfig: {
+                processId: 'test-process-id',
+                wallet: {} // Mock wallet config
+            }
+        });
     });
 
     describe('getProcessIdForDomain', () => {
@@ -56,7 +83,10 @@ describe('ARIOService', () => {
 
             // Verify ANTClient was only constructed once for 'randao'
             expect(ANTClient).toHaveBeenCalledTimes(1);
-            expect(ANTClient).toHaveBeenCalledWith(processId);
+            expect(ANTClient).toHaveBeenCalledWith(expect.objectContaining({
+                processId: expect.any(String),
+                wallet: expect.anything()
+            }));
         });
 
         it('should get process ID for simple domain', async () => {
@@ -75,7 +105,10 @@ describe('ARIOService', () => {
             expect(result).toBe(txId);
             expect(mockArnsClient.getRecord).toHaveBeenCalledWith(domain);
             expect(mockAntClient.getRecord).toHaveBeenCalledWith(ARN_ROOT_NAME);
-            expect(ANTClient).toHaveBeenCalledWith(processId);
+            expect(ANTClient).toHaveBeenCalledWith(expect.objectContaining({
+                processId: expect.any(String),
+                wallet: expect.anything()
+            }));
         });
 
         it('should get process ID for domain with undername', async () => {
@@ -93,7 +126,10 @@ describe('ARIOService', () => {
             // Verify
             expect(result).toBe(txId);
             expect(mockAntClient.getRecord).toHaveBeenCalledWith('nft');
-            expect(ANTClient).toHaveBeenCalledWith(processId);
+            expect(ANTClient).toHaveBeenCalledWith(expect.objectContaining({
+                processId: expect.any(String),
+                wallet: expect.anything()
+            }));
         });
 
         it('should throw ARNSRecordNotFoundError when ARNS record not found', async () => {
