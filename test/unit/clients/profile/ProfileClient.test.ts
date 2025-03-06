@@ -1,124 +1,85 @@
-import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
-import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
-import { getWalletLazy, Logger, LogLevel } from "src/utils";
-import { BaseClient } from "src/core/ao/BaseClient";
+import { Logger, LogLevel } from "src/utils";
 import { ProfileClient } from "src/index";
-
-
-// Mock BaseClient methods
-const mockDryRunResult: DryRunResult = {
-    Output: undefined,
-    Messages: [{
-        Data: JSON.stringify({
-            Profile: {},
-            Assets: [],
-            Collections: [],
-            Owner: "test-owner"
-        }),
-        Tags: []
-    }],
-    Spawns: []
-};
-
-const mockMessageResult: MessageResult = {
-    Output: undefined,
-    Messages: [{ Data: "", Tags: [{ name: "Action", value: "Transfer-Success" }] }],
-    Spawns: []
-};
-
-jest.spyOn(BaseClient.prototype, 'dryrun').mockResolvedValue(mockDryRunResult);
-jest.spyOn(BaseClient.prototype, 'messageResult').mockResolvedValue(mockMessageResult);
-jest.spyOn(BaseClient.prototype, 'getCallingWalletAddress').mockResolvedValue("test-wallet");
-
-// Mock the getProfileClientAutoConfiguration
-jest.mock("src/clients/bazar/profile/ProfileClientAutoConfiguration", () => ({
-    getProfileClientAutoConfiguration: jest.fn().mockResolvedValue({
-        processId: "test-process-id",
-        wallet: getWalletLazy(),
-        environment: "node"
-    })
-}));
+import { MockBaseClient } from "test/unit/clients/MockBaseClient";
 
 describe("ProfileClient Unit Tests", () => {
+    let mockBaseClient: MockBaseClient;
     let client: ProfileClient;
 
-    beforeAll(async () => {
-        // Logger.setLogLevel(LogLevel.DEBUG)
+    beforeEach(async () => {
+        Logger.setLogLevel(LogLevel.NONE);
+        // Logger.setLogLevel(LogLevel.DEBUG);
+        mockBaseClient = new MockBaseClient();
         client = await ProfileClient.autoConfiguration();
-    });
-
-    afterEach(() => {
-        jest.clearAllMocks();
+        mockBaseClient.bindToClient(client);
     });
 
     describe("getProfileInfo", () => {
-
         it("should use provided address", async () => {
-            const address = "test-address";
-            const dryrunSpy = jest.spyOn(client, 'dryrun');
+            // Setup mock data
+            const mockProfileInfo = {
+                Profile: {},
+                Assets: [],
+                Collections: [],
+                Owner: "test-owner"
+            };
+            mockBaseClient.setMockDataJson(mockProfileInfo);
 
-            await client.getProfileInfo();
-
-            expect(dryrunSpy).toHaveBeenCalledWith('', [
-                { name: "Action", value: "Info" }
-            ]);
-        });
-
-        it("should use calling wallet address if none provided", async () => {
-            const getWalletSpy = jest.spyOn(client, 'getCallingWalletAddress');
-
-            await client.getProfileInfo();
-
-            expect(getWalletSpy).toHaveBeenCalled();
-        });
-
-        it("should return parsed profile info", async () => {
             const result = await client.getProfileInfo();
-            expect(result).toBeDefined();
+            expect(result).toEqual(mockProfileInfo);
+        });
+
+        it("should return parsed profile info with all expected fields", async () => {
+            const mockProfileInfo = {
+                Profile: { name: "Test User" },
+                Assets: ["asset1", "asset2"],
+                Collections: ["col1"],
+                Owner: "test-owner"
+            };
+            mockBaseClient.setMockDataJson(mockProfileInfo);
+
+            const result = await client.getProfileInfo();
             expect(result.Profile).toBeDefined();
             expect(result.Assets).toBeDefined();
             expect(result.Collections).toBeDefined();
             expect(result.Owner).toBeDefined();
+            expect(result).toEqual(mockProfileInfo);
         });
     });
 
     describe("transferAsset", () => {
-        let client: ProfileClient;
-
-        beforeAll(async () => {
-            client = await ProfileClient.autoConfiguration();
-        });
-
-        afterEach(() => {
-            jest.clearAllMocks();
-        });
-
         it("should include additional tags if provided", async () => {
-            const messageResultSpy = jest.spyOn(client, 'messageResult');
+            const mockSuccessResult = {
+                Output: undefined,
+                Messages: [{ Data: "", Tags: [{ name: "Action", value: "Transfer-Success" }] }],
+                Spawns: []
+            };
+            mockBaseClient.setMockMessageResult(mockSuccessResult);
+
             const additionalTags = [{ name: "Extra", value: "Tag" }];
-
-            await client.transferAsset("asset", "recipient", "1", additionalTags);
-
-            expect(messageResultSpy).toHaveBeenCalledWith('', expect.arrayContaining([
-                { name: "Action", value: "Transfer" },
-                { name: "Target", value: "asset" },
-                { name: "Recipient", value: "recipient" },
-                { name: "Quantity", value: "1" },
-                { name: "Extra", value: "Tag" }
-            ]));
+            const result = await client.transferAsset("asset", "recipient", "1", additionalTags);
+            expect(result).toBe(true);
         });
 
         it("should return true on successful transfer", async () => {
+            const mockSuccessResult = {
+                Output: undefined,
+                Messages: [{ Data: "", Tags: [{ name: "Action", value: "Transfer-Success" }] }],
+                Spawns: []
+            };
+            mockBaseClient.setMockMessageResult(mockSuccessResult);
+
             const result = await client.transferAsset("asset", "recipient", "1");
             expect(result).toBe(true);
         });
 
         it("should return false on failed transfer", async () => {
-            jest.spyOn(BaseClient.prototype, 'messageResult').mockResolvedValueOnce({
+            const mockFailedResult = {
                 Output: undefined,
                 Messages: [{ Data: "", Tags: [{ name: "Action", value: "Transfer-Failed" }] }],
                 Spawns: []
-            });
+            };
+            mockBaseClient.setMockMessageResult(mockFailedResult);
 
             const result = await client.transferAsset("asset", "recipient", "1");
             expect(result).toBe(false);

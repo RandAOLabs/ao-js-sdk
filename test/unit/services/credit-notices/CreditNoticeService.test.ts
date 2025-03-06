@@ -2,6 +2,7 @@ import { CreditNoticeService } from "src/services/credit-notices";
 import { MessagesService } from "src/services/messages";
 import { CREDIT_NOTICE_ACTION_TAG, FROM_PROCESS_TAG_NAME } from "src/services/credit-notices/constants";
 import { GetCreditNoticesError } from "src/services/credit-notices/CreditNoticeServiceError";
+import { Logger, LogLevel } from "src/utils";
 
 // Mock MessagesService
 jest.mock("../../../../src/services/messages/MessagesService");
@@ -11,6 +12,8 @@ describe("CreditNoticeService", () => {
     let mockGetAllMessagesReceivedBy: jest.Mock;
 
     beforeEach(() => {
+        Logger.setLogLevel(LogLevel.NONE)
+
         jest.clearAllMocks();
         mockGetAllMessagesReceivedBy = jest.fn().mockResolvedValue([]);
         (MessagesService as jest.Mock).mockImplementation(() => ({

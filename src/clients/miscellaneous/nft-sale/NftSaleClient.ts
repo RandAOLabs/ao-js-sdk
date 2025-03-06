@@ -5,13 +5,15 @@ import { INftSaleClient, NftSaleClientConfig } from "src/clients/miscellaneous/n
 import { NftSaleInfo } from "src/clients/miscellaneous/nft-sale/abstract/types";
 import { getNftSaleClientAutoConfiguration } from "src/clients/miscellaneous/nft-sale/NftSaleClientAutoConfiguration";
 import { PurchaseNftError, LuckyDrawError, QueryNFTCountError, AddNftError, ReturnNFTsError, NftSaleInfoError, PaymentError } from "src/clients/miscellaneous/nft-sale/NftSaleClientError";
-import { ASyncInitClient, Tags } from "src/core";
+import { Tags } from "src/core";
+import { IAsyncAutoConfiguration } from "src/core/ao/abstract";
+import { BaseClient } from "src/core/ao/BaseClient";
 import { Logger } from "src/utils";
 
 /**
  * @category Miscellaneous
  */
-export class NftSaleClient extends ASyncInitClient implements INftSaleClient {
+export class NftSaleClient extends BaseClient implements INftSaleClient, IAsyncAutoConfiguration {
     /* Fields */
     readonly tokenClient: TokenClient;
     readonly profileClient: ProfileClient;
