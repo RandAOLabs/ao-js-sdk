@@ -1,9 +1,9 @@
 import { InputValidationError } from "src/clients/bazar";
-import { NftSaleClientConfig } from "src/clients/miscellaneous/nft-sale/abstract";
+import { TokenInterfacingClientConfig } from "src/clients/common/TokenInterfacingClientConfig";
 import { BaseClientConfigBuilder } from "src/core/ao/configuration/builder";
 import { IBuilder } from "src/utils/builder";
 
-export class TokenInterfacingClientConfigBuilder extends BaseClientConfigBuilder implements IBuilder<NftSaleClientConfig> {
+export class TokenInterfacingClientConfigBuilder extends BaseClientConfigBuilder implements IBuilder<TokenInterfacingClientConfig> {
     private tokenProcessId?: string
 
     // ==========================================
@@ -14,7 +14,7 @@ export class TokenInterfacingClientConfigBuilder extends BaseClientConfigBuilder
      * Builds and returns the final DryRunCachingClientConfig object.
      * @returns The constructed DryRunCachingClientConfig
      */
-    build(): NftSaleClientConfig {
+    build(): TokenInterfacingClientConfig {
         const baseConfig = super.build();//validation is called add superclass
         return {
             ...baseConfig,
