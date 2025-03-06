@@ -1,4 +1,4 @@
-import { BaseClientConfig } from "src/core/ao/abstract/BaseClientConfig";
+import { BaseClientConfig } from "src/core/ao/configuration/BaseClientConfig";
 
 /**
  * Represents an ARNS (Arweave Name Service) record

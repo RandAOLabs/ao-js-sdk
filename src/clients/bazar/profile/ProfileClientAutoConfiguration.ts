@@ -1,10 +1,8 @@
 import { ProfileRegistryClient } from "src/clients/bazar/profile-registry";
 import { ProfileClientConfig } from "src/clients/bazar/profile/abstract";
 import { NoProfileFoundError } from "src/clients/bazar/profile/ProfileClientError";
+import { BaseClientConfigBuilder } from "src/core/ao/configuration/builder";
 
-import { getBaseClientAutoConfiguration } from "src/core/ao/BaseClientAutoConfiguration";
-import { getDryRunCachineClientAutoConfiguration } from "src/core/ao/client-variants";
-import { ICacheConfig } from "src/utils";
 
 
 export const getProfileClientAutoConfiguration = async (): Promise<ProfileClientConfig> => {
@@ -16,10 +14,8 @@ export const getProfileClientAutoConfiguration = async (): Promise<ProfileClient
         throw new NoProfileFoundError(walletAddress);
     }
 
-    const config: ProfileClientConfig = {
-        ...getBaseClientAutoConfiguration(),
-        processId: profiles[0].ProfileId,
-    }
-
-    return config
+    const builder = new BaseClientConfigBuilder()
+    return builder
+        .withProcessId(profiles[0].ProfileId)
+        .build()
 }

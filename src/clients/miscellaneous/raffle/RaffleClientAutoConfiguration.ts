@@ -1,8 +1,10 @@
 import { RaffleClientConfig } from "src/clients";
-import { getBaseClientAutoConfiguration } from "src/core/ao/BaseClientAutoConfiguration";
+import { BaseClientConfigBuilder } from "src/core/ao/configuration/builder";
 import { RAFFLE_PROCESS_ID } from "src/processes_ids";
 
-export const getRaffleClientAutoConfiguration = (): RaffleClientConfig => ({
-    ...getBaseClientAutoConfiguration(),
-    processId: RAFFLE_PROCESS_ID,
-});
+export const getRaffleClientAutoConfiguration = (): RaffleClientConfig => {
+    const builder = new BaseClientConfigBuilder()
+    return builder
+        .withProcessId(RAFFLE_PROCESS_ID)
+        .build()
+}

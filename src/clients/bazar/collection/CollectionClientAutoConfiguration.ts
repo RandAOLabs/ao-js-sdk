@@ -1,8 +1,10 @@
 import { CollectionClientConfig } from "src/clients";
-import { getBaseClientAutoConfiguration } from "src/core/ao/BaseClientAutoConfiguration";
+import { BaseClientConfigBuilder } from "src/core/ao/configuration/builder";
 import { ARCAO_TEST_NFT_COLLECTION } from "src/processes_ids";
 
-export const getCollectionClientAutoConfiguration = (): CollectionClientConfig => ({
-    ...getBaseClientAutoConfiguration(),
-    processId: ARCAO_TEST_NFT_COLLECTION,
-});
+export const getCollectionClientAutoConfiguration = (): CollectionClientConfig => {
+    const builder = new BaseClientConfigBuilder()
+    return builder
+        .withProcessId(ARCAO_TEST_NFT_COLLECTION)
+        .build()
+}
