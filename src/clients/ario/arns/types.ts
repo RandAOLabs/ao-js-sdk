@@ -20,10 +20,6 @@ export interface ARNSRecord {
     metadata?: Record<string, any>;
 }
 
-
-export interface ARNSClientConfig extends BaseClientConfig {
-}
-
 /**
  * Request parameters for retrieving an ARNS record
  */

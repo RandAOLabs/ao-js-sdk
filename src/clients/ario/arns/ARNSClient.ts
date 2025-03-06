@@ -12,12 +12,8 @@ import { ISyncAutoConfiguration } from "src/core/ao/abstract";
  * @category ARIO
  */
 export class ARNSClient extends DryRunCachingClient implements IARNSClient, ISyncAutoConfiguration {
-    constructor() {
-        super(getARNSClientAutoConfiguration());
-    }
-
     public static autoConfiguration(): ARNSClient {
-        return new ARNSClient();
+        return new ARNSClient(getARNSClientAutoConfiguration());
     }
 
     /**
