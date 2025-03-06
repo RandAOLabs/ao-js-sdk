@@ -1,5 +1,4 @@
-import { BaseClientConfig } from "src/core/ao/abstract/BaseClientConfig";
+import { TokenInterfacingClientConfig } from "src/clients/common/TokenInterfacingClientConfig";
 
-export interface NftSaleClientConfig extends BaseClientConfig {
-    tokenProcessId: string;
+export interface NftSaleClientConfig extends TokenInterfacingClientConfig {
 }

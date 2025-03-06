@@ -1,11 +1,10 @@
+import { TokenInterfacingClientConfigBuilder } from "src/clients/common/TokenInterfacingClientConfigBuilder";
 import { RandomClientConfig } from "src/clients/randao/random/abstract";
-import { getBaseClientAutoConfiguration } from "src/core/ao/BaseClientAutoConfiguration";
-import { RNG_TOKEN_PROCESS_ID } from "src/processes_ids"
-import { ARIOService } from "src/services/ario/ARIOService";
-import { Domain } from "src/services/ario/domains";
+import { RandomClientConfigBuilder } from "src/clients/randao/random/RandomClientConfigBuilder";
 
-export const getRandomClientAutoConfiguration = async (): Promise<RandomClientConfig> => ({
-    ...getBaseClientAutoConfiguration(),
-    processId: await ARIOService.getInstance().getProcessIdForDomain(Domain.RANDAO_API),
-    tokenProcessId: RNG_TOKEN_PROCESS_ID,
-});
+
+export const getRandomClientAutoConfiguration = async (): Promise<RandomClientConfig> => {
+    const builder = new RandomClientConfigBuilder()
+    return builder
+        .build()
+}

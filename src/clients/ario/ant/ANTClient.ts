@@ -1,8 +1,8 @@
-import { getBaseClientAutoConfiguration } from "src/core/ao/BaseClientAutoConfiguration";
 import { IANTClient } from "src/clients/ario/ant/abstract/IANTClient";
 import { ANTRecord, ANTRecords } from "src/clients/ario/ant/abstract/types";
 import { GetRecordsError, GetRecordError } from "src/clients/ario/ant/ANTClientError";
 import { DryRunCachingClient } from "src/core/ao/client-variants";
+import { DryRunCachingClientConfigBuilder } from "src/core/ao/configuration/builder";
 
 /**
  * Client for interacting with ANT (Arweave Name Token) records.
@@ -10,10 +10,11 @@ import { DryRunCachingClient } from "src/core/ao/client-variants";
  */
 export class ANTClient extends DryRunCachingClient implements IANTClient {
     constructor(processId: string) {
-        super({
-            ...getBaseClientAutoConfiguration(),
-            processId
-        });
+        const builder = new DryRunCachingClientConfigBuilder()
+        const config = builder
+            .withProcessId(processId)
+            .build()
+        super(config);
     }
 
     /**

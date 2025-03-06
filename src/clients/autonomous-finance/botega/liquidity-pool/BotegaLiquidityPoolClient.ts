@@ -3,7 +3,6 @@ import { LPInfo } from "./abstract/types";
 import { DryRunCachingClient } from "src/core/ao/client-variants";
 import { TokenClient } from "src/clients/ao/token/TokenClient";
 import { Logger } from "src/utils/index";
-import { getBaseClientAutoConfiguration } from "src/core/ao/BaseClientAutoConfiguration";
 import TagUtils from "src/core/common/TagUtils";
 import { ArweaveTransaction } from "src/core/arweave/abstract/types";
 import { ITokenClient } from "src/clients/ao";
@@ -16,6 +15,7 @@ import {
     GetPriceOfTokenAInTokenBError,
     GetPriceOfTokenBInTokenAError
 } from "./BotegaLiquidityPoolClientError";
+import { BaseClientConfigBuilder, DryRunCachingClientConfigBuilder } from "src/core/ao/configuration/builder";
 
 /**
  * @category Autonomous Finance
@@ -26,10 +26,11 @@ export class BotegaLiquidityPoolClient extends DryRunCachingClient implements IB
     private tokenBClient?: ITokenClient;
 
     constructor(processId: string) {
-        super({
-            ...getBaseClientAutoConfiguration(),
-            processId
-        });
+        const builder = new DryRunCachingClientConfigBuilder()
+        const config = builder
+            .withProcessId(processId)
+            .build()
+        super(config);
     }
 
     /* Core Liquidity Pool Functions */
@@ -78,10 +79,11 @@ export class BotegaLiquidityPoolClient extends DryRunCachingClient implements IB
         if (!this.tokenAClient) {
             try {
                 const lpInfo = await this.getLPInfo();
-                this.tokenAClient = new TokenClient({
-                    ...getBaseClientAutoConfiguration(),
-                    processId: lpInfo.tokenA
-                });
+                const builder = new BaseClientConfigBuilder()
+                const config = builder
+                    .withProcessId(lpInfo.tokenA)
+                    .build()
+                this.tokenAClient = new TokenClient(config);
             } catch (error: any) {
                 Logger.error(`Error initializing token A client: ${error.message}`);
                 throw new GetTokenAError(error);
@@ -94,10 +96,11 @@ export class BotegaLiquidityPoolClient extends DryRunCachingClient implements IB
         if (!this.tokenBClient) {
             try {
                 const lpInfo = await this.getLPInfo();
-                this.tokenBClient = new TokenClient({
-                    ...getBaseClientAutoConfiguration(),
-                    processId: lpInfo.tokenB
-                });
+                const builder = new BaseClientConfigBuilder()
+                const config = builder
+                    .withProcessId(lpInfo.tokenB)
+                    .build()
+                this.tokenBClient = new TokenClient(config);
             } catch (error: any) {
                 Logger.error(`Error initializing token B client: ${error.message}`);
                 throw new GetTokenBError(error);

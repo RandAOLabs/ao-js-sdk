@@ -1,21 +1,17 @@
 import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
 import { ITokenClient, IGrantToken } from "src/clients/ao/token/abstract";
 import { TRANSFER_SUCCESS_MESSAGE } from "src/clients/ao/token/constants";
-import { getTokenClientAutoConfiguration } from "src/clients/ao/token/TokenClientAutoConfiguration";
 import { BalanceError, BalancesError, TransferError, GetInfoError, MintError, GrantError } from "src/clients/ao/token/TokenClientError";
-
-import { SyncInitClient, Tags } from "src/core";
+import { Tags } from "src/core";
+import { ISyncAutoConfiguration } from "src/core/ao/abstract";
+import { BaseClient } from "src/core/ao/BaseClient";
 import { Logger } from "src/utils/index"
 
 /**
  * @category ao-standards
  * @see {@link https://cookbook_ao.g8way.io/references/token.html | specification}
  */
-export class TokenClient extends SyncInitClient implements ITokenClient, IGrantToken {
-    /* Constructors */
-    public static autoConfiguration(): TokenClient {
-        return new TokenClient(getTokenClientAutoConfiguration());
-    }
+export class TokenClient extends BaseClient implements ITokenClient, IGrantToken {
     /* Constructors */
 
     /* Core Token Functions */

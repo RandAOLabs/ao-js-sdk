@@ -2,13 +2,14 @@ import { IProviderProfileClient } from "src/clients/randao/provider-profile/abst
 import { ProviderDetails, ProviderInfo, ProviderInfoDTO } from "src/clients/randao/provider-profile/abstract/types";
 import { getProviderProfileClientAutoConfiguration } from "src/clients/randao/provider-profile/ProviderProfileClientAutoConfiguration";
 import { Tags } from "src/core";
-import { SyncInitDryRunCachingClient } from "src/core/ao/client-variants";
+import { ISyncAutoConfiguration } from "src/core/ao/abstract";
+import { DryRunCachingClient } from "src/core/ao/client-variants";
 import { Logger } from "src/utils";
 
 /**
  * @category RandAO
  */
-export class ProviderProfileClient extends SyncInitDryRunCachingClient implements IProviderProfileClient {
+export class ProviderProfileClient extends DryRunCachingClient implements IProviderProfileClient, ISyncAutoConfiguration {
 
     public static autoConfiguration(): ProviderProfileClient {
         const config = getProviderProfileClientAutoConfiguration()

@@ -1,8 +1,10 @@
 import { ProfileRegistryClientConfig } from "src/clients/bazar/profile-registry/abstract";
-import { getBaseClientAutoConfiguration } from "src/core/ao/BaseClientAutoConfiguration";
+import { BaseClientConfigBuilder } from "src/core/ao/configuration/builder";
 import { PROFILE_REGISTRY_PROCESS_ID } from "src/processes_ids";
 
-export const getProfileRegistryClientAutoConfiguration = (): ProfileRegistryClientConfig => ({
-    ...getBaseClientAutoConfiguration(),
-    processId: PROFILE_REGISTRY_PROCESS_ID,
-});
+export const getProfileRegistryClientAutoConfiguration = (): ProfileRegistryClientConfig => {
+    const builder = new BaseClientConfigBuilder()
+    return builder
+        .withProcessId(PROFILE_REGISTRY_PROCESS_ID)
+        .build()
+}

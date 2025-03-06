@@ -1,4 +1,5 @@
-import { BaseClientConfig } from "src/core/ao/abstract/BaseClientConfig";
+import { DryRunCachingClientConfig } from "src/core/ao/configuration";
+import { BaseClientConfig } from "src/core/ao/configuration/BaseClientConfig";
 
 /**
  * Represents an ARNS (Arweave Name Service) record
@@ -31,13 +32,3 @@ export interface ARNSRecordRequest {
     name: string;
 }
 
-/**
- * Configuration for the ARNS client
- * @extends BaseClientConfig
- */
-export interface ARNSClientConfig extends BaseClientConfig {
-    /**
-     * The process ID for the ARNS service
-     */
-    processId: string;
-}

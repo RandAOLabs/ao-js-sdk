@@ -1,4 +1,5 @@
 import { IBaseClient } from "src/core/ao/abstract/IBaseClient";
+import { UnimplementedError } from "src/utils/errors";
 
 export abstract class IAsyncAutoConfiguration extends IBaseClient {
     /**
@@ -9,6 +10,6 @@ export abstract class IAsyncAutoConfiguration extends IBaseClient {
      * @throws Error if the implementation does not provide auto-configuration
      */
     public static autoConfiguration(): Promise<IAsyncAutoConfiguration> {
-        throw new Error("Method not implemented")
+        throw new UnimplementedError('autoConfiguration', this.name)
     }
 }

@@ -3,14 +3,15 @@ import { getARNSClientAutoConfiguration } from "src/clients/ario/arns/ARNSClient
 import { GetRecordError, InvalidDomainError } from "src/clients/ario/arns/ARNSClientError";
 import { ARNSRecord } from "src/clients/ario/arns/abstract/types";
 import { DOMAIN_SEPARATOR } from "src/clients/ario/arns/constants";
-import { SyncInitDryRunCachingClient } from "src/core/ao/client-variants";
 import { Logger, LogLevel } from "src/utils";
+import { DryRunCachingClient } from "src/core/ao/client-variants";
+import { ISyncAutoConfiguration } from "src/core/ao/abstract";
 
 /**
  * Client for interacting with ARNS (Arweave Name Service) records.
  * @category ARIO
  */
-export class ARNSClient extends SyncInitDryRunCachingClient implements IARNSClient {
+export class ARNSClient extends DryRunCachingClient implements IARNSClient, ISyncAutoConfiguration {
     constructor() {
         super(getARNSClientAutoConfiguration());
     }
