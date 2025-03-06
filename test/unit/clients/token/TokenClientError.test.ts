@@ -1,5 +1,6 @@
 import { dryrun, message } from "@permaweb/aoconnect";
 import { TokenClient, BalanceError, Logger, BalancesError, GetInfoError, MintError } from "src";
+import { BaseClientConfigBuilder } from "src/core/ao/configuration/builder";
 
 // Mocks
 jest.mock('@permaweb/aoconnect', () => ({
@@ -23,7 +24,10 @@ describe("TokenClient Error Handling", () => {
     let client: TokenClient;
 
     beforeEach(() => {
-        client = TokenClient.autoConfiguration();
+        const config = new BaseClientConfigBuilder()
+            .withProcessId("test-process-id")
+            .build()
+        client = new TokenClient(config)
     });
 
     afterEach(() => {

@@ -1,6 +1,6 @@
 import { createDataItemSigner } from '@permaweb/aoconnect';
 import { IBaseClient } from 'src/core/ao/abstract/IBaseClient';
-import { BaseClientConfig } from 'src/core/ao/abstract/BaseClientConfig';
+import { BaseClientConfig } from 'src/core/ao/configuration/BaseClientConfig';
 import { mergeLists } from 'src/utils/lists';
 import { DEFAULT_TAGS } from 'src/core/ao/constants';
 import { DryRunError, JsonParsingError, MessageError, MessageOutOfBoundsError, ResultError, ResultsError } from 'src/core/ao/BaseClientError';

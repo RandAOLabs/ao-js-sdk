@@ -1,7 +1,6 @@
-import { BaseClientConfig } from "src/core/ao/abstract";
+import { BaseClientConfig } from "src/core";
 
 export interface RaffleClientConfig extends BaseClientConfig {
-    processId: string;
 }
 
 export interface RafflePull {

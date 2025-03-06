@@ -5,14 +5,16 @@ import { IRandomClient, RandomClientConfig, GetProviderAvailableValuesResponse, 
 import { getRandomClientAutoConfiguration } from "src/clients/randao/random/RandomClientAutoConfiguration";
 import { PostVDFChallengeError, ProviderAvailableValuesError, UpdateProviderAvailableValuesError, OpenRandomRequestsError, RandomRequestsError, CreateRequestError, PostVDFOutputAndProofError } from "src/clients/randao/random/RandomClientError";
 import { RandomProcessError } from "src/clients/randao/random/RandomProcessError";
-import { ASyncInitClient, Tags } from "src/core";
+import { Tags } from "src/core";
+import { IAsyncAutoConfiguration } from "src/core/ao/abstract";
+import { BaseClient } from "src/core/ao/BaseClient";
 import { Logger } from "src/utils";
 
 /**
  * @category RandAO
  * @see {@link https://github.com/RandAOLabs/Random-Process | specification}
  */
-export class RandomClient extends ASyncInitClient implements IRandomClient {
+export class RandomClient extends BaseClient implements IRandomClient, IAsyncAutoConfiguration {
     /* Fields */
     readonly tokenClient: TokenClient;
     /* Fields */

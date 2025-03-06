@@ -4,13 +4,14 @@ import { IProviderStakingClient } from "src/clients/randao/provider-staking/abst
 import { ProviderStakeInfo } from "src/clients/randao/provider-staking/abstract/types";
 import { getProviderStakingClientAutoConfiguration } from "src/clients/randao/provider-staking/ProviderStakingClientAutoConfiguration";
 import { GetStakeError, ProviderUnstakeError, StakeWithDetailsError } from "src/clients/randao/provider-staking/ProviderStakingError";
-import { SyncInitClient, Tags } from "src/core";
+import { Tags } from "src/core";
+import { ISyncAutoConfiguration } from "src/core/ao/abstract";
 import { Logger } from "src/utils";
 
 /**
  * @category RandAO
  */
-export class ProviderStakingClient extends StakingClient implements IProviderStakingClient, SyncInitClient {
+export class ProviderStakingClient extends StakingClient implements IProviderStakingClient, ISyncAutoConfiguration {
     public static autoConfiguration(): ProviderStakingClient {
         return new ProviderStakingClient(getProviderStakingClientAutoConfiguration());
     }

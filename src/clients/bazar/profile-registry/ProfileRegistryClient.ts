@@ -1,15 +1,15 @@
 import { IProfileRegistryClient, ProfileRegistryEntry } from "src/clients/bazar/profile-registry/abstract";
 import { getProfileRegistryClientAutoConfiguration } from "src/clients/bazar/profile-registry/ProfileRegistryClientAutoConfiguration";
 import { GetProfilesError } from "src/clients/bazar/profile-registry/RegistryClientError";
-import { SyncInitDryRunCachingClient } from "src/core/ao/client-variants";
-import { SyncInitClient } from "src/core/ao/index";
+import { ISyncAutoConfiguration } from "src/core/ao/abstract";
+import { DryRunCachingClient } from "src/core/ao/client-variants";
 import { Logger } from "src/utils/index";
 
 
 /**
  * @category Bazar
  */
-export class ProfileRegistryClient extends SyncInitDryRunCachingClient implements IProfileRegistryClient {
+export class ProfileRegistryClient extends DryRunCachingClient implements IProfileRegistryClient, ISyncAutoConfiguration {
     /* Constructors */
     public static autoConfiguration(): ProfileRegistryClient {
         return new ProfileRegistryClient(getProfileRegistryClientAutoConfiguration());

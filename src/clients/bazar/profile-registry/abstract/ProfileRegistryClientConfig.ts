@@ -1,5 +1,4 @@
-import { DryRunCachingClientConfig } from "src/core/ao/abstract";
-import { BaseClientConfig } from "src/core/ao/abstract/BaseClientConfig";
+import { DryRunCachingClientConfig } from "src/core/ao/configuration";
 
 export interface ProfileRegistryClientConfig extends DryRunCachingClientConfig {
     // Registry Specific Configuration Items

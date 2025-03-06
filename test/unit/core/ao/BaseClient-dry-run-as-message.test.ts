@@ -2,8 +2,8 @@ import { dryrun, message, result } from '@permaweb/aoconnect';
 import { DryRunResult } from '@permaweb/aoconnect/dist/lib/dryrun';
 import { MessageResult } from '@permaweb/aoconnect/dist/lib/result';
 import { BaseClient } from 'src/core/ao/BaseClient';
+import { BaseClientConfigBuilder } from 'src/core/ao/configuration/builder';
 import { DEFAULT_TAGS } from 'src/core/ao/constants';
-import { SyncInitClient } from 'src/index';
 
 // Mocking external dependencies
 jest.mock('@permaweb/aoconnect', () => ({
@@ -35,7 +35,10 @@ jest.mock('src/utils/logger/logger', () => {
 describe("BaseClient Dry Run Tests", () => {
     let client: BaseClient;
     beforeEach(() => {
-        client = SyncInitClient.autoConfiguration();
+        const config = new BaseClientConfigBuilder()
+            .withProcessId("test-process-id")
+            .build()
+        client = new BaseClient(config)
     });
 
     afterEach(() => {

@@ -3,6 +3,7 @@ import { dryrun } from "@permaweb/aoconnect";
 import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
 import { Tags } from "src/core";
 import { BaseClient } from "src/core/ao/BaseClient";
+import { BaseClientConfigBuilder } from "src/core/ao/configuration/builder";
 import { TokenClient } from "src/index";
 
 
@@ -40,7 +41,11 @@ describe("TokenClient", () => {
 
     beforeEach(() => {
         // Create a new TokenClient instance using autoConfiguration
-        client = TokenClient.autoConfiguration();
+        const config = new BaseClientConfigBuilder()
+            .withProcessId("test-process-id")
+            .build()
+
+        client = new TokenClient(config);
     });
 
     afterEach(() => {

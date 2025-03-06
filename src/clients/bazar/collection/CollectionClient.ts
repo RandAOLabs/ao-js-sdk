@@ -3,14 +3,16 @@ import { getCollectionClientAutoConfiguration } from "src/clients/bazar/collecti
 import { CollectionInfoError, AuthorizationError, InputValidationError, UpdateAssetsError, AddToProfileError, TransferAllAssetsError } from "src/clients/bazar/collection/CollectionClientError";
 import { TAG_NAMES, ACTIONS, RESPONSE_ACTIONS, STATUS, TRANSFER_RATE_LIMIT, TRANSFER_BATCH_DELAY } from "src/clients/bazar/collection/constants";
 import { NftClient } from "src/clients/bazar/nft";
-import { SyncInitClient, BaseClientConfig } from "src/core";
+import { BaseClientConfig } from "src/core";
+import { ISyncAutoConfiguration } from "src/core/ao/abstract";
+import { BaseClient } from "src/core/ao/BaseClient";
 import { Logger } from "src/utils";
 
 
 /**
  * @category Bazar
  */
-export class CollectionClient extends SyncInitClient implements ICollectionClient {
+export class CollectionClient extends BaseClient implements ICollectionClient, ISyncAutoConfiguration {
     /* Constructors */
     public static autoConfiguration(): CollectionClient {
         return new CollectionClient(getCollectionClientAutoConfiguration());
