@@ -1,4 +1,4 @@
-export { BaseClientConfig } from "./abstract/BaseClientConfig";
+export { BaseClientConfig } from "./configuration/BaseClientConfig";
 
 export * from "./client-variants/AsyncInitClient"
 export * from "./client-variants/SyncInitClient"

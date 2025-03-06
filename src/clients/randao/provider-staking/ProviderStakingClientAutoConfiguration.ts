@@ -1,10 +1,12 @@
 import { StakingClientConfig } from "src/clients";
-import { getBaseClientAutoConfiguration } from "src/core/ao/BaseClientAutoConfiguration";
+import { TokenInterfacingClientConfigBuilder } from "src/clients/common/TokenInterfacingClientConfigBuilder";
 
-import { RANDAO_STAKING_TOKEN_PROCESS_ID, RANDAO_STAKING_PROCESS_ID } from "src/processes_ids";
+import { RANDAO_STAKING_TOKEN_PROCESS_ID, RANDAO_PROFILE_PROCESS_ID } from "src/processes_ids";
 
-export const getProviderStakingClientAutoConfiguration = (): StakingClientConfig => ({
-    ...getBaseClientAutoConfiguration(),
-    processId: RANDAO_STAKING_PROCESS_ID,
-    tokenProcessId: RANDAO_STAKING_TOKEN_PROCESS_ID,
-});
+export const getProviderStakingClientAutoConfiguration = (): StakingClientConfig => {
+    const builder = new TokenInterfacingClientConfigBuilder()
+    return builder
+        .withProcessId(RANDAO_PROFILE_PROCESS_ID)
+        .withTokenProcessId(RANDAO_STAKING_TOKEN_PROCESS_ID)
+        .build()
+}

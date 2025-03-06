@@ -1,13 +1,12 @@
 import { IAsyncAutoConfiguration } from "src/core/ao/abstract/IAsyncAutoConfiguration";
 import { DryRunCachingClient } from "src/core/ao/client-variants/DryRunCachingClient";
-import { getDryRunCachineClientAutoConfiguration } from "src/core/ao/client-variants/DryRunCachingClientAutoConfiguration";
+import { UnimplementedError } from "src/utils/errors";
 
 /**
  * @category Core
  */
 export class AsyncInitDryRunCachingClient extends DryRunCachingClient implements IAsyncAutoConfiguration {
     public static autoConfiguration(): Promise<AsyncInitDryRunCachingClient> {
-        const config = getDryRunCachineClientAutoConfiguration()
-        return Promise.resolve(new DryRunCachingClient(config))
+        throw new UnimplementedError('autoConfiguration', this.name)
     }
 }

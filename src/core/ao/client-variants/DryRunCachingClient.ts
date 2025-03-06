@@ -1,7 +1,7 @@
 import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
-import { DryRunCachingClientConfig } from "src/core/ao/abstract";
 import { IDryRunCachingClient } from "src/core/ao/abstract/ICachingClient"
 import { BaseClient } from "src/core/ao/BaseClient";
+import { DryRunCachingClientConfig } from "src/core/ao/configuration";
 import { Tags } from "src/core/common";
 import { ICache, newCache } from "src/utils/cache";
 

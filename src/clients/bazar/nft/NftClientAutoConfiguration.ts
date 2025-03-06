@@ -1,8 +1,10 @@
 import { TokenClientConfig } from "src/clients";
-import { getBaseClientAutoConfiguration } from "src/core/ao/BaseClientAutoConfiguration";
-import { RNG_TOKEN_PROCESS_ID } from "src/processes_ids";
+import { BaseClientConfigBuilder } from "src/core/ao/configuration/builder";
+import { ARCAO_TEST_NFT_COLLECTION, RNG_TOKEN_PROCESS_ID } from "src/processes_ids";
 
-export const getNftClientAutoConfiguration = (): TokenClientConfig => ({
-    ...getBaseClientAutoConfiguration(),
-    processId: RNG_TOKEN_PROCESS_ID,
-});
+export const getNftClientAutoConfiguration = (): TokenClientConfig => {
+    const builder = new BaseClientConfigBuilder()
+    return builder
+        .withProcessId(RNG_TOKEN_PROCESS_ID)
+        .build()
+}
