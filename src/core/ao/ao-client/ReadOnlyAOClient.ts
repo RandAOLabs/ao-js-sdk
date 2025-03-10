@@ -61,4 +61,8 @@ export class ReadOnlyAOClient implements IAOClient {
         });
         return result;
     }
+
+    public async getCallingWalletAddress(): Promise<string> {
+        throw new AOReadOnlyClientError();
+    }
 }

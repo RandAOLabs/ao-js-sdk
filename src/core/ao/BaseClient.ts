@@ -17,6 +17,7 @@ import { ArweaveTransaction } from 'src/core/arweave/abstract/types';
 import { WriteReadAOClient } from 'src/core/ao/ao-client/WriteReadAOClient';
 import { IAOClient } from 'src/core/ao/ao-client/abstract/IAOClient';
 import { ReadOnlyAOClient } from 'src/core/ao/ao-client/ReadOnlyAOClient';
+import { JWKInterface } from 'arweave/node/lib/wallet';
 
 export class BaseClient extends IBaseClient {
     /* Fields */
@@ -32,7 +33,7 @@ export class BaseClient extends IBaseClient {
         super()
         this.baseConfig = baseConfig;
         if (baseConfig.wallet) { // Wallet Provided -> Write Read Client
-            this.ao = new WriteReadAOClient(createDataItemSigner(baseConfig.wallet))
+            this.ao = new WriteReadAOClient(baseConfig.wallet)
         } else { // Wallet Not Provided -> Read Only Client
             this.ao = new ReadOnlyAOClient()
         }
@@ -127,20 +128,17 @@ export class BaseClient extends IBaseClient {
         Logger.log(logLevel, `Action: Dry run mode set to ${status} | Process ID: ${this.baseConfig.processId} | Subclass: ${this.constructor.name}`);
     }
 
+    public setWallet(wallet: JWKInterface | any): void {
+        this.ao = new WriteReadAOClient(wallet)
+    }
+
     /* Public Utility */
     public getProcessId(): string {
         return this.baseConfig.processId
     }
 
     public async getCallingWalletAddress(): Promise<string> {
-        const environment = getEnvironment();
-
-        if (environment === Environment.BROWSER) {
-            return await this.baseConfig.wallet.getActiveAddress();
-        } else {
-            const arweave = getArweave();
-            return await arweave.wallets.jwkToAddress(this.baseConfig.wallet);
-        }
+        return this.ao.getCallingWalletAddress()
     }
 
     public isRunningDryRunsAsMessages(): boolean {

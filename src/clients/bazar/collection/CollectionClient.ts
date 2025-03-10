@@ -3,7 +3,7 @@ import { getCollectionClientAutoConfiguration } from "src/clients/bazar/collecti
 import { CollectionInfoError, AuthorizationError, InputValidationError, UpdateAssetsError, AddToProfileError, TransferAllAssetsError } from "src/clients/bazar/collection/CollectionClientError";
 import { TAG_NAMES, ACTIONS, RESPONSE_ACTIONS, STATUS, TRANSFER_RATE_LIMIT, TRANSFER_BATCH_DELAY } from "src/clients/bazar/collection/constants";
 import { NftClient } from "src/clients/bazar/nft";
-import { BaseClientConfig, TagUtils } from "src/core";
+import { BaseClientConfig, BaseClientConfigBuilder, TagUtils } from "src/core";
 import { ISyncAutoConfiguration } from "src/core/ao/abstract";
 import { BaseClient } from "src/core/ao/BaseClient";
 import ResultUtils from "src/core/common/result-utils/ResultUtils";
@@ -95,10 +95,10 @@ export class CollectionClient extends BaseClient implements ICollectionClient, I
 
         await Promise.all(processIds.map(async (processId) => {
             try {
-                const nftConfig: BaseClientConfig = {
-                    ...this.baseConfig,
-                    processId
-                };
+                const nftConfig = new BaseClientConfigBuilder()
+                    .withProcessId(processId)
+                    .withWallet(this.baseConfig.wallet)
+                    .build()
                 const nftClient = new NftClient(nftConfig);
                 await nftClient.transfer(recipient);
             } catch (error: any) {

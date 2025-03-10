@@ -5,8 +5,11 @@ import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
 import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
 import { Tags } from "src/core/common";
 import { ArweaveTransaction } from "src/core/arweave/abstract/types";
+import { JWKInterface } from "arweave/node/lib/wallet";
 
 export abstract class IBaseClient {
+    /* AO Interaction Methods */
+
     /**
      * Send a message to an ao Message Unit (mu) targeting an ao process.
      * 
@@ -53,13 +56,15 @@ export abstract class IBaseClient {
      * @throws DryRunError if there is an error performing the dry run.
      */
     abstract dryrun(data: any, tags: Tags, anchor?: string, id?: string, owner?: string): Promise<DryRunResult>;
+    /* AO Interaction Methods */
 
+    /* Utility */
     /**
-     * Controls whether dryrun executes as a message or simulation.
-     * 
-     * @param enabled When true, dryrun will execute as a real message. When false (default), executes as a simulation.
+     * Gets the wallet address associated with the client.
+     * @returns Promise resolving to the wallet address string
+     * @throws Error if client is in read-only mode
      */
-    abstract setDryRunAsMessage(enabled: boolean): void;
+    abstract getCallingWalletAddress(): Promise<string>;
 
     /**
      * Retrieves the transaction that created this process. This transaction contains
@@ -69,11 +74,36 @@ export abstract class IBaseClient {
      * @throws ArweaveGraphQLError if there is an error retrieving the transaction
      */
     abstract getProcessInfo(): Promise<ArweaveTransaction>;
+    /* Utility */
 
+    /* ReadOnly Feature */
     /**
      * A Readonly Client can only perform dry run and result operations, however does not require a wallet to be used.
      * If a wallet is specified on instantiation the client will additionally be able to use write operations (messages).
      * @returns Boolean indicating whether or not the client is for read operations only.
      */
     abstract isReadOnly(): boolean;
+
+    /**
+     * Sets the wallet being used for this client. If the client is readonly it will now have write abilities.
+     * @param wallet the wallet to use with this client.
+     */
+    abstract setWallet(wallet: JWKInterface | any): void;
+
+    /* ReadOnly Feature */
+    /* Dry runs ass messages feature */
+
+    /**
+     * Controls whether dryrun executes as a message or simulation.
+     * 
+     * @param enabled When true, dryrun will execute as a real message. When false (default), executes as a simulation.
+     */
+    abstract setDryRunAsMessage(enabled: boolean): void;
+
+    /**
+     * @returns Boolean indicating whether or not the client is set to run dryruns as messages. (non default behavior)
+     */
+    abstract isRunningDryRunsAsMessages(): boolean;
+
+    /* Dry runs as messages feature */
 }
