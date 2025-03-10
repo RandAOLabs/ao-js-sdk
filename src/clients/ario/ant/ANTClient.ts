@@ -3,6 +3,7 @@ import { ANTRecord, ANTRecords } from "src/clients/ario/ant/abstract/types";
 import { GetRecordsError, GetRecordError } from "src/clients/ario/ant/ANTClientError";
 import { DryRunCachingClient } from "src/core/ao/client-variants";
 import { DryRunCachingClientConfigBuilder } from "src/core/ao/configuration/builder";
+import ResultUtils from "src/core/common/result-utils/ResultUtils";
 
 /**
  * Client for interacting with ANT (Arweave Name Token) records.
@@ -18,7 +19,7 @@ export class ANTClient extends DryRunCachingClient implements IANTClient {
             const result = await this.dryrun('', [
                 { name: "Action", value: "Records" }
             ]);
-            return this.getFirstMessageDataJson<ANTRecords>(result);
+            return ResultUtils.getFirstMessageDataJson<ANTRecords>(result);
         } catch (error: any) {
             throw new GetRecordsError(error);
         }
@@ -35,7 +36,7 @@ export class ANTClient extends DryRunCachingClient implements IANTClient {
                 { name: "Sub-Domain", value: undername },
                 { name: "Action", value: "Record" }
             ]);
-            return this.getFirstMessageDataJson<ANTRecord>(result);
+            return ResultUtils.getFirstMessageDataJson<ANTRecord>(result);
         } catch (error: any) {
             throw new GetRecordError(undername, error);
         }

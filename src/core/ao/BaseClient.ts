@@ -3,7 +3,7 @@ import { IBaseClient } from 'src/core/ao/abstract/IBaseClient';
 import { BaseClientConfig } from 'src/core/ao/configuration/BaseClientConfig';
 import { mergeLists } from 'src/utils/lists';
 import { DEFAULT_TAGS } from 'src/core/ao/constants';
-import { DryRunError, JsonParsingError, MessageError, MessageOutOfBoundsError, ResultError, ResultsError } from 'src/core/ao/BaseClientError';
+import { DryRunError, MessageError, ResultError, ResultsError } from 'src/core/ao/BaseClientError';
 import { MessageResult } from '@permaweb/aoconnect/dist/lib/result';
 import { ResultsResponse } from '@permaweb/aoconnect/dist/lib/results';
 import { DryRunResult } from '@permaweb/aoconnect/dist/lib/dryrun';
@@ -32,7 +32,7 @@ export class BaseClient extends IBaseClient {
         super()
         this.baseConfig = baseConfig;
         if (baseConfig.wallet) { // Wallet Provided -> Write Read Client
-            this.ao = new WriteReadAOClient(baseConfig.wallet)
+            this.ao = new WriteReadAOClient(createDataItemSigner(baseConfig.wallet))
         } else { // Wallet Not Provided -> Read Only Client
             this.ao = new ReadOnlyAOClient()
         }
@@ -126,6 +126,7 @@ export class BaseClient extends IBaseClient {
         const logLevel = enabled ? LogLevel.WARN : LogLevel.INFO;
         Logger.log(logLevel, `Action: Dry run mode set to ${status} | Process ID: ${this.baseConfig.processId} | Subclass: ${this.constructor.name}`);
     }
+
     /* Public Utility */
     public getProcessId(): string {
         return this.baseConfig.processId
@@ -156,11 +157,6 @@ export class BaseClient extends IBaseClient {
     /* Public Utility */
 
     /* Protected Utility */
-    protected findTagValue(tags: Tags, name: string): string | undefined {
-        const tag = tags.find(tag => tag.name === name);
-        return tag?.value;
-    }
-
     async messageResult(data: string = '', tags: Tags = [], anchor?: string): Promise<MessageResult> {
         const result_id = await this.message(
             data,
@@ -169,34 +165,6 @@ export class BaseClient extends IBaseClient {
         );
         const result = await this.result(result_id);
         return result;
-    }
-
-    protected getFirstMessageDataString(result: MessageResult | DryRunResult): string {
-        return this.getNthMessageDataString(result, 0);
-    }
-
-    protected getNthMessageDataString(result: MessageResult | DryRunResult, n: number): string {
-        if (n < 0 || n >= result.Messages.length) {
-            throw new MessageOutOfBoundsError(n, result.Messages.length);
-        }
-        return result.Messages[n].Data;
-    }
-
-    protected getFirstMessageDataJson<T>(result: MessageResult | DryRunResult): T {
-        return this.getNthMessageDataJson(result, 0);
-    }
-
-    protected getNthMessageDataJson<T>(result: MessageResult | DryRunResult, n: number): T {
-        try {
-            if (n < 0 || n >= result.Messages.length) {
-                throw new MessageOutOfBoundsError(n, result.Messages.length);
-            }
-            const data = result.Messages[n].Data;
-            const parsedObject = JSON.parse(data) as T;
-            return parsedObject;
-        } catch (error) {
-            throw new JsonParsingError(`Invalid JSON in message data at index ${n}: ${result.Messages[n]?.Data}`, error as Error);
-        }
     }
     /* Protected Utility */
 

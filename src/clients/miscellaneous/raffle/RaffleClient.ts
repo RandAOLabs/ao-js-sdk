@@ -8,6 +8,7 @@ import { SetRaffleEntrantsError, PullRaffleError, ViewPullsError, ViewPullError,
 import { RaffleProcessError } from "src/clients/miscellaneous/raffle/RaffleProcessError";
 import { ISyncAutoConfiguration } from "src/core/ao/abstract";
 import { BaseClient } from "src/core/ao/BaseClient";
+import ResultUtils from "src/core/common/result-utils/ResultUtils";
 
 /**
  * @category Miscellaneous
@@ -59,7 +60,7 @@ export class RaffleClient extends BaseClient implements IRaffleClient, ISyncAuto
             ];
             const result = await this.dryrun(undefined, tags);
             this.checkResultForErrors(result);
-            return this.getFirstMessageDataJson(result);
+            return ResultUtils.getFirstMessageDataJson(result);
         } catch (error: any) {
             Logger.error(`Error viewing entrants: ${error.message}`);
             throw new ViewEntrantsError(error);
@@ -75,7 +76,7 @@ export class RaffleClient extends BaseClient implements IRaffleClient, ISyncAuto
             ];
             const result = await this.dryrun(undefined, tags);
             this.checkResultForErrors(result);
-            return this.getFirstMessageDataJson(result);
+            return ResultUtils.getFirstMessageDataJson(result);
         } catch (error: any) {
             Logger.error(`Error viewing user pull: ${error.message}`);
             throw new ViewUserPullError(error);
@@ -92,7 +93,7 @@ export class RaffleClient extends BaseClient implements IRaffleClient, ISyncAuto
 
             const result = await this.dryrun(undefined, tags);
             this.checkResultForErrors(result);
-            const pulls = this.getFirstMessageDataJson(result) as RafflePull[];
+            const pulls = ResultUtils.getFirstMessageDataJson(result) as RafflePull[];
             return { pulls };
         } catch (error: any) {
             Logger.error(`Error viewing user pulls: ${error.message}`);
@@ -107,7 +108,7 @@ export class RaffleClient extends BaseClient implements IRaffleClient, ISyncAuto
             ];
             const result = await this.dryrun(undefined, tags);
             this.checkResultForErrors(result);
-            return this.getFirstMessageDataJson(result);
+            return ResultUtils.getFirstMessageDataJson(result);
         } catch (error: any) {
             Logger.error(`Error viewing raffle owners: ${error.message}`);
             throw new ViewRaffleOwnersError(error);
