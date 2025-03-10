@@ -3,6 +3,7 @@ import { getProfileRegistryClientAutoConfiguration } from "src/clients/bazar/pro
 import { GetProfilesError } from "src/clients/bazar/profile-registry/RegistryClientError";
 import { ISyncAutoConfiguration } from "src/core/ao/abstract";
 import { DryRunCachingClient } from "src/core/ao/client-variants";
+import ResultUtils from "src/core/common/result-utils/ResultUtils";
 import { Logger } from "src/utils/index";
 
 
@@ -26,7 +27,7 @@ export class ProfileRegistryClient extends DryRunCachingClient implements IProfi
                 JSON.stringify({ Address: walletAddress }),
                 [{ name: "Action", value: "Get-Profiles-By-Delegate" }]
             );
-            const data = this.getFirstMessageDataJson<ProfileRegistryEntry[]>(response);
+            const data = ResultUtils.getFirstMessageDataJson<ProfileRegistryEntry[]>(response);
             return data
         } catch (error: any) {
             Logger.error(`Error fetching profiles for wallet address ${walletAddress}: ${error.message}`);

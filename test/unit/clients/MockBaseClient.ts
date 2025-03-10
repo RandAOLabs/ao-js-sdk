@@ -23,13 +23,6 @@ export class MockBaseClient extends BaseClient {
     }
 
     /**
-     * Set mock response for getFirstMessageDataJson
-     */
-    setMockDataJson(response: any) {
-        this.mockResponses.getFirstMessageDataJson = response;
-    }
-
-    /**
      * Set mock response for dryrun
      */
     setMockDryrun(response: DryRunResult) {
@@ -48,13 +41,6 @@ export class MockBaseClient extends BaseClient {
      */
     clearMockResponses() {
         this.mockResponses = {};
-    }
-
-    /**
-     * Override BaseClient methods to use mock responses
-     */
-    protected getFirstMessageDataJson(): any {
-        return this.mockResponses.getFirstMessageDataJson;
     }
 
     async dryrun(): Promise<DryRunResult> {
@@ -79,7 +65,6 @@ export class MockBaseClient extends BaseClient {
      */
     bindToClient(client: BaseClient) {
         const mockMethods = {
-            getFirstMessageDataJson: this.getFirstMessageDataJson.bind(this),
             dryrun: this.dryrun.bind(this),
             messageResult: this.messageResult.bind(this)
         };

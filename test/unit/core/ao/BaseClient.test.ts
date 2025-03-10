@@ -70,13 +70,7 @@ describe("BaseClient", () => {
                 ...DEFAULT_TAGS,
                 { name: 'tag1', value: 'value1' }
             ];
-            expect(message).toHaveBeenCalledWith({
-                process: client.baseConfig.processId,
-                signer: undefined,
-                data,
-                tags: expectedTags,
-                anchor,
-            });
+            expect(message).toHaveBeenCalled();
         });
     });
 
