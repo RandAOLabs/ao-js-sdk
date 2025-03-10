@@ -1,6 +1,6 @@
 {
   "name": "ao-process-clients",
-  "version": "5.3.9",
+  "version": "5.3.10",
   "description": "A modular TypeScript API client library for AO Process interactions",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
@@ -45,7 +45,7 @@
     "typescript": "^5.6.3"
   },
   "dependencies": {
-    "@permaweb/aoconnect": "^0.0.75",
+    "@permaweb/aoconnect": "^0.0.77",
     "arweave": "^1.15.5",
     "lru-cache": "^11.0.2",
     "p-limit": "3.1.0",

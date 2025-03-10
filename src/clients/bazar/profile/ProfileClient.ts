@@ -2,9 +2,10 @@
 import { IProfileClient, ProfileInfo } from "src/clients/bazar/profile/abstract";
 import { getProfileClientAutoConfiguration } from "src/clients/bazar/profile/ProfileClientAutoConfiguration";
 import { GetProfileError, ProfileTransferError } from "src/clients/bazar/profile/ProfileClientError";
-import { Tags } from "src/core";
+import { Tags, TagUtils } from "src/core";
 import { IAsyncAutoConfiguration } from "src/core/ao/abstract";
 import { DryRunCachingClient } from "src/core/ao/client-variants";
+import ResultUtils from "src/core/common/result-utils/ResultUtils";
 import { Logger } from "src/utils/index";
 
 /**
@@ -27,7 +28,7 @@ export class ProfileClient extends DryRunCachingClient implements IProfileClient
             const response = await this.dryrun('', [
                 { name: "Action", value: "Info" },
             ]);
-            return this.getFirstMessageDataJson<ProfileInfo>(response);
+            return ResultUtils.getFirstMessageDataJson<ProfileInfo>(response);
         } catch (error: any) {
             Logger.error(`Error fetching profile for address ${address}: ${error.message}`);
             throw new GetProfileError(address, error);
@@ -46,7 +47,7 @@ export class ProfileClient extends DryRunCachingClient implements IProfileClient
                 tags.forEach(tag => transferTags.push(tag));
             }
             const result = await this.messageResult('', transferTags);
-            const actionValue = this.findTagValue(result.Messages[0].Tags, "Action");
+            const actionValue = TagUtils.getTagValue(result.Messages[0].Tags, "Action");
             return actionValue !== "Transfer-Failed";
         } catch (error: any) {
             Logger.error(`Error transferring ${quantity} from ${assetToTransfer} to ${recipient}: ${error.message}`);

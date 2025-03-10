@@ -41,21 +41,44 @@ function listAvailableTests(type: TestType): void {
     traverseDir(join(TEST_ROOT, type));
 }
 
-function findTestPaths(type: TestType, searchPath: string): string[] {
-    const paths: string[] = [];
+function getAllSubdirectories(dir: string): string[] {
+    const subdirs: string[] = [];
 
-    // Direct match first
-    const directPath = join(TEST_ROOT, type, searchPath);
-    if (existsSync(directPath)) {
-        paths.push(directPath);
+    function traverse(currentDir: string, basePath: string = '') {
+        const items = readdirSync(currentDir, { withFileTypes: true });
+
+        items.forEach(item => {
+            if (item.isDirectory()) {
+                const relativePath = join(basePath, item.name);
+                subdirs.push(relativePath);
+                traverse(join(currentDir, item.name), relativePath);
+            }
+        });
     }
 
-    // Search in common parent directories for both unit and integration tests
-    const commonParents = ['services', 'clients', 'core', 'utils, clients/randao', 'clients/miscellaneous', "clients/autonomous-finance/botega/"];
-    for (const parent of commonParents) {
-        const parentPath = join(TEST_ROOT, type, parent, searchPath);
-        if (existsSync(parentPath)) {
-            paths.push(parentPath);
+    traverse(dir);
+    return subdirs;
+}
+
+function findTestPaths(type: TestType, searchPath: string): string[] {
+    const paths: string[] = [];
+    const typeRoot = join(TEST_ROOT, type);
+
+    // Direct match first
+    const directPath = join(typeRoot, searchPath);
+    if (existsSync(directPath)) {
+        paths.push(directPath);
+        return paths;
+    }
+
+    // Get all possible subdirectories
+    const allSubdirs = getAllSubdirectories(typeRoot);
+
+    // Search in all subdirectories
+    for (const subdir of allSubdirs) {
+        const testPath = join(typeRoot, subdir, searchPath);
+        if (existsSync(testPath)) {
+            paths.push(testPath);
         }
     }
 

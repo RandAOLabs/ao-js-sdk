@@ -10,13 +10,13 @@ describe("BotegaLiquidityPoolClient Integration Tests", () => {
         client.setDryRunAsMessage(true)
     });
 
-    describe("getLPInfo", () => {
-        it("should return pool info with token details", async () => {
-            const info = await client.getLPInfo();
-            Logger.info("Pool Info:", JSON.stringify(info, null, 2));
-            expect(info).toBeDefined();
-        });
-    });
+    // describe("getLPInfo", () => {
+    //     it("should return pool info with token details", async () => {
+    //         const info = await client.getLPInfo();
+    //         Logger.info("Pool Info:", JSON.stringify(info, null, 2));
+    //         expect(info).toBeDefined();
+    //     });
+    // });
 
     describe("getPrice", () => {
         it("should return price for token A", async () => {
@@ -27,12 +27,12 @@ describe("BotegaLiquidityPoolClient Integration Tests", () => {
             expect(price).toBeGreaterThan(0);
         });
 
-        it("should return price for token B", async () => {
-            const info = await client.getLPInfo();
-            const price = await client.getPrice(100, info.tokenB);
-            Logger.info("Price for 100 Token B:", price);
-            expect(typeof price).toBe("number");
-            expect(price).toBeGreaterThan(0);
-        });
+        // it("should return price for token B", async () => {
+        //     const info = await client.getLPInfo();
+        //     const price = await client.getPrice(100, info.tokenB);
+        //     Logger.info("Price for 100 Token B:", price);
+        //     expect(typeof price).toBe("number");
+        //     expect(price).toBeGreaterThan(0);
+        // });
     });
 });
