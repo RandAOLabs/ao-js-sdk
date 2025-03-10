@@ -8,6 +8,7 @@ import { RandomProcessError } from "src/clients/randao/random/RandomProcessError
 import { Tags } from "src/core";
 import { IAsyncAutoConfiguration } from "src/core/ao/abstract";
 import { BaseClient } from "src/core/ao/BaseClient";
+import ResultUtils from "src/core/common/result-utils/ResultUtils";
 import { Logger } from "src/utils";
 
 /**
@@ -61,7 +62,7 @@ export class RandomClient extends BaseClient implements IRandomClient, IAsyncAut
             const data = JSON.stringify({ providerId });
             const result = await this.dryrun(data, tags);
             this.checkResultForErrors(result)
-            return await this.getFirstMessageDataJson(result)
+            return await ResultUtils.getFirstMessageDataJson(result)
         } catch (error: any) {
             Logger.error(`Error retrieving provider's available values: ${error.message}`);
             throw new ProviderAvailableValuesError(error);
@@ -91,7 +92,7 @@ export class RandomClient extends BaseClient implements IRandomClient, IAsyncAut
             const data = JSON.stringify({ providerId: provider });
             const result = await this.dryrun(data, tags);
             this.checkResultForErrors(result)
-            return this.getFirstMessageDataJson(result)
+            return ResultUtils.getFirstMessageDataJson(result)
         } catch (error: any) {
             Logger.error(`Error retrieving open random requests: ${error.message}`);
             throw new OpenRandomRequestsError(error);
@@ -106,7 +107,7 @@ export class RandomClient extends BaseClient implements IRandomClient, IAsyncAut
             const data = JSON.stringify({ requestIds: randomnessRequestIds });
             const result = await this.dryrun(data, tags);
             this.checkResultForErrors(result)
-            return this.getFirstMessageDataJson(result)
+            return ResultUtils.getFirstMessageDataJson(result)
         } catch (error: any) {
             Logger.error(`Error retrieving random requests: ${error.message}`);
             throw new RandomRequestsError(error);
@@ -121,7 +122,7 @@ export class RandomClient extends BaseClient implements IRandomClient, IAsyncAut
             const data = JSON.stringify({ callbackId });
             const result = await this.dryrun(data, tags);
             this.checkResultForErrors(result)
-            return this.getFirstMessageDataJson(result)
+            return ResultUtils.getFirstMessageDataJson(result)
         } catch (error: any) {
             Logger.error(`Error retrieving random request via callback ID: ${error.message}`);
             throw new RandomRequestsError(error);
@@ -170,7 +171,7 @@ export class RandomClient extends BaseClient implements IRandomClient, IAsyncAut
             ];
             const result = await this.messageResult(undefined, tags);
             this.checkResultForErrors(result)
-            return this.getFirstMessageDataJson(result)
+            return ResultUtils.getFirstMessageDataJson(result)
         } catch (error: any) {
             Logger.error(`Error posting VDF output and proof: ${error.message}`);
             throw new PostVDFOutputAndProofError(error);
@@ -185,7 +186,7 @@ export class RandomClient extends BaseClient implements IRandomClient, IAsyncAut
             const data = JSON.stringify({ providerId: providerId })
             const result = await this.messageResult(data, tags);
             this.checkResultForErrors(result)
-            return this.getFirstMessageDataJson(result)
+            return ResultUtils.getFirstMessageDataJson(result)
         } catch (error: any) {
             Logger.error(`Error posting VDF output and proof: ${error.message}`);
             throw new PostVDFOutputAndProofError(error);

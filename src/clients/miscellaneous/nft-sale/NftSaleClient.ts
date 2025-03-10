@@ -8,6 +8,7 @@ import { PurchaseNftError, LuckyDrawError, QueryNFTCountError, AddNftError, Retu
 import { Tags } from "src/core";
 import { IAsyncAutoConfiguration } from "src/core/ao/abstract";
 import { BaseClient } from "src/core/ao/BaseClient";
+import ResultUtils from "src/core/common/result-utils/ResultUtils";
 import { Logger } from "src/utils";
 
 /**
@@ -77,7 +78,7 @@ export class NftSaleClient extends BaseClient implements INftSaleClient, IAsyncA
                 { name: "Action", value: "Query-NFT-Count" }
             ]);
 
-            const count = parseInt(this.getFirstMessageDataString(result));
+            const count = parseInt(ResultUtils.getFirstMessageDataString(result));
             if (isNaN(count)) {
                 throw new Error("Invalid NFT count response");
             }
@@ -133,7 +134,7 @@ export class NftSaleClient extends BaseClient implements INftSaleClient, IAsyncA
                 { name: "Action", value: "Info" }
             ]);
             // Handle double-encoded JSON
-            const rawData = this.getFirstMessageDataString(result);
+            const rawData = ResultUtils.getFirstMessageDataString(result);
             const parsedOnce = JSON.parse(rawData);
             if (Array.isArray(parsedOnce) && parsedOnce.length > 0) {
                 this._cachedInfo = JSON.parse(parsedOnce[0]) as NftSaleInfo;

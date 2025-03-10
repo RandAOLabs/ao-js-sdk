@@ -2,6 +2,7 @@ import { JWKInterface } from 'arweave/node/lib/wallet.js';
 import { IBuilder } from 'src/utils/builder';
 import { BaseClientConfig } from '../BaseClientConfig';
 import { getWalletLazy } from 'src/utils/wallet';
+import { Logger } from 'src/utils';
 
 /**
  * Builder class for constructing BaseClientConfig objects.
@@ -20,13 +21,22 @@ export class BaseClientConfigBuilder implements IBuilder<BaseClientConfig> {
      * @returns The constructed BaseClientConfig
      * @throws Error if required fields are not set and defaults are not allowed
      */
+    private getWalletSafely(): JWKInterface | undefined {
+        try {
+            return getWalletLazy();
+        } catch (error: any) {
+            Logger.warn(`Could not find any wallets available: ${error.message}`, `Proceeding with readonly client`);
+            return undefined;
+        }
+    }
+
     build(): BaseClientConfig {
         this.validate();
 
         // We can assert processId exists since validate() would throw if it didn't
         return {
             processId: this.config.processId!,
-            wallet: this.config.wallet || getWalletLazy()
+            wallet: this.config.wallet || this.getWalletSafely()
         };
     }
 
@@ -61,10 +71,6 @@ export class BaseClientConfigBuilder implements IBuilder<BaseClientConfig> {
     protected validate(): void {
         if (!this.config.processId) {
             throw new Error('Process ID is required');
-        }
-
-        if (!this.useDefaults && !this.config.wallet) {
-            throw new Error('Wallet is required when defaults are not allowed');
         }
     }
 

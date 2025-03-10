@@ -4,131 +4,79 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "ARIOService",
-            "runtimeArgs": [
-                "-r",
-                "ts-node/register",
-                "-r",
-                "tsconfig-paths/register"
-            ],
+            "name": "Debug Current Test File",
             "program": "${workspaceFolder}/node_modules/jest/bin/jest",
             "args": [
-                "--runInBand",
-                "--testPathPattern=test/unit/services/ario/ARIOService.test.ts",
-                "--config=test/jest.config.js"
+                "${relativeFile}",
+                "--config",
+                "jest.config.js",
+                "--runInBand"
             ],
             "console": "integratedTerminal",
             "internalConsoleOptions": "neverOpen",
-            "disableOptimisticBPs": true,
             "windows": {
                 "program": "${workspaceFolder}/node_modules/jest/bin/jest"
-            },
-            "env": {
-                "TS_NODE_PROJECT": "test/tsconfig.json"
             }
         },
         {
             "type": "node",
             "request": "launch",
-            "name": "ArnCachingService",
-            "runtimeArgs": [
-                "-r",
-                "ts-node/register",
-                "-r",
-                "tsconfig-paths/register"
-            ],
-            "program": "${workspaceFolder}/node_modules/jest/bin/jest",
+            "name": "Debug Integration Tests",
+            "program": "${workspaceFolder}/node_modules/ts-node/dist/bin.js",
             "args": [
-                "--runInBand",
-                "--testPathPattern=test/integration/services/ario/ArnCachingService.test.ts"
+                "-P",
+                "test/scripts/tsconfig.json",
+                "test/scripts/run-tests.ts",
+                "integration"
             ],
             "console": "integratedTerminal",
-            "internalConsoleOptions": "neverOpen",
-            "disableOptimisticBPs": true,
-            "windows": {
-                "program": "${workspaceFolder}/node_modules/jest/bin/jest"
-            },
-            "env": {
-                "TS_NODE_PROJECT": "test/tsconfig.json"
-            }
+            "internalConsoleOptions": "neverOpen"
         },
         {
             "type": "node",
             "request": "launch",
-            "name": "Provider Staking Client",
-            "runtimeArgs": [
-                "-r",
-                "ts-node/register",
-                "-r",
-                "tsconfig-paths/register"
-            ],
+            "name": "Debug Integration Tests (Current Folder)",
             "program": "${workspaceFolder}/node_modules/jest/bin/jest",
             "args": [
+                "${relativeFileDirname}",
+                "--config",
+                "jest.config.js",
                 "--runInBand",
-                "--testPathPattern=test/integration/clients/randao/provider-staking/ProviderStaking.test.ts",
-                "--config=test/jest.config.js"
+                "--testMatch",
+                "**/test/integration/**/*.test.ts"
             ],
             "console": "integratedTerminal",
-            "internalConsoleOptions": "neverOpen",
-            "disableOptimisticBPs": true,
-            "windows": {
-                "program": "${workspaceFolder}/node_modules/jest/bin/jest"
-            },
-            "env": {
-                "TS_NODE_PROJECT": "test/tsconfig.json"
-            }
+            "internalConsoleOptions": "neverOpen"
         },
         {
             "type": "node",
             "request": "launch",
-            "name": "Credit Notice Unit",
-            "runtimeArgs": [
-                "-r",
-                "ts-node/register",
-                "-r",
-                "tsconfig-paths/register"
-            ],
-            "program": "${workspaceFolder}/node_modules/jest/bin/jest",
+            "name": "Debug Unit Tests",
+            "program": "${workspaceFolder}/node_modules/ts-node/dist/bin.js",
             "args": [
-                "--runInBand",
-                "--testPathPattern=test/unit/services/credit-notices",
-                "--config=test/jest.config.js"
+                "-P",
+                "test/scripts/tsconfig.json",
+                "test/scripts/run-tests.ts",
+                "unit"
             ],
             "console": "integratedTerminal",
-            "internalConsoleOptions": "neverOpen",
-            "disableOptimisticBPs": true,
-            "windows": {
-                "program": "${workspaceFolder}/node_modules/jest/bin/jest"
-            },
-            "env": {
-                "TS_NODE_PROJECT": "test/tsconfig.json"
-            }
+            "internalConsoleOptions": "neverOpen"
         },
         {
             "type": "node",
             "request": "launch",
-            "name": "Profile Unit",
-            "runtimeArgs": [
-                "-r",
-                "ts-node/register",
-                "-r",
-                "tsconfig-paths/register"
-            ],
+            "name": "Debug Unit Tests (Current Folder)",
             "program": "${workspaceFolder}/node_modules/jest/bin/jest",
             "args": [
+                "${relativeFileDirname}",
+                "--config",
+                "jest.config.js",
                 "--runInBand",
-                "--testPathPattern=test/unit/clients/profile",
-                "--config=test/jest.config.js"
+                "--testMatch",
+                "**/test/unit/**/*.test.ts"
             ],
             "console": "integratedTerminal",
-            "internalConsoleOptions": "neverOpen",
-            "disableOptimisticBPs": true,
-            "windows": {
-                "program": "${workspaceFolder}/node_modules/jest/bin/jest"
-            },
-            "env": {
-                "TS_NODE_PROJECT": "test/tsconfig.json"
-            }
-        },
+            "internalConsoleOptions": "neverOpen"
+        }
     ]
 }

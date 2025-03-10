@@ -1,6 +1,7 @@
 import { Logger, LogLevel } from "src/utils";
-import { ProfileClient } from "src/index";
+import { DryRunCachingClientConfig, DryRunCachingClientConfigBuilder, ProfileClient } from "src/index";
 import { MockBaseClient } from "test/unit/clients/MockBaseClient";
+import ResultUtils from "src/core/common/result-utils/ResultUtils";
 
 describe("ProfileClient Unit Tests", () => {
     let mockBaseClient: MockBaseClient;
@@ -10,8 +11,13 @@ describe("ProfileClient Unit Tests", () => {
         Logger.setLogLevel(LogLevel.NONE);
         // Logger.setLogLevel(LogLevel.DEBUG);
         mockBaseClient = new MockBaseClient();
-        client = await ProfileClient.autoConfiguration();
+        const config: DryRunCachingClientConfig = new DryRunCachingClientConfigBuilder()
+            .withProcessId("test-process-id")
+            .build()
+        client = new ProfileClient(config);
         mockBaseClient.bindToClient(client);
+        jest.spyOn(ResultUtils, 'getFirstMessageDataJson').mockReset();
+
     });
 
     describe("getProfileInfo", () => {
@@ -23,7 +29,7 @@ describe("ProfileClient Unit Tests", () => {
                 Collections: [],
                 Owner: "test-owner"
             };
-            mockBaseClient.setMockDataJson(mockProfileInfo);
+            jest.spyOn(ResultUtils, 'getFirstMessageDataJson').mockReturnValueOnce(mockProfileInfo);
 
             const result = await client.getProfileInfo();
             expect(result).toEqual(mockProfileInfo);
@@ -36,7 +42,7 @@ describe("ProfileClient Unit Tests", () => {
                 Collections: ["col1"],
                 Owner: "test-owner"
             };
-            mockBaseClient.setMockDataJson(mockProfileInfo);
+            jest.spyOn(ResultUtils, 'getFirstMessageDataJson').mockReturnValueOnce(mockProfileInfo);
 
             const result = await client.getProfileInfo();
             expect(result.Profile).toBeDefined();

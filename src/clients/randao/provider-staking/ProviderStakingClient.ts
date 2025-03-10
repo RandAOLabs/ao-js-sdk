@@ -6,6 +6,7 @@ import { getProviderStakingClientAutoConfiguration } from "src/clients/randao/pr
 import { GetStakeError, ProviderUnstakeError, StakeWithDetailsError } from "src/clients/randao/provider-staking/ProviderStakingError";
 import { Tags } from "src/core";
 import { ISyncAutoConfiguration } from "src/core/ao/abstract";
+import ResultUtils from "src/core/common/result-utils/ResultUtils";
 import { Logger } from "src/utils";
 
 /**
@@ -40,7 +41,7 @@ export class ProviderStakingClient extends StakingClient implements IProviderSta
             ];
             const requestData = JSON.stringify({ providerId });
             const result = await this.dryrun(requestData, tags);
-            const stakeStringJson = this.getFirstMessageDataString(result);
+            const stakeStringJson = ResultUtils.getFirstMessageDataString(result);
             const stake: ProviderStakeInfo = JSON.parse(stakeStringJson)
 
             return stake;

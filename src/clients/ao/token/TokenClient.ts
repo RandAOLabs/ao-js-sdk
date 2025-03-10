@@ -2,9 +2,10 @@ import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
 import { ITokenClient, IGrantToken } from "src/clients/ao/token/abstract";
 import { TRANSFER_SUCCESS_MESSAGE } from "src/clients/ao/token/constants";
 import { BalanceError, BalancesError, TransferError, GetInfoError, MintError, GrantError } from "src/clients/ao/token/TokenClientError";
-import { Tags } from "src/core";
+import { Tags, TagUtils } from "src/core";
 import { ISyncAutoConfiguration } from "src/core/ao/abstract";
 import { BaseClient } from "src/core/ao/BaseClient";
+import ResultUtils from "src/core/common/result-utils/ResultUtils";
 import { Logger } from "src/utils/index"
 
 /**
@@ -58,7 +59,7 @@ export class TokenClient extends BaseClient implements ITokenClient, IGrantToken
                 forwardedTags.forEach(tag => tags.push({ name: `X-${tag.name}`, value: tag.value }));
             }
             const result = await this.messageResult('', tags)
-            const messageData: string = this.getFirstMessageDataString(result)
+            const messageData: string = ResultUtils.getFirstMessageDataString(result)
             return messageData.includes(TRANSFER_SUCCESS_MESSAGE);
         } catch (error: any) {
             Logger.error(`Error transferring ${quantity} to ${recipient}: ${error.message}`);
@@ -85,7 +86,7 @@ export class TokenClient extends BaseClient implements ITokenClient, IGrantToken
                 { name: "Action", value: "Mint" },
                 { name: "Quantity", value: quantity }
             ]);
-            const actionValue = this.findTagValue(result.Messages[0].Tags, "Action");
+            const actionValue = TagUtils.getTagValue(result.Messages[0].Tags, "Action");
             return actionValue !== "Mint-Error";
         } catch (error: any) {
             Logger.error(`Error minting quantity ${quantity}: ${error.message}`);
@@ -101,7 +102,7 @@ export class TokenClient extends BaseClient implements ITokenClient, IGrantToken
                 { name: "Quantity", value: quantity },
                 { name: "Recipient", value: recipientAddress }
             ]);
-            const actionValue = this.findTagValue(result.Messages[0].Tags, "Action");
+            const actionValue = TagUtils.getTagValue(result.Messages[0].Tags, "Action");
             return actionValue !== "Grant-Error";
         } catch (error: any) {
             Logger.error(`Error granting ${quantity} tokens to ${recipient}: ${error.message}`);

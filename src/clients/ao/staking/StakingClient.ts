@@ -5,6 +5,7 @@ import { Tags } from 'src/core/common/types';
 import { IStakingClient, StakingClientConfig } from 'src/clients/ao/staking/abstract';
 import { StakeError, UnstakeError } from 'src/clients/ao/staking/StakingClientError';
 import { TokenClient, TokenClientConfig } from 'src/clients/ao/token';
+import ResultUtils from 'src/core/common/result-utils/ResultUtils';
 
 /**
  * @category ao-standards
@@ -58,7 +59,7 @@ export class StakingClient extends BaseClient implements IStakingClient {
                 { name: "Action", value: "Unstake" }
             ];;
             const result = await this.messageResult(data, tags);
-            const response = this.getFirstMessageDataString(result);
+            const response = ResultUtils.getFirstMessageDataString(result);
             if (!response) {
                 return false
             }
