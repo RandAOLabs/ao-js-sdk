@@ -16,5 +16,5 @@ export interface BaseClientConfig {
      * @see {@link JWKInterface} for Arweave wallet type
      * @remarks Use getWalletLazy utility to get the proper wallet in browser or node environments
      */
-    wallet: JWKInterface | any;
+    wallet: JWKInterface | any | undefined;
 }

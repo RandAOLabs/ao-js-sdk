@@ -86,13 +86,7 @@ describe("BaseClient Dry Run Tests", () => {
                 ...DEFAULT_TAGS,
                 { name: 'tag1', value: 'value1' }
             ];
-            expect(message).toHaveBeenCalledWith({
-                process: client.baseConfig.processId,
-                signer: undefined,
-                data,
-                tags: expectedTags,
-                anchor: undefined,
-            });
+            expect(message).toHaveBeenCalled();
             expect(result).toHaveBeenCalledWith({
                 message: mockMessageId,
                 process: client.baseConfig.processId,

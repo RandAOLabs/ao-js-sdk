@@ -53,6 +53,7 @@ export abstract class IBaseClient {
      * @throws DryRunError if there is an error performing the dry run.
      */
     abstract dryrun(data: any, tags: Tags, anchor?: string, id?: string, owner?: string): Promise<DryRunResult>;
+
     /**
      * Controls whether dryrun executes as a message or simulation.
      * 
@@ -68,4 +69,11 @@ export abstract class IBaseClient {
      * @throws ArweaveGraphQLError if there is an error retrieving the transaction
      */
     abstract getProcessInfo(): Promise<ArweaveTransaction>;
+
+    /**
+     * A Readonly Client can only perform dry run and result operations, however does not require a wallet to be used.
+     * If a wallet is specified on instantiation the client will additionally be able to use write operations (messages).
+     * @returns Boolean indicating whether or not the client is for read operations only.
+     */
+    abstract isReadOnly(): boolean;
 }
