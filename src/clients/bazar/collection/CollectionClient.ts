@@ -3,9 +3,10 @@ import { getCollectionClientAutoConfiguration } from "src/clients/bazar/collecti
 import { CollectionInfoError, AuthorizationError, InputValidationError, UpdateAssetsError, AddToProfileError, TransferAllAssetsError } from "src/clients/bazar/collection/CollectionClientError";
 import { TAG_NAMES, ACTIONS, RESPONSE_ACTIONS, STATUS, TRANSFER_RATE_LIMIT, TRANSFER_BATCH_DELAY } from "src/clients/bazar/collection/constants";
 import { NftClient } from "src/clients/bazar/nft";
-import { BaseClientConfig } from "src/core";
+import { BaseClientConfig, TagUtils } from "src/core";
 import { ISyncAutoConfiguration } from "src/core/ao/abstract";
 import { BaseClient } from "src/core/ao/BaseClient";
+import ResultUtils from "src/core/common/result-utils/ResultUtils";
 import { Logger } from "src/utils";
 
 
@@ -29,7 +30,7 @@ export class CollectionClient extends BaseClient implements ICollectionClient, I
             const result = await this.messageResult('', [
                 { name: TAG_NAMES.ACTION, value: ACTIONS.INFO }
             ]);
-            return this.getFirstMessageDataJson<CollectionInfo>(result);
+            return ResultUtils.getFirstMessageDataJson<CollectionInfo>(result);
         } catch (error: any) {
             Logger.error(`Error fetching collection info: ${error.message}`);
             throw new CollectionInfoError(error);
@@ -44,9 +45,9 @@ export class CollectionClient extends BaseClient implements ICollectionClient, I
             );
 
             const firstMessage = result.Messages[0];
-            const action = this.findTagValue(firstMessage.Tags, TAG_NAMES.ACTION);
-            const status = this.findTagValue(firstMessage.Tags, TAG_NAMES.STATUS);
-            const message = this.findTagValue(firstMessage.Tags, TAG_NAMES.MESSAGE);
+            const action = TagUtils.getTagValue(firstMessage.Tags, TAG_NAMES.ACTION);
+            const status = TagUtils.getTagValue(firstMessage.Tags, TAG_NAMES.STATUS);
+            const message = TagUtils.getTagValue(firstMessage.Tags, TAG_NAMES.MESSAGE);
 
             if (action === RESPONSE_ACTIONS.AUTHORIZATION_ERROR) {
                 throw new AuthorizationError(message || 'Unauthorized to update assets');
@@ -74,8 +75,8 @@ export class CollectionClient extends BaseClient implements ICollectionClient, I
             ]);
 
             const firstMessage = result.Messages[0];
-            const action = this.findTagValue(firstMessage.Tags, TAG_NAMES.ACTION);
-            const message = this.findTagValue(firstMessage.Tags, TAG_NAMES.MESSAGE);
+            const action = TagUtils.getTagValue(firstMessage.Tags, TAG_NAMES.ACTION);
+            const message = TagUtils.getTagValue(firstMessage.Tags, TAG_NAMES.MESSAGE);
 
             if (action === RESPONSE_ACTIONS.INPUT_ERROR) {
                 throw new InputValidationError(message || 'Invalid profile process ID');
