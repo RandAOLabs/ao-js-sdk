@@ -71,4 +71,11 @@ export interface IAOClient {
         id?: string,
         owner?: string
     ): Promise<DryRunResult>;
+
+    /**
+     * Gets the wallet address associated with the client.
+     * @returns Promise resolving to the wallet address string
+     * @throws Error if client is in read-only mode
+     */
+    getCallingWalletAddress(): Promise<string>;
 }
