@@ -1,0 +1,49 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Run Integration Tests",
+            "type": "shell",
+            "command": "npm",
+            "args": [
+                "run",
+                "test:integration"
+            ],
+            "group": "test",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            }
+        },
+        {
+            "label": "Run Unit Tests",
+            "type": "shell",
+            "command": "npm",
+            "args": [
+                "run",
+                "test:unit"
+            ],
+            "group": "test",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            }
+        },
+        {
+            "label": "Run Current Test File",
+            "type": "shell",
+            "command": "npx",
+            "args": [
+                "jest",
+                "--config",
+                "jest.config.js",
+                "${relativeFile}"
+            ],
+            "group": "test",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            }
+        }
+    ]
+}

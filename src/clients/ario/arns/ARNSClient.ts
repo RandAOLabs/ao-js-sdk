@@ -6,6 +6,7 @@ import { DOMAIN_SEPARATOR } from "src/clients/ario/arns/constants";
 import { Logger, LogLevel } from "src/utils";
 import { DryRunCachingClient } from "src/core/ao/client-variants";
 import { ISyncAutoConfiguration } from "src/core/ao/abstract";
+import ResultUtils from "src/core/common/result-utils/ResultUtils";
 
 /**
  * Client for interacting with ARNS (Arweave Name Service) records.
@@ -30,7 +31,7 @@ export class ARNSClient extends DryRunCachingClient implements IARNSClient, ISyn
                 { name: "Action", value: "Record" },
                 { name: "Name", value: name }
             ]);
-            return this.getFirstMessageDataJson<ARNSRecord>(result);
+            return ResultUtils.getFirstMessageDataJson<ARNSRecord>(result);
         } catch (error: any) {
             throw new GetRecordError(name, error);
         }

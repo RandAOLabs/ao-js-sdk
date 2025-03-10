@@ -4,6 +4,7 @@ import { getProviderProfileClientAutoConfiguration } from "src/clients/randao/pr
 import { Tags } from "src/core";
 import { ISyncAutoConfiguration } from "src/core/ao/abstract";
 import { DryRunCachingClient } from "src/core/ao/client-variants";
+import ResultUtils from "src/core/common/result-utils/ResultUtils";
 import { Logger } from "src/utils";
 
 /**
@@ -25,7 +26,7 @@ export class ProviderProfileClient extends DryRunCachingClient implements IProvi
             const data = JSON.stringify({ providerDetails: JSON.stringify(providerDetails) });
             const result = await this.messageResult(data, tags);
             this.clearCache()
-            return this.getFirstMessageDataString(result);
+            return ResultUtils.getFirstMessageDataString(result);
         } catch (error: any) {
             Logger.error(`Error updating provider details: ${error.message}`);
             throw new Error(`Failed to update provider details: ${error.message}`);
@@ -37,7 +38,7 @@ export class ProviderProfileClient extends DryRunCachingClient implements IProvi
                 { name: "Action", value: "Get-All-Providers-Details" }
             ];
             const result = await this.dryrun("", tags);
-            const dtos = this.getFirstMessageDataJson<ProviderInfoDTO[]>(result);
+            const dtos = ResultUtils.getFirstMessageDataJson<ProviderInfoDTO[]>(result);
             const providers = dtos.map(dto => this._parseProviderInfoDTO(dto));
             return providers;
         } catch (error: any) {
@@ -59,7 +60,7 @@ export class ProviderProfileClient extends DryRunCachingClient implements IProvi
             providerWalletAddress = providerId || await this.getCallingWalletAddress();
             const data = JSON.stringify({ providerId: providerWalletAddress });
             const result = await this.dryrun(data, tags);
-            const dto = this.getFirstMessageDataJson<ProviderInfoDTO>(result);
+            const dto = ResultUtils.getFirstMessageDataJson<ProviderInfoDTO>(result);
             const info = this._parseProviderInfoDTO(dto);
             return info;
         } catch (error: any) {
