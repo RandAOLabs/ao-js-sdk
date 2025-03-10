@@ -12,16 +12,18 @@ import { getEnvironment, Environment } from 'src/utils/environment';
 import { Logger, LogLevel } from 'src/utils';
 import { Tags } from 'src/core/common';
 import { SortOrder } from 'src/core/ao/abstract';
-import { AO } from 'src/core/ao/ao';
 import { ArweaveDataCachingService } from 'src/core/arweave/ArweaveDataCachingService';
 import { ArweaveTransaction } from 'src/core/arweave/abstract/types';
+import { WriteReadAOClient } from 'src/core/ao/ao-client/WriteReadAOClient';
+import { IAOClient } from 'src/core/ao/ao-client/abstract/IAOClient';
+import { ReadOnlyAOClient } from 'src/core/ao/ao-client/ReadOnlyAOClient';
 
 export class BaseClient extends IBaseClient {
     /* Fields */
     /** @protected */
     readonly baseConfig: BaseClientConfig;
     /** @protected */
-    readonly ao: AO;
+    private ao: IAOClient;
     private useDryRunAsMessage: boolean = false;
     private readonly arweaveService: ArweaveDataCachingService;
     /* Fields */
@@ -29,12 +31,12 @@ export class BaseClient extends IBaseClient {
     public constructor(baseConfig: BaseClientConfig) {
         super()
         this.baseConfig = baseConfig;
-        this.ao = new AO(createDataItemSigner(baseConfig.wallet));
+        if (baseConfig.wallet) { // Wallet Provided -> Write Read Client
+            this.ao = new WriteReadAOClient(baseConfig.wallet)
+        } else { // Wallet Not Provided -> Read Only Client
+            this.ao = new ReadOnlyAOClient()
+        }
         this.arweaveService = new ArweaveDataCachingService();
-    }
-
-    public async getProcessInfo(): Promise<ArweaveTransaction> {
-        return await this.arweaveService.getTransactionById(this.baseConfig.processId);
     }
     /* Constructors */
     /* Core AO Functions */
@@ -142,6 +144,14 @@ export class BaseClient extends IBaseClient {
 
     public isRunningDryRunsAsMessages(): boolean {
         return this.useDryRunAsMessage
+    }
+
+    public isReadOnly(): boolean {
+        return this.ao instanceof ReadOnlyAOClient && !(this.ao instanceof WriteReadAOClient);
+    }
+
+    public async getProcessInfo(): Promise<ArweaveTransaction> {
+        return await this.arweaveService.getTransactionById(this.baseConfig.processId);
     }
     /* Public Utility */
 

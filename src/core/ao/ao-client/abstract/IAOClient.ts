@@ -1,30 +1,15 @@
-import { message, result, results, createDataItemSigner, dryrun } from '@permaweb/aoconnect';
 import { MessageResult } from '@permaweb/aoconnect/dist/lib/result';
 import { ResultsResponse } from '@permaweb/aoconnect/dist/lib/results';
 import { DryRunResult } from '@permaweb/aoconnect/dist/lib/dryrun';
 import { Tags } from 'src/core/common';
 import { SortOrder } from 'src/core/ao/abstract';
-import { Logger } from 'src/utils';
-import { Tag } from 'arweave/node/lib/transaction';
 
 /**
- * AO class provides a wrapper for interacting with the Arweave Operating System (AO).
- * This class encapsulates all core AO functionality from @permaweb/aoconnect, providing
+ * AO interface provides a wrapper for interacting with the Arweave Operating System (AO).
+ * This interface encapsulates all core AO functionality from @permaweb/aoconnect, providing
  * a clean interface for sending messages, retrieving results, and performing dry runs.
- * 
- * The class maintains a signer instance for message authentication and requires a process ID
- * for each operation to identify the target AO process.
  */
-export class AO {
-    private readonly signer: ReturnType<typeof createDataItemSigner>;
-    /**
-     * Creates a new AO instance with the provided signer.
-     * @param signer - The data item signer used for authenticating messages
-     */
-    constructor(signer: ReturnType<typeof createDataItemSigner>) {
-        this.signer = signer;
-    }
-
+export interface IAOClient {
     /**
      * Sends a message to an AO process.
      * @param process - The target process ID
@@ -33,20 +18,12 @@ export class AO {
      * @param anchor - Optional anchor reference
      * @returns Promise resolving to the message ID
      */
-    public async message(
+    message(
         process: string,
-        data: string = '',
-        tags: Tags = [],
+        data?: string,
+        tags?: Tags,
         anchor?: string
-    ): Promise<string> {
-        return await message({
-            process,
-            signer: this.signer,
-            data,
-            tags,
-            anchor,
-        });
-    }
+    ): Promise<string>;
 
     /**
      * Retrieves results from an AO process.
@@ -57,21 +34,13 @@ export class AO {
      * @param sort - Sort order for results (default: ASCENDING)
      * @returns Promise resolving to the results response
      */
-    public async results(
+    results(
         process: string,
         from?: string,
         to?: string,
-        limit: number = 25,
-        sort: SortOrder = SortOrder.ASCENDING
-    ): Promise<ResultsResponse> {
-        return await results({
-            process,
-            from,
-            to,
-            limit,
-            sort,
-        });
-    }
+        limit?: number,
+        sort?: SortOrder
+    ): Promise<ResultsResponse>;
 
     /**
      * Retrieves the result of a specific message.
@@ -79,15 +48,10 @@ export class AO {
      * @param messageId - The ID of the message to get results for
      * @returns Promise resolving to the message result
      */
-    public async result(
+    result(
         process: string,
         messageId: string
-    ): Promise<MessageResult> {
-        return await result({
-            process,
-            message: messageId,
-        });
-    }
+    ): Promise<MessageResult>;
 
     /**
      * Performs a dry run of a message without actually sending it.
@@ -99,22 +63,12 @@ export class AO {
      * @param owner - Optional owner address
      * @returns Promise resolving to the dry run result
      */
-    public async dryrun(
+    dryrun(
         process: string,
-        data: any = '',
-        tags: Tags = [],
+        data?: any,
+        tags?: Tags,
         anchor?: string,
         id?: string,
         owner?: string
-    ): Promise<DryRunResult> {
-        const result = await dryrun({
-            process,
-            data,
-            tags,
-            anchor,
-            id,
-            owner,
-        });
-        return result
-    }
+    ): Promise<DryRunResult>;
 }
