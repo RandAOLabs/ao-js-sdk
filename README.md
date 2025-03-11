@@ -17,40 +17,6 @@ A modular TypeScript Process client library for AO Process interactions. This li
 npm i ao-process-clients
 ```
 
-## Quick Start
-```typescript
-import { TokenClient } from 'ao-process-clients'
-
-// Initialize token client
-const tokenClient = TokenClient.autoConfiguration()
-
-// Transfer tokens
-const success = await tokenClient.transfer(
-    "recipient-address",
-    "100000000000000000000"
-)
-console.log(success) // true if successful
-```
-
-## Clients
-
-This library provides several specialized clients for interacting with different AO processes:
-
-### [Token Client](src/clients/token/README.md)
-Handles token operations like transfers, balance checks, minting, and granting.
-
-### [Random Client](src/clients/random/README.md)
-Manages random number generation through VDF challenges and requests.
-
-### [NFT Client](src/clients/nft/README.md)
-Provides NFT functionality including minting and transfers.
-
-### [Staking Client](src/clients/staking/README.md)
-Handles staking operations including staking, unstaking, and stake status checks.
-
-### [NFT Sale Client](src/clients/nft-sale/README.md)
-Manages NFT sales including adding NFTs to sale, purchasing NFTs, and querying available NFT counts.
-
 ## Environment
 ### Node
 Create a `.env` file:
