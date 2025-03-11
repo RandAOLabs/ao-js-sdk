@@ -22,6 +22,7 @@ export class ArweaveGQLBuilder {
     private fields: NodeFields = {
         id: true // Always include id by default
     };
+    private countMode: boolean = false;
 
     // Filter methods
     public ids(ids: string[]): this {
@@ -159,6 +160,15 @@ export class ArweaveGQLBuilder {
         return value && typeof value === 'object';
     }
 
+    /**
+     * Switches the query to return a count of matching transactions instead of transaction data
+     * @returns this builder instance
+     */
+    public count(): this {
+        this.countMode = true;
+        return this;
+    }
+
     private buildFieldSelection(obj: Record<string, any>): string[] {
         const selections = new Set<string>();
 
@@ -227,12 +237,12 @@ export class ArweaveGQLBuilder {
         const query = `
             query {
                 transactions${queryString} {
-                    edges {
+                    ${this.countMode ? 'count' : `edges {
                         cursor
                         node {
                             ${nodeFields.join('\n                            ')}
                         }
-                    }
+                    }`}
                 }
             }
         `.trim();

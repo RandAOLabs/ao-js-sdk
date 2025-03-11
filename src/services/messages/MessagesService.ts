@@ -14,6 +14,7 @@ import {
 } from "src/services/messages/abstract/types";
 import { ArweaveGQLSortOrder } from "src/core/arweave/gql/types";
 import { ArweaveTransaction } from "src/core/arweave/abstract/types";
+import { DEFAULT_AO_TAGS } from "src/services/messages/constants";
 
 /**
  * @category On-chain-data
@@ -45,13 +46,10 @@ export class MessagesService extends BaseArweaveDataService implements IMessages
 
     public async getLatestMessages(params: GetLatestMessagesParams = {}): Promise<GetLatestMessagesResponse> {
         try {
-            // Always include Data-Protocol:ao tag
-            const requiredTags = [{ name: "Data-Protocol", value: "ao" }];
-
             // Combine with user provided tags if any
             const allTags = params.tags
-                ? [...requiredTags, ...params.tags]
-                : requiredTags;
+                ? [...DEFAULT_AO_TAGS, ...params.tags]
+                : DEFAULT_AO_TAGS;
             const builder = new ArweaveGQLBuilder()
                 .withAllFields()
                 .sortBy(ArweaveGQLSortOrder.HEIGHT_DESC)
@@ -115,5 +113,33 @@ export class MessagesService extends BaseArweaveDataService implements IMessages
             ...params,
             recipient: params.recipientId
         });
+    }
+
+    public async countAllMessages(params: GetAllMessagesParams): Promise<number> {
+        try {
+            // Always include Data-Protocol:ao tag
+            // Combine with user provided tags if any
+            const allTags = params.tags
+                ? [...DEFAULT_AO_TAGS, ...params.tags]
+                : DEFAULT_AO_TAGS;
+            const builder = new ArweaveGQLBuilder()
+                .tags(allTags)
+                .count()
+
+            // Add recipient tag if specified
+            if (params.recipient) {
+                builder.recipient(params.recipient)
+            }
+
+            if (params.owner) {
+                builder.owner(params.owner);
+            }
+
+            const response = await this.query(builder);
+            return response.data.transactions.count!
+        } catch (error: any) {
+            Logger.error(`Error retrieving latest messages: ${error.message}`);
+            throw new GetLatestMessagesError(error);
+        }
     }
 }
