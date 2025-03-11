@@ -7,7 +7,7 @@ import { ProviderInfoDataAggregator } from "src/services/randao/ProviderInfoData
 // Mock dependencies
 jest.mock("src/clients/randao/random/RandomClient");
 jest.mock("src/clients/randao/provider-profile/ProviderProfileClient");
-jest.mock("src/services/randao/ProviderDataAggregator");
+jest.mock("src/services/randao/ProviderInfoDataAggregator");
 
 describe("RandAOService", () => {
     let mockRandomClient: jest.Mocked<RandomClient>;
