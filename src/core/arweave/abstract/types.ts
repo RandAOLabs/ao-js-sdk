@@ -45,6 +45,7 @@ export interface ArweaveGQLResponse {
                 cursor: string;
                 node: ArweaveTransaction;
             }>;
+            count?: number;
         };
     };
 }

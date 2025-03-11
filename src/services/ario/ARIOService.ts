@@ -8,6 +8,7 @@ import { ANTRecordNotFoundError, ARNSRecordNotFoundError } from 'src/services/ar
 import { ARIOServiceConfig } from 'src/services/ario/abstract/ARIOServiceConfig';
 import { getARNSClientAutoConfiguration } from 'src/clients/ario/arns/ARNSClientAutoConfiguration';
 import { DryRunCachingClientConfigBuilder } from 'src/core/ao/configuration/builder';
+import { Logger } from 'src/utils';
 
 /**
  * Service for handling ARIO operations, including ANT and ARNS record management.
@@ -121,6 +122,7 @@ export class ARIOService implements IARIOService {
         // Check cache first
         const cachedClient = this.antClientCache.get(antName);
         if (cachedClient) {
+            Logger.debug(`Using Cached Ant Client for ${antName}`) // Leave this debug log in as its useful
             return cachedClient;
         }
 

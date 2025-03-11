@@ -1,6 +1,7 @@
 import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
 import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
 import { TokenClient, TokenClientConfig } from "src/clients/ao";
+import { POST_VDF_OUTPUT_AND_PROOF_TAG } from "./constants";
 import { IRandomClient, RandomClientConfig, GetProviderAvailableValuesResponse, GetOpenRandomRequestsResponse, GetRandomRequestsResponse, ProviderActivity } from "src/clients/randao/random/abstract";
 import { getRandomClientAutoConfiguration } from "src/clients/randao/random/RandomClientAutoConfiguration";
 import { PostVDFChallengeError, ProviderAvailableValuesError, UpdateProviderAvailableValuesError, OpenRandomRequestsError, RandomRequestsError, CreateRequestError, PostVDFOutputAndProofError } from "src/clients/randao/random/RandomClientError";
@@ -152,7 +153,7 @@ export class RandomClient extends BaseClient implements IRandomClient, IAsyncAut
     async postVDFOutputAndProof(randomnessRequestId: string, output: string, proof: string): Promise<boolean> {
         try {
             const tags: Tags = [
-                { name: "Action", value: "Post-VDF-Output-And-Proof" },
+                POST_VDF_OUTPUT_AND_PROOF_TAG,
             ];
             const data = JSON.stringify({ requestId: randomnessRequestId, output, proof });
             const result = await this.messageResult(data, tags);
