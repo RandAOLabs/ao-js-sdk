@@ -5,8 +5,9 @@ import { ProviderInfoAggregate } from "src/services/randao";
  */
 export interface IRandAOService {
     /**
-     * Retrieves All info on the random providers
-     * @returns An array of {ProviderInfo,ProviderActivity,GraphQlData} linked by address
+     * Retrieves all known provider data on all providers.
+     * @returns An array of all known provider data on all providers.
+     * Sourced from the random process, staking process, onchain transaction data.
      */
     getAllProviderInfo(): Promise<ProviderInfoAggregate[]>;
 
