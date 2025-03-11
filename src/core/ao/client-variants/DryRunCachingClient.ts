@@ -3,6 +3,7 @@ import { IDryRunCachingClient } from "src/core/ao/abstract/ICachingClient"
 import { BaseClient } from "src/core/ao/BaseClient";
 import { DryRunCachingClientConfig } from "src/core/ao/configuration";
 import { Tags } from "src/core/common";
+import { Logger } from "src/utils";
 import { ICache, newCache } from "src/utils/cache";
 
 /**
@@ -26,6 +27,7 @@ export class DryRunCachingClient extends BaseClient implements IDryRunCachingCli
         const cachedResult = this.cache.get(cacheKey);
 
         if (cachedResult) {
+            Logger.debug(`Using Cached DryRun for ${cacheKey}`) // Leave this debug log in as its useful
             return cachedResult;
         }
 
