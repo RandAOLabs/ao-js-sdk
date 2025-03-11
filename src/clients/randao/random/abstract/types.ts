@@ -52,5 +52,11 @@ export type GetRandomRequestsResponse = {
 };
 
 export type ProviderActivity = {
-
+    active_challenge_requests: RequestList,
+    provider_id: string,
+    active: number,
+    created_at: number,
+    random_balance: number,
+    active_output_requests: RequestList,
+    staked: 1
 }
