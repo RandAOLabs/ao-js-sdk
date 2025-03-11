@@ -1,22 +1,52 @@
-import { RandomClient } from "src/clients";
+import { ProviderProfileClient, RandomClient } from "src/clients";
 import { IRandAOService } from "src/services/randao/abstract";
+import { from, lastValueFrom } from "rxjs";
+import { mergeMap } from "rxjs/operators";
+import { ProviderInfoAggregate } from "./abstract/types";
+import { ProviderInfoDataAggregator } from "./ProviderInfoDataAggregator";
 
 /**
  * Service for handling RandAO operations
- * Implements a singleton pattern to ensure only one instance exists
  * @category RandAO
  */
 export class RandAOService implements IRandAOService {
-    private static instance: RandAOService;
+    constructor(
+        private readonly randomClient: RandomClient,
+        private readonly providerProfileClient: ProviderProfileClient,
+    ) { }
 
+    public static async autoConfiguration(): Promise<IRandAOService> {
+        return new RandAOService(
+            await RandomClient.autoConfiguration(),
+            ProviderProfileClient.autoConfiguration()
+        );
+    }
 
-    public static getInstance(): RandAOService {
-        if (!RandAOService.instance) {
-            RandAOService.instance = new RandAOService();
-        }
-        return RandAOService.instance;
+    async getAllProviderInfo(): Promise<ProviderInfoAggregate[]> {
+        // Initialize aggregator
+        const aggregator = await ProviderInfoDataAggregator.autoconfiguration()
+
+        // Create and process streams
+        const activityStream = from(this.randomClient.getAllProviderActivity()).pipe(
+            mergeMap(activities => from(activities)),
+            mergeMap(async item => {
+                await aggregator.updateProviderData(item);
+            })
+        );
+
+        const infoStream = from(this.providerProfileClient.getAllProvidersInfo()).pipe(
+            mergeMap(providers => from(providers)),
+            mergeMap(async item => {
+                await aggregator.updateProviderData(item);
+            })
+        );
+
+        // Wait for completion
+        await Promise.all([
+            lastValueFrom(activityStream),
+            lastValueFrom(infoStream)
+        ]);
+
+        return aggregator.getAggregatedData();
     }
 }
-
-// Export singleton instance
-export default RandAOService.getInstance();

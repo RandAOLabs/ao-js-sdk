@@ -18,7 +18,7 @@ export const RUNE_REALM_PAYMENTS_PROCESS_ID: string = "j7NcraZUL6GZlgdPEoph12Q5r
 
 /*In theory these never need to change*/
 export const PROFILE_REGISTRY_PROCESS_ID: string = "SNy4m-DrqxWl01YqGM4sxI8qCni-58re8uuJLvZPypY"
-export const ARNS_REGISTRY_PROCESS_ID: string = "agYcCFJtrMG6cqMuZfskIkFTGvUPddICmtQSBIoPdiA" // TODO: Replace when ARNS hits mainnet
+export const ARNS_REGISTRY_PROCESS_ID: string = "qNvAoz0TgcH7DMg8BCVn8jF32QH5L6T29VjHxhHqqGE"
 
 // Also export as a single namespace object
 export const processIds = {
