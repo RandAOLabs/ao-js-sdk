@@ -6,7 +6,7 @@ import { RandomClientConfig } from "src/clients/randao/random/abstract";
 import { RNG_TOKEN_PROCESS_ID } from "src/processes_ids";
 import { ARIOService } from "src/services";
 import { Domain } from "src/services/ario/domains";
-import { getWalletLazy } from "src/utils";
+import { getWalletLazy, getWalletSafely } from "src/utils";
 import { IBuilder } from "src/utils/builder";
 
 export class RandomClientConfigBuilder implements IBuilder<RandomClientConfig> {
@@ -24,12 +24,11 @@ export class RandomClientConfigBuilder implements IBuilder<RandomClientConfig> {
      */
     async build(): Promise<RandomClientConfig> {
         this.validate();
-
         // We can assert processId exists since validate() would throw if it didn't
         return {
             processId: this.config.processId || await ARIOService.getInstance().getProcessIdForDomain(Domain.RANDAO_API),
             tokenProcessId: this.config.tokenProcessId || RNG_TOKEN_PROCESS_ID,
-            wallet: this.config.wallet || getWalletLazy()
+            wallet: this.config.wallet || getWalletSafely()
         };
     }
 

@@ -14,7 +14,7 @@ export class ANTClientError extends Error {
 /**
  * Error thrown when fetching ANT records fails
  */
-export class GetRecordsError extends ANTClientError {
+export class GetANTRecordsError extends ANTClientError {
     constructor(originalError?: Error) {
         super('Error fetching ANT records', originalError);
         this.name = 'GetRecordsError';
@@ -24,7 +24,7 @@ export class GetRecordsError extends ANTClientError {
 /**
  * Error thrown when fetching a specific ANT record fails
  */
-export class GetRecordError extends ANTClientError {
+export class GetANTRecordError extends ANTClientError {
     constructor(name: string, originalError?: Error) {
         super(`Error fetching ANT record for name: ${name}`, originalError);
         this.name = 'GetRecordError';

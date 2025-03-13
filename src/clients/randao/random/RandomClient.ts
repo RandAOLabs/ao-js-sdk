@@ -4,7 +4,7 @@ import { TokenClient, TokenClientConfig } from "src/clients/ao";
 import { POST_VDF_OUTPUT_AND_PROOF_TAG } from "./constants";
 import { IRandomClient, RandomClientConfig, GetProviderAvailableValuesResponse, GetOpenRandomRequestsResponse, GetRandomRequestsResponse, ProviderActivity } from "src/clients/randao/random/abstract";
 import { getRandomClientAutoConfiguration } from "src/clients/randao/random/RandomClientAutoConfiguration";
-import { PostVDFChallengeError, ProviderAvailableValuesError, UpdateProviderAvailableValuesError, OpenRandomRequestsError, RandomRequestsError, CreateRequestError, PostVDFOutputAndProofError } from "src/clients/randao/random/RandomClientError";
+import { PostVDFChallengeError, ProviderAvailableValuesError, UpdateProviderAvailableValuesError, OpenRandomRequestsError, RandomRequestsError, CreateRequestError, PostVDFOutputAndProofError, GetAllProviderActivityError, GetProviderActivityError } from "src/clients/randao/random/RandomClientError";
 import { RandomProcessError } from "src/clients/randao/random/RandomProcessError";
 import { Tags } from "src/core";
 import { IAsyncAutoConfiguration } from "src/core/ao/abstract";
@@ -174,8 +174,8 @@ export class RandomClient extends BaseClient implements IRandomClient, IAsyncAut
             this.checkResultForErrors(result)
             return ResultUtils.getFirstMessageDataJson(result)
         } catch (error: any) {
-            Logger.error(`Error posting VDF output and proof: ${error.message}`);
-            throw new PostVDFOutputAndProofError(error);
+            Logger.error(`Error Getting all provider activity: ${error.message}`);
+            throw new GetAllProviderActivityError(error);
         }
     }
 
@@ -189,8 +189,8 @@ export class RandomClient extends BaseClient implements IRandomClient, IAsyncAut
             this.checkResultForErrors(result)
             return ResultUtils.getFirstMessageDataJson(result)
         } catch (error: any) {
-            Logger.error(`Error posting VDF output and proof: ${error.message}`);
-            throw new PostVDFOutputAndProofError(error);
+            Logger.error(`Error getting provider activity: ${error.message}`);
+            throw new GetProviderActivityError(error);
         }
     }
 
