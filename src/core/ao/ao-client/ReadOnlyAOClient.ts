@@ -1,20 +1,20 @@
-import { connect, result, results, dryrun } from '@permaweb/aoconnect';
-import { MessageResult } from '@permaweb/aoconnect/dist/lib/result';
-import { ResultsResponse } from '@permaweb/aoconnect/dist/lib/results';
-import { DryRunResult } from '@permaweb/aoconnect/dist/lib/dryrun';
+import { connect } from '@permaweb/aoconnect';
+import { MessageResult, ReadResult } from '@permaweb/aoconnect/dist/lib/result';
+import { ReadResults, ResultsResponse } from '@permaweb/aoconnect/dist/lib/results';
+import { DryRun, DryRunResult } from '@permaweb/aoconnect/dist/lib/dryrun';
 import { Tags } from 'src/core/common';
-import { SortOrder, DryRunParams } from './abstract';
+import { DryRunParams } from './abstract';
 import { IAOClient } from './abstract/IAOClient';
 import { ConnectArgsLegacy } from './aoconnect-types';
 import { AOSuspectedRateLimitingError } from './AOError';
-import { Logger } from 'src/utils';
 import { AO_CONFIGURATION_DEFAULT } from 'src/core/ao/ao-client/configurations';
 import { AOReadOnlyClientError } from 'src/core/ao/ao-client/AOClientError';
+import { SortOrder } from 'src/core/ao/abstract';
 
 export class ReadOnlyAOClient implements IAOClient {
-    protected _result!: typeof result;
-    protected _results!: typeof results;
-    protected _dryrun!: typeof dryrun;
+    protected _result!: ReadResult;
+    protected _results!: ReadResults;
+    protected _dryrun!: DryRun;
 
     constructor(aoConfig?: ConnectArgsLegacy) {
         if (aoConfig) {

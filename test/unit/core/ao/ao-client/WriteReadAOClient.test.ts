@@ -1,11 +1,26 @@
-import { WriteReadAOClient } from 'src/core/ao/ao-client/WriteReadAOClient';
-import { message, createDataItemSigner } from '@permaweb/aoconnect';
+// Create mock functions that will be shared between direct imports and connect() return value
+const message = jest.fn();
+const results = jest.fn();
+const result = jest.fn();
+const dryrun = jest.fn();
+const mockCreateDataItemSigner = jest.fn();
 
-// Mock the aoconnect library
 jest.mock('@permaweb/aoconnect', () => ({
-    message: jest.fn(),
-    createDataItemSigner: jest.fn()
+    // Direct exports
+    createDataItemSigner: mockCreateDataItemSigner,
+    // connect function that returns the same mock functions
+    connect: jest.fn().mockReturnValue({
+        message: message,
+        results: results,
+        result: result,
+        dryrun: dryrun,
+        createDataItemSigner: mockCreateDataItemSigner
+    })
 }));
+
+
+import { WriteReadAOClient } from 'src/core/ao/ao-client/WriteReadAOClient';
+import { createDataItemSigner } from '@permaweb/aoconnect';
 
 describe('WriteReadAOClient', () => {
     let client: WriteReadAOClient;

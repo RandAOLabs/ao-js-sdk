@@ -11,7 +11,7 @@ import { getArweave } from 'src/core/arweave/arweave';
 import { getEnvironment, Environment } from 'src/utils/environment';
 import { Logger, LogLevel } from 'src/utils';
 import { Tags } from 'src/core/common';
-import { SortOrder, DryRunParams } from 'src/core/ao/ao-client/abstract';
+import { DryRunParams } from 'src/core/ao/ao-client/abstract';
 import { ArweaveDataCachingService } from 'src/core/arweave/ArweaveDataCachingService';
 import { ArweaveTransaction } from 'src/core/arweave/abstract/types';
 import { WriteReadAOClient } from 'src/core/ao/ao-client/WriteReadAOClient';
@@ -19,6 +19,7 @@ import { IAOClient } from 'src/core/ao/ao-client/abstract/IAOClient';
 import { ReadOnlyAOClient } from 'src/core/ao/ao-client/ReadOnlyAOClient';
 import { JWKInterface } from 'arweave/node/lib/wallet';
 import { ReadOnlyRetryAOClient } from 'src/core/ao/ao-client';
+import { SortOrder } from 'src/core/ao/abstract';
 
 export class BaseClient extends IBaseClient {
     /* Fields */

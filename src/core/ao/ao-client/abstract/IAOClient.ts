@@ -2,7 +2,8 @@ import { MessageResult } from '@permaweb/aoconnect/dist/lib/result';
 import { ResultsResponse } from '@permaweb/aoconnect/dist/lib/results';
 import { DryRunResult } from '@permaweb/aoconnect/dist/lib/dryrun';
 import { Tags } from 'src/core/common';
-import { SortOrder, DryRunParams } from 'src/core/ao/ao-client/abstract';
+import { DryRunParams } from 'src/core/ao/ao-client/abstract';
+import { SortOrder } from 'src/core/ao/abstract';
 
 /**
  * AO interface provides a wrapper for interacting with the Arweave Operating System (AO).
