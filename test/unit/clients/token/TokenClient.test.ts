@@ -1,5 +1,23 @@
+// Create mock functions that will be shared between direct imports and connect() return value
+const message = jest.fn();
+const results = jest.fn();
+const result = jest.fn();
+const dryrun = jest.fn();
+const mockCreateDataItemSigner = jest.fn();
 
-import { dryrun } from "@permaweb/aoconnect";
+jest.mock('@permaweb/aoconnect', () => ({
+    // Direct exports
+    createDataItemSigner: mockCreateDataItemSigner,
+    // connect function that returns the same mock functions
+    connect: jest.fn().mockReturnValue({
+        message: message,
+        results: results,
+        result: result,
+        dryrun: dryrun,
+        createDataItemSigner: mockCreateDataItemSigner
+    })
+}));
+
 import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
 import { Tags } from "src/core";
 import { BaseClient } from "src/core/ao/BaseClient";
@@ -8,16 +26,6 @@ import { TokenClient } from "src/index";
 
 
 // Mock the functions from '@permaweb/aoconnect'
-
-
-//mocks
-jest.mock('@permaweb/aoconnect', () => ({
-    message: jest.fn(),
-    results: jest.fn(),
-    result: jest.fn(),
-    dryrun: jest.fn(),
-    createDataItemSigner: jest.fn(), // Create a Jest mock function here
-}));
 /*
 * Mocks the logger for tests to suppress log outputs.
 * Logs a warning that logging has been disabled for the current test suite.

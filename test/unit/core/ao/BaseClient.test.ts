@@ -1,21 +1,33 @@
-import { message, results, result, dryrun } from '@permaweb/aoconnect';
 import { SortOrder } from 'src';
 import { BaseClient } from 'src/core/ao/BaseClient';
 import { BaseClientConfigBuilder } from 'src/core/ao/configuration/builder';
 import { DEFAULT_TAGS } from 'src/core/ao/constants';
+import { IAOClient } from 'src/core/ao/ao-client/abstract/IAOClient';
+import { WriteReadAOClient } from 'src/core/ao/ao-client/WriteReadAOClient';
+
+// Create mock functions for IAOClient implementation
+const message = jest.fn();
+const results = jest.fn();
+const result = jest.fn();
+const dryrun = jest.fn();
+const getCallingWalletAddress = jest.fn();
+
+// Mock WriteReadAOClient to return our mock implementation
+jest.mock('src/core/ao/ao-client/WriteReadAOClient', () => {
+    return {
+        WriteReadAOClient: jest.fn().mockImplementation(() => ({
+            message,
+            results,
+            result,
+            dryrun,
+            getCallingWalletAddress
+        }))
+    };
+});
 
 
 // Mocking external dependencies
 
-//mocks
-
-jest.mock('@permaweb/aoconnect', () => ({
-    message: jest.fn(),
-    results: jest.fn(),
-    result: jest.fn(),
-    dryrun: jest.fn(),
-    createDataItemSigner: jest.fn(), // Create a Jest mock function here
-}));
 jest.mock('src/utils/logger/logger', () => ({
     Logger: {
         info: jest.fn(),
@@ -33,6 +45,17 @@ describe("BaseClient", () => {
     beforeEach(() => {
         const config = new BaseClientConfigBuilder()
             .withProcessId("test-process-id")
+            .withWallet({
+                kty: "RSA",
+                n: "test-modulus",
+                e: "test-exponent",
+                d: "test-private-exponent",
+                p: "test-prime-1",
+                q: "test-prime-2",
+                dp: "test-exponent-1",
+                dq: "test-exponent-2",
+                qi: "test-coefficient"
+            }) // Mock JWKInterface wallet
             .build()
         client = new BaseClient(config)
     });
@@ -70,7 +93,12 @@ describe("BaseClient", () => {
                 ...DEFAULT_TAGS,
                 { name: 'tag1', value: 'value1' }
             ];
-            expect(message).toHaveBeenCalled();
+            expect(message).toHaveBeenCalledWith(
+                client.baseConfig.processId,
+                data,
+                expectedTags,
+                anchor
+            );
         });
     });
 
@@ -91,13 +119,13 @@ describe("BaseClient", () => {
             const response = await client.results(from, to, limit, sort);
 
             // Assert
-            expect(results).toHaveBeenCalledWith({
-                process: client.baseConfig.processId,
+            expect(results).toHaveBeenCalledWith(
+                client.baseConfig.processId,
                 from,
                 to,
                 limit,
-                sort,
-            });
+                sort
+            );
             expect(response).toEqual(mockResponse);
         });
     });
@@ -116,13 +144,32 @@ describe("BaseClient", () => {
             const response = await client.result(messageId);
 
             // Assert
-            expect(result).toHaveBeenCalledWith({
-                message: messageId,
-                process: client.baseConfig.processId,
-            });
+            expect(result).toHaveBeenCalledWith(
+                client.baseConfig.processId,
+                messageId
+            );
             expect(response).toEqual(mockResponse);
         });
     });
+
+    /**
+     * Test case: Getting wallet address
+     */
+    describe('getCallingWalletAddress()', () => {
+        it('should return the wallet address', async () => {
+            // Arrange
+            const mockAddress = "test-wallet-address";
+            getCallingWalletAddress.mockResolvedValueOnce(mockAddress);
+
+            // Act
+            const address = await client.getCallingWalletAddress();
+
+            // Assert
+            expect(getCallingWalletAddress).toHaveBeenCalled();
+            expect(address).toBe(mockAddress);
+        });
+    });
+
     /**
      * Test case: Performing a dry run
      */

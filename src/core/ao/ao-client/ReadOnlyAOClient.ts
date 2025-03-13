@@ -1,15 +1,29 @@
-import { result, results, dryrun, connect } from '@permaweb/aoconnect';
-import { MessageResult } from '@permaweb/aoconnect/dist/lib/result';
-import { ResultsResponse } from '@permaweb/aoconnect/dist/lib/results';
-import { DryRunResult } from '@permaweb/aoconnect/dist/lib/dryrun';
+import { connect } from '@permaweb/aoconnect';
+import { MessageResult, ReadResult } from '@permaweb/aoconnect/dist/lib/result';
+import { ReadResults, ResultsResponse } from '@permaweb/aoconnect/dist/lib/results';
+import { DryRun, DryRunResult } from '@permaweb/aoconnect/dist/lib/dryrun';
 import { Tags } from 'src/core/common';
-import { SortOrder } from 'src/core/ao/abstract';
+import { DryRunParams } from './abstract';
 import { IAOClient } from './abstract/IAOClient';
-import { AOReadOnlyClientError } from './AOReadOnlyClientError';
-import { ConnectArgsLegacy, ConnectArgsMainnet, ConnectArgsMainnetFull } from 'src/core/ao/ao-client/aoconnect-types';
-import { AOSuspectedRateLimitingError } from 'src/core/ao/ao-client/AOError';
+import { ConnectArgsLegacy } from './aoconnect-types';
+import { AOSuspectedRateLimitingError } from './AOError';
+import { AO_CONFIGURATION_DEFAULT } from 'src/core/ao/ao-client/configurations';
+import { AOReadOnlyClientError } from 'src/core/ao/ao-client/AOClientError';
+import { SortOrder } from 'src/core/ao/abstract';
 
 export class ReadOnlyAOClient implements IAOClient {
+    protected _result!: ReadResult;
+    protected _results!: ReadResults;
+    protected _dryrun!: DryRun;
+
+    constructor(aoConfig?: ConnectArgsLegacy) {
+        if (aoConfig) {
+            this.setConfig(aoConfig);
+        } else {
+            this.setConfig(AO_CONFIGURATION_DEFAULT);
+        }
+    }
+
     public async message(
         process: string,
         data: string = '',
@@ -26,7 +40,7 @@ export class ReadOnlyAOClient implements IAOClient {
         limit: number = 25,
         sort: SortOrder = SortOrder.ASCENDING
     ): Promise<ResultsResponse> {
-        return await results({
+        return await this._results({
             process,
             from,
             to,
@@ -39,35 +53,21 @@ export class ReadOnlyAOClient implements IAOClient {
         process: string,
         messageId: string
     ): Promise<MessageResult> {
-        return await result({
+        return await this._result({
             process,
             message: messageId,
         });
     }
 
-    public async dryrun(
-        process: string,
-        data: any = '',
-        tags: Tags = [],
-        anchor?: string,
-        id?: string,
-        owner?: string
-    ): Promise<DryRunResult> {
+    public async dryrun(params: DryRunParams): Promise<DryRunResult> {
         let result;
         try {
-            result = await dryrun({
-                process,
-                data,
-                tags,
-                anchor,
-                id,
-                owner,
-            });
+            result = await this._dryrun(params);
         } catch (error: any) {
             if (error.message = `Unexpected token '<', \"<html>\r\n<h\"... is not valid JSON`) {
-                throw new AOSuspectedRateLimitingError(error, { process, data, tags, anchor, id, owner })
+                throw new AOSuspectedRateLimitingError(error, params);
             } else {
-                throw error
+                throw error;
             }
         }
         return result;
@@ -78,6 +78,9 @@ export class ReadOnlyAOClient implements IAOClient {
     }
 
     public setConfig(aoConnectConfig: ConnectArgsLegacy) {
-        connect(aoConnectConfig)
+        const { result, results, dryrun } = connect(aoConnectConfig);
+        this._result = result;
+        this._results = results;
+        this._dryrun = dryrun;
     }
 }
