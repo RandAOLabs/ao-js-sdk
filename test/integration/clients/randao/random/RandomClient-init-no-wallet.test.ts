@@ -8,12 +8,13 @@ describe("RandomClient Integration Test", () => {
 
 
     beforeAll(async () => {
+        Logger.setLogLevel(LogLevel.DEBUG)
+
         // Initialize the RandomClient with actual configuration for integration testing
         const RANDOM_CONFIG: RandomClientConfig = await new RandomClientConfigBuilder()
             .withWallet(JSON.parse(getEnvironmentVariable("REQUEST_WALLET_JSON")))
             .build()
         client = new RandomClient(RANDOM_CONFIG)
-        Logger.setLogLevel(LogLevel.DEBUG)
     });
 
     afterAll(() => {

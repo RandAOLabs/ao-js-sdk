@@ -1,20 +1,33 @@
-import { ReadOnlyAOClient } from 'src/core/ao/ao-client/ReadOnlyAOClient';
-import { result, results, dryrun } from '@permaweb/aoconnect';
+// Create mock functions that will be shared between direct imports and connect() return value
+const mockMessage = jest.fn();
+const mockResults = jest.fn();
+const mockResult = jest.fn();
+const mockDryrun = jest.fn();
+const mockCreateDataItemSigner = jest.fn();
 
-// Mock the aoconnect library
 jest.mock('@permaweb/aoconnect', () => ({
-    result: jest.fn(),
-    results: jest.fn(),
-    dryrun: jest.fn()
+    // Direct exports
+    createDataItemSigner: mockCreateDataItemSigner,
+    // connect function that returns the same mock functions
+    connect: jest.fn().mockReturnValue({
+        message: mockMessage,
+        results: mockResults,
+        result: mockResult,
+        dryrun: mockDryrun,
+        createDataItemSigner: mockCreateDataItemSigner
+    })
 }));
+
+import { ReadOnlyAOClient } from 'src/core/ao/ao-client/ReadOnlyAOClient';
+import { DryRunParams } from 'src/core/ao/ao-client/abstract';
 
 describe('ReadOnlyAOClient', () => {
     let client: ReadOnlyAOClient;
 
     beforeEach(() => {
-        client = new ReadOnlyAOClient();
         // Reset all mocks before each test
-        jest.resetAllMocks();
+        jest.clearAllMocks();
+        client = new ReadOnlyAOClient();
     });
 
     it('should throw error when trying to send message', async () => {
@@ -22,20 +35,37 @@ describe('ReadOnlyAOClient', () => {
     });
 
     it('should return results when fetching results', async () => {
-        (results as jest.Mock).mockResolvedValue({ success: true });
+        mockResults.mockResolvedValue({ success: true });
         const response = await client.results('process-id');
         expect(response).toBeDefined();
+        expect(mockResults).toHaveBeenCalledWith({
+            process: 'process-id',
+            from: undefined,
+            to: undefined,
+            limit: 25,
+            sort: 'ASC'
+        });
     });
 
     it('should return result when fetching single result', async () => {
-        (result as jest.Mock).mockResolvedValue({ success: true });
+        mockResult.mockResolvedValue({ success: true });
         const response = await client.result('process-id', 'message-id');
         expect(response).toBeDefined();
+        expect(mockResult).toHaveBeenCalledWith({
+            process: 'process-id',
+            message: 'message-id'
+        });
     });
 
     it('should return result when performing dryrun', async () => {
-        (dryrun as jest.Mock).mockResolvedValue({ success: true });
-        const response = await client.dryrun('process-id');
+        mockDryrun.mockResolvedValue({ success: true });
+        const params: DryRunParams = {
+            process: 'process-id',
+            data: '',
+            tags: []
+        };
+        const response = await client.dryrun(params);
         expect(response).toBeDefined();
+        expect(mockDryrun).toHaveBeenCalledWith(params);
     });
 });

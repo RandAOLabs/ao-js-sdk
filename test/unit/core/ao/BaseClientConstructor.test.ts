@@ -1,4 +1,23 @@
-import { message, dryrun } from '@permaweb/aoconnect';
+// Create mock functions that will be shared between direct imports and connect() return value
+const message = jest.fn();
+const results = jest.fn();
+const result = jest.fn();
+const dryrun = jest.fn();
+const mockCreateDataItemSigner = jest.fn();
+
+jest.mock('@permaweb/aoconnect', () => ({
+    // Direct exports
+    createDataItemSigner: mockCreateDataItemSigner,
+    // connect function that returns the same mock functions
+    connect: jest.fn().mockReturnValue({
+        message: message,
+        results: results,
+        result: result,
+        dryrun: dryrun,
+        createDataItemSigner: mockCreateDataItemSigner
+    })
+}));
+
 import { BaseClient } from 'src/core/ao/BaseClient';
 import { BaseClientConfigBuilder } from 'src/core/ao/configuration/builder';
 import { JWKInterface } from 'arweave/node/lib/wallet';
@@ -8,12 +27,6 @@ jest.mock('src/utils/wallet', () => ({
     getWalletSafely: jest.fn().mockReturnValue(undefined)
 }));
 
-// Mock aoconnect library
-jest.mock('@permaweb/aoconnect', () => ({
-    message: jest.fn(),
-    dryrun: jest.fn(),
-    createDataItemSigner: jest.fn()
-}));
 
 // Mock the logger
 jest.mock('src/utils/logger/logger', () => ({

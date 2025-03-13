@@ -1,4 +1,5 @@
 import { JWKInterface } from 'arweave/node/lib/wallet.js';
+import { ConnectArgsLegacy } from 'src/core/ao/ao-client/aoconnect-types';
 
 /**
  * Base configuration interface shared by all ao clients.
@@ -17,4 +18,10 @@ export interface BaseClientConfig {
      * @remarks Use getWalletLazy utility to get the proper wallet in browser or node environments
      */
     wallet: JWKInterface | any | undefined;
+
+    /**
+     * Allows you to specify how to interact with AO
+     * Defaults if not specified
+     */
+    aoConfig?: ConnectArgsLegacy;
 }
