@@ -1,15 +1,16 @@
-import { message, createDataItemSigner, connect } from '@permaweb/aoconnect';
+import { createDataItemSigner, connect } from '@permaweb/aoconnect';
 import { Tags } from 'src/core/common';
 import { JWKInterface } from 'arweave/node/lib/wallet';
 import { Environment, getEnvironment } from 'src/utils';
 import { getArweave } from 'src/core/arweave/arweave';
 import { ConnectArgsLegacy } from 'src/core/ao/ao-client/aoconnect-types';
 import { ReadOnlyRetryAOClient } from 'src/core/ao/ao-client/ReadOnlyRetryClient';
+import { SendMessage } from '@permaweb/aoconnect/dist/lib/message';
 
 export class WriteReadAOClient extends ReadOnlyRetryAOClient {
     private readonly signer: ReturnType<typeof createDataItemSigner>;
     private readonly wallet: JWKInterface | any;
-    protected _message!: typeof message;
+    protected _message!: SendMessage;
 
     /**
      * Creates a new WriteReadAOClient instance with the provided signer.
