@@ -15,13 +15,13 @@ export * from "src/clients/ario/arns/constants";
 // Export error types
 export {
     ANTClientError,
-    GetRecordsError as ANTGetRecordsError,
-    GetRecordError as ANTGetRecordError
+    GetANTRecordsError as ANTGetRecordsError,
+    GetANTRecordError as ANTGetRecordError
 } from "src/clients/ario/ant/ANTClientError";
 
 export {
     ARNSClientError,
-    GetRecordError as ARNSGetRecordError,
+    GetARNSRecordError as ARNSGetRecordError,
     InvalidDomainError
 } from "src/clients/ario/arns/ARNSClientError";
 

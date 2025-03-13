@@ -1,6 +1,6 @@
 import { IARNSClient } from "src/clients/ario/arns/abstract/IARNSClient";
 import { getARNSClientAutoConfiguration } from "src/clients/ario/arns/ARNSClientAutoConfiguration";
-import { GetRecordError, InvalidDomainError } from "src/clients/ario/arns/ARNSClientError";
+import { GetARNSRecordError, InvalidDomainError } from "src/clients/ario/arns/ARNSClientError";
 import { ARNSRecord } from "src/clients/ario/arns/abstract/types";
 import { DOMAIN_SEPARATOR } from "src/clients/ario/arns/constants";
 import { Logger, LogLevel } from "src/utils";
@@ -33,7 +33,7 @@ export class ARNSClient extends DryRunCachingClient implements IARNSClient, ISyn
             ]);
             return ResultUtils.getFirstMessageDataJson<ARNSRecord>(result);
         } catch (error: any) {
-            throw new GetRecordError(name, error);
+            throw new GetARNSRecordError(name, error);
         }
     }
 
