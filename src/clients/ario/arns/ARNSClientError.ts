@@ -14,7 +14,7 @@ export class ARNSClientError extends Error {
 /**
  * Error thrown when fetching an ARNS record fails
  */
-export class GetRecordError extends ARNSClientError {
+export class GetARNSRecordError extends ARNSClientError {
     constructor(name: string, originalError?: Error) {
         super(`Error fetching ARNS record for name: ${name}`, originalError);
         this.name = 'GetRecordError';

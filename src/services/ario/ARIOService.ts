@@ -1,9 +1,9 @@
 import { IARIOService } from 'src/services/ario/abstract/IARIOService';
-import { ANTClient } from 'src/clients/ario/ant';
-import { ARNSClient, InvalidDomainError } from 'src/clients/ario/arns';
-import { ICache, ICacheConfig, newCache } from 'src/utils/cache';
+import { ANTClient, GetANTRecordError } from 'src/clients/ario/ant';
+import { ARNSClient, GetARNSRecordError, InvalidDomainError } from 'src/clients/ario/arns';
+import { ICache, newCache } from 'src/utils/cache';
 import { DOMAIN_SEPARATOR, ARN_ROOT_NAME } from 'src/services/ario/constants';
-import { Domain } from 'src/services/ario/domains';
+import { Domain, DOMAIN_DEFAULTS } from 'src/services/ario/domains';
 import { ANTRecordNotFoundError, ARNSRecordNotFoundError } from 'src/services/ario/ARIOError';
 import { ARIOServiceConfig } from 'src/services/ario/abstract/ARIOServiceConfig';
 import { getARNSClientAutoConfiguration } from 'src/clients/ario/arns/ARNSClientAutoConfiguration';
@@ -53,13 +53,31 @@ export class ARIOService implements IARIOService {
      */
     async getProcessIdForDomain(domain: Domain | string): Promise<string> {
         // Validate domain
+
+        try {
+            const processId = await this.getProcessIdFromARNSProcess(domain);
+            return processId
+        } catch (error: unknown) {
+            // Check for rate limiting and fall back to default process ID if available
+            if (error instanceof GetANTRecordError || error instanceof GetARNSRecordError) {
+                const defaultProcessId = DOMAIN_DEFAULTS[domain as Domain];
+                if (defaultProcessId) {
+                    Logger.warn(`Unable to obtain process id from ARNS domain ${domain} | Using backup process ID: ${defaultProcessId}`);
+                    return defaultProcessId;
+                }
+            }
+            throw error;
+        }
+    }
+
+    /* Private functions */
+    private async getProcessIdFromARNSProcess(domain: Domain | string): Promise<string> {
         this._validateDomain(domain);
 
         // Get the ANT name and undername from the domain
         const antName = this._getAntName(domain);
         const undername = this._getUnderName(domain);
         const hasUndername = undername !== undefined;
-
         // Get or create the ANT client for this domain
         const antClient = await this._getOrCreateAntClient(antName);
         // Get process ID - if we have an undername, use it, otherwise use root name (@)
@@ -68,11 +86,8 @@ export class ARIOService implements IARIOService {
         if (!record?.transactionId) {
             throw new ANTRecordNotFoundError(hasUndername ? undername : ARN_ROOT_NAME);
         }
-
         return record.transactionId;
     }
-
-    /* Private functions */
 
     /**
      * Validates a domain string format.
