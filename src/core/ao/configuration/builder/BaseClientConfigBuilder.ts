@@ -2,6 +2,7 @@ import { JWKInterface } from 'arweave/node/lib/wallet.js';
 import { IBuilder } from 'src/utils/builder';
 import { BaseClientConfig } from '../BaseClientConfig';
 import { getWalletSafely, Logger } from 'src/utils';
+import { ConnectArgsLegacy } from 'src/core/ao/ao-client/aoconnect-types';
 
 /**
  * Builder class for constructing BaseClientConfig objects.
@@ -21,7 +22,8 @@ export class BaseClientConfigBuilder implements IBuilder<BaseClientConfig> {
         // We can assert processId exists since validate() would throw if it didn't
         return {
             processId: this.config.processId!,
-            wallet: this.config.wallet || getWalletSafely()
+            wallet: this.config.wallet || getWalletSafely(),
+            aoConfig: this.config.aoConfig
         };
     }
 
@@ -88,6 +90,17 @@ export class BaseClientConfigBuilder implements IBuilder<BaseClientConfig> {
      */
     withWallet(wallet: JWKInterface): this {
         this.config.wallet = wallet;
+        return this;
+    }
+
+
+    /**
+     * Sets the aoConfig for the configurations
+     * @param aoConfig The aoConfig to use
+     * @returns The builder instance for method chaining
+     */
+    withAOConfig(aoConfig: ConnectArgsLegacy): this {
+        this.config.aoConfig = aoConfig;
         return this;
     }
 }

@@ -11,13 +11,14 @@ import { getArweave } from 'src/core/arweave/arweave';
 import { getEnvironment, Environment } from 'src/utils/environment';
 import { Logger, LogLevel } from 'src/utils';
 import { Tags } from 'src/core/common';
-import { SortOrder } from 'src/core/ao/abstract';
+import { SortOrder, DryRunParams } from 'src/core/ao/ao-client/abstract';
 import { ArweaveDataCachingService } from 'src/core/arweave/ArweaveDataCachingService';
 import { ArweaveTransaction } from 'src/core/arweave/abstract/types';
 import { WriteReadAOClient } from 'src/core/ao/ao-client/WriteReadAOClient';
 import { IAOClient } from 'src/core/ao/ao-client/abstract/IAOClient';
 import { ReadOnlyAOClient } from 'src/core/ao/ao-client/ReadOnlyAOClient';
 import { JWKInterface } from 'arweave/node/lib/wallet';
+import { ReadOnlyRetryAOClient } from 'src/core/ao/ao-client';
 
 export class BaseClient extends IBaseClient {
     /* Fields */
@@ -35,7 +36,7 @@ export class BaseClient extends IBaseClient {
         if (baseConfig.wallet) { // Wallet Provided -> Write Read Client
             this.ao = new WriteReadAOClient(baseConfig.wallet)
         } else { // Wallet Not Provided -> Read Only Client
-            this.ao = new ReadOnlyAOClient()
+            this.ao = new ReadOnlyRetryAOClient()
         }
         this.arweaveService = new ArweaveDataCachingService();
     }
@@ -104,14 +105,15 @@ export class BaseClient extends IBaseClient {
     protected async _dryrun(data: any = '', tags: Tags = [], anchor?: string, id?: string, owner?: string): Promise<DryRunResult> {
         try {
             const mergedTags = mergeLists(DEFAULT_TAGS, tags, tag => tag.name);
-            return await this.ao.dryrun(
-                this.baseConfig.processId,
+            const params: DryRunParams = {
+                process: this.baseConfig.processId,
                 data,
-                mergedTags,
+                tags: mergedTags,
                 anchor,
                 id,
                 owner
-            );
+            };
+            return await this.ao.dryrun(params);
         } catch (error: any) {
             Logger.error(`Error performing dry run: ${JSON.stringify(error.message)}`);
             throw new DryRunError(error);

@@ -1,1 +1,2 @@
-export * from "./IAOClient"
+export * from "./IAOClient";
+export * from "./types"
