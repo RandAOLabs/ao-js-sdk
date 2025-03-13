@@ -2,7 +2,7 @@ import { MessageResult } from '@permaweb/aoconnect/dist/lib/result';
 import { ResultsResponse } from '@permaweb/aoconnect/dist/lib/results';
 import { DryRunResult } from '@permaweb/aoconnect/dist/lib/dryrun';
 import { Tags } from 'src/core/common';
-import { SortOrder } from 'src/core/ao/abstract';
+import { SortOrder, DryRunParams } from 'src/core/ao/ao-client/abstract';
 
 /**
  * AO interface provides a wrapper for interacting with the Arweave Operating System (AO).
@@ -55,22 +55,10 @@ export interface IAOClient {
 
     /**
      * Performs a dry run of a message without actually sending it.
-     * @param process - The target process ID
-     * @param data - The message data to simulate
-     * @param tags - Optional tags to include
-     * @param anchor - Optional anchor reference
-     * @param id - Optional message ID
-     * @param owner - Optional owner address
+     * @param params - The dry run parameters
      * @returns Promise resolving to the dry run result
      */
-    dryrun(
-        process: string,
-        data?: any,
-        tags?: Tags,
-        anchor?: string,
-        id?: string,
-        owner?: string
-    ): Promise<DryRunResult>;
+    dryrun(params: DryRunParams): Promise<DryRunResult>;
 
     /**
      * Gets the wallet address associated with the client.

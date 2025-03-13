@@ -9,6 +9,7 @@ import { ARIOServiceConfig } from 'src/services/ario/abstract/ARIOServiceConfig'
 import { getARNSClientAutoConfiguration } from 'src/clients/ario/arns/ARNSClientAutoConfiguration';
 import { DryRunCachingClientConfigBuilder } from 'src/core/ao/configuration/builder';
 import { Logger } from 'src/utils';
+import { AO_CONFIGURATIONS } from 'src/core/ao/ao-client/configurations';
 
 /**
  * Service for handling ARIO operations, including ANT and ARNS record management.
@@ -151,6 +152,7 @@ export class ARIOService implements IARIOService {
         const config = new DryRunCachingClientConfigBuilder()
             .withProcessId(arnsRecord.processId)
             .withWallet(this.config.arnsClientConfig.wallet)
+            .withAOConfig(AO_CONFIGURATIONS.ARDRIVE)
             .build()
         const antClient = new ANTClient(config);
         this.antClientCache.set(antName, antClient);

@@ -1,20 +1,27 @@
 import { ReadOnlyAOClient } from 'src/core/ao/ao-client/ReadOnlyAOClient';
-import { result, results, dryrun } from '@permaweb/aoconnect';
+import { connect } from '@permaweb/aoconnect';
+import { DryRunParams } from 'src/core/ao/ao-client/abstract';
 
-// Mock the aoconnect library
+// Mock the aoconnect library and its functions
+const mockResult = jest.fn();
+const mockResults = jest.fn();
+const mockDryrun = jest.fn();
+
 jest.mock('@permaweb/aoconnect', () => ({
-    result: jest.fn(),
-    results: jest.fn(),
-    dryrun: jest.fn()
+    connect: jest.fn().mockReturnValue({
+        result: mockResult,
+        results: mockResults,
+        dryrun: mockDryrun
+    })
 }));
 
 describe('ReadOnlyAOClient', () => {
     let client: ReadOnlyAOClient;
 
     beforeEach(() => {
-        client = new ReadOnlyAOClient();
         // Reset all mocks before each test
         jest.resetAllMocks();
+        client = new ReadOnlyAOClient();
     });
 
     it('should throw error when trying to send message', async () => {
@@ -22,20 +29,25 @@ describe('ReadOnlyAOClient', () => {
     });
 
     it('should return results when fetching results', async () => {
-        (results as jest.Mock).mockResolvedValue({ success: true });
+        mockResults.mockResolvedValue({ success: true });
         const response = await client.results('process-id');
         expect(response).toBeDefined();
     });
 
     it('should return result when fetching single result', async () => {
-        (result as jest.Mock).mockResolvedValue({ success: true });
+        mockResult.mockResolvedValue({ success: true });
         const response = await client.result('process-id', 'message-id');
         expect(response).toBeDefined();
     });
 
     it('should return result when performing dryrun', async () => {
-        (dryrun as jest.Mock).mockResolvedValue({ success: true });
-        const response = await client.dryrun('process-id');
+        mockDryrun.mockResolvedValue({ success: true });
+        const params: DryRunParams = {
+            process: 'process-id',
+            data: '',
+            tags: []
+        };
+        const response = await client.dryrun(params);
         expect(response).toBeDefined();
     });
 });
