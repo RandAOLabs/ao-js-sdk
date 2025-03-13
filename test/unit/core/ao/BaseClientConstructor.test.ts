@@ -5,7 +5,7 @@ import { JWKInterface } from 'arweave/node/lib/wallet';
 
 // Mock getWalletLazy
 jest.mock('src/utils/wallet', () => ({
-    getWalletLazy: jest.fn().mockReturnValue(undefined)
+    getWalletSafely: jest.fn().mockReturnValue(undefined)
 }));
 
 // Mock aoconnect library

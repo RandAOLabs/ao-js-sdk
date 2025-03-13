@@ -65,7 +65,7 @@ export class ReadOnlyAOClient implements IAOClient {
             });
         } catch (error: any) {
             if (error.message = `Unexpected token '<', \"<html>\r\n<h\"... is not valid JSON`) {
-                throw new AOSuspectedRateLimitingError(error)
+                throw new AOSuspectedRateLimitingError(error, { process, data, tags, anchor, id, owner })
             } else {
                 throw error
             }

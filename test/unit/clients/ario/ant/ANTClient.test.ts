@@ -1,7 +1,7 @@
 import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
 import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
 import { ANTClient } from "src/clients/ario/ant/ANTClient";
-import { GetRecordError, GetRecordsError } from "src/clients/ario/ant/ANTClientError";
+import { GetANTRecordError, GetANTRecordsError } from "src/clients/ario/ant/ANTClientError";
 import { BaseClient } from "src/core/ao/BaseClient";
 import { ANTRecord, ANTRecords } from "src/clients/ario/ant/abstract/types";
 import { DryRunCachingClientConfigBuilder } from "src/core/ao/configuration/builder";
@@ -80,7 +80,7 @@ describe("ANTClient Unit Test", () => {
             const error = new Error("Dryrun failed");
             jest.spyOn(BaseClient.prototype, 'dryrun').mockRejectedValueOnce(error);
 
-            await expect(client.getRecords()).rejects.toThrow(GetRecordsError);
+            await expect(client.getRecords()).rejects.toThrow(GetANTRecordsError);
         });
     });
 
@@ -103,7 +103,7 @@ describe("ANTClient Unit Test", () => {
             const error = new Error("Dryrun failed");
             jest.spyOn(BaseClient.prototype, 'dryrun').mockRejectedValueOnce(error);
 
-            await expect(client.getRecord(undername)).rejects.toThrow(GetRecordError);
+            await expect(client.getRecord(undername)).rejects.toThrow(GetANTRecordError);
         });
     });
 });

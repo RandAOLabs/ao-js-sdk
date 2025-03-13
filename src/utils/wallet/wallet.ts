@@ -1,5 +1,6 @@
 import { createDataItemSigner } from "@permaweb/aoconnect";
 import { JWKInterface } from "arweave/node/lib/wallet";
+import { Logger } from "src/utils";
 
 let lazyWallet: JWKInterface | null = null;
 /**
@@ -12,6 +13,20 @@ export function getWalletLazy(): JWKInterface {
     }
     return lazyWallet!;
 };
+
+
+/**
+ * Builds and returns the final BaseClientConfig object.
+ * @returns The constructed BaseClientConfig
+ */
+export function getWalletSafely(): JWKInterface | undefined {
+    try {
+        return getWalletLazy();
+    } catch (error: any) {
+        Logger.warn(`Could not find any wallets available: ${error.message}`);
+        return undefined;
+    }
+}
 /**
  * @category Utility
  */

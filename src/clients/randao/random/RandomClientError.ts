@@ -58,3 +58,18 @@ export class PostVDFOutputAndProofError extends RandomClientError {
         this.name = 'PostVDFOutputAndProofError';
     }
 }
+
+export class GetAllProviderActivityError extends RandomClientError {
+    constructor(originalError?: Error) {
+        super('Error Getting all provider activity', originalError);
+        this.name = 'GetAllProviderActivityError';
+    }
+}
+
+
+export class GetProviderActivityError extends RandomClientError {
+    constructor(originalError?: Error) {
+        super('Error getting provider activity', originalError);
+        this.name = 'GetAllProviderActivityError';
+    }
+}
