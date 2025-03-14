@@ -41,6 +41,12 @@ export class BaseClient extends IBaseClient {
         }
         this.arweaveService = new ArweaveDataCachingService();
     }
+
+    public createInstance(baseConfig: BaseClientConfig) {
+        return new BaseClient(baseConfig)
+    }
+
+
     /* Constructors */
     /* Core AO Functions */
     /** @protected */
@@ -167,6 +173,8 @@ export class BaseClient extends IBaseClient {
         const result = await this.result(result_id);
         return result;
     }
+
+
     /* Protected Utility */
 
     /* Private */

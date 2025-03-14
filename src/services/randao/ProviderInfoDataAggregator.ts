@@ -4,7 +4,7 @@ import { POST_VDF_OUTPUT_AND_PROOF_TAG } from "src/clients/randao/random/constan
 import { ProviderInfoAggregate } from "./abstract/types";
 import { MessagesService } from "src/services/messages";
 import { ARIOService } from "src/services/ario";
-import { Domain } from "src/services/ario/domains";
+import { Domains } from "src/services/ario/domains";
 
 /**
  * Class responsible for aggregating provider data from multiple sources
@@ -26,7 +26,7 @@ export class ProviderInfoDataAggregator {
         const ario = ARIOService.getInstance()
         return new ProviderInfoDataAggregator(
             new MessagesService(),
-            await ario.getProcessIdForDomain(Domain.RANDAO_API)
+            await ario.getProcessIdForDomain(Domains.RANDAO_API)
         )
     }
     /**

@@ -1,20 +1,18 @@
 import { IProviderProfileClient } from "src/clients/randao/provider-profile/abstract/IProviderProfileClient";
 import { ProviderDetails, ProviderInfo, ProviderInfoDTO } from "src/clients/randao/provider-profile/abstract/types";
-import { getProviderProfileClientAutoConfiguration } from "src/clients/randao/provider-profile/ProviderProfileClientAutoConfiguration";
-import { Tags } from "src/core";
-import { ISyncAutoConfiguration } from "src/core/ao/abstract";
-import { DryRunCachingClient } from "src/core/ao/client-variants";
+import { DryRunCachingClientConfigBuilder, Tags } from "src/core";
+import { SyncAutoConfigBaseClient } from "src/core/ao/client-variants/SyncAutoConfigBaseClient";
 import ResultUtils from "src/core/common/result-utils/ResultUtils";
+import { RANDAO_PROFILE_PROCESS_ID } from "src/processes_ids";
 import { Logger } from "src/utils";
 
 /**
  * @category RandAO
  */
-export class ProviderProfileClient extends DryRunCachingClient implements IProviderProfileClient, ISyncAutoConfiguration {
-
-    public static autoConfiguration(): ProviderProfileClient {
-        const config = getProviderProfileClientAutoConfiguration()
-        return new ProviderProfileClient(config)
+export class ProviderProfileClient extends SyncAutoConfigBaseClient implements IProviderProfileClient {
+    public static defaultConfigBuilder(): DryRunCachingClientConfigBuilder {
+        return new DryRunCachingClientConfigBuilder()
+            .withProcessId(RANDAO_PROFILE_PROCESS_ID)
     }
 
     /* Interface Provider Profile Functions */
@@ -25,7 +23,6 @@ export class ProviderProfileClient extends DryRunCachingClient implements IProvi
             ];
             const data = JSON.stringify({ providerDetails: JSON.stringify(providerDetails) });
             const result = await this.messageResult(data, tags);
-            this.clearCache()
             return ResultUtils.getFirstMessageDataString(result);
         } catch (error: any) {
             Logger.error(`Error updating provider details: ${error.message}`);

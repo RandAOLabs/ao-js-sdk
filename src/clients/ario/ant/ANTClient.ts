@@ -2,7 +2,6 @@ import { IANTClient } from "src/clients/ario/ant/abstract/IANTClient";
 import { ANTRecord, ANTRecords } from "src/clients/ario/ant/abstract/types";
 import { GetANTRecordsError, GetANTRecordError } from "src/clients/ario/ant/ANTClientError";
 import { DryRunCachingClient } from "src/core/ao/client-variants";
-import { DryRunCachingClientConfigBuilder } from "src/core/ao/configuration/builder";
 import ResultUtils from "src/core/common/result-utils/ResultUtils";
 
 /**

@@ -1,10 +1,8 @@
 import { ICollectionClient, CollectionClientConfig, CollectionInfo, UpdateAssetsRequest } from "src/clients/bazar/collection/abstract";
-import { getCollectionClientAutoConfiguration } from "src/clients/bazar/collection/CollectionClientAutoConfiguration";
 import { CollectionInfoError, AuthorizationError, InputValidationError, UpdateAssetsError, AddToProfileError, TransferAllAssetsError } from "src/clients/bazar/collection/CollectionClientError";
 import { TAG_NAMES, ACTIONS, RESPONSE_ACTIONS, STATUS, TRANSFER_RATE_LIMIT, TRANSFER_BATCH_DELAY } from "src/clients/bazar/collection/constants";
 import { NftClient } from "src/clients/bazar/nft";
-import { BaseClientConfig, BaseClientConfigBuilder, TagUtils } from "src/core";
-import { ISyncAutoConfiguration } from "src/core/ao/abstract";
+import { BaseClientConfigBuilder, TagUtils } from "src/core";
 import { BaseClient } from "src/core/ao/BaseClient";
 import ResultUtils from "src/core/common/result-utils/ResultUtils";
 import { Logger } from "src/utils";
@@ -13,12 +11,7 @@ import { Logger } from "src/utils";
 /**
  * @category Bazar
  */
-export class CollectionClient extends BaseClient implements ICollectionClient, ISyncAutoConfiguration {
-    /* Constructors */
-    public static autoConfiguration(): CollectionClient {
-        return new CollectionClient(getCollectionClientAutoConfiguration());
-    }
-
+export class CollectionClient extends BaseClient implements ICollectionClient {
     public constructor(config: CollectionClientConfig) {
         super(config);
     }

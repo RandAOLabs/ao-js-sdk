@@ -13,7 +13,7 @@ import { RANDOM_PROCESS_ID } from "src/processes_ids";
  * 
  * @see {@link ARIOService.getProcessIdForDomain} for domain resolution logic
  */
-export enum Domain {
+export enum Domains {
     /**
      * Domain for the RANDAO API process.
      * Uses format "api_randao" where:
@@ -26,7 +26,7 @@ export enum Domain {
 /**
  * Static mapping of domain default process IDs used during rate limiting
  */
-export const DOMAIN_DEFAULTS: { [key in Domain]?: string } = {
-    [Domain.RANDAO_API]: RANDOM_PROCESS_ID
+export const DOMAIN_DEFAULTS: { [key in Domains]?: string } = {
+    [Domains.RANDAO_API]: RANDOM_PROCESS_ID
     // Add more domain defaults here as needed
 };

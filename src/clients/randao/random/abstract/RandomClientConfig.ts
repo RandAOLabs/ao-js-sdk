@@ -1,5 +1,4 @@
-import { BaseClientConfig } from "src/index";
+import { TokenInterfacingClientConfig } from "src/clients/common/TokenInterfacingClientConfig";
 
-export interface RandomClientConfig extends BaseClientConfig {
-    tokenProcessId: string
+export interface RandomClientConfig extends TokenInterfacingClientConfig {
 }

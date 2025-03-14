@@ -1,4 +1,4 @@
-import { Domain } from 'src/services/ario/domains';
+import { Domains } from 'src/services/ario/domains';
 
 /**
  * Interface for ARIO (Arweave Resource Identifier Oracle) service operations.
@@ -36,5 +36,5 @@ export interface IARIOService {
      * @throws {ARNSRecordNotFoundError} If no ARNS record exists for the domain
      * @throws {ANTRecordNotFoundError} If no ANT record exists for the ANT name
      */
-    getProcessIdForDomain(domain: Domain | string): Promise<string>;
+    getProcessIdForDomain(domain: Domains | string): Promise<string>;
 }
