@@ -2,7 +2,10 @@ import { TokenInterfacingClientConfigBuilder } from "src/clients/common/TokenInt
 import { RandomClientConfig } from "src/clients/randao/random/abstract";
 import { RandomClientConfigBuilder } from "src/clients/randao/random/RandomClientConfigBuilder";
 
-
+/**
+ * 
+ * @deprecated
+ */
 export const getRandomClientAutoConfiguration = async (): Promise<RandomClientConfig> => {
     const builder = new RandomClientConfigBuilder()
     return builder

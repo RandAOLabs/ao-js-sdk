@@ -3,20 +3,22 @@ import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
 import { TokenClient, TokenClientConfig } from "src/clients/ao";
 import { POST_VDF_OUTPUT_AND_PROOF_TAG } from "./constants";
 import { IRandomClient, RandomClientConfig, GetProviderAvailableValuesResponse, GetOpenRandomRequestsResponse, GetRandomRequestsResponse, ProviderActivity } from "src/clients/randao/random/abstract";
-import { getRandomClientAutoConfiguration } from "src/clients/randao/random/RandomClientAutoConfiguration";
 import { PostVDFChallengeError, ProviderAvailableValuesError, UpdateProviderAvailableValuesError, OpenRandomRequestsError, RandomRequestsError, CreateRequestError, PostVDFOutputAndProofError, GetAllProviderActivityError, GetProviderActivityError } from "src/clients/randao/random/RandomClientError";
 import { RandomProcessError } from "src/clients/randao/random/RandomProcessError";
 import { Tags } from "src/core";
-import { IAsyncAutoConfiguration } from "src/core/ao/abstract";
-import { BaseClient } from "src/core/ao/BaseClient";
 import ResultUtils from "src/core/common/result-utils/ResultUtils";
 import { Logger } from "src/utils";
+import { TokenInterfacingClientConfigBuilder } from "src/clients/common/TokenInterfacingClientConfigBuilder";
+import { ARIOService } from "src/services";
+import { Domains } from "src/services/ario/domains";
+import { RNG_TOKEN_PROCESS_ID } from "src/processes_ids";
+import { AsyncAutoConfigBaseClient } from "src/core/ao/client-variants/AsyncAutoConfigBaseClient";
 
 /**
  * @category RandAO
  * @see {@link https://github.com/RandAOLabs/Random-Process | specification}
  */
-export class RandomClient extends BaseClient implements IRandomClient, IAsyncAutoConfiguration {
+export class RandomClient extends AsyncAutoConfigBaseClient implements IRandomClient {
     /* Fields */
     readonly tokenClient: TokenClient;
     /* Fields */
@@ -34,8 +36,11 @@ export class RandomClient extends BaseClient implements IRandomClient, IAsyncAut
         this.tokenClient = new TokenClient(tokenConfig)
     }
 
-    public static async autoConfiguration(): Promise<RandomClient> {
-        return new RandomClient(await getRandomClientAutoConfiguration());
+    public static async defaultConfigBuilder(): Promise<TokenInterfacingClientConfigBuilder> {
+        const processId = await ARIOService.getInstance().getProcessIdForDomain(Domains.RANDAO_API)
+        return new TokenInterfacingClientConfigBuilder()
+            .withProcessId(processId)
+            .withTokenProcessId(RNG_TOKEN_PROCESS_ID)
     }
     /* Constructors */
 

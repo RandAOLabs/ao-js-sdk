@@ -1,22 +1,24 @@
 import { IARNSClient } from "src/clients/ario/arns/abstract/IARNSClient";
-import { getARNSClientAutoConfiguration } from "src/clients/ario/arns/ARNSClientAutoConfiguration";
 import { GetARNSRecordError, InvalidDomainError } from "src/clients/ario/arns/ARNSClientError";
 import { ARNSRecord } from "src/clients/ario/arns/abstract/types";
 import { DOMAIN_SEPARATOR } from "src/clients/ario/arns/constants";
-import { Logger, LogLevel } from "src/utils";
-import { DryRunCachingClient } from "src/core/ao/client-variants";
-import { ISyncAutoConfiguration } from "src/core/ao/abstract";
 import ResultUtils from "src/core/common/result-utils/ResultUtils";
+import { BaseClientConfigBuilder, DryRunCachingClientConfigBuilder } from "src/core";
+import { ARNS_REGISTRY_PROCESS_ID } from "src/processes_ids";
+import { AO_CONFIGURATIONS } from "src/core/ao/ao-client/configurations";
+import { SyncAutoConfigBaseClient } from "src/core/ao/client-variants/SyncAutoConfigBaseClient";
 
 /**
  * Client for interacting with ARNS (Arweave Name Service) records.
  * @category ARIO
  */
-export class ARNSClient extends DryRunCachingClient implements IARNSClient, ISyncAutoConfiguration {
-    public static autoConfiguration(): ARNSClient {
-        return new ARNSClient(getARNSClientAutoConfiguration());
-    }
+export class ARNSClient extends SyncAutoConfigBaseClient implements IARNSClient {
 
+    public static defaultConfigBuilder(): BaseClientConfigBuilder {
+        return new DryRunCachingClientConfigBuilder()
+            .withProcessId(ARNS_REGISTRY_PROCESS_ID)
+            .withAOConfig(AO_CONFIGURATIONS.ARDRIVE)
+    }
     /**
      * Retrieves an ARNS record for a given name.
      * @param name - The name to get the ARNS record for
@@ -65,3 +67,5 @@ export class ARNSClient extends DryRunCachingClient implements IARNSClient, ISyn
         }
     }
 }
+
+ARNSClient.defaultConfigBuilder

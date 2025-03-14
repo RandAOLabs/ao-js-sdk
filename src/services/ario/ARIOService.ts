@@ -3,10 +3,9 @@ import { ANTClient, GetANTRecordError } from 'src/clients/ario/ant';
 import { ARNSClient, GetARNSRecordError, InvalidDomainError } from 'src/clients/ario/arns';
 import { ICache, newCache } from 'src/utils/cache';
 import { DOMAIN_SEPARATOR, ARN_ROOT_NAME } from 'src/services/ario/constants';
-import { Domain, DOMAIN_DEFAULTS } from 'src/services/ario/domains';
+import { Domains, DOMAIN_DEFAULTS } from 'src/services/ario/domains';
 import { ANTRecordNotFoundError, ARNSRecordNotFoundError } from 'src/services/ario/ARIOError';
 import { ARIOServiceConfig } from 'src/services/ario/abstract/ARIOServiceConfig';
-import { getARNSClientAutoConfiguration } from 'src/clients/ario/arns/ARNSClientAutoConfiguration';
 import { DryRunCachingClientConfigBuilder } from 'src/core/ao/configuration/builder';
 import { Logger } from 'src/utils';
 import { AO_CONFIGURATIONS } from 'src/core/ao/ao-client/configurations';
@@ -34,7 +33,7 @@ export class ARIOService implements IARIOService {
                 ARIOService.instance = new ARIOService(config);
             } else {
                 ARIOService.instance = new ARIOService({
-                    arnsClientConfig: getARNSClientAutoConfiguration()
+                    arnsClientConfig: ARNSClient.defaultConfigBuilder().build()
                 });
             }
         }
@@ -52,7 +51,7 @@ export class ARIOService implements IARIOService {
      * @throws {ARNSRecordNotFoundError} If no ARNS record is found for the domain
      * @throws {ANTRecordNotFoundError} If no ANT record is found for the ANT name
      */
-    async getProcessIdForDomain(domain: Domain | string): Promise<string> {
+    async getProcessIdForDomain(domain: Domains | string): Promise<string> {
         // Validate domain
 
         try {
@@ -61,7 +60,7 @@ export class ARIOService implements IARIOService {
         } catch (error: unknown) {
             // Check for rate limiting and fall back to default process ID if available
             if (error instanceof GetANTRecordError || error instanceof GetARNSRecordError) {
-                const defaultProcessId = DOMAIN_DEFAULTS[domain as Domain];
+                const defaultProcessId = DOMAIN_DEFAULTS[domain as Domains];
                 if (defaultProcessId) {
                     Logger.warn(`Unable to obtain process id from ARNS domain ${domain} | Using backup process ID: ${defaultProcessId}`);
                     return defaultProcessId;
@@ -72,7 +71,7 @@ export class ARIOService implements IARIOService {
     }
 
     /* Private functions */
-    private async getProcessIdFromARNSProcess(domain: Domain | string): Promise<string> {
+    private async getProcessIdFromARNSProcess(domain: Domains | string): Promise<string> {
         this._validateDomain(domain);
 
         // Get the ANT name and undername from the domain

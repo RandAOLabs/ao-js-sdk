@@ -2,6 +2,10 @@ import { BaseClientConfig } from "src/core";
 import { BaseClientConfigBuilder } from "src/core/ao/configuration/builder";
 import { RANDAO_PROFILE_PROCESS_ID } from "src/processes_ids";
 
+/**
+ * 
+ * @deprecated
+ */
 export const getProviderProfileClientAutoConfiguration = (): BaseClientConfig => {
     const builder = new BaseClientConfigBuilder()
     return builder

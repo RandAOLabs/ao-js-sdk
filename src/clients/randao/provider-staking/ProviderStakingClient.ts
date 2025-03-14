@@ -1,20 +1,42 @@
-import { StakingClient } from "src/clients/ao";
+import { IStakingClient, StakingClient, StakingClientConfig, TokenClient } from "src/clients/ao";
+import { TokenInterfacingClientConfigBuilder } from "src/clients/common/TokenInterfacingClientConfigBuilder";
 import { ProviderDetails } from "src/clients/randao/provider-profile";
 import { IProviderStakingClient } from "src/clients/randao/provider-staking/abstract/IProviderStakingClient";
 import { ProviderStakeInfo } from "src/clients/randao/provider-staking/abstract/types";
-import { getProviderStakingClientAutoConfiguration } from "src/clients/randao/provider-staking/ProviderStakingClientAutoConfiguration";
 import { GetStakeError, ProviderUnstakeError, StakeWithDetailsError } from "src/clients/randao/provider-staking/ProviderStakingError";
 import { Tags } from "src/core";
-import { ISyncAutoConfiguration } from "src/core/ao/abstract";
+import { SyncAutoConfigBaseClient } from "src/core/ao/client-variants/SyncAutoConfigBaseClient";
 import ResultUtils from "src/core/common/result-utils/ResultUtils";
+import { RANDAO_PROFILE_PROCESS_ID, RANDAO_STAKING_TOKEN_PROCESS_ID } from "src/processes_ids";
 import { Logger } from "src/utils";
 
 /**
  * @category RandAO
  */
-export class ProviderStakingClient extends StakingClient implements IProviderStakingClient, ISyncAutoConfiguration {
-    public static autoConfiguration(): ProviderStakingClient {
-        return new ProviderStakingClient(getProviderStakingClientAutoConfiguration());
+export class ProviderStakingClient extends SyncAutoConfigBaseClient implements IProviderStakingClient, IStakingClient {
+    // Include StakingClient functionality
+    private stakingClient: StakingClient;
+    private readonly tokenClient: TokenClient;
+
+    public constructor(config: StakingClientConfig) {
+        super(config);
+        this.stakingClient = new StakingClient(config);
+        this.tokenClient = this.stakingClient.tokenClient;
+    }
+
+    public static defaultConfigBuilder(): TokenInterfacingClientConfigBuilder {
+        return new TokenInterfacingClientConfigBuilder()
+            .withProcessId(RANDAO_PROFILE_PROCESS_ID)
+            .withTokenProcessId(RANDAO_STAKING_TOKEN_PROCESS_ID)
+    }
+
+    // Delegate StakingClient methods
+    public stake(quantity: string, additionaForwardedlTags?: Tags): Promise<boolean> {
+        return this.stakingClient.stake(quantity, additionaForwardedlTags);
+    }
+
+    public getStakingToken(): TokenClient {
+        return this.stakingClient.getStakingToken();
     }
 
     public async stakeWithDetails(quantity: string, providerDetails?: ProviderDetails): Promise<boolean> {
@@ -26,7 +48,7 @@ export class ProviderStakingClient extends StakingClient implements IProviderSta
                     value: JSON.stringify(providerDetails)
                 }]
                 : undefined
-            const success = await super.stake(quantity, additionaForwardedlTags);
+            const success = await this.stake(quantity, additionaForwardedlTags);
             return success
         } catch (error: any) {
             Logger.error(`Error staking with provider details ${quantity} tokens: ${error.message}`);
@@ -58,7 +80,7 @@ export class ProviderStakingClient extends StakingClient implements IProviderSta
                 { name: "Action", value: "Unstake" }
             ];
             const data = JSON.stringify({ providerId })
-            const result = await super.unstake(data)
+            const result = await this.unstake(data)
             return result
         } catch (error: any) {
             Logger.error(`Provider Error unstaking for: ${error.message}`);

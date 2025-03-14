@@ -7,6 +7,7 @@ import { Tags } from "src/core/common";
 import { ArweaveTransaction } from "src/core/arweave/abstract/types";
 import { JWKInterface } from "arweave/node/lib/wallet";
 
+
 export abstract class IBaseClient {
     /* AO Interaction Methods */
 

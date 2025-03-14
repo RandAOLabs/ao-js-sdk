@@ -1,5 +1,3 @@
-export * from "./IAsyncAutoConfiguration"
 export * from "./IBaseClient"
 export * from "./ICachingClient"
-export * from "./ISyncAutoConfiguraiton"
 export * from "./types"

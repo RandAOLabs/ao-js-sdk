@@ -2,9 +2,8 @@
 import { TokenClient, TokenClientConfig } from "src/clients/ao";
 import { INftClient } from "src/clients/bazar/nft/abstract/INftClient";
 import { NFT_QUANTITY } from "src/clients/bazar/nft/constants";
-import { getNftClientAutoConfiguration } from "src/clients/bazar/nft/NftClientAutoConfiguration";
 import { NftTransferError } from "src/clients/bazar/nft/NftClientError";
-import { Tags } from "src/core";
+import { BaseClientConfigBuilder, Tags } from "src/core";
 
 import { Logger } from "src/utils/index";
 
@@ -14,20 +13,17 @@ import { Logger } from "src/utils/index";
 export class NftClient extends TokenClient implements INftClient {
     /* Constructors */
     public constructor(configOrProcessId: TokenClientConfig | string) {
-        const config = getNftClientAutoConfiguration();
-
+        let config;
         if (typeof configOrProcessId === 'string') {
-            config.processId = configOrProcessId;
+            config = new BaseClientConfigBuilder()
+                .withProcessId(configOrProcessId)
+                .build()
         } else {
-            Object.assign(config, configOrProcessId);
+            config = configOrProcessId
         }
-
         super(config);
     }
 
-    public static autoConfiguration(): NftClient {
-        return new NftClient(getNftClientAutoConfiguration());
-    }
     /* Constructors */
 
     /* Core NFT Functions */
