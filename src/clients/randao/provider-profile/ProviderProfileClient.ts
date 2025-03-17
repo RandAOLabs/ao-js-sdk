@@ -5,13 +5,14 @@ import { Tags } from "src/core";
 import { DryRunCachingClient } from "src/core/ao/client-variants";
 import ResultUtils from "src/core/common/result-utils/ResultUtils";
 import { RANDAO_PROFILE_PROCESS_ID } from "src/processes_ids";
-import { IAutoconfiguration, IDefaultBuilder, Logger } from "src/utils";
+import { IAutoconfiguration, IDefaultBuilder, Logger, staticImplements } from "src/utils";
 
 /**
  * @category RandAO
  */
-
-export class ProviderProfileClient extends DryRunCachingClient implements IProviderProfileClient, IAutoconfiguration, IDefaultBuilder {
+@staticImplements<IAutoconfiguration>() 
+@staticImplements<IDefaultBuilder>()
+export class ProviderProfileClient extends DryRunCachingClient implements IProviderProfileClient {
     public static autoConfiguration(): ProviderProfileClient {
         return ProviderProfileClient.defaultBuilder()
             .build()

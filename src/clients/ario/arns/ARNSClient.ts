@@ -8,12 +8,15 @@ import { IAutoconfiguration, IDefaultBuilder } from "src/utils/class-interfaces"
 import { ARNS_REGISTRY_PROCESS_ID } from "src/processes_ids";
 import { AO_CONFIGURATIONS } from "src/core/ao/ao-client/configurations";
 import { ClientBuilder } from "src/clients/common";
+import { staticImplements } from "src/utils";
 
 /**
  * Client for interacting with ARNS (Arweave Name Service) records.
  * @category ARIO
  */
-export class ARNSClient extends DryRunCachingClient implements IARNSClient, IAutoconfiguration, IDefaultBuilder{
+@staticImplements<IAutoconfiguration>() 
+@staticImplements<IDefaultBuilder>()
+export class ARNSClient extends DryRunCachingClient implements IARNSClient{
     public static autoConfiguration(): ARNSClient {
         return ARNSClient.defaultBuilder()
             .build()

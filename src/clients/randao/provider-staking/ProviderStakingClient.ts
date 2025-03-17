@@ -7,12 +7,14 @@ import { GetStakeError, ProviderUnstakeError, StakeWithDetailsError } from "src/
 import { Tags } from "src/core";
 import ResultUtils from "src/core/common/result-utils/ResultUtils";
 import { RANDAO_PROFILE_PROCESS_ID, RANDAO_STAKING_TOKEN_PROCESS_ID } from "src/processes_ids";
-import { IAutoconfiguration, IDefaultBuilder, Logger } from "src/utils";
+import { IAutoconfiguration, IDefaultBuilder, Logger, staticImplements } from "src/utils";
 
 /**
  * @category RandAO
  */
-export class ProviderStakingClient extends StakingClient implements IProviderStakingClient, IAutoconfiguration, IDefaultBuilder {
+@staticImplements<IAutoconfiguration>() 
+@staticImplements<IDefaultBuilder>()
+export class ProviderStakingClient extends StakingClient implements IProviderStakingClient {
     public static autoConfiguration(): ProviderStakingClient {
         return ProviderStakingClient.defaultBuilder()
             .build()

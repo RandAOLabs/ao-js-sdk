@@ -5,5 +5,5 @@ export interface IDefaultBuilder {
     /**
      * @returns a builder with nice preset defaults
      */
-    defaultBuilder<T extends IDefaultBuilder>(): IBuilder<T>;
+    defaultBuilder(): IBuilder<any> | Promise<IBuilder<any>>;
 }

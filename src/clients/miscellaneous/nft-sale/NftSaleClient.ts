@@ -8,13 +8,14 @@ import { PurchaseNftError, LuckyDrawError, QueryNFTCountError, AddNftError, Retu
 import { Tags } from "src/core";
 import { BaseClient } from "src/core/ao/BaseClient";
 import ResultUtils from "src/core/common/result-utils/ResultUtils";
-import { IAutoconfiguration, Logger } from "src/utils";
+import { Logger } from "src/utils";
 
 /**
  * @deprecated
  * @category Miscellaneous
  */
-export class NftSaleClient extends BaseClient implements INftSaleClient, IAutoconfiguration {
+
+export class NftSaleClient extends BaseClient implements INftSaleClient {
     /* Fields */
     readonly tokenClient: TokenClient;
     readonly profileClient: ProfileClient;
