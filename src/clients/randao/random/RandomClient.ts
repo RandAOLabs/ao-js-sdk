@@ -170,7 +170,7 @@ export class RandomClient extends BaseClient implements IRandomClient, IAsyncAut
             const tags: Tags = [
                 { name: "Action", value: "Get-All-Providers" },
             ];
-            const result = await this.messageResult(undefined, tags);
+            const result = await this.dryrun(undefined, tags);
             this.checkResultForErrors(result)
             return ResultUtils.getFirstMessageDataJson(result)
         } catch (error: any) {
