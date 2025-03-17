@@ -2,9 +2,9 @@ import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
 import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
 
 import { Tags } from "src/core";
-import { IAutoconfiguration, IDefaultBuilder, Logger } from "src/utils";
-import { IRaffleClient, RaffleClientConfig, RafflePull, ViewPullsResponse, ViewEntrantsResponse, ViewRaffleOwnersResponse, getRaffleClientAutoConfiguration } from "src/clients";
-import { SetRaffleEntrantsError, PullRaffleError, ViewPullsError, ViewPullError, ViewEntrantsError, ViewUserPullError, ViewUserPullsError, ViewRaffleOwnersError } from "src/clients/miscellaneous/raffle/RaffleClientError";
+import { IAutoconfiguration, IDefaultBuilder, Logger, staticImplements } from "src/utils";
+import { IRaffleClient, RafflePull, ViewPullsResponse, ViewEntrantsResponse, ViewRaffleOwnersResponse } from "src/clients";
+import { SetRaffleEntrantsError, PullRaffleError, ViewPullError, ViewEntrantsError, ViewUserPullError, ViewUserPullsError, ViewRaffleOwnersError } from "src/clients/miscellaneous/raffle/RaffleClientError";
 import { RaffleProcessError } from "src/clients/miscellaneous/raffle/RaffleProcessError";
 import { BaseClient } from "src/core/ao/BaseClient";
 import ResultUtils from "src/core/common/result-utils/ResultUtils";
@@ -15,7 +15,9 @@ import { RAFFLE_PROCESS_ID } from "src/processes_ids";
  * @category Miscellaneous
  * @see {@link https://github.com/RandAOLabs/Raffle-Process | specification}
  */
-export class RaffleClient extends BaseClient implements IRaffleClient, IAutoconfiguration, IDefaultBuilder {
+@staticImplements<IAutoconfiguration>() 
+@staticImplements<IDefaultBuilder>()
+export class RaffleClient extends BaseClient implements IRaffleClient {
     public static autoConfiguration(): RaffleClient {
         return RaffleClient.defaultBuilder()
             .build()

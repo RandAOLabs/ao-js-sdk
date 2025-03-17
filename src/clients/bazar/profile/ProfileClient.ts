@@ -4,7 +4,7 @@ import { GetProfileError, NoProfileFoundError, ProfileTransferError } from "src/
 import { Tags, TagUtils } from "src/core";
 import { DryRunCachingClient } from "src/core/ao/client-variants";
 import ResultUtils from "src/core/common/result-utils/ResultUtils";
-import { IAutoconfiguration, IDefaultBuilder, Logger } from "src/utils/index";
+import { IAutoconfiguration, IDefaultBuilder, Logger, staticImplements } from "src/utils/index";
 import { ProfileRegistryClient } from "../profile-registry";
 import { ClientBuilder } from "src/clients/common";
 
@@ -12,7 +12,9 @@ import { ClientBuilder } from "src/clients/common";
  * @category Bazar
  * @see {@link https://cookbook_ao.g8way.io/references/profile.html | specification}
  */
-export class ProfileClient extends DryRunCachingClient implements IProfileClient, IDefaultBuilder, IAutoconfiguration {
+@staticImplements<IAutoconfiguration>() 
+@staticImplements<IDefaultBuilder>()
+export class ProfileClient extends DryRunCachingClient implements IProfileClient{
     /* Constructors */
     public static async autoConfiguration(): Promise<ProfileClient> {
         const builder = await ProfileClient.defaultBuilder()

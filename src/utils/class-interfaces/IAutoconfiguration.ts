@@ -1,5 +1,3 @@
-import { BaseClient } from "src/core/ao/BaseClient";
-import { UnimplementedError } from "../errors";
 
 export interface IAutoconfiguration{
 
@@ -10,5 +8,5 @@ export interface IAutoconfiguration{
      * @returns A configured instance of the client ready for use
      * @throws Error if the implementation does not provide auto-configuration
      */
-    autoConfiguration<T extends IAutoconfiguration>(): T | Promise<T>;
+    autoConfiguration(): any | Promise<any>;
 }

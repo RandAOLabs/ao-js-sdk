@@ -8,7 +8,7 @@ import { RandomProcessError } from "src/clients/randao/random/RandomProcessError
 import { Tags } from "src/core";
 import { BaseClient } from "src/core/ao/BaseClient";
 import ResultUtils from "src/core/common/result-utils/ResultUtils";
-import { IAutoconfiguration, IDefaultBuilder, Logger } from "src/utils";
+import { IAutoconfiguration, IDefaultBuilder, Logger, staticImplements } from "src/utils";
 import { ARIOService } from "src/services";
 import { TokenInterfacingClientBuilder } from "src/clients/common/TokenInterfacingClientBuilder";
 import { Domain } from "src/services/ario/domains";
@@ -19,7 +19,9 @@ import { RNG_TOKEN_PROCESS_ID } from "src/processes_ids";
  * @category RandAO
  * @see {@link https://github.com/RandAOLabs/Random-Process | specification}
  */
-export class RandomClient extends BaseClient implements IRandomClient, IAutoconfiguration, IDefaultBuilder {
+@staticImplements<IAutoconfiguration>() 
+@staticImplements<IDefaultBuilder>()
+export class RandomClient extends BaseClient implements IRandomClient {
     /* Fields */
     readonly tokenClient: TokenClient;
     /* Fields */

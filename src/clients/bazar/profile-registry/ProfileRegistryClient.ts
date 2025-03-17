@@ -1,17 +1,18 @@
 import { IProfileRegistryClient, ProfileRegistryEntry } from "src/clients/bazar/profile-registry/abstract";
-import { getProfileRegistryClientAutoConfiguration } from "src/clients/bazar/profile-registry/ProfileRegistryClientAutoConfiguration";
 import { GetProfilesError } from "src/clients/bazar/profile-registry/RegistryClientError";
 import { ClientBuilder } from "src/clients/common";
 import { DryRunCachingClient } from "src/core/ao/client-variants";
 import ResultUtils from "src/core/common/result-utils/ResultUtils";
 import { PROFILE_REGISTRY_PROCESS_ID } from "src/processes_ids";
-import { IAutoconfiguration, IDefaultBuilder, Logger } from "src/utils/index";
+import { IAutoconfiguration, IDefaultBuilder, Logger, staticImplements } from "src/utils/index";
 
 
 /**
  * @category Bazar
  */
-export class ProfileRegistryClient extends DryRunCachingClient implements IProfileRegistryClient, IAutoconfiguration, IDefaultBuilder {
+@staticImplements<IAutoconfiguration>() 
+@staticImplements<IDefaultBuilder>()
+export class ProfileRegistryClient extends DryRunCachingClient implements IProfileRegistryClient {
     /* Constructors */
 
     public static autoConfiguration(): ProfileRegistryClient {
