@@ -3,6 +3,7 @@ import { TokenInterfacingClientConfigBuilder } from "src/clients/common/TokenInt
 
 import { RANDAO_STAKING_TOKEN_PROCESS_ID, RANDAO_PROFILE_PROCESS_ID } from "src/processes_ids";
 
+/** @deprecated */
 export const getProviderStakingClientAutoConfiguration = (): StakingClientConfig => {
     const builder = new TokenInterfacingClientConfigBuilder()
     return builder
