@@ -3,13 +3,17 @@ import { InputValidationError } from "src/clients/bazar";
 import { TokenInterfacingClientConfig } from "src/clients/common/TokenInterfacingClientConfig";
 import { TokenInterfacingClientConfigBuilder } from "src/clients/common/TokenInterfacingClientConfigBuilder";
 import { RandomClientConfig } from "src/clients/randao/random/abstract";
+import { AO_CONFIGURATIONS } from "src/core/ao/ao-client/configurations";
 import { RNG_TOKEN_PROCESS_ID } from "src/processes_ids";
 import { ARIOService } from "src/services";
 import { Domain } from "src/services/ario/domains";
 import { getWalletLazy, getWalletSafely } from "src/utils";
 import { IBuilder } from "src/utils/builder";
 
-export class RandomClientConfigBuilder implements IBuilder<RandomClientConfig> {
+/**
+ * wont be updated anymore as soon as we have a generic solution
+ */
+export class RandomClientConfigBuilder implements IBuilder<TokenInterfacingClientConfig> {
     private config: Partial<RandomClientConfig> = {};
     private useDefaults: boolean = true;
 
@@ -22,12 +26,13 @@ export class RandomClientConfigBuilder implements IBuilder<RandomClientConfig> {
      * @returns The constructed BaseClientConfig
      * @throws Error if required fields are not set and defaults are not allowed
      */
-    async build(): Promise<RandomClientConfig> {
+    async build(): Promise<TokenInterfacingClientConfig> {
         this.validate();
         // We can assert processId exists since validate() would throw if it didn't
         return {
             processId: this.config.processId || await ARIOService.getInstance().getProcessIdForDomain(Domain.RANDAO_API),
             tokenProcessId: this.config.tokenProcessId || RNG_TOKEN_PROCESS_ID,
+            aoConfig: this.config.aoConfig || AO_CONFIGURATIONS.RANDAO,
             wallet: this.config.wallet || getWalletSafely()
         };
     }
