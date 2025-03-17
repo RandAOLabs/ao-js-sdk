@@ -1,22 +1,38 @@
 
 import { IProfileClient, ProfileInfo } from "src/clients/bazar/profile/abstract";
-import { getProfileClientAutoConfiguration } from "src/clients/bazar/profile/ProfileClientAutoConfiguration";
-import { GetProfileError, ProfileTransferError } from "src/clients/bazar/profile/ProfileClientError";
+import { GetProfileError, NoProfileFoundError, ProfileTransferError } from "src/clients/bazar/profile/ProfileClientError";
 import { Tags, TagUtils } from "src/core";
-import { IAsyncAutoConfiguration } from "src/core/ao/abstract";
 import { DryRunCachingClient } from "src/core/ao/client-variants";
 import ResultUtils from "src/core/common/result-utils/ResultUtils";
-import { Logger } from "src/utils/index";
+import { IAutoconfiguration, IDefaultBuilder, Logger, staticImplements } from "src/utils/index";
+import { ProfileRegistryClient } from "../profile-registry";
+import { ClientBuilder } from "src/clients/common";
 
 /**
  * @category Bazar
  * @see {@link https://cookbook_ao.g8way.io/references/profile.html | specification}
  */
-export class ProfileClient extends DryRunCachingClient implements IProfileClient, IAsyncAutoConfiguration {
+@staticImplements<IAutoconfiguration>() 
+@staticImplements<IDefaultBuilder>()
+export class ProfileClient extends DryRunCachingClient implements IProfileClient{
     /* Constructors */
     public static async autoConfiguration(): Promise<ProfileClient> {
-        const config = await getProfileClientAutoConfiguration();
-        return new ProfileClient(config);
+        const builder = await ProfileClient.defaultBuilder()
+        return builder
+            .build()
+    }
+
+    public static async defaultBuilder(): Promise<ClientBuilder<ProfileClient>> {
+        const registryClient = ProfileRegistryClient.autoConfiguration();
+        const profiles = await registryClient.getProfileByWalletAddress();
+
+        if (!profiles || profiles.length === 0) {
+            const walletAddress = await registryClient.getCallingWalletAddress();
+            throw new NoProfileFoundError(walletAddress);
+        }
+
+        return new ClientBuilder(ProfileClient)
+            .withProcessId(profiles[0].ProfileId)
     }
     /* Constructors */
 

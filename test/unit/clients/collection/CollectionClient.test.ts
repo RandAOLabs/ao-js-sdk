@@ -1,5 +1,6 @@
 import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
-import { CollectionClient, TAG_NAMES, ACTIONS, CollectionInfoError, Logger, STATUS, RESPONSE_ACTIONS, AuthorizationError, InputValidationError, UpdateAssetsError, AddToProfileError } from "src";
+import { CollectionClient, TAG_NAMES, ACTIONS, CollectionInfoError, Logger, STATUS, RESPONSE_ACTIONS, AuthorizationError, InputValidationError, UpdateAssetsError, AddToProfileError, getWalletSafely } from "src";
+import { getWallet } from "src/utils/wallet/environmentWallet";
 
 
 jest.mock('src/utils/logger/logger');
@@ -9,7 +10,10 @@ describe('CollectionClient', () => {
     let mockMessageResult: jest.SpyInstance;
 
     beforeEach(() => {
-        client = CollectionClient.autoConfiguration();
+        client = new CollectionClient({
+            processId: "test-process-id",
+            wallet: getWalletSafely()
+        });
         mockMessageResult = jest.spyOn(client as any, 'messageResult');
     });
 
