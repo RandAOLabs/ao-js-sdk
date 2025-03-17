@@ -4,7 +4,10 @@ import { NoProfileFoundError } from "src/clients/bazar/profile/ProfileClientErro
 import { BaseClientConfigBuilder } from "src/core/ao/configuration/builder";
 
 
-
+/**
+ * 
+ * @deprecated
+ */
 export const getProfileClientAutoConfiguration = async (): Promise<ProfileClientConfig> => {
     const registryClient = ProfileRegistryClient.autoConfiguration();
     const walletAddress = await registryClient.getCallingWalletAddress();

@@ -3,20 +3,23 @@ import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
 import { TokenClient, TokenClientConfig } from "src/clients/ao";
 import { POST_VDF_OUTPUT_AND_PROOF_TAG } from "./constants";
 import { IRandomClient, RandomClientConfig, GetProviderAvailableValuesResponse, GetOpenRandomRequestsResponse, GetRandomRequestsResponse, ProviderActivity } from "src/clients/randao/random/abstract";
-import { getRandomClientAutoConfiguration } from "src/clients/randao/random/RandomClientAutoConfiguration";
 import { PostVDFChallengeError, ProviderAvailableValuesError, UpdateProviderAvailableValuesError, OpenRandomRequestsError, RandomRequestsError, CreateRequestError, PostVDFOutputAndProofError, GetAllProviderActivityError, GetProviderActivityError } from "src/clients/randao/random/RandomClientError";
 import { RandomProcessError } from "src/clients/randao/random/RandomProcessError";
 import { Tags } from "src/core";
-import { IAsyncAutoConfiguration } from "src/core/ao/abstract";
 import { BaseClient } from "src/core/ao/BaseClient";
 import ResultUtils from "src/core/common/result-utils/ResultUtils";
-import { Logger } from "src/utils";
+import { IAutoconfiguration, IDefaultBuilder, Logger } from "src/utils";
+import { ARIOService } from "src/services";
+import { TokenInterfacingClientBuilder } from "src/clients/common/TokenInterfacingClientBuilder";
+import { Domain } from "src/services/ario/domains";
+import { AO_CONFIGURATIONS } from "src/core/ao/ao-client/configurations";
+import { RNG_TOKEN_PROCESS_ID } from "src/processes_ids";
 
 /**
  * @category RandAO
  * @see {@link https://github.com/RandAOLabs/Random-Process | specification}
  */
-export class RandomClient extends BaseClient implements IRandomClient, IAsyncAutoConfiguration {
+export class RandomClient extends BaseClient implements IRandomClient, IAutoconfiguration, IDefaultBuilder {
     /* Fields */
     readonly tokenClient: TokenClient;
     /* Fields */
@@ -35,7 +38,18 @@ export class RandomClient extends BaseClient implements IRandomClient, IAsyncAut
     }
 
     public static async autoConfiguration(): Promise<RandomClient> {
-        return new RandomClient(await getRandomClientAutoConfiguration());
+        const builder = await RandomClient.defaultBuilder()
+        return builder
+            .build()
+    }
+
+    public static async defaultBuilder(): Promise<TokenInterfacingClientBuilder<RandomClient>> {
+        const ario = await ARIOService.getInstance()
+        const randomProcessId = await ario.getProcessIdForDomain(Domain.RANDAO_API)
+        return new TokenInterfacingClientBuilder(RandomClient)
+            .withProcessId(randomProcessId)
+            .withTokenProcessId(RNG_TOKEN_PROCESS_ID)
+            .withAOConfig(AO_CONFIGURATIONS.RANDAO)
     }
     /* Constructors */
 

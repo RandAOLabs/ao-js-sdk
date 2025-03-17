@@ -18,14 +18,17 @@ jest.mock('@permaweb/aoconnect', () => ({
     })
 }));
 
-import { NftClient, TokenClient } from "src";
+import { getWalletSafely, NftClient, TokenClient } from "src";
 import { NFT_QUANTITY } from "src/clients/bazar/nft/constants";
 
 describe("NftClient", () => {
     let client: NftClient;
 
     beforeEach(() => {
-        client = NftClient.autoConfiguration();
+        client = new NftClient({
+            processId: "test-process-id",
+            wallet: getWalletSafely()
+        })
         jest.clearAllMocks();
     });
 

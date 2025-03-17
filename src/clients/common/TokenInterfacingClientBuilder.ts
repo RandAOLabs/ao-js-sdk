@@ -1,14 +1,15 @@
-import { BaseClientConfig, BaseClientConfigBuilder } from "src/core";
 import { BaseClient } from "src/core/ao/BaseClient";
 import { IBuilder } from "src/utils/class-interfaces/IBuilder";
+import { TokenInterfacingClientConfig } from "./TokenInterfacingClientConfig";
+import { TokenInterfacingClientConfigBuilder } from ".";
 
-export class ClientBuilder<T extends BaseClient> implements IBuilder<T> {
-    private configBuilder: BaseClientConfigBuilder;
-    private clientConstructor: new (config: BaseClientConfig) => T;
+export class TokenInterfacingClientBuilder<T extends BaseClient> implements IBuilder<T> {
+    private configBuilder: TokenInterfacingClientConfigBuilder;
+    private clientConstructor: new (config: TokenInterfacingClientConfig) => T;
 
-    constructor(clientConstructor: new (config: BaseClientConfig) => T) {
+    constructor(clientConstructor: new (config: TokenInterfacingClientConfig) => T) {
         this.clientConstructor = clientConstructor;
-        this.configBuilder = new BaseClientConfigBuilder();
+        this.configBuilder = new TokenInterfacingClientConfigBuilder();
     }
 
     build(): T {
@@ -39,5 +40,10 @@ export class ClientBuilder<T extends BaseClient> implements IBuilder<T> {
     withAOConfig(aoConfig: any): this {
         this.configBuilder.withAOConfig(aoConfig);
         return this;
+    }
+
+    withTokenProcessId(processId: string): this {
+        this.configBuilder.withTokenProcessId(processId)
+        return this
     }
 }

@@ -1,20 +1,25 @@
+import { ClientBuilder } from "src/clients/common";
 import { IProviderProfileClient } from "src/clients/randao/provider-profile/abstract/IProviderProfileClient";
 import { ProviderDetails, ProviderInfo, ProviderInfoDTO } from "src/clients/randao/provider-profile/abstract/types";
 import { getProviderProfileClientAutoConfiguration } from "src/clients/randao/provider-profile/ProviderProfileClientAutoConfiguration";
 import { Tags } from "src/core";
-import { ISyncAutoConfiguration } from "src/core/ao/abstract";
 import { DryRunCachingClient } from "src/core/ao/client-variants";
 import ResultUtils from "src/core/common/result-utils/ResultUtils";
-import { Logger } from "src/utils";
+import { RANDAO_PROFILE_PROCESS_ID } from "src/processes_ids";
+import { IAutoconfiguration, IDefaultBuilder, Logger } from "src/utils";
 
 /**
  * @category RandAO
  */
-export class ProviderProfileClient extends DryRunCachingClient implements IProviderProfileClient, ISyncAutoConfiguration {
-
+export class ProviderProfileClient extends DryRunCachingClient implements IProviderProfileClient, IAutoconfiguration, IDefaultBuilder {
     public static autoConfiguration(): ProviderProfileClient {
-        const config = getProviderProfileClientAutoConfiguration()
-        return new ProviderProfileClient(config)
+        return ProviderProfileClient.defaultBuilder()
+            .build()
+    }
+
+    public static defaultBuilder(): ClientBuilder<ProviderProfileClient> {
+        return new ClientBuilder(ProviderProfileClient)
+            .withProcessId(RANDAO_PROFILE_PROCESS_ID)
     }
 
     /* Interface Provider Profile Functions */

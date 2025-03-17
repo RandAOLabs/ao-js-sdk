@@ -1,7 +1,7 @@
 import { InputValidationError } from "src/clients/bazar";
 import { TokenInterfacingClientConfig } from "src/clients/common/TokenInterfacingClientConfig";
 import { BaseClientConfigBuilder } from "src/core/ao/configuration/builder";
-import { IBuilder } from "src/abstract/IBuilder";
+import { IBuilder } from "src/utils/class-interfaces/IBuilder";
 
 export class TokenInterfacingClientConfigBuilder extends BaseClientConfigBuilder implements IBuilder<TokenInterfacingClientConfig> {
     private tokenProcessId?: string
