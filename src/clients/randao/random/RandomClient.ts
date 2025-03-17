@@ -185,7 +185,7 @@ export class RandomClient extends BaseClient implements IRandomClient, IAsyncAut
                 { name: "Action", value: "Get-Provider" },
             ];
             const data = JSON.stringify({ providerId: providerId })
-            const result = await this.messageResult(data, tags);
+            const result = await this.dryrun(data, tags);
             this.checkResultForErrors(result)
             return ResultUtils.getFirstMessageDataJson(result)
         } catch (error: any) {

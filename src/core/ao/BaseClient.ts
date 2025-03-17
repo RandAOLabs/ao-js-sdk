@@ -1,4 +1,3 @@
-import { createDataItemSigner } from '@permaweb/aoconnect';
 import { IBaseClient } from 'src/core/ao/abstract/IBaseClient';
 import { BaseClientConfig } from 'src/core/ao/configuration/BaseClientConfig';
 import { mergeLists } from 'src/utils/lists';
@@ -7,8 +6,6 @@ import { DryRunError, MessageError, ResultError, ResultsError } from 'src/core/a
 import { MessageResult } from '@permaweb/aoconnect/dist/lib/result';
 import { ResultsResponse } from '@permaweb/aoconnect/dist/lib/results';
 import { DryRunResult } from '@permaweb/aoconnect/dist/lib/dryrun';
-import { getArweave } from 'src/core/arweave/arweave';
-import { getEnvironment, Environment } from 'src/utils/environment';
 import { Logger, LogLevel } from 'src/utils';
 import { Tags } from 'src/core/common';
 import { DryRunParams } from 'src/core/ao/ao-client/abstract';
