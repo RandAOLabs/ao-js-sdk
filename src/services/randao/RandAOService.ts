@@ -69,15 +69,16 @@ export class RandAOService implements IRandAOService {
                     await aggregator.updateProviderData(item);
                 })
             );
-        }catch(error: any){
-            return {providerId} // No Provider data found for this 
-        }
+
 
         // Wait for completion
         await Promise.all([
             lastValueFrom(activityStream),
             lastValueFrom(infoStream)
         ]);
+    }catch(error: any){
+        return {providerId} // No Provider data found for this 
+    }
 
         // Get the aggregated data for this specific provider
         const allData = aggregator.getAggregatedData();
