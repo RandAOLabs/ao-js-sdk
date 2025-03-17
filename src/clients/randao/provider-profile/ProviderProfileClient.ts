@@ -48,7 +48,6 @@ export class ProviderProfileClient extends DryRunCachingClient implements IProvi
     }
 
     /** 
-     * @inheritdoc
      * Known issues with return value on this method TODO fix
      */
     async getProviderInfo(providerId?: string): Promise<ProviderInfo> {
