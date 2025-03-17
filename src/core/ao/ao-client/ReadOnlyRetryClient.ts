@@ -8,13 +8,17 @@ import { AOAllConfigsFailedError } from "src/core/ao/ao-client/AOClientError";
 
 export class ReadOnlyRetryAOClient extends ReadOnlyAOClient {
     private static readonly AO_CONFIGURATIONS: readonly ConnectArgsLegacy[] = [
-        AO_CONFIGURATIONS.FORWARD_RESEARCH,
-        AO_CONFIGURATIONS.ARDRIVE,
         AO_CONFIGURATIONS.RANDAO,
-        AO_CONFIGURATIONS.ARIO
+        AO_CONFIGURATIONS.ARDRIVE,
+        AO_CONFIGURATIONS.ARIO,
+        AO_CONFIGURATIONS.FORWARD_RESEARCH,
     ] as const;
 
     private encounteredErrors: Error[] = [];
+
+    constructor(aoConfig?: ConnectArgsLegacy) {
+        super(aoConfig);
+    }
 
     private async tryWithConfig(configIndex: number, params: DryRunParams): Promise<DryRunResult> {
         const currentConfig = ReadOnlyRetryAOClient.AO_CONFIGURATIONS[configIndex];
@@ -56,7 +60,4 @@ export class ReadOnlyRetryAOClient extends ReadOnlyAOClient {
         throw new AOAllConfigsFailedError(params, this.encounteredErrors);
     }
 
-    constructor(aoConfig?: ConnectArgsLegacy) {
-        super(aoConfig);
-    }
 }

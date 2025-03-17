@@ -10,6 +10,7 @@ import { AOSuspectedRateLimitingError } from './AOError';
 import { AO_CONFIGURATION_DEFAULT } from 'src/core/ao/ao-client/configurations';
 import { AOReadOnlyClientError } from 'src/core/ao/ao-client/AOClientError';
 import { SortOrder } from 'src/core/ao/abstract';
+import { Logger } from 'src/utils';
 
 export class ReadOnlyAOClient implements IAOClient {
     protected _result!: ReadResult;
@@ -78,6 +79,7 @@ export class ReadOnlyAOClient implements IAOClient {
     }
 
     public setConfig(aoConnectConfig: ConnectArgsLegacy) {
+        Logger.debug(`Connecting to AO with:`, aoConnectConfig)
         const { result, results, dryrun } = connect(aoConnectConfig);
         this._result = result;
         this._results = results;
