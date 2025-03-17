@@ -16,8 +16,8 @@ export class WriteReadAOClient extends ReadOnlyRetryAOClient {
      * Creates a new WriteReadAOClient instance with the provided signer.
      * @param signer - The data item signer used for authenticating messages
      */
-    constructor(wallet: JWKInterface | any) {
-        super(); // sets the config
+    constructor(wallet: JWKInterface | any, aoConfig?: ConnectArgsLegacy) {
+        super(aoConfig); // sets the config
         this.wallet = wallet;
         this.signer = createDataItemSigner(wallet);
     }
