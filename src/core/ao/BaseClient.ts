@@ -35,9 +35,9 @@ export class BaseClient extends IBaseClient {
         super()
         this.baseConfig = baseConfig;
         if (baseConfig.wallet) { // Wallet Provided -> Write Read Client
-            this.ao = new WriteReadAOClient(baseConfig.wallet)
+            this.ao = new WriteReadAOClient(baseConfig.wallet, baseConfig.aoConfig)
         } else { // Wallet Not Provided -> Read Only Client
-            this.ao = new ReadOnlyRetryAOClient()
+            this.ao = new ReadOnlyRetryAOClient(baseConfig.aoConfig)
         }
         this.arweaveService = new ArweaveDataCachingService();
     }

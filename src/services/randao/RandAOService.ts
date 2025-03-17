@@ -49,4 +49,33 @@ export class RandAOService implements IRandAOService {
 
         return aggregator.getAggregatedData();
     }
+
+    async getAllInfoForProvider(providerId: string): Promise<ProviderInfoAggregate> {
+        // Initialize aggregator
+        const aggregator = await ProviderInfoDataAggregator.autoconfiguration()
+
+        // Create and process streams
+        const activityStream = from(this.randomClient.getProviderActivity(providerId)).pipe(
+            mergeMap(async item => {
+                await aggregator.updateProviderData(item);
+            })
+        );
+
+        const infoStream = from(this.providerProfileClient.getProviderInfo(providerId)).pipe(
+            mergeMap(async item => {
+                await aggregator.updateProviderData(item);
+            })
+        );
+
+        // Wait for completion
+        await Promise.all([
+            lastValueFrom(activityStream),
+            lastValueFrom(infoStream)
+        ]);
+
+        // Get the aggregated data for this specific provider
+        const allData = aggregator.getAggregatedData();
+        
+        return allData[0]; // Return the first (and should be only) item
+    }
 }
