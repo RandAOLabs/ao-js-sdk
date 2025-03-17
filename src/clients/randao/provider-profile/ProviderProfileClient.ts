@@ -1,7 +1,6 @@
 import { ClientBuilder } from "src/clients/common";
 import { IProviderProfileClient } from "src/clients/randao/provider-profile/abstract/IProviderProfileClient";
 import { ProviderDetails, ProviderInfo, ProviderInfoDTO } from "src/clients/randao/provider-profile/abstract/types";
-import { getProviderProfileClientAutoConfiguration } from "src/clients/randao/provider-profile/ProviderProfileClientAutoConfiguration";
 import { Tags } from "src/core";
 import { DryRunCachingClient } from "src/core/ao/client-variants";
 import ResultUtils from "src/core/common/result-utils/ResultUtils";
