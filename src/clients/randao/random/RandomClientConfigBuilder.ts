@@ -8,7 +8,7 @@ import { RNG_TOKEN_PROCESS_ID } from "src/processes_ids";
 import { ARIOService } from "src/services";
 import { Domain } from "src/services/ario/domains";
 import { getWalletLazy, getWalletSafely } from "src/utils";
-import { IBuilder } from "src/utils/builder";
+import { IBuilder } from "src/abstract/IBuilder";
 
 /**
  * wont be updated anymore as soon as we have a generic solution
