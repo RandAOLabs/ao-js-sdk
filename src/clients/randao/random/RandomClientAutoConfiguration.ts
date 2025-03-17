@@ -5,6 +5,6 @@ import { RandomClientConfigBuilder } from "src/clients/randao/random/RandomClien
 
 export const getRandomClientAutoConfiguration = async (): Promise<RandomClientConfig> => {
     const builder = new RandomClientConfigBuilder()
-    return builder
+    return await builder
         .build()
 }
