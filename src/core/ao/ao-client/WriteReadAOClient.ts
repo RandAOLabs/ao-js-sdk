@@ -1,7 +1,7 @@
 import { createDataItemSigner, connect } from '@permaweb/aoconnect';
 import { Tags } from 'src/core/common';
 import { JWKInterface } from 'arweave/node/lib/wallet';
-import { Environment, getEnvironment } from 'src/utils';
+import { Environment, getEnvironment, Logger } from 'src/utils';
 import { getArweave } from 'src/core/arweave/arweave';
 import { ConnectArgsLegacy } from 'src/core/ao/ao-client/aoconnect-types';
 import { ReadOnlyRetryAOClient } from 'src/core/ao/ao-client/ReadOnlyRetryClient';
@@ -49,6 +49,7 @@ export class WriteReadAOClient extends ReadOnlyRetryAOClient {
     }
 
     public override setConfig(aoConnectConfig: ConnectArgsLegacy): void {
+        Logger.debug(`Connecting to AO with:`, aoConnectConfig)
         const { message, result, results, dryrun } = connect(aoConnectConfig);
         this._message = message;
         this._result = result;

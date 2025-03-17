@@ -1,8 +1,28 @@
 import { Logger, LogLevel } from "src/utils";
 import { RandAOService } from "../../../../src/services/randao/RandAOService";
-import { time } from "console";
 import { IRandAOService } from "src/services";
+const http = require('http');
+const https = require('https');
 
+// Store original request functions
+const originalHttpRequest = http.request;
+const originalHttpsRequest = https.request;
+
+// Override http.request
+http.request = function() {
+  console.log('HTTP Request:', arguments[0]);
+  return originalHttpRequest.apply(this, arguments);
+};
+
+// Override https.request
+https.request = function() {
+  console.log('HTTPS Request:', arguments[0]);
+  return originalHttpsRequest.apply(this, arguments);
+};
+
+
+
+jest.setTimeout(6000000);
 describe("RandAOService Integration Tests", () => {
     let service: IRandAOService;
 
