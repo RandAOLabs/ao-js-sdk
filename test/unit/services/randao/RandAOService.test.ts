@@ -41,12 +41,46 @@ describe("RandAOService", () => {
         (ProviderInfoDataAggregator.autoconfiguration as jest.Mock).mockResolvedValue(mockProviderInfoDataAggregator);
 
         // Mock instance methods with some data
-        mockRandomClient.getAllProviderActivity = jest.fn().mockResolvedValue([
-            { provider_id: "test-provider", staked: true }
-        ]);
-        mockProviderProfileClient.getAllProvidersInfo = jest.fn().mockResolvedValue([
-            { provider_id: "test-provider", created_at: Date.now() }
-        ]);
+        mockRandomClient.getAllProviderActivity = jest.fn().mockResolvedValue([{
+            provider_id: "test-provider",
+            active: 1,
+            created_at: Date.now(),
+            random_balance: 100,
+            staked: 1,
+            active_challenge_requests: { request_ids: [] },
+            active_output_requests: { request_ids: [] }
+        }]);
+        mockRandomClient.getProviderActivity = jest.fn().mockResolvedValue({
+            provider_id: "test-provider",
+            active: 1,
+            created_at: Date.now(),
+            random_balance: 100,
+            staked: 1,
+            active_challenge_requests: { request_ids: [] },
+            active_output_requests: { request_ids: [] }
+        });
+        mockProviderProfileClient.getAllProvidersInfo = jest.fn().mockResolvedValue([{
+            provider_id: "test-provider",
+            created_at: Date.now(),
+            stake: {
+                timestamp: Date.now(),
+                status: "active",
+                amount: "1000",
+                token: "test-token",
+                provider_id: "test-provider"
+            }
+        }]);
+        mockProviderProfileClient.getProviderInfo = jest.fn().mockResolvedValue({
+            provider_id: "test-provider",
+            created_at: Date.now(),
+            stake: {
+                timestamp: Date.now(),
+                status: "active",
+                amount: "1000",
+                token: "test-token",
+                provider_id: "test-provider"
+            }
+        });
         mockProviderInfoDataAggregator.updateProviderData = jest.fn().mockResolvedValue(undefined);
         mockProviderInfoDataAggregator.getAggregatedData = jest.fn().mockReturnValue([]);
     });
@@ -78,6 +112,80 @@ describe("RandAOService", () => {
             expect(mockProviderProfileClient.getAllProvidersInfo).toHaveBeenCalled();
             expect(mockProviderInfoDataAggregator.getAggregatedData).toHaveBeenCalled();
             expect(result).toBe(mockAggregatedData);
+        });
+    });
+
+    describe("getAllInfoForProvider", () => {
+        const providerId = "test-provider";
+        const mockProviderData: ProviderInfoAggregate = { 
+            providerId,
+            providerInfo: {
+                provider_id: providerId,
+                created_at: Date.now(),
+                stake: {
+                    timestamp: Date.now(),
+                    status: "active",
+                    amount: "1000",
+                    token: "test-token",
+                    provider_id: providerId
+                }
+            },
+            providerActivity: {
+                provider_id: providerId,
+                active: 1,
+                created_at: Date.now(),
+                random_balance: 100,
+                staked: 1,
+                active_challenge_requests: { request_ids: [] },
+                active_output_requests: { request_ids: [] }
+            }
+        };
+
+        it("should process provider data and return aggregated results for a specific provider", async () => {
+            // Arrange
+            const service = new RandAOService(mockRandomClient, mockProviderProfileClient);
+            mockProviderInfoDataAggregator.getAggregatedData.mockReturnValue([mockProviderData]);
+
+            // Act
+            const result = await service.getAllInfoForProvider(providerId);
+
+            // Assert
+            expect(mockRandomClient.getProviderActivity).toHaveBeenCalledWith(providerId);
+            expect(mockProviderProfileClient.getProviderInfo).toHaveBeenCalledWith(providerId);
+            expect(mockProviderInfoDataAggregator.getAggregatedData).toHaveBeenCalled();
+            expect(result).toEqual(mockProviderData);
+        });
+
+        it("should return only providerId when RandomClient throws an error", async () => {
+            // Arrange
+            const service = new RandAOService(mockRandomClient, mockProviderProfileClient);
+            
+            // Mock implementation that throws an error
+            mockRandomClient.getProviderActivity = jest.fn().mockImplementation(() => {
+                throw new Error("Random client error");
+            });
+
+            // Act
+            const result = await service.getAllInfoForProvider(providerId);
+
+            // Assert
+            expect(result).toEqual({ providerId });
+        });
+
+        it("should return only providerId when ProviderProfileClient throws an error", async () => {
+            // Arrange
+            const service = new RandAOService(mockRandomClient, mockProviderProfileClient);
+            
+            // Mock implementation that throws an error
+            mockProviderProfileClient.getProviderInfo = jest.fn().mockImplementation(() => {
+                throw new Error("Profile client error");
+            });
+
+            // Act
+            const result = await service.getAllInfoForProvider(providerId);
+
+            // Assert
+            expect(result).toEqual({ providerId });
         });
     });
 });
