@@ -1,6 +1,6 @@
 import { connect } from '@permaweb/aoconnect';
-import { MessageResult, ReadResult } from '@permaweb/aoconnect/dist/lib/result';
-import { ReadResults, ResultsResponse } from '@permaweb/aoconnect/dist/lib/results';
+import { MessageResult, ReadResult, ReadResultArgs } from '@permaweb/aoconnect/dist/lib/result';
+import { ReadResults, ReadResultsArgs, ResultsResponse } from '@permaweb/aoconnect/dist/lib/results';
 import { DryRun, DryRunResult } from '@permaweb/aoconnect/dist/lib/dryrun';
 import { Tags } from 'src/core/common';
 import { DryRunParams } from './abstract';
@@ -35,29 +35,19 @@ export class ReadOnlyAOClient implements IAOClient {
     }
 
     public async results(
-        process: string,
-        from?: string,
-        to?: string,
-        limit: number = 25,
-        sort: SortOrder = SortOrder.ASCENDING
+        params: ReadResultsArgs
     ): Promise<ResultsResponse> {
-        return await this._results({
-            process,
-            from,
-            to,
-            limit,
-            sort,
-        });
+        if (!params.limit) {
+            params.limit = 25
+        }
+        if (!params.sort) {
+            params.sort = SortOrder.ASCENDING
+        }
+        return await this._results(params);
     }
 
-    public async result(
-        process: string,
-        messageId: string
-    ): Promise<MessageResult> {
-        return await this._result({
-            process,
-            message: messageId,
-        });
+    public async result(params: ReadResultArgs): Promise<MessageResult> {
+        return await this._result(params);
     }
 
     public async dryrun(params: DryRunParams): Promise<DryRunResult> {

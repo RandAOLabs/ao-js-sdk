@@ -119,13 +119,13 @@ describe("BaseClient", () => {
             const response = await client.results(from, to, limit, sort);
 
             // Assert
-            expect(results).toHaveBeenCalledWith(
-                client.baseConfig.processId,
+            expect(results).toHaveBeenCalledWith({
+                process: client.baseConfig.processId,
                 from,
                 to,
                 limit,
                 sort
-            );
+            });
             expect(response).toEqual(mockResponse);
         });
     });
@@ -144,10 +144,10 @@ describe("BaseClient", () => {
             const response = await client.result(messageId);
 
             // Assert
-            expect(result).toHaveBeenCalledWith(
-                client.baseConfig.processId,
-                messageId
-            );
+            expect(result).toHaveBeenCalledWith({
+                process: client.baseConfig.processId,
+                message: messageId
+            });
             expect(response).toEqual(mockResponse);
         });
     });

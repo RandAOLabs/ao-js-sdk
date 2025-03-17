@@ -64,13 +64,13 @@ export class BaseClient extends IBaseClient {
         sort: SortOrder = SortOrder.ASCENDING
     ): Promise<ResultsResponse> {
         try {
-            return await this.ao.results(
-                this.baseConfig.processId,
+            return await this.ao.results({
+                process: this.baseConfig.processId,
                 from,
                 to,
                 limit,
                 sort
-            );
+            });
         } catch (error: any) {
             Logger.error(`Error fetching results: ${error.message}`);
             throw new ResultsError(error);
@@ -80,10 +80,10 @@ export class BaseClient extends IBaseClient {
     /** @protected */
     async result(messageId: string): Promise<MessageResult> {
         try {
-            return await this.ao.result(
-                this.baseConfig.processId,
-                messageId
-            );
+            return await this.ao.result({
+                process: this.baseConfig.processId,
+                message: messageId
+            });
         } catch (error: any) {
             Logger.error(`Error fetching result: ${error.message}`);
             throw new ResultError(error);
