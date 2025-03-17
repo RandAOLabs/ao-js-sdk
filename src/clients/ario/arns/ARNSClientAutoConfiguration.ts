@@ -4,6 +4,7 @@ import { DryRunCachingClientConfigBuilder } from "src/core/ao/configuration/buil
 import { ARNS_REGISTRY_PROCESS_ID } from "src/processes_ids";
 
 /**
+ * @deprecated in favor of {@link ARNSClient.defaults}
  * Gets the default configuration for the ARNS client
  * @returns ARNSClientConfig with default settings
  */
