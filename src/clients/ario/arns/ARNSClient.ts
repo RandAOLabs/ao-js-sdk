@@ -7,12 +7,13 @@ import { Logger, LogLevel } from "src/utils";
 import { DryRunCachingClient } from "src/core/ao/client-variants";
 import { ISyncAutoConfiguration } from "src/core/ao/abstract";
 import ResultUtils from "src/core/common/result-utils/ResultUtils";
+import { IAutoconfiguration } from "src/abstract";
 
 /**
  * Client for interacting with ARNS (Arweave Name Service) records.
  * @category ARIO
  */
-export class ARNSClient extends DryRunCachingClient implements IARNSClient, ISyncAutoConfiguration {
+export class ARNSClient extends DryRunCachingClient implements IARNSClient, IAutoconfiguration<ARNSClient> {
     public static autoConfiguration(): ARNSClient {
         return new ARNSClient(getARNSClientAutoConfiguration());
     }

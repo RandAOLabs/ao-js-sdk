@@ -1,5 +1,5 @@
 import { JWKInterface } from 'arweave/node/lib/wallet.js';
-import { IBuilder } from 'src/utils/builder';
+import { IBuilder } from 'src/abstract/IBuilder';
 import { BaseClientConfig } from '../BaseClientConfig';
 import { getWalletSafely, Logger } from 'src/utils';
 import { ConnectArgsLegacy } from 'src/core/ao/ao-client/aoconnect-types';
