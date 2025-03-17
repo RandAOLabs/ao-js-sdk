@@ -1,8 +1,7 @@
-import { MessageResult } from '@permaweb/aoconnect/dist/lib/result';
-import { ResultsResponse } from '@permaweb/aoconnect/dist/lib/results';
-import { DryRunResult } from '@permaweb/aoconnect/dist/lib/dryrun';
+import { MessageResult, ReadResultArgs } from '@permaweb/aoconnect/dist/lib/result';
+import { ReadResultsArgs, ResultsResponse } from '@permaweb/aoconnect/dist/lib/results';
+import { DryRunResult, MessageInput } from '@permaweb/aoconnect/dist/lib/dryrun';
 import { Tags } from 'src/core/common';
-import { DryRunParams } from 'src/core/ao/ao-client/abstract';
 import { SortOrder } from 'src/core/ao/abstract';
 
 /**
@@ -35,13 +34,7 @@ export interface IAOClient {
      * @param sort - Sort order for results (default: ASCENDING)
      * @returns Promise resolving to the results response
      */
-    results(
-        process: string,
-        from?: string,
-        to?: string,
-        limit?: number,
-        sort?: SortOrder
-    ): Promise<ResultsResponse>;
+    results(params: ReadResultsArgs): Promise<ResultsResponse>;
 
     /**
      * Retrieves the result of a specific message.
@@ -49,17 +42,14 @@ export interface IAOClient {
      * @param messageId - The ID of the message to get results for
      * @returns Promise resolving to the message result
      */
-    result(
-        process: string,
-        messageId: string
-    ): Promise<MessageResult>;
+    result(params: ReadResultArgs): Promise<MessageResult>;
 
     /**
      * Performs a dry run of a message without actually sending it.
      * @param params - The dry run parameters
      * @returns Promise resolving to the dry run result
      */
-    dryrun(params: DryRunParams): Promise<DryRunResult>;
+    dryrun(params: MessageInput): Promise<DryRunResult>;
 
     /**
      * Gets the wallet address associated with the client.

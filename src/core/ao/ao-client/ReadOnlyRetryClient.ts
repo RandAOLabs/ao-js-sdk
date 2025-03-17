@@ -5,6 +5,8 @@ import { DryRunParams } from "./abstract";
 import { ConnectArgsLegacy } from "./aoconnect-types";
 import { AO_CONFIGURATIONS } from "src/core/ao/ao-client/configurations";
 import { AOAllConfigsFailedError } from "src/core/ao/ao-client/AOClientError";
+import { MessageResult, ReadResultArgs } from "@permaweb/aoconnect/dist/lib/result";
+import { ReadResultsArgs, ResultsResponse } from "@permaweb/aoconnect/dist/lib/results";
 
 export class ReadOnlyRetryAOClient extends ReadOnlyAOClient {
     private static readonly AO_CONFIGURATIONS: readonly ConnectArgsLegacy[] = [
@@ -19,20 +21,64 @@ export class ReadOnlyRetryAOClient extends ReadOnlyAOClient {
     constructor(aoConfig?: ConnectArgsLegacy) {
         super(aoConfig);
     }
-
-    private async tryWithConfig(configIndex: number, params: DryRunParams): Promise<DryRunResult> {
-        const currentConfig = ReadOnlyRetryAOClient.AO_CONFIGURATIONS[configIndex];
-
-        this.setConfig(currentConfig);
-        return await super.dryrun(params);
+    
+    public override async dryrun(params: DryRunParams): Promise<DryRunResult> {
+        return this.retryWithConfigs<DryRunResult, DryRunParams>(
+            params,
+            () => super.dryrun(params),
+            (p) => super.dryrun(p)
+        );
     }
 
-    public override async dryrun(params: DryRunParams): Promise<DryRunResult> {
+    public override async result(params: ReadResultArgs): Promise<MessageResult> {
+        return this.retryWithConfigs<MessageResult, ReadResultArgs>(
+            params,
+            () => super.result(params),
+            (p) => super.result(p)
+        );
+    }
+
+    public override async results(params: ReadResultsArgs): Promise<ResultsResponse> {
+        return this.retryWithConfigs<ResultsResponse, ReadResultsArgs>(
+            params,
+            () => super.results(params),
+            (p) => super.results(p)
+        );
+    }
+
+    /**
+     * Generic method to try an operation with a specific configuration
+     * @param configIndex The index of the configuration to use
+     * @param operation The operation to perform with the configuration
+     * @returns The result of the operation
+     */
+    private async tryWithConfig<T>(
+        configIndex: number, 
+        operation: () => Promise<T>
+    ): Promise<T> {
+        const currentConfig = ReadOnlyRetryAOClient.AO_CONFIGURATIONS[configIndex];
+        this.setConfig(currentConfig);
+        return await operation();
+    }
+
+    /**
+     * Generic method to retry an operation with different configurations if rate limiting is encountered
+     * @param params The parameters for the operation
+     * @param initialOperation The operation to try with the initial configuration
+     * @param operationFn Function to create an operation for a specific configuration
+     * @returns The result of the successful operation
+     * @throws AOAllConfigsFailedError if all configurations fail
+     */
+    private async retryWithConfigs<T, P>(
+        params: P,
+        initialOperation: () => Promise<T>,
+        operationFn: (params: P) => Promise<T>
+    ): Promise<T> {
         this.encounteredErrors = []; // Reset errors for new attempt
 
         // First try with the original config if it exists
         try {
-            return await super.dryrun(params);
+            return await initialOperation();
         } catch (error: any) {
             if (error instanceof AOSuspectedRateLimitingError) {
                 this.encounteredErrors.push(error);
@@ -45,7 +91,7 @@ export class ReadOnlyRetryAOClient extends ReadOnlyAOClient {
         // If original config failed with rate limiting, try each alternative config in sequence
         for (let configIndex = 0; configIndex < ReadOnlyRetryAOClient.AO_CONFIGURATIONS.length; configIndex++) {
             try {
-                return await this.tryWithConfig(configIndex, params);
+                return await this.tryWithConfig(configIndex, () => operationFn(params));
             } catch (error: any) {
                 if (error instanceof AOSuspectedRateLimitingError) {
                     this.encounteredErrors.push(error);
@@ -59,5 +105,4 @@ export class ReadOnlyRetryAOClient extends ReadOnlyAOClient {
         // If we get here, all compute units failed
         throw new AOAllConfigsFailedError(params, this.encounteredErrors);
     }
-
 }
