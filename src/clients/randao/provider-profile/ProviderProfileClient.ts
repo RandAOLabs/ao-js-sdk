@@ -10,6 +10,7 @@ import { IAutoconfiguration, IDefaultBuilder, Logger } from "src/utils";
 /**
  * @category RandAO
  */
+
 export class ProviderProfileClient extends DryRunCachingClient implements IProviderProfileClient, IAutoconfiguration, IDefaultBuilder {
     public static autoConfiguration(): ProviderProfileClient {
         return ProviderProfileClient.defaultBuilder()
