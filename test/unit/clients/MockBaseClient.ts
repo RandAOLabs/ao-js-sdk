@@ -2,6 +2,7 @@ import { BaseClient } from "src/core/ao/BaseClient";
 import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
 import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
 import { getWalletLazy } from "src/utils";
+import { IBaseClient } from "src/core/ao/abstract";
 
 /**
  * Mock implementation of BaseClient for testing.
@@ -63,7 +64,7 @@ export class MockBaseClient extends BaseClient {
      * Bind all BaseClient methods from this mock to a client instance
      * @param client Client instance to bind methods to
      */
-    bindToClient(client: BaseClient) {
+    bindToClient(client: IBaseClient) {
         const mockMethods = {
             dryrun: this.dryrun.bind(this),
             messageResult: this.messageResult.bind(this)

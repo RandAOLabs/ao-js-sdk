@@ -1,5 +1,4 @@
 import { IBuilder } from "./IBuilder";
-import { UnimplementedError } from "../errors";
 
 export interface IDefaultBuilder {
     /**
