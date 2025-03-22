@@ -43,7 +43,7 @@ export class BaseClient extends IBaseClient {
     /** @protected */
     async message(data: string = '', tags: Tags = [], anchor?: string): Promise<string> {
         try {
-            const mergedTags = mergeLists(DEFAULT_TAGS, tags, tag => tag.name);
+            const mergedTags = mergeLists(tags, DEFAULT_TAGS, tag => tag.name);
             return await this.ao.message(
                 this.baseConfig.processId,
                 data,
@@ -102,7 +102,7 @@ export class BaseClient extends IBaseClient {
 
     protected async _dryrun(data: any = '', tags: Tags = [], anchor?: string, id?: string, owner?: string): Promise<DryRunResult> {
         try {
-            const mergedTags = mergeLists(DEFAULT_TAGS, tags, tag => tag.name);
+            const mergedTags = mergeLists(tags, DEFAULT_TAGS, tag => tag.name);
             const params: DryRunParams = {
                 process: this.baseConfig.processId,
                 data,

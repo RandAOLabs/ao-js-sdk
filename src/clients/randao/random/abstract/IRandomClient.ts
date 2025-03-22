@@ -1,4 +1,4 @@
-import { GetProviderAvailableValuesResponse, GetOpenRandomRequestsResponse, GetRandomRequestsResponse, ProviderActivity } from "src/clients/randao/random/abstract/types";
+import { GetProviderAvailableValuesResponse, GetOpenRandomRequestsResponse, GetRandomRequestsResponse, ProviderActivity, TimeLockPuzzle, RSAKey, CommitParams, RevealParams } from "src/clients/randao/random/abstract/types";
 
 // src/interfaces/IRandomClient.ts
 export interface IRandomClient {
@@ -40,6 +40,7 @@ export interface IRandomClient {
 
     /**
      * Submits a Verifiable Delay Function (VDF) challenge, including input and modulus, for a specific randomness request.
+     * @deprecated in favor of {@link IRandomClient.commit}
      * @param randomnessRequestId - The ID of the randomness request.
      * @param modulus - The modulus to be used in the challenge.
      * @param input - The input for the VDF challenge.
@@ -49,6 +50,7 @@ export interface IRandomClient {
 
     /**
      * Posts a Verifiable Delay Function (VDF) proof and output for a specific randomness request.
+     * @deprecated in favor of {@link IRandomClient.reveal}
      * @param randomnessRequestId - The ID of the randomness request.
      * @param output - The output result of the VDF computation.
      * @param proof - The proof of correctness for the output.
@@ -77,4 +79,13 @@ export interface IRandomClient {
      * @returns - A promise that resolves with a provider activity for the given providerId
      */
     getProviderActivity(providerId: String): Promise<ProviderActivity>
+
+    /**
+     * Posts a timeunlocked commitement to a randomness request
+     */
+    commit(params: CommitParams): Promise<void>
+    /**
+     * Posts a timeunlocked commitement to a randomness request
+     */
+    reveal(params: RevealParams): Promise<void>
 }
