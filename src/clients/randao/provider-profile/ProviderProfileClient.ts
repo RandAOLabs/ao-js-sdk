@@ -4,13 +4,13 @@ import { ProviderDetails, ProviderInfo, ProviderInfoDTO } from "src/clients/rand
 import { Tags } from "src/core";
 import { DryRunCachingClient } from "src/core/ao/client-variants";
 import ResultUtils from "src/core/common/result-utils/ResultUtils";
-import { RANDAO_PROFILE_PROCESS_ID } from "src/processes_ids";
+import { PROCESS_IDS } from "src/process-ids";
 import { IAutoconfiguration, IDefaultBuilder, Logger, staticImplements } from "src/utils";
 
 /**
  * @category RandAO
  */
-@staticImplements<IAutoconfiguration>() 
+@staticImplements<IAutoconfiguration>()
 @staticImplements<IDefaultBuilder>()
 export class ProviderProfileClient extends DryRunCachingClient implements IProviderProfileClient {
     public static autoConfiguration(): ProviderProfileClient {
@@ -20,7 +20,7 @@ export class ProviderProfileClient extends DryRunCachingClient implements IProvi
 
     public static defaultBuilder(): ClientBuilder<ProviderProfileClient> {
         return new ClientBuilder(ProviderProfileClient)
-            .withProcessId(RANDAO_PROFILE_PROCESS_ID)
+            .withProcessId(PROCESS_IDS.RANDAO.PROFILE)
     }
 
     /* Interface Provider Profile Functions */
