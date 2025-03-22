@@ -12,6 +12,7 @@
   ],
   "scripts": {
     "build": "tsc && tsc-alias",
+    "postbuild": "node scripts/inject-doc-links.js",
     "prepare": "npm run build",
     "test:unit": "ts-node -P test/scripts/tsconfig.json test/scripts/run-tests.ts unit",
     "test:integration": "ts-node -P test/scripts/tsconfig.json test/scripts/run-tests.ts integration",
