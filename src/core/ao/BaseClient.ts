@@ -6,7 +6,7 @@ import { DryRunError, MessageError, ResultError, ResultsError } from 'src/core/a
 import { MessageResult } from '@permaweb/aoconnect/dist/lib/result';
 import { ResultsResponse } from '@permaweb/aoconnect/dist/lib/results';
 import { DryRunResult } from '@permaweb/aoconnect/dist/lib/dryrun';
-import { Logger, LogLevel } from 'src/utils';
+import { Logger, LogLevel, documented } from 'src/utils';
 import { Tags } from 'src/core/common';
 import { DryRunParams } from 'src/core/ao/ao-client/abstract';
 import { ArweaveDataCachingService } from 'src/core/arweave/ArweaveDataCachingService';
@@ -18,6 +18,13 @@ import { JWKInterface } from 'arweave/node/lib/wallet';
 import { ReadOnlyRetryAOClient } from 'src/core/ao/ao-client';
 import { SortOrder } from 'src/core/ao/abstract';
 
+/**
+ * Base client implementation for AO Process interactions.
+ * Provides core functionality for message handling, results retrieval, and dry runs.
+ * All other clients extend this base implementation.
+ * @category Core
+ */
+@documented()
 export class BaseClient extends IBaseClient {
     /* Fields */
     /** @protected */
