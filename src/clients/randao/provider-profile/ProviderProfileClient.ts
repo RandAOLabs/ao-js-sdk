@@ -5,7 +5,7 @@ import { Tags } from "src/core";
 import { DryRunCachingClient } from "src/core/ao/client-variants";
 import ResultUtils from "src/core/common/result-utils/ResultUtils";
 import { PROCESS_IDS } from "src/process-ids";
-import { IAutoconfiguration, IDefaultBuilder, Logger, staticImplements, documented } from "src/utils";
+import { IAutoconfiguration, IDefaultBuilder, Logger, staticImplements } from "src/utils";
 
 /**
  * @category RandAO
