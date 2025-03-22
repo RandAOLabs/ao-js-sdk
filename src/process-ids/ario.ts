@@ -1,0 +1,5 @@
+export const ARIO_ARNS_REGISTRY_PROCESS_ID: string = "SNy4m-DrqxWl01YqGM4sxI8qCni-58re8uuJLvZPypY"
+
+export const ARIO = {
+    ARNS_REGISTRY: ARIO_ARNS_REGISTRY_PROCESS_ID
+}

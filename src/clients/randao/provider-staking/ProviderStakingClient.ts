@@ -6,13 +6,14 @@ import { ProviderStakeInfo } from "src/clients/randao/provider-staking/abstract/
 import { GetStakeError, ProviderUnstakeError, StakeWithDetailsError } from "src/clients/randao/provider-staking/ProviderStakingError";
 import { Tags } from "src/core";
 import ResultUtils from "src/core/common/result-utils/ResultUtils";
+import { PROCESS_IDS } from "src/process-ids";
 import { RANDAO_PROFILE_PROCESS_ID, RANDAO_STAKING_TOKEN_PROCESS_ID } from "src/processes_ids";
 import { IAutoconfiguration, IDefaultBuilder, Logger, staticImplements } from "src/utils";
 
 /**
  * @category RandAO
  */
-@staticImplements<IAutoconfiguration>() 
+@staticImplements<IAutoconfiguration>()
 @staticImplements<IDefaultBuilder>()
 export class ProviderStakingClient extends StakingClient implements IProviderStakingClient {
     public static autoConfiguration(): ProviderStakingClient {
@@ -22,8 +23,8 @@ export class ProviderStakingClient extends StakingClient implements IProviderSta
 
     public static defaultBuilder(): TokenInterfacingClientBuilder<ProviderStakingClient> {
         return new TokenInterfacingClientBuilder(ProviderStakingClient)
-            .withProcessId(RANDAO_PROFILE_PROCESS_ID)
-            .withTokenProcessId(RANDAO_STAKING_TOKEN_PROCESS_ID)
+            .withProcessId(PROCESS_IDS.RANDAO.STAKING)
+            .withTokenProcessId(PROCESS_IDS.RANDAO.STAKING_TOKEN)
     }
 
     public async stakeWithDetails(quantity: string, providerDetails?: ProviderDetails): Promise<boolean> {

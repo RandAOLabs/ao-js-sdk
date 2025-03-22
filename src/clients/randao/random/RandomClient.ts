@@ -13,13 +13,13 @@ import { ARIOService } from "src/services";
 import { TokenInterfacingClientBuilder } from "src/clients/common/TokenInterfacingClientBuilder";
 import { Domain } from "src/services/ario/domains";
 import { AO_CONFIGURATIONS } from "src/core/ao/ao-client/configurations";
-import { RNG_TOKEN_PROCESS_ID } from "src/processes_ids";
+import { PROCESS_IDS } from "src/process-ids";
 
 /**
  * @category RandAO
  * @see {@link https://github.com/RandAOLabs/Random-Process | specification}
  */
-@staticImplements<IAutoconfiguration>() 
+@staticImplements<IAutoconfiguration>()
 @staticImplements<IDefaultBuilder>()
 export class RandomClient extends BaseClient implements IRandomClient {
     /* Fields */
@@ -50,7 +50,7 @@ export class RandomClient extends BaseClient implements IRandomClient {
         const randomProcessId = await ario.getProcessIdForDomain(Domain.RANDAO_API)
         return new TokenInterfacingClientBuilder(RandomClient)
             .withProcessId(randomProcessId)
-            .withTokenProcessId(RNG_TOKEN_PROCESS_ID)
+            .withTokenProcessId(PROCESS_IDS.RANDAO.RANDOM)
             .withAOConfig(AO_CONFIGURATIONS.RANDAO)
     }
     /* Constructors */
