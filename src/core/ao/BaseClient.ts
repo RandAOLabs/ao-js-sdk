@@ -6,7 +6,7 @@ import { DryRunError, MessageError, ResultError, ResultsError } from 'src/core/a
 import { MessageResult } from '@permaweb/aoconnect/dist/lib/result';
 import { ResultsResponse } from '@permaweb/aoconnect/dist/lib/results';
 import { DryRunResult } from '@permaweb/aoconnect/dist/lib/dryrun';
-import { Logger, LogLevel, documented } from 'src/utils';
+import { Logger, LogLevel } from 'src/utils';
 import { Tags } from 'src/core/common';
 import { DryRunParams } from 'src/core/ao/ao-client/abstract';
 import { ArweaveDataCachingService } from 'src/core/arweave/ArweaveDataCachingService';
@@ -24,7 +24,6 @@ import { SortOrder } from 'src/core/ao/abstract';
  * All other clients extend this base implementation.
  * @category Core
  */
-@documented()
 export class BaseClient extends IBaseClient {
     /* Fields */
     /** @protected */
