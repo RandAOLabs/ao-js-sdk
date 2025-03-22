@@ -17,7 +17,8 @@ const DECLARATION_PATTERNS = {
  * @returns {string} Formatted documentation link
  */
 function createDocLink(symbolName, symbolType, docsUrl) {
-    return `/**\n * [📘 Read the Docs](${docsUrl}/${symbolType}s/${symbolName}.html)\n */\n`;
+    const pluralType = symbolType === 'class' ? 'classes' : `${symbolType}s`;
+    return `/**\n * [📘 Read the Docs](${docsUrl}/${pluralType}/${symbolName}.html)\n */\n`;
 }
 
 /**
@@ -28,7 +29,8 @@ function createDocLink(symbolName, symbolType, docsUrl) {
  * @returns {string} Formatted documentation link line
  */
 function createDocLinkLine(symbolName, symbolType, docsUrl) {
-    return ` * @see [📘 Full ${symbolName} Documentation](${docsUrl}/${symbolType}s/${symbolName}.html)\n `;
+    const pluralType = symbolType === 'class' ? 'classes' : `${symbolType}s`;
+    return ` * @see [📘 Full ${symbolName} Documentation](${docsUrl}/${pluralType}/${symbolName}.html)\n `;
 }
 
 /**
