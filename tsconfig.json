@@ -6,6 +6,7 @@
         "rootDir": ".",
         "sourceMap": true,
         "declaration": true,
+        "declarationMap": true,
         "moduleResolution": "node",
         "strict": true,
         "esModuleInterop": true,
