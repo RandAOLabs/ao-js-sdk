@@ -1,3 +1,4 @@
+import { PROCESS_IDS } from "src/process-ids";
 import { RANDOM_PROCESS_ID } from "src/processes_ids";
 
 /**
@@ -27,6 +28,6 @@ export enum Domain {
  * Static mapping of domain default process IDs used during rate limiting
  */
 export const DOMAIN_DEFAULTS: { [key in Domain]?: string } = {
-    [Domain.RANDAO_API]: RANDOM_PROCESS_ID
+    [Domain.RANDAO_API]: PROCESS_IDS.RANDAO.RANDOM
     // Add more domain defaults here as needed
 };

@@ -11,7 +11,7 @@ import { ARIOService } from "src/services";
 import { TokenInterfacingClientBuilder } from "src/clients/common/TokenInterfacingClientBuilder";
 import { Domain } from "src/services/ario/domains";
 import { AO_CONFIGURATIONS } from "src/core/ao/ao-client/configurations";
-import { RNG_TOKEN_PROCESS_ID } from "src/processes_ids";
+import { PROCESS_IDS } from "src/process-ids";
 import TAGS from "src/clients/randao/random/tags";
 import { RandomProcessError } from "src/clients/randao/random/RandomProcessError";
 import { IClassBuilder } from "src/utils/class-interfaces/IClientBuilder";
@@ -59,7 +59,7 @@ export class RandomClient extends BaseClient implements IRandomClient {
         const randomProcessId = await ario.getProcessIdForDomain(Domain.RANDAO_API)
         return RandomClient.builder()
             .withProcessId(randomProcessId)
-            .withTokenProcessId(RNG_TOKEN_PROCESS_ID)
+            .withTokenProcessId(PROCESS_IDS.RANDAO.RANDOM)
             .withAOConfig(AO_CONFIGURATIONS.RANDAO)
     }
     /* Constructors */
