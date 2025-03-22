@@ -1,6 +1,5 @@
 import { ProviderInfo } from "src/clients/randao/provider-profile/abstract/types";
 import { ProviderActivity } from "src/clients/randao/random/abstract/types";
-import { POST_VDF_OUTPUT_AND_PROOF_TAG } from "src/clients/randao/random/constants";
 import { ProviderInfoAggregate } from "./abstract/types";
 import { MessagesService } from "src/services/messages";
 import { ARIOService } from "src/services/ario";

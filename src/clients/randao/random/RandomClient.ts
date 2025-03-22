@@ -24,9 +24,6 @@ import { IClassBuilder } from "src/utils/class-interfaces/IClientBuilder";
 @staticImplements<IDefaultBuilder>()
 @staticImplements<IClassBuilder>()
 export class RandomClient extends BaseClient implements IRandomClient {
-    viewMostRecentPull() {
-        throw new Error("Method not implemented.");
-    }
     /* Fields */
     readonly tokenClient: TokenClient;
     /* Fields */
