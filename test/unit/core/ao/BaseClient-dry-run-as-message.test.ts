@@ -123,8 +123,8 @@ describe("BaseClient Dry Run Tests", () => {
 
             // Assert
             const expectedTags = [
-                ...DEFAULT_TAGS,
-                { name: 'tag1', value: 'value1' }
+                { name: 'tag1', value: 'value1' },
+                ...DEFAULT_TAGS
             ];
             expect(dryrun).toHaveBeenCalledWith({
                 process: client.baseConfig.processId,
