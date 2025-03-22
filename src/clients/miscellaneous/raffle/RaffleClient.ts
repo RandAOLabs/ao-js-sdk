@@ -9,13 +9,13 @@ import { RaffleProcessError } from "src/clients/miscellaneous/raffle/RaffleProce
 import { BaseClient } from "src/core/ao/BaseClient";
 import ResultUtils from "src/core/common/result-utils/ResultUtils";
 import { ClientBuilder } from "src/clients/common";
-import { RAFFLE_PROCESS_ID } from "src/processes_ids";
+import { PROCESS_IDS } from "src/process-ids";
 
 /**
  * @category Miscellaneous
  * @see {@link https://github.com/RandAOLabs/Raffle-Process | specification}
  */
-@staticImplements<IAutoconfiguration>() 
+@staticImplements<IAutoconfiguration>()
 @staticImplements<IDefaultBuilder>()
 export class RaffleClient extends BaseClient implements IRaffleClient {
     public static autoConfiguration(): RaffleClient {
@@ -25,7 +25,7 @@ export class RaffleClient extends BaseClient implements IRaffleClient {
 
     public static defaultBuilder(): ClientBuilder<RaffleClient> {
         return new ClientBuilder(RaffleClient)
-            .withProcessId(RAFFLE_PROCESS_ID)
+            .withProcessId(PROCESS_IDS.MISCELLANEOUS.RAFFLE)
     }
 
     /* Core Raffle Functions */
