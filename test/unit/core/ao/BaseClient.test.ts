@@ -90,8 +90,8 @@ describe("BaseClient", () => {
 
             // Assert
             const expectedTags = [
+                { name: 'tag1', value: 'value1' },
                 ...DEFAULT_TAGS,
-                { name: 'tag1', value: 'value1' }
             ];
             expect(message).toHaveBeenCalledWith(
                 client.baseConfig.processId,
@@ -189,8 +189,8 @@ describe("BaseClient", () => {
 
             // Assert
             const expectedTags = [
+                { name: 'tag1', value: 'value1' },
                 ...DEFAULT_TAGS,
-                { name: 'tag1', value: 'value1' }
             ];
             expect(dryrun).toHaveBeenCalledWith({
                 process: client.baseConfig.processId,
