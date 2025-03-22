@@ -3,14 +3,14 @@ import { GetProfilesError } from "src/clients/bazar/profile-registry/RegistryCli
 import { ClientBuilder } from "src/clients/common";
 import { DryRunCachingClient } from "src/core/ao/client-variants";
 import ResultUtils from "src/core/common/result-utils/ResultUtils";
-import { PROFILE_REGISTRY_PROCESS_ID } from "src/processes_ids";
+import { PROCESS_IDS } from "src/process-ids";
 import { IAutoconfiguration, IDefaultBuilder, Logger, staticImplements } from "src/utils/index";
 
 
 /**
  * @category Bazar
  */
-@staticImplements<IAutoconfiguration>() 
+@staticImplements<IAutoconfiguration>()
 @staticImplements<IDefaultBuilder>()
 export class ProfileRegistryClient extends DryRunCachingClient implements IProfileRegistryClient {
     /* Constructors */
@@ -22,7 +22,7 @@ export class ProfileRegistryClient extends DryRunCachingClient implements IProfi
 
     public static defaultBuilder(): ClientBuilder<ProfileRegistryClient> {
         return new ClientBuilder(ProfileRegistryClient)
-            .withProcessId(PROFILE_REGISTRY_PROCESS_ID)
+            .withProcessId(PROCESS_IDS.BAZAR.PROFILE_REGISTRY)
     }
     /* Constructors */
 

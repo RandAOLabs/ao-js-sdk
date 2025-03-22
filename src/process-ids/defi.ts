@@ -1,0 +1,6 @@
+
+export const DEFI = {
+    WRAPPED_ARWEAVE: "xU9zFkq3X2ZQ6olwNVvr1vUWIjc3kXTWr7xKQD6dh10",
+    QUANTOM_ARWEAVE: "NG-0lVX882MG5nhARrSzyprEK6ejonHpdUmaaMPsHE8"
+}
+
