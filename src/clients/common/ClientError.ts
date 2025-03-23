@@ -8,7 +8,7 @@ export class ClientError<T extends IBaseClient, P = any> extends Error {
         const paramsString = JSON.stringify(params, null, 2);
 
         const fullMessage: string = `
-            \n| Error in ${typeof client} |
+            \n| Error in ${client.constructor.name} |
             \n| Occurred while executing function: ${functionName} |
             \n| With parameters: ${paramsString} |
             \n| Process Id: ${client.getProcessId()} |
@@ -17,7 +17,7 @@ export class ClientError<T extends IBaseClient, P = any> extends Error {
         `
         super(fullMessage);
         this.client = client
-        this.name = `${typeof client} Error`;
+        this.name = `${client.constructor.name} Error`;
         Logger.error(fullMessage)
 
         if (originalError) {

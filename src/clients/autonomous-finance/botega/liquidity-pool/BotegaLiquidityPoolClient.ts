@@ -7,15 +7,9 @@ import TagUtils from "src/core/common/TagUtils";
 import { ArweaveTransaction } from "src/core/arweave/abstract/types";
 import { ITokenClient } from "src/clients/ao";
 import { Tags } from "src/core/common/types";
-import {
-    GetLPInfoError,
-    GetPriceError,
-    GetTokenAError,
-    GetTokenBError,
-    GetPriceOfTokenAInTokenBError,
-    GetPriceOfTokenBInTokenAError
-} from "./BotegaLiquidityPoolClientError";
+
 import { BaseClientConfigBuilder, DryRunCachingClientConfigBuilder } from "src/core/ao/configuration/builder";
+import { ClientError } from "src/clients/common/ClientError";
 
 /**
  * @category Autonomous Finance
@@ -50,8 +44,7 @@ export class BotegaLiquidityPoolClient extends DryRunCachingClient implements IB
                 name: TagUtils.getTagValue(tags, "Name") || ""
             };
         } catch (error: any) {
-            Logger.error(`Error fetching liquidity pool info: ${error.message}`);
-            throw new GetLPInfoError(error);
+            throw new ClientError(this, this.getLPInfo, null, error);
         }
     }
 
@@ -70,8 +63,7 @@ export class BotegaLiquidityPoolClient extends DryRunCachingClient implements IB
 
             return Number(price);
         } catch (error: any) {
-            Logger.error(`Error getting price for token ${tokenId}: ${error.message}`);
-            throw new GetPriceError(tokenId, quantity, error);
+            throw new ClientError(this, this.getPrice, { quantity, tokenId }, error);
         }
     }
 
@@ -85,8 +77,7 @@ export class BotegaLiquidityPoolClient extends DryRunCachingClient implements IB
                     .build()
                 this.tokenAClient = new TokenClient(config);
             } catch (error: any) {
-                Logger.error(`Error initializing token A client: ${error.message}`);
-                throw new GetTokenAError(error);
+                throw new ClientError(this, this.getTokenA, null, error);
             }
         }
         return this.tokenAClient;
@@ -102,8 +93,7 @@ export class BotegaLiquidityPoolClient extends DryRunCachingClient implements IB
                     .build()
                 this.tokenBClient = new TokenClient(config);
             } catch (error: any) {
-                Logger.error(`Error initializing token B client: ${error.message}`);
-                throw new GetTokenBError(error);
+                throw new ClientError(this, this.getTokenB, null, error);
             }
         }
         return this.tokenBClient;
@@ -114,8 +104,7 @@ export class BotegaLiquidityPoolClient extends DryRunCachingClient implements IB
             const lpInfo = await this.getLPInfo();
             return this.getPrice(Number(quantity), lpInfo.tokenA);
         } catch (error: any) {
-            Logger.error(`Error getting price of token A in token B: ${error.message}`);
-            throw new GetPriceOfTokenAInTokenBError(quantity, error);
+            throw new ClientError(this, this.getPriceOfTokenAInTokenB, { quantity }, error);
         }
     }
 
@@ -124,8 +113,7 @@ export class BotegaLiquidityPoolClient extends DryRunCachingClient implements IB
             const lpInfo = await this.getLPInfo();
             return this.getPrice(Number(quantity), lpInfo.tokenB);
         } catch (error: any) {
-            Logger.error(`Error getting price of token B in token A: ${error.message}`);
-            throw new GetPriceOfTokenBInTokenAError(quantity, error);
+            throw new ClientError(this, this.getPriceOfTokenBInTokenA, { quantity }, error);
         }
     }
 }

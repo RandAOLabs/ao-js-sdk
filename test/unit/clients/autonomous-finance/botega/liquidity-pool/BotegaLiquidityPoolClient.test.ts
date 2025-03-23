@@ -2,11 +2,8 @@ import { BotegaLiquidityPoolClient } from "src/clients/autonomous-finance/botega
 import { MockBaseClient } from "test/unit/clients/MockBaseClient";
 import { ArweaveTransaction } from "src/core/arweave/abstract/types";
 import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
-import {
-    GetLPInfoError,
-    GetPriceError
-} from "src/clients/autonomous-finance/botega/liquidity-pool/BotegaLiquidityPoolClientError";
 import { Logger, LogLevel } from "src/utils";
+import { ClientError } from "src/clients/common/ClientError";
 
 describe("BotegaLiquidityPoolClient Unit Tests", () => {
     let client: BotegaLiquidityPoolClient;
@@ -51,7 +48,7 @@ describe("BotegaLiquidityPoolClient Unit Tests", () => {
 
         it("should throw GetLPInfoError on failure", async () => {
             jest.spyOn(client, "getProcessInfo").mockRejectedValue(new Error("Test error"));
-            await expect(client.getLPInfo()).rejects.toThrow(GetLPInfoError);
+            await expect(client.getLPInfo()).rejects.toThrow(ClientError);
         });
     });
 
@@ -83,7 +80,7 @@ describe("BotegaLiquidityPoolClient Unit Tests", () => {
             mockBaseClient.setMockDryrun(mockDryrun);
 
             await expect(client.getPrice(100, "test-token"))
-                .rejects.toThrow(GetPriceError);
+                .rejects.toThrow(ClientError);
         });
     });
 
