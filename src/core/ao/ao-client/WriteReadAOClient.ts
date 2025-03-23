@@ -6,6 +6,7 @@ import { getArweave } from 'src/core/arweave/arweave';
 import { ConnectArgsLegacy } from 'src/core/ao/ao-client/aoconnect-types';
 import { ReadOnlyRetryAOClient } from 'src/core/ao/ao-client/ReadOnlyRetryClient';
 import { SendMessage } from '@permaweb/aoconnect/dist/lib/message';
+import { AOClientError } from 'src/core/ao/ao-client/AOClientError';
 
 export class WriteReadAOClient extends ReadOnlyRetryAOClient {
     private readonly signer: ReturnType<typeof createDataItemSigner>;
@@ -39,13 +40,18 @@ export class WriteReadAOClient extends ReadOnlyRetryAOClient {
         tags: Tags = [],
         anchor?: string
     ): Promise<string> {
-        return await this._message({
-            process,
-            signer: this.signer,
-            data,
-            tags,
-            anchor,
-        });
+        try {
+            const result = await this._message({
+                process,
+                signer: this.signer,
+                data,
+                tags,
+                anchor,
+            });
+            return result
+        } catch (error: any) {
+            throw await AOClientError.create(this, this.result, { process, data, tags, anchor }, error);
+        }
     }
 
     public override setConfig(aoConnectConfig: ConnectArgsLegacy): void {
