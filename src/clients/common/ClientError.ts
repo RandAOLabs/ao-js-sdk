@@ -2,8 +2,12 @@ import { IBaseClient } from "src/core/ao/abstract";
 import { Logger } from "src/utils";
 
 export class ClientError<T extends IBaseClient, P = any> extends Error {
-    public client: T
-    constructor(client: T, func: Function, params: P, originalError?: Error) {
+    constructor(
+        public readonly client: T,
+        public readonly func: Function,
+        public readonly params: P,
+        public readonly originalError?: Error
+    ) {
         const functionName = func.name;
         const paramsString = JSON.stringify(params, null, 2);
 
