@@ -1,4 +1,5 @@
 import { ClientBuilder } from "src/clients/common";
+import { ClientError } from "src/clients/common/ClientError";
 import { IProviderProfileClient } from "src/clients/randao/provider-profile/abstract/IProviderProfileClient";
 import { ProviderDetails, ProviderInfo, ProviderInfoDTO } from "src/clients/randao/provider-profile/abstract/types";
 import { Tags } from "src/core";
@@ -34,8 +35,7 @@ export class ProviderProfileClient extends DryRunCachingClient implements IProvi
             this.clearCache()
             return ResultUtils.getFirstMessageDataString(result);
         } catch (error: any) {
-            Logger.error(`Error updating provider details: ${error.message}`);
-            throw new Error(`Failed to update provider details: ${error.message}`);
+            throw new ClientError(this, this.updateDetails, { providerDetails }, error);
         }
     }
     async getAllProvidersInfo(): Promise<ProviderInfo[]> {
@@ -48,8 +48,7 @@ export class ProviderProfileClient extends DryRunCachingClient implements IProvi
             const providers = dtos.map(dto => this._parseProviderInfoDTO(dto));
             return providers;
         } catch (error: any) {
-            Logger.error(`Error getting all providers info: ${error.message}`);
-            throw new Error(`Failed to get all providers info: ${error.message}`);
+            throw new ClientError(this, this.getAllProvidersInfo, null, error);
         }
     }
 
@@ -69,8 +68,7 @@ export class ProviderProfileClient extends DryRunCachingClient implements IProvi
             const info = this._parseProviderInfoDTO(dto);
             return info;
         } catch (error: any) {
-            Logger.error(`Error getting provider info for ${providerWalletAddress}: ${error.message}`);
-            throw new Error(`Failed to get provider info for ${providerWalletAddress}: ${error.message}`);
+            throw new ClientError(this, this.getProviderInfo, { providerId }, error);
         }
     }
     /* Interface Provider Profile Functions */

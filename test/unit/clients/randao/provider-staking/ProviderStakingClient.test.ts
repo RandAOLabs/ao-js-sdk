@@ -2,10 +2,10 @@ import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
 import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
 import { ProviderStakingClient } from "src/clients/randao/provider-staking/ProviderStakingClient";
 import { ProviderDetails } from "src/clients/randao/provider-profile";
-import { StakeWithDetailsError, GetStakeError, ProviderUnstakeError } from "src/clients/randao/provider-staking/ProviderStakingError";
 import { BaseClient } from "src/core/ao/BaseClient";
 import { Logger, LogLevel } from "src/utils";
 import { TokenClient } from "src/clients";
+import { ClientError } from "src/clients/common/ClientError";
 
 // Mock BaseClient methods
 jest.spyOn(BaseClient.prototype, 'message').mockResolvedValue("test-message-id");
@@ -75,7 +75,7 @@ describe("ProviderStakingClient", () => {
             mockTokenClient.transfer.mockRejectedValueOnce(new Error("Transfer failed"));
 
             await expect(client.stakeWithDetails(quantity, providerDetails))
-                .rejects.toThrow(StakeWithDetailsError);
+                .rejects.toThrow(ClientError);
         });
     });
 
@@ -103,7 +103,7 @@ describe("ProviderStakingClient", () => {
             jest.spyOn(BaseClient.prototype, 'dryrun').mockRejectedValueOnce(new Error("Failed to get stake"));
 
             await expect(client.getStake(providerId))
-                .rejects.toThrow(GetStakeError);
+                .rejects.toThrow(ClientError);
         });
     });
 
@@ -123,7 +123,7 @@ describe("ProviderStakingClient", () => {
             jest.spyOn(BaseClient.prototype, 'messageResult').mockRejectedValueOnce(new Error("Failed to unstake"));
 
             await expect(client.unstake(providerId))
-                .rejects.toThrow(ProviderUnstakeError);
+                .rejects.toThrow(ClientError);
         });
     });
 });
