@@ -2,14 +2,15 @@ import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
 import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
 
 import { Tags } from "src/core";
-import { IAutoconfiguration, IDefaultBuilder, Logger, staticImplements } from "src/utils";
+import { IAutoconfiguration, IDefaultBuilder, staticImplements } from "src/utils";
 import { IRaffleClient, RafflePull, ViewPullsResponse, ViewEntrantsResponse, ViewRaffleOwnersResponse } from "src/clients";
-import { SetRaffleEntrantsError, PullRaffleError, ViewPullError, ViewEntrantsError, ViewUserPullError, ViewUserPullsError, ViewRaffleOwnersError } from "src/clients/miscellaneous/raffle/RaffleClientError";
+import { ViewPullError } from "src/clients/miscellaneous/raffle/RaffleClientError";
 import { RaffleProcessError } from "src/clients/miscellaneous/raffle/RaffleProcessError";
 import { BaseClient } from "src/core/ao/BaseClient";
 import ResultUtils from "src/core/common/result-utils/ResultUtils";
 import { ClientBuilder } from "src/clients/common";
 import { PROCESS_IDS } from "src/process-ids";
+import { ClientError } from "src/clients/common/ClientError";
 
 /**
  * @category Miscellaneous
@@ -39,8 +40,7 @@ export class RaffleClient extends BaseClient implements IRaffleClient {
             this.checkResultForErrors(result)
             return true
         } catch (error: any) {
-            Logger.error(`Error setting raffle entrants: ${error.message}`);
-            throw new SetRaffleEntrantsError(error);
+            throw new ClientError(this, this.setRaffleEntrants, { entrants }, error);
         }
     }
 
@@ -52,8 +52,7 @@ export class RaffleClient extends BaseClient implements IRaffleClient {
             const result = await this.messageResult(undefined, tags);
             return true
         } catch (error: any) {
-            Logger.error(`Error pulling raffle: ${error.message}`);
-            throw new PullRaffleError(error);
+            throw new ClientError(this, this.pullRaffle, null, error);
         }
     }
 
@@ -67,8 +66,7 @@ export class RaffleClient extends BaseClient implements IRaffleClient {
             this.checkResultForErrors(result);
             return ResultUtils.getFirstMessageDataJson(result);
         } catch (error: any) {
-            Logger.error(`Error viewing entrants: ${error.message}`);
-            throw new ViewEntrantsError(error);
+            throw new ClientError(this, this.viewEntrants, { userId }, error);
         }
     }
 
@@ -83,8 +81,7 @@ export class RaffleClient extends BaseClient implements IRaffleClient {
             this.checkResultForErrors(result);
             return ResultUtils.getFirstMessageDataJson(result);
         } catch (error: any) {
-            Logger.error(`Error viewing user pull: ${error.message}`);
-            throw new ViewUserPullError(error);
+            throw new ClientError(this, this.viewUserPull, { userId, pullId }, error);
         }
     }
 
@@ -101,8 +98,7 @@ export class RaffleClient extends BaseClient implements IRaffleClient {
             const pulls = ResultUtils.getFirstMessageDataJson(result) as RafflePull[];
             return { pulls };
         } catch (error: any) {
-            Logger.error(`Error viewing user pulls: ${error.message}`);
-            throw new ViewUserPullsError(error);
+            throw new ClientError(this, this.viewUserPulls, { _userId, userId }, error);
         }
     }
 
@@ -115,8 +111,7 @@ export class RaffleClient extends BaseClient implements IRaffleClient {
             this.checkResultForErrors(result);
             return ResultUtils.getFirstMessageDataJson(result);
         } catch (error: any) {
-            Logger.error(`Error viewing raffle owners: ${error.message}`);
-            throw new ViewRaffleOwnersError(error);
+            throw new ClientError(this, this.viewRaffleOwners, null, error);
         }
     }
 
@@ -135,8 +130,7 @@ export class RaffleClient extends BaseClient implements IRaffleClient {
             );
             return mostRecent;
         } catch (error: any) {
-            Logger.error(`Error viewing most recent pull: ${error.message}`);
-            throw new ViewPullError(error);
+            throw new ClientError(this, this.viewMostRecentPull, null, error);
         }
     }
     /* Utilities */

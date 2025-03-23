@@ -1,7 +1,7 @@
 import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
 import { ITokenClient, IGrantToken } from "src/clients/ao/token/abstract";
 import { TRANSFER_SUCCESS_MESSAGE } from "src/clients/ao/token/constants";
-import { BalanceError, BalancesError, TransferError, GetInfoError, MintError, GrantError } from "src/clients/ao/token/TokenClientError";
+import { ClientError } from "src/clients/common/ClientError";
 import { Tags, TagUtils } from "src/core";
 import { BaseClient } from "src/core/ao/BaseClient";
 import ResultUtils from "src/core/common/result-utils/ResultUtils";
@@ -26,8 +26,7 @@ export class TokenClient extends BaseClient implements ITokenClient, IGrantToken
             ]);
             return response.Messages[0].Data // Unsafe Typing
         } catch (error: any) {
-            Logger.error(`Error fetching balance for identifier ${identifier}: ${error.message}`);
-            throw new BalanceError(identifier, error);
+            throw new ClientError(this, this.balance, identifier, error);
         }
     }
 
@@ -42,8 +41,7 @@ export class TokenClient extends BaseClient implements ITokenClient, IGrantToken
             }
             return await this.dryrun('', tags); // If ever used should refactor to return the balances in a list format 
         } catch (error: any) {
-            Logger.error(`Error fetching balances: ${error.message}`);
-            throw new BalancesError(error);
+            throw new ClientError(this, this.balances, { limit, cursor }, error);
         }
     }
 
@@ -61,8 +59,7 @@ export class TokenClient extends BaseClient implements ITokenClient, IGrantToken
             const messageData: string = ResultUtils.getFirstMessageDataString(result)
             return messageData.includes(TRANSFER_SUCCESS_MESSAGE);
         } catch (error: any) {
-            Logger.error(`Error transferring ${quantity} to ${recipient}: ${error.message}`);
-            throw new TransferError(recipient, quantity, error);
+            throw new ClientError(this, this.transfer, { recipient, quantity, forwardedTags }, error);
         }
     }
 
@@ -74,8 +71,7 @@ export class TokenClient extends BaseClient implements ITokenClient, IGrantToken
             ]);
             // TODO unimplemented
         } catch (error: any) {
-            Logger.error(`Error fetching info for token ${token}: ${error.message}`);
-            throw new GetInfoError(token, error);
+            throw new ClientError(this, this.getInfo, { token }, error);
         }
     }
 
@@ -88,8 +84,7 @@ export class TokenClient extends BaseClient implements ITokenClient, IGrantToken
             const actionValue = TagUtils.getTagValue(result.Messages[0].Tags, "Action");
             return actionValue !== "Mint-Error";
         } catch (error: any) {
-            Logger.error(`Error minting quantity ${quantity}: ${error.message}`);
-            throw new MintError(quantity, error);
+            throw new ClientError(this, this.mint, { quantity }, error);
         }
     }
 
@@ -104,8 +99,7 @@ export class TokenClient extends BaseClient implements ITokenClient, IGrantToken
             const actionValue = TagUtils.getTagValue(result.Messages[0].Tags, "Action");
             return actionValue !== "Grant-Error";
         } catch (error: any) {
-            Logger.error(`Error granting ${quantity} tokens to ${recipient}: ${error.message}`);
-            throw new GrantError(quantity, recipient ?? 'self', error);
+            throw new ClientError(this, this.grant, { quantity, recipient }, error);
         }
     }
     /* Core Token Functions */

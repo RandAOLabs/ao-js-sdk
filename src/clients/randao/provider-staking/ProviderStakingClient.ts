@@ -1,9 +1,9 @@
 import { StakingClient } from "src/clients/ao";
+import { ClientError } from "src/clients/common/ClientError";
 import { TokenInterfacingClientBuilder } from "src/clients/common/TokenInterfacingClientBuilder";
 import { ProviderDetails } from "src/clients/randao/provider-profile";
 import { IProviderStakingClient } from "src/clients/randao/provider-staking/abstract/IProviderStakingClient";
 import { ProviderStakeInfo } from "src/clients/randao/provider-staking/abstract/types";
-import { GetStakeError, ProviderUnstakeError, StakeWithDetailsError } from "src/clients/randao/provider-staking/ProviderStakingError";
 import { Tags } from "src/core";
 import ResultUtils from "src/core/common/result-utils/ResultUtils";
 import { PROCESS_IDS } from "src/process-ids";
@@ -39,8 +39,7 @@ export class ProviderStakingClient extends StakingClient implements IProviderSta
             const success = await super.stake(quantity, additionaForwardedlTags);
             return success
         } catch (error: any) {
-            Logger.error(`Error staking with provider details ${quantity} tokens: ${error.message}`);
-            throw new StakeWithDetailsError(error, providerDetails);
+            throw new ClientError(this, this.stakeWithDetails, { quantity, providerDetails }, error);
         }
     }
 
@@ -56,8 +55,8 @@ export class ProviderStakingClient extends StakingClient implements IProviderSta
 
             return stake;
         } catch (error: any) {
-            Logger.error(`Error getting stake for provider ${providerId}: ${error.message}`);
-            throw new GetStakeError(providerId, error);
+            throw new ClientError(this, this.getStake, { providerId }, error);
+
         }
     }
 
@@ -71,8 +70,7 @@ export class ProviderStakingClient extends StakingClient implements IProviderSta
             const result = await super.unstake(data)
             return result
         } catch (error: any) {
-            Logger.error(`Provider Error unstaking for: ${error.message}`);
-            throw new ProviderUnstakeError(error);
+            throw new ClientError(this, this.unstake, { providerId }, error);
         }
     }
 }

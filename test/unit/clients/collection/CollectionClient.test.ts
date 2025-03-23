@@ -1,5 +1,6 @@
 import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
-import { CollectionClient, TAG_NAMES, ACTIONS, CollectionInfoError, Logger, STATUS, RESPONSE_ACTIONS, AuthorizationError, InputValidationError, UpdateAssetsError, AddToProfileError, getWalletSafely } from "src";
+import { CollectionClient, TAG_NAMES, ACTIONS, Logger, STATUS, RESPONSE_ACTIONS, AuthorizationError, InputValidationError, getWalletSafely } from "src";
+import { ClientError } from "src/clients/common/ClientError";
 import { getWallet } from "src/utils/wallet/environmentWallet";
 
 
@@ -53,8 +54,7 @@ describe('CollectionClient', () => {
             const error = new Error('Network error');
             mockMessageResult.mockRejectedValueOnce(error);
 
-            await expect(client.getInfo()).rejects.toThrow(CollectionInfoError);
-            expect(Logger.error).toHaveBeenCalledWith(`Error fetching collection info: ${error.message}`);
+            await expect(client.getInfo()).rejects.toThrow(ClientError);
         });
     });
 
@@ -126,8 +126,7 @@ describe('CollectionClient', () => {
             const error = new Error('Network error');
             mockMessageResult.mockRejectedValueOnce(error);
 
-            await expect(client.updateAssets(updateRequest)).rejects.toThrow(UpdateAssetsError);
-            expect(Logger.error).toHaveBeenCalledWith(`Error updating collection assets: ${error.message}`);
+            await expect(client.updateAssets(updateRequest)).rejects.toThrow(ClientError);
         });
     });
 
@@ -176,8 +175,7 @@ describe('CollectionClient', () => {
             const error = new Error('Network error');
             mockMessageResult.mockRejectedValueOnce(error);
 
-            await expect(client.addToProfile(profileProcessId)).rejects.toThrow(AddToProfileError);
-            expect(Logger.error).toHaveBeenCalledWith(`Error adding collection to profile: ${error.message}`);
+            await expect(client.addToProfile(profileProcessId)).rejects.toThrow(ClientError);
         });
     });
 

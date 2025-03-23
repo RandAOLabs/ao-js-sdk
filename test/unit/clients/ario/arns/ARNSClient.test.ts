@@ -1,9 +1,10 @@
 import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
 import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
 import { ARNSClient } from "src/clients/ario/arns/ARNSClient";
-import { GetARNSRecordError, InvalidDomainError } from "src/clients/ario/arns/ARNSClientError";
 import { BaseClient } from "src/core/ao/BaseClient";
 import { ARNSRecord } from "src/clients/ario/arns/abstract/types";
+import { ClientError } from "src/clients/common/ClientError";
+import { Logger, LogLevel } from "src/utils";
 
 // Mock BaseClient methods
 jest.spyOn(BaseClient.prototype, 'message').mockResolvedValue("test-message-id");
@@ -33,6 +34,7 @@ describe("ARNSClient Unit Test", () => {
     let client: ARNSClient;
 
     beforeAll(async () => {
+        Logger.setLogLevel(LogLevel.NONE)
         client = ARNSClient.autoConfiguration();
     });
 
@@ -57,7 +59,7 @@ describe("ARNSClient Unit Test", () => {
             const error = new Error("Dryrun failed");
             jest.spyOn(BaseClient.prototype, 'dryrun').mockRejectedValueOnce(error);
 
-            await expect(client.getRecord(name)).rejects.toThrow(GetARNSRecordError);
+            await expect(client.getRecord(name)).rejects.toThrow(ClientError);
         });
     });
 
