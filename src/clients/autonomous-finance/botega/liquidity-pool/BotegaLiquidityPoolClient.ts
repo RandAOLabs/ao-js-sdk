@@ -2,7 +2,6 @@ import { IBotegaLiquidityPoolClient } from "./abstract";
 import { LPInfo } from "./abstract/types";
 import { DryRunCachingClient } from "src/core/ao/client-variants";
 import { TokenClient } from "src/clients/ao/token/TokenClient";
-import { Logger } from "src/utils/index";
 import TagUtils from "src/core/common/TagUtils";
 import { ArweaveTransaction } from "src/core/arweave/abstract/types";
 import { ITokenClient } from "src/clients/ao";
