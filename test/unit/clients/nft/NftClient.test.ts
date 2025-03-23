@@ -20,6 +20,7 @@ jest.mock('@permaweb/aoconnect', () => ({
 
 import { getWalletSafely, Logger, LogLevel, NftClient, TokenClient } from "src";
 import { NFT_QUANTITY } from "src/clients/bazar/nft/constants";
+import { ClientError } from "src/clients/common/ClientError";
 
 describe("NftClient", () => {
     let client: NftClient;
@@ -56,7 +57,7 @@ describe("NftClient", () => {
             // Act & Assert
             await expect(client.transfer(recipient))
                 .rejects
-                .toThrow("Error transferring NFT to recipient test-recipient");
+                .toThrow(ClientError);
         });
     });
 });
