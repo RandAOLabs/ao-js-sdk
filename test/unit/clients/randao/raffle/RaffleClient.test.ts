@@ -3,6 +3,7 @@ import { ViewPullError } from "src/clients/miscellaneous/raffle/RaffleClientErro
 import { Logger, LogLevel } from "src/utils";
 import { MockBaseClient } from "test/unit/clients/MockBaseClient";
 import ResultUtils from "src/core/common/result-utils/ResultUtils";
+import { ClientError } from "src/clients/common/ClientError";
 
 describe("RaffleClient Unit Tests", () => {
     let mockBaseClient: MockBaseClient;
@@ -38,7 +39,7 @@ describe("RaffleClient Unit Tests", () => {
 
             await expect(client.viewMostRecentPull())
                 .rejects
-                .toThrow(ViewPullError);
+                .toThrow(ClientError);
         });
     });
 });

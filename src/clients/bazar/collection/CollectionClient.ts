@@ -1,7 +1,8 @@
 import { ICollectionClient, CollectionClientConfig, CollectionInfo, UpdateAssetsRequest } from "src/clients/bazar/collection/abstract";
-import { CollectionInfoError, AuthorizationError, InputValidationError, UpdateAssetsError, AddToProfileError, TransferAllAssetsError } from "src/clients/bazar/collection/CollectionClientError";
+import { AuthorizationError, InputValidationError, TransferAllAssetsError } from "src/clients/bazar/collection/CollectionClientError";
 import { TAG_NAMES, ACTIONS, RESPONSE_ACTIONS, STATUS, TRANSFER_RATE_LIMIT, TRANSFER_BATCH_DELAY } from "src/clients/bazar/collection/constants";
 import { NftClient } from "src/clients/bazar/nft";
+import { ClientError } from "src/clients/common/ClientError";
 import { BaseClientConfigBuilder, TagUtils } from "src/core";
 import { BaseClient } from "src/core/ao/BaseClient";
 import ResultUtils from "src/core/common/result-utils/ResultUtils";
@@ -26,8 +27,7 @@ export class CollectionClient extends BaseClient implements ICollectionClient {
             ]);
             return ResultUtils.getFirstMessageDataJson<CollectionInfo>(result);
         } catch (error: any) {
-            Logger.error(`Error fetching collection info: ${error.message}`);
-            throw new CollectionInfoError(error);
+            throw new ClientError(this, this.getInfo, null, error);
         }
     }
 
@@ -56,8 +56,7 @@ export class CollectionClient extends BaseClient implements ICollectionClient {
             if (error instanceof AuthorizationError || error instanceof InputValidationError) {
                 throw error;
             }
-            Logger.error(`Error updating collection assets: ${error.message}`);
-            throw new UpdateAssetsError(error);
+            throw new ClientError(this, this.updateAssets, request, error);
         }
     }
 
@@ -79,8 +78,7 @@ export class CollectionClient extends BaseClient implements ICollectionClient {
             if (error instanceof InputValidationError) {
                 throw error;
             }
-            Logger.error(`Error adding collection to profile: ${error.message}`);
-            throw new AddToProfileError(profileProcessId, error);
+            throw new ClientError(this, this.addToProfile, { profileProcessId }, error);
         }
     }
 
@@ -140,7 +138,7 @@ export class CollectionClient extends BaseClient implements ICollectionClient {
                 throw error;
             }
             Logger.error(`Error transferring all assets: ${error.message}`);
-            throw new CollectionInfoError(error);
+            throw new ClientError(this, this.transferAllAssets, { recipient }, error);
         }
     }
     /* Core Collection Functions */

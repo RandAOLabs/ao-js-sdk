@@ -106,4 +106,9 @@ export abstract class IBaseClient {
     abstract isRunningDryRunsAsMessages(): boolean;
 
     /* Dry runs as messages feature */
+
+    /**
+     * @returns Boolean indicating whether or not the client is set to run dryruns as messages. (non default behavior)
+     */
+    abstract getProcessId(): string;
 }

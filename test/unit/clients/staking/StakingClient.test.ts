@@ -1,6 +1,7 @@
 import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
 import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
-import { StakingClient, StakingClientConfig, TokenClient, UnstakeError } from "src";
+import { StakingClient, StakingClientConfig, TokenClient } from "src";
+import { ClientError } from "src/clients/common/ClientError";
 import { BaseClient } from "src/core/ao/BaseClient";
 import { getWallet } from "src/utils/wallet/environmentWallet";
 
@@ -120,7 +121,7 @@ describe("StakingClient Unit Test", () => {
         it("should throw UnstakeError when messageResult fails", async () => {
             jest.spyOn(BaseClient.prototype, 'messageResult').mockRejectedValueOnce(new Error("Network error"));
 
-            await expect(client.unstake(providerId)).rejects.toThrow(UnstakeError);
+            await expect(client.unstake(providerId)).rejects.toThrow(ClientError);
             expect(BaseClient.prototype.messageResult).toHaveBeenCalled();
         });
 

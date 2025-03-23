@@ -1,6 +1,6 @@
 import { IANTClient } from "src/clients/ario/ant/abstract/IANTClient";
 import { ANTRecord, ANTRecords } from "src/clients/ario/ant/abstract/types";
-import { GetANTRecordsError, GetANTRecordError } from "src/clients/ario/ant/ANTClientError";
+import { ClientError } from "src/clients/common/ClientError";
 import { DryRunCachingClient } from "src/core/ao/client-variants";
 import { DryRunCachingClientConfigBuilder } from "src/core/ao/configuration/builder";
 import ResultUtils from "src/core/common/result-utils/ResultUtils";
@@ -21,7 +21,7 @@ export class ANTClient extends DryRunCachingClient implements IANTClient {
             ]);
             return ResultUtils.getFirstMessageDataJson<ANTRecords>(result);
         } catch (error: any) {
-            throw new GetANTRecordsError(error);
+            throw new ClientError(this, this.getRecords, null, error);
         }
     }
 
@@ -38,7 +38,7 @@ export class ANTClient extends DryRunCachingClient implements IANTClient {
             ]);
             return ResultUtils.getFirstMessageDataJson<ANTRecord>(result);
         } catch (error: any) {
-            throw new GetANTRecordError(undername, error);
+            throw new ClientError(this, this.getRecord, { undername }, error);
         }
     }
 

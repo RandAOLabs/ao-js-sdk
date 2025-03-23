@@ -2,7 +2,6 @@ import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
 import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
 import { TokenClient, TokenClientConfig } from "src/clients/ao";
 import { IRandomClient, RandomClientConfig, GetProviderAvailableValuesResponse, GetOpenRandomRequestsResponse, GetRandomRequestsResponse, ProviderActivity, CommitParams, RevealParams } from "src/clients/randao/random/abstract";
-import { PostVDFChallengeError, ProviderAvailableValuesError, UpdateProviderAvailableValuesError, OpenRandomRequestsError, RandomRequestsError, CreateRequestError, PostVDFOutputAndProofError, GetAllProviderActivityError, GetProviderActivityError } from "src/clients/randao/random/RandomClientError";
 import { Tags } from "src/core";
 import { BaseClient } from "src/core/ao/BaseClient";
 import ResultUtils from "src/core/common/result-utils/ResultUtils";
@@ -12,6 +11,7 @@ import { TokenInterfacingClientBuilder } from "src/clients/common/TokenInterfaci
 import { Domain } from "src/services/ario/domains";
 import { AO_CONFIGURATIONS } from "src/core/ao/ao-client/configurations";
 import { PROCESS_IDS } from "src/process-ids";
+import { ClientError } from "src/clients/common/ClientError";
 import TAGS from "src/clients/randao/random/tags";
 import { RandomProcessError } from "src/clients/randao/random/RandomProcessError";
 import { IClassBuilder } from "src/utils/class-interfaces/IClientBuilder";
@@ -56,7 +56,7 @@ export class RandomClient extends BaseClient implements IRandomClient {
         const randomProcessId = await ario.getProcessIdForDomain(Domain.RANDAO_API)
         return RandomClient.builder()
             .withProcessId(randomProcessId)
-            .withTokenProcessId(PROCESS_IDS.RANDAO.RANDOM)
+            .withTokenProcessId(PROCESS_IDS.RANDAO.RNG_TOKEN)
             .withAOConfig(AO_CONFIGURATIONS.RANDAO)
     }
     /* Constructors */
@@ -99,8 +99,7 @@ export class RandomClient extends BaseClient implements IRandomClient {
             this.checkResultForErrors(result)
             return true
         } catch (error: any) {
-            Logger.error(`Error posting VDF challenge: ${error.message}`);
-            throw new PostVDFChallengeError(error);
+            throw new ClientError(this, this.postVDFChallenge, { randomnessRequestId, modulus, input }, error);
         }
     }
 
@@ -114,8 +113,7 @@ export class RandomClient extends BaseClient implements IRandomClient {
             this.checkResultForErrors(result)
             return await ResultUtils.getFirstMessageDataJson(result)
         } catch (error: any) {
-            Logger.error(`Error retrieving provider's available values: ${error.message}`);
-            throw new ProviderAvailableValuesError(error);
+            throw new ClientError(this, this.getProviderAvailableValues, { providerId }, error);
         }
     }
 
@@ -129,8 +127,7 @@ export class RandomClient extends BaseClient implements IRandomClient {
             this.checkResultForErrors(result)
             return true
         } catch (error: any) {
-            Logger.error(`Error updating provider's available values: ${error.message}`);
-            throw new UpdateProviderAvailableValuesError(error);
+            throw new ClientError(this, this.updateProviderAvailableValues, { availableRandomValues }, error);
         }
     }
 
@@ -144,8 +141,7 @@ export class RandomClient extends BaseClient implements IRandomClient {
             this.checkResultForErrors(result)
             return ResultUtils.getFirstMessageDataJson(result)
         } catch (error: any) {
-            Logger.error(`Error retrieving open random requests: ${error.message}`);
-            throw new OpenRandomRequestsError(error);
+            throw new ClientError(this, this.getOpenRandomRequests, { provider }, error);
         }
     }
 
@@ -159,8 +155,7 @@ export class RandomClient extends BaseClient implements IRandomClient {
             this.checkResultForErrors(result)
             return ResultUtils.getFirstMessageDataJson(result)
         } catch (error: any) {
-            Logger.error(`Error retrieving random requests: ${error.message}`);
-            throw new RandomRequestsError(error);
+            throw new ClientError(this, this.getRandomRequests, { randomnessRequestIds }, error);
         }
     }
 
@@ -174,8 +169,7 @@ export class RandomClient extends BaseClient implements IRandomClient {
             this.checkResultForErrors(result)
             return ResultUtils.getFirstMessageDataJson(result)
         } catch (error: any) {
-            Logger.error(`Error retrieving random request via callback ID: ${error.message}`);
-            throw new RandomRequestsError(error);
+            throw new ClientError(this, this.getRandomRequestViaCallbackId, { callbackId }, error);
         }
     }
 
@@ -193,8 +187,7 @@ export class RandomClient extends BaseClient implements IRandomClient {
 
             return await this.tokenClient.transfer(this.getProcessId(), paymentAmount, tags);
         } catch (error: any) {
-            Logger.error(`Error creating request: ${error.message}`);
-            throw new CreateRequestError(error);
+            throw new ClientError(this, this.createRequest, { provider_ids, requestedInputs, callbackId }, error);
         }
     }
 
@@ -209,8 +202,7 @@ export class RandomClient extends BaseClient implements IRandomClient {
             this.checkResultForErrors(result)
             return true
         } catch (error: any) {
-            Logger.error(`Error posting VDF output and proof: ${error.message}`);
-            throw new PostVDFOutputAndProofError(error);
+            throw new ClientError(this, this.postVDFOutputAndProof, { randomnessRequestId, output, proof }, error);
         }
     }
 
@@ -223,8 +215,7 @@ export class RandomClient extends BaseClient implements IRandomClient {
             this.checkResultForErrors(result)
             return ResultUtils.getFirstMessageDataJson(result)
         } catch (error: any) {
-            Logger.error(`Error Getting all provider activity: ${error.message}`);
-            throw new GetAllProviderActivityError(error);
+            throw new ClientError(this, this.getAllProviderActivity, null, error);
         }
     }
 
@@ -238,8 +229,7 @@ export class RandomClient extends BaseClient implements IRandomClient {
             this.checkResultForErrors(result)
             return ResultUtils.getFirstMessageDataJson(result)
         } catch (error: any) {
-            Logger.error(`Error getting provider activity: ${error.message}`);
-            throw new GetProviderActivityError(error);
+            throw new ClientError(this, this.getAllProviderActivity, { providerId }, error);
         }
     }
 
