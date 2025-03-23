@@ -5,7 +5,7 @@ import { IRandomClient, RandomClientConfig, GetProviderAvailableValuesResponse, 
 import { Tags } from "src/core";
 import { BaseClient } from "src/core/ao/BaseClient";
 import ResultUtils from "src/core/common/result-utils/ResultUtils";
-import { IAutoconfiguration, IDefaultBuilder, Logger, staticImplements } from "src/utils";
+import { IAutoconfiguration, IDefaultBuilder, staticImplements } from "src/utils";
 import { ARIOService } from "src/services";
 import { TokenInterfacingClientBuilder } from "src/clients/common/TokenInterfacingClientBuilder";
 import { Domain } from "src/services/ario/domains";
@@ -71,8 +71,7 @@ export class RandomClient extends BaseClient implements IRandomClient {
             const result = await this.messageResult(data, tags);
             this.checkResultForErrors(result)
         } catch (error: any) {
-            Logger.error(`Error posting VDF challenge: ${error.message}`);
-            throw new PostVDFChallengeError(error);
+            throw new ClientError(this, this.commit, params, error);
         }
     }
     async reveal(params: RevealParams): Promise<void> {
@@ -84,8 +83,7 @@ export class RandomClient extends BaseClient implements IRandomClient {
             const result = await this.messageResult(data, tags);
             this.checkResultForErrors(result)
         } catch (error: any) {
-            Logger.error(`Error posting VDF output and proof: ${error.message}`);
-            throw new PostVDFOutputAndProofError(error);
+            throw new ClientError(this, this.reveal, params, error);
         }
     }
 
