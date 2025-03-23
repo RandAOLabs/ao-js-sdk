@@ -19,6 +19,7 @@ jest.mock('@permaweb/aoconnect', () => ({
 }));
 
 import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
+import { ClientError } from "src/clients/common/ClientError";
 import { Tags } from "src/core";
 import { BaseClient } from "src/core/ao/BaseClient";
 import { BaseClientConfigBuilder } from "src/core/ao/configuration/builder";
@@ -231,7 +232,7 @@ describe("TokenClient", () => {
             jest.spyOn(BaseClient.prototype, 'messageResult').mockRejectedValue(new Error("Network error"));
 
             // Act & Assert
-            await expect(client.grant(quantity, recipient)).rejects.toThrow("Failed to grant 1000 tokens to test-recipient");
+            await expect(client.grant(quantity, recipient)).rejects.toThrow(ClientError);
         });
     });
 });
