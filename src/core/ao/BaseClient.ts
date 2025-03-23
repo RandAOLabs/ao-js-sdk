@@ -18,6 +18,12 @@ import { JWKInterface } from 'arweave/node/lib/wallet';
 import { ReadOnlyRetryAOClient } from 'src/core/ao/ao-client';
 import { SortOrder } from 'src/core/ao/abstract';
 
+/**
+ * Base client implementation for AO Process interactions.
+ * Provides core functionality for message handling, results retrieval, and dry runs.
+ * All other clients extend this base implementation.
+ * @category Core
+ */
 export class BaseClient extends IBaseClient {
     /* Fields */
     /** @protected */

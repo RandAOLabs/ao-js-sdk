@@ -2,7 +2,7 @@
 import { TokenClient, TokenClientConfig } from "src/clients/ao";
 import { INftClient } from "src/clients/bazar/nft/abstract/INftClient";
 import { NFT_QUANTITY } from "src/clients/bazar/nft/constants";
-import { NftTransferError } from "src/clients/bazar/nft/NftClientError";
+import { ClientError } from "src/clients/common/ClientError";
 import { Tags } from "src/core";
 
 import { Logger } from "src/utils/index";
@@ -24,7 +24,7 @@ export class NftClient extends TokenClient implements INftClient {
             return await super.transfer(recipient, quantity, forwardedTags);
         } catch (error: any) {
             Logger.error(`Error transferring NFT to ${recipient}: ${error.message}`);
-            throw new NftTransferError(recipient, error);
+            throw new ClientError(this, this.transfer, { recipient, quantity, forwardedTags }, error);
         }
     }
     /* Core NFT Functions */

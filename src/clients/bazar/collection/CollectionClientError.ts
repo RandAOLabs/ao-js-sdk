@@ -8,26 +8,9 @@ export class CollectionClientError extends Error {
     }
 }
 
-export class CollectionInfoError extends CollectionClientError {
-    constructor(originalError?: Error) {
-        super('Error fetching collection info', originalError);
-        this.name = 'CollectionInfoError';
-    }
-}
 
-export class UpdateAssetsError extends CollectionClientError {
-    constructor(originalError?: Error) {
-        super('Error updating collection assets', originalError);
-        this.name = 'UpdateAssetsError';
-    }
-}
 
-export class AddToProfileError extends CollectionClientError {
-    constructor(profileProcessId: string, originalError?: Error) {
-        super(`Error adding collection to profile ${profileProcessId}`, originalError);
-        this.name = 'AddToProfileError';
-    }
-}
+
 
 export class AuthorizationError extends CollectionClientError {
     constructor(message: string) {

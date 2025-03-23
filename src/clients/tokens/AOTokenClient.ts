@@ -4,6 +4,7 @@ import { PROCESS_IDS } from "src/process-ids";
 import { staticImplements, IAutoconfiguration, IDefaultBuilder } from "src/utils";
 
 /**
+ * Client for interacting with AO tokens on the network.
  * @category Tokens
  */
 @staticImplements<IAutoconfiguration>()

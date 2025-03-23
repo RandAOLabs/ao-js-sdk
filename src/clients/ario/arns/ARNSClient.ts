@@ -1,15 +1,15 @@
 import { IARNSClient } from "src/clients/ario/arns/abstract/IARNSClient";
-import { GetARNSRecordError, InvalidDomainError } from "src/clients/ario/arns/ARNSClientError";
 import { ARNSRecord } from "src/clients/ario/arns/abstract/types";
 import { DOMAIN_SEPARATOR } from "src/clients/ario/arns/constants";
 import { DryRunCachingClient } from "src/core/ao/client-variants";
 import ResultUtils from "src/core/common/result-utils/ResultUtils";
 import { IAutoconfiguration, IDefaultBuilder } from "src/utils/class-interfaces";
-import { ARNS_REGISTRY_PROCESS_ID } from "src/processes_ids";
 import { AO_CONFIGURATIONS } from "src/core/ao/ao-client/configurations";
 import { ClientBuilder } from "src/clients/common";
 import { staticImplements } from "src/utils";
 import { PROCESS_IDS } from "src/process-ids";
+import { ClientError } from "src/clients/common/ClientError";
+import { InputValidationError } from "src/clients/bazar";
 
 /**
  * Client for interacting with ARNS (Arweave Name Service) records.
@@ -45,7 +45,7 @@ export class ARNSClient extends DryRunCachingClient implements IARNSClient {
             ]);
             return ResultUtils.getFirstMessageDataJson<ARNSRecord>(result);
         } catch (error: any) {
-            throw new GetARNSRecordError(name, error);
+            throw new ClientError(this, this.getRecord, { name }, error);
         }
     }
 
@@ -64,15 +64,15 @@ export class ARNSClient extends DryRunCachingClient implements IARNSClient {
      */
     private validateDomainFormat(domain: string): void {
         if (!domain) {
-            throw new InvalidDomainError(domain, 'Domain cannot be empty');
+            throw new InputValidationError(`Domain cannot be empty | Received ${domain}`);
         }
         if (domain.includes(DOMAIN_SEPARATOR)) {
             const [undername, antName] = domain.split(DOMAIN_SEPARATOR);
             if (!undername || !antName) {
-                throw new InvalidDomainError(domain, `Expected format: undername${DOMAIN_SEPARATOR}antname or antname`);
+                throw new InputValidationError(`Expected format: undername${DOMAIN_SEPARATOR}antname or antname | Received ${domain}`);
             }
             if (domain.split(DOMAIN_SEPARATOR).length > 2) {
-                throw new InvalidDomainError(domain, `Domain can only contain one ${DOMAIN_SEPARATOR}`);
+                throw new InputValidationError(`Domain can only contain one ${DOMAIN_SEPARATOR} | Received: ${domain}`);
             }
         }
     }
