@@ -4,6 +4,7 @@ import { ARNSClient } from "src/clients/ario/arns/ARNSClient";
 import { BaseClient } from "src/core/ao/BaseClient";
 import { ARNSRecord } from "src/clients/ario/arns/abstract/types";
 import { ClientError } from "src/clients/common/ClientError";
+import { Logger, LogLevel } from "src/utils";
 
 // Mock BaseClient methods
 jest.spyOn(BaseClient.prototype, 'message').mockResolvedValue("test-message-id");
@@ -33,6 +34,7 @@ describe("ARNSClient Unit Test", () => {
     let client: ARNSClient;
 
     beforeAll(async () => {
+        Logger.setLogLevel(LogLevel.NONE)
         client = ARNSClient.autoConfiguration();
     });
 
