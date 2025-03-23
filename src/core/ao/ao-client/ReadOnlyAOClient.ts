@@ -6,9 +6,8 @@ import { Tags } from 'src/core/common';
 import { DryRunParams } from './abstract';
 import { IAOClient } from './abstract/IAOClient';
 import { ConnectArgsLegacy } from './aoconnect-types';
-import { AOSuspectedRateLimitingError } from './AOError';
 import { AO_CONFIGURATION_DEFAULT } from 'src/core/ao/ao-client/configurations';
-import { AOReadOnlyClientError } from 'src/core/ao/ao-client/AOClientError';
+import { AOClientError, AOReadOnlyClientError, AOSuspectedRateLimitingError } from 'src/core/ao/ao-client/AOClientError';
 import { SortOrder } from 'src/core/ao/abstract';
 import { Logger } from 'src/utils';
 
@@ -37,31 +36,42 @@ export class ReadOnlyAOClient implements IAOClient {
     public async results(
         params: ReadResultsArgs
     ): Promise<ResultsResponse> {
-        if (!params.limit) {
-            params.limit = 25
+        try {
+            if (!params.limit) {
+                params.limit = 25
+            }
+            if (!params.sort) {
+                params.sort = SortOrder.ASCENDING
+            }
+            const results = await this._results(params);
+            return results
+        } catch (error: any) {
+            throw await AOClientError.create(this, this.results, params, error);
         }
-        if (!params.sort) {
-            params.sort = SortOrder.ASCENDING
-        }
-        return await this._results(params);
+
     }
 
     public async result(params: ReadResultArgs): Promise<MessageResult> {
-        return await this._result(params);
+        try {
+            const result = await this._result(params);
+            return result
+        } catch (error: any) {
+            throw await AOClientError.create(this, this.result, params, error);
+        }
+
     }
 
     public async dryrun(params: DryRunParams): Promise<DryRunResult> {
-        let result;
         try {
-            result = await this._dryrun(params);
+            const result = await this._dryrun(params);
+            return result
         } catch (error: any) {
             if (error.message = `Unexpected token '<', \"<html>\r\n<h\"... is not valid JSON`) {
                 throw new AOSuspectedRateLimitingError(error, params);
             } else {
-                throw error;
+                throw await AOClientError.create(this, this.dryrun, params, error);
             }
         }
-        return result;
     }
 
     public async getCallingWalletAddress(): Promise<string> {

@@ -1,10 +1,9 @@
 import { ReadOnlyAOClient } from "./ReadOnlyAOClient";
 import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
-import { AOSuspectedRateLimitingError } from "./AOError";
 import { DryRunParams } from "./abstract";
 import { ConnectArgsLegacy } from "./aoconnect-types";
 import { AO_CONFIGURATIONS } from "src/core/ao/ao-client/configurations";
-import { AOAllConfigsFailedError } from "src/core/ao/ao-client/AOClientError";
+import { AOAllConfigsFailedError, AOSuspectedRateLimitingError } from "src/core/ao/ao-client/AOClientError";
 import { MessageResult, ReadResultArgs } from "@permaweb/aoconnect/dist/lib/result";
 import { ReadResultsArgs, ResultsResponse } from "@permaweb/aoconnect/dist/lib/results";
 
@@ -21,7 +20,7 @@ export class ReadOnlyRetryAOClient extends ReadOnlyAOClient {
     constructor(aoConfig?: ConnectArgsLegacy) {
         super(aoConfig);
     }
-    
+
     public override async dryrun(params: DryRunParams): Promise<DryRunResult> {
         return this.retryWithConfigs<DryRunResult, DryRunParams>(
             params,
@@ -53,7 +52,7 @@ export class ReadOnlyRetryAOClient extends ReadOnlyAOClient {
      * @returns The result of the operation
      */
     private async tryWithConfig<T>(
-        configIndex: number, 
+        configIndex: number,
         operation: () => Promise<T>
     ): Promise<T> {
         const currentConfig = ReadOnlyRetryAOClient.AO_CONFIGURATIONS[configIndex];
