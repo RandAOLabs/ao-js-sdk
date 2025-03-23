@@ -1,11 +1,10 @@
 
-import { Logger } from 'src/utils';
 import { BaseClient } from 'src/core/ao/BaseClient';
 import { Tags } from 'src/core/common/types';
 import { IStakingClient, StakingClientConfig } from 'src/clients/ao/staking/abstract';
-import { StakeError, UnstakeError } from 'src/clients/ao/staking/StakingClientError';
 import { TokenClient, TokenClientConfig } from 'src/clients/ao/token';
 import ResultUtils from 'src/core/common/result-utils/ResultUtils';
+import { ClientError } from 'src/clients/common/ClientError';
 
 /**
  * @category ao-standards
@@ -48,8 +47,7 @@ export class StakingClient extends BaseClient implements IStakingClient {
 
             return true;
         } catch (error: any) {
-            Logger.error(`Error staking ${quantity} tokens: ${error.message}`);
-            throw new StakeError(quantity, error);
+            throw new ClientError(this, this.stake, { quantity, additionaForwardedlTags }, error);
         }
     }
 
@@ -65,8 +63,7 @@ export class StakingClient extends BaseClient implements IStakingClient {
             }
             return !response.includes("Failed to unstake");
         } catch (error: any) {
-            Logger.error(`Error unstaking for: ${error.message}`);
-            throw new UnstakeError(error);
+            throw new ClientError(this, this.unstake, { data }, error);
         }
     }
     /* Interface Staking Functions */

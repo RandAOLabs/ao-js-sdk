@@ -1,20 +1,21 @@
 
 import { IProfileClient, ProfileInfo } from "src/clients/bazar/profile/abstract";
-import { GetProfileError, NoProfileFoundError, ProfileTransferError } from "src/clients/bazar/profile/ProfileClientError";
 import { Tags, TagUtils } from "src/core";
 import { DryRunCachingClient } from "src/core/ao/client-variants";
 import ResultUtils from "src/core/common/result-utils/ResultUtils";
 import { IAutoconfiguration, IDefaultBuilder, Logger, staticImplements } from "src/utils/index";
 import { ProfileRegistryClient } from "../profile-registry";
 import { ClientBuilder } from "src/clients/common";
+import { NoProfileFoundError } from "src/clients/bazar/profile/ProfileClientError";
+import { ClientError } from "src/clients/common/ClientError";
 
 /**
  * @category Bazar
  * @see {@link https://cookbook_ao.g8way.io/references/profile.html | specification}
  */
-@staticImplements<IAutoconfiguration>() 
+@staticImplements<IAutoconfiguration>()
 @staticImplements<IDefaultBuilder>()
-export class ProfileClient extends DryRunCachingClient implements IProfileClient{
+export class ProfileClient extends DryRunCachingClient implements IProfileClient {
     /* Constructors */
     public static async autoConfiguration(): Promise<ProfileClient> {
         const builder = await ProfileClient.defaultBuilder()
@@ -46,8 +47,7 @@ export class ProfileClient extends DryRunCachingClient implements IProfileClient
             ]);
             return ResultUtils.getFirstMessageDataJson<ProfileInfo>(response);
         } catch (error: any) {
-            Logger.error(`Error fetching profile for address ${address}: ${error.message}`);
-            throw new GetProfileError(address, error);
+            throw new ClientError(this, this.getProfileInfo, null, error);
         }
     }
 
@@ -66,8 +66,7 @@ export class ProfileClient extends DryRunCachingClient implements IProfileClient
             const actionValue = TagUtils.getTagValue(result.Messages[0].Tags, "Action");
             return actionValue !== "Transfer-Failed";
         } catch (error: any) {
-            Logger.error(`Error transferring ${quantity} from ${assetToTransfer} to ${recipient}: ${error.message}`);
-            throw new ProfileTransferError(assetToTransfer, recipient, quantity, error);
+            throw new ClientError(this, this.transferAsset, { assetToTransfer, recipient, quantity, tags }, error);
         }
     }
     /* Core Profile Functions */

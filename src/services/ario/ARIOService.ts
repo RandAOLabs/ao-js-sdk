@@ -1,6 +1,6 @@
 import { IARIOService } from 'src/services/ario/abstract/IARIOService';
-import { ANTClient, GetANTRecordError } from 'src/clients/ario/ant';
-import { ARNSClient, GetARNSRecordError, InvalidDomainError } from 'src/clients/ario/arns';
+import { ANTClient } from 'src/clients/ario/ant';
+import { ARNSClient, } from 'src/clients/ario/arns';
 import { ICache, newCache } from 'src/utils/cache';
 import { DOMAIN_SEPARATOR, ARN_ROOT_NAME } from 'src/services/ario/constants';
 import { Domain, DOMAIN_DEFAULTS } from 'src/services/ario/domains';
@@ -10,6 +10,8 @@ import { getARNSClientAutoConfiguration } from 'src/clients/ario/arns/ARNSClient
 import { DryRunCachingClientConfigBuilder } from 'src/core/ao/configuration/builder';
 import { Logger } from 'src/utils';
 import { AO_CONFIGURATIONS } from 'src/core/ao/ao-client/configurations';
+import { ClientError } from 'src/clients/common/ClientError';
+import { InputValidationError } from 'src/clients';
 
 /**
  * Service for handling ARIO operations, including ANT and ARNS record management.
@@ -60,7 +62,7 @@ export class ARIOService implements IARIOService {
             return processId
         } catch (error: unknown) {
             // Check for rate limiting and fall back to default process ID if available
-            if (error instanceof GetANTRecordError || error instanceof GetARNSRecordError) {
+            if (error instanceof ClientError) {
                 const defaultProcessId = DOMAIN_DEFAULTS[domain as Domain];
                 if (defaultProcessId) {
                     Logger.warn(`Unable to obtain process id from ARNS domain ${domain} | Using backup process ID: ${defaultProcessId}`);
@@ -97,15 +99,15 @@ export class ARIOService implements IARIOService {
      */
     private _validateDomain(domain: string): void {
         if (!domain) {
-            throw new InvalidDomainError(domain, 'Domain cannot be empty');
+            throw new InputValidationError(`Domain cannot be empty | Received ${domain}`);
         }
         if (domain.includes(DOMAIN_SEPARATOR)) {
             const [undername, antName] = domain.split(DOMAIN_SEPARATOR);
             if (!undername || !antName) {
-                throw new InvalidDomainError(domain, `Expected format: undername${DOMAIN_SEPARATOR}antname or antname`);
+                throw new InputValidationError(`Expected format: undername${DOMAIN_SEPARATOR}antname or antname | Received ${domain}`);
             }
             if (domain.split(DOMAIN_SEPARATOR).length > 2) {
-                throw new InvalidDomainError(domain, `Domain can only contain one ${DOMAIN_SEPARATOR}`);
+                throw new InputValidationError(`Domain can only contain one ${DOMAIN_SEPARATOR} | Received: ${domain}`);
             }
         }
     }

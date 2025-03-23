@@ -18,7 +18,8 @@ jest.mock('@permaweb/aoconnect', () => ({
     })
 }));
 
-import { TokenClient, BalanceError, Logger, BalancesError, GetInfoError, MintError, LogLevel } from "src";
+import { TokenClient, Logger, LogLevel } from "src";
+import { ClientError } from "src/clients/common/ClientError";
 import { BaseClientConfigBuilder } from "src/core/ao/configuration/builder";
 
 
@@ -48,7 +49,7 @@ describe("TokenClient Error Handling", () => {
             (dryrun as jest.Mock).mockRejectedValueOnce(new Error(errorMessage));
 
             // Act & Assert
-            await expect(client.balance(identifier)).rejects.toThrow(BalanceError);
+            await expect(client.balance(identifier)).rejects.toThrow(ClientError);
         });
     });
 
@@ -63,7 +64,7 @@ describe("TokenClient Error Handling", () => {
             const cursor = "test-cursor";
 
             // Act & Assert
-            await expect(client.balances(limit, cursor)).rejects.toThrow(BalancesError);
+            await expect(client.balances(limit, cursor)).rejects.toThrow(ClientError);
         });
     });
 
@@ -93,7 +94,7 @@ describe("TokenClient Error Handling", () => {
             (dryrun as jest.Mock).mockRejectedValue(new Error(errorMessage));
 
             // Act & Assert
-            await expect(client.getInfo(token)).rejects.toThrow(GetInfoError);
+            await expect(client.getInfo(token)).rejects.toThrow(ClientError);
         });
     });
 
@@ -108,7 +109,7 @@ describe("TokenClient Error Handling", () => {
             (message as jest.Mock).mockRejectedValueOnce(new Error(errorMessage));
 
             // Act & Assert
-            await expect(client.mint(quantity)).rejects.toThrow(MintError);
+            await expect(client.mint(quantity)).rejects.toThrow(ClientError);
         });
     });
 });

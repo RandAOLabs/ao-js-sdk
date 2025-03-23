@@ -1,7 +1,7 @@
 import { ARIOService } from 'src/services/ario/ARIOService';
 import { ANTClient } from 'src/clients/ario/ant';
 import { ANTRecord } from 'src/clients/ario/ant/types';
-import { ARNSClient, InvalidDomainError } from 'src/clients/ario/arns';
+import { ARNSClient } from 'src/clients/ario/arns';
 import { ARNSRecord } from 'src/clients/ario/arns/types';
 import { ANTRecordNotFoundError, ARNSRecordNotFoundError } from 'src/services/ario/ARIOError';
 import { ARN_ROOT_NAME } from 'src/services/ario/constants';
