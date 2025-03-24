@@ -1,19 +1,20 @@
 import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
 import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
 import { TokenClient, TokenClientConfig } from "src/clients/ao";
-import { POST_VDF_OUTPUT_AND_PROOF_TAG } from "./constants";
-import { IRandomClient, RandomClientConfig, GetProviderAvailableValuesResponse, GetOpenRandomRequestsResponse, GetRandomRequestsResponse, ProviderActivity } from "src/clients/randao/random/abstract";
-import { RandomProcessError } from "src/clients/randao/random/RandomProcessError";
+import { IRandomClient, RandomClientConfig, GetProviderAvailableValuesResponse, GetOpenRandomRequestsResponse, GetRandomRequestsResponse, ProviderActivity, CommitParams, RevealParams } from "src/clients/randao/random/abstract";
 import { Tags } from "src/core";
 import { BaseClient } from "src/core/ao/BaseClient";
 import ResultUtils from "src/core/common/result-utils/ResultUtils";
-import { IAutoconfiguration, IDefaultBuilder, Logger, staticImplements } from "src/utils";
+import { IAutoconfiguration, IDefaultBuilder, staticImplements } from "src/utils";
 import { ARIOService } from "src/services";
 import { TokenInterfacingClientBuilder } from "src/clients/common/TokenInterfacingClientBuilder";
 import { Domain } from "src/services/ario/domains";
 import { AO_CONFIGURATIONS } from "src/core/ao/ao-client/configurations";
 import { PROCESS_IDS } from "src/process-ids";
 import { ClientError } from "src/clients/common/ClientError";
+import TAGS from "src/clients/randao/random/tags";
+import { RandomProcessError } from "src/clients/randao/random/RandomProcessError";
+import { IClassBuilder } from "src/utils/class-interfaces/IClientBuilder";
 
 /**
  * @category RandAO
@@ -21,6 +22,7 @@ import { ClientError } from "src/clients/common/ClientError";
  */
 @staticImplements<IAutoconfiguration>()
 @staticImplements<IDefaultBuilder>()
+@staticImplements<IClassBuilder>()
 export class RandomClient extends BaseClient implements IRandomClient {
     /* Fields */
     readonly tokenClient: TokenClient;
@@ -45,10 +47,14 @@ export class RandomClient extends BaseClient implements IRandomClient {
             .build()
     }
 
+    public static builder(): TokenInterfacingClientBuilder<RandomClient> {
+        return new TokenInterfacingClientBuilder(RandomClient)
+    }
+
     public static async defaultBuilder(): Promise<TokenInterfacingClientBuilder<RandomClient>> {
         const ario = await ARIOService.getInstance()
         const randomProcessId = await ario.getProcessIdForDomain(Domain.RANDAO_API)
-        return new TokenInterfacingClientBuilder(RandomClient)
+        return RandomClient.builder()
             .withProcessId(randomProcessId)
             .withTokenProcessId(PROCESS_IDS.RANDAO.RNG_TOKEN)
             .withAOConfig(AO_CONFIGURATIONS.RANDAO)
@@ -56,10 +62,35 @@ export class RandomClient extends BaseClient implements IRandomClient {
     /* Constructors */
 
     /* Core Random Functions */
+    async commit(params: CommitParams): Promise<void> {
+        try {
+            const tags: Tags = [
+                TAGS.ACTION.COMMIT
+            ];
+            const data = JSON.stringify(params);
+            const result = await this.messageResult(data, tags);
+            this.checkResultForErrors(result)
+        } catch (error: any) {
+            throw new ClientError(this, this.commit, params, error);
+        }
+    }
+    async reveal(params: RevealParams): Promise<void> {
+        try {
+            const tags: Tags = [
+                TAGS.ACTION.REVEAL
+            ];
+            const data = JSON.stringify(params);
+            const result = await this.messageResult(data, tags);
+            this.checkResultForErrors(result)
+        } catch (error: any) {
+            throw new ClientError(this, this.reveal, params, error);
+        }
+    }
+
     async postVDFChallenge(randomnessRequestId: string, modulus: string, input: string): Promise<boolean> {
         try {
             const tags: Tags = [
-                { name: "Action", value: "Post-VDF-Challenge" },
+                TAGS.ACTION.POST_VDF_CHALLENGE
             ];
             const data = JSON.stringify({ requestId: randomnessRequestId, input, modulus });
             const result = await this.messageResult(data, tags);
@@ -73,7 +104,7 @@ export class RandomClient extends BaseClient implements IRandomClient {
     async getProviderAvailableValues(providerId: string): Promise<GetProviderAvailableValuesResponse> {
         try {
             const tags: Tags = [
-                { name: "Action", value: "Get-Providers-Random-Balance" },
+                TAGS.ACTION.GET_PROVIDER_RANDOM_BALANCE
             ];
             const data = JSON.stringify({ providerId });
             const result = await this.dryrun(data, tags);
@@ -87,7 +118,7 @@ export class RandomClient extends BaseClient implements IRandomClient {
     async updateProviderAvailableValues(availableRandomValues: number): Promise<boolean> {
         try {
             const tags: Tags = [
-                { name: "Action", value: "Update-Providers-Random-Balance" },
+                TAGS.ACTION.UPDATE_PROVIDER_RANDOM_BALANCE
             ];
             const data = JSON.stringify({ availableRandomValues });
             const result = await this.messageResult(data, tags);
@@ -101,7 +132,7 @@ export class RandomClient extends BaseClient implements IRandomClient {
     async getOpenRandomRequests(provider: string): Promise<GetOpenRandomRequestsResponse> {
         try {
             const tags: Tags = [
-                { name: "Action", value: "Get-Open-Random-Requests" },
+                TAGS.ACTION.GET_OPEN_RANDOM_REQUESTS
             ];
             const data = JSON.stringify({ providerId: provider });
             const result = await this.dryrun(data, tags);
@@ -115,7 +146,7 @@ export class RandomClient extends BaseClient implements IRandomClient {
     async getRandomRequests(randomnessRequestIds: string[]): Promise<GetRandomRequestsResponse> {
         try {
             const tags: Tags = [
-                { name: "Action", value: "Get-Random-Requests" },
+                TAGS.ACTION.GET_RANDOM_REQUESTS
             ];
             const data = JSON.stringify({ requestIds: randomnessRequestIds });
             const result = await this.dryrun(data, tags);
@@ -129,7 +160,7 @@ export class RandomClient extends BaseClient implements IRandomClient {
     async getRandomRequestViaCallbackId(callbackId: string): Promise<GetRandomRequestsResponse> {
         try {
             const tags: Tags = [
-                { name: "Action", value: "Get-Random-Request-Via-Callback-Id" },
+                TAGS.ACTION.GET_RANDOM_REQUEST_VIA_CALLBACK_ID
             ];
             const data = JSON.stringify({ callbackId });
             const result = await this.dryrun(data, tags);
@@ -143,7 +174,7 @@ export class RandomClient extends BaseClient implements IRandomClient {
     async createRequest(provider_ids: string[], requestedInputs?: number, callbackId: string = ''): Promise<boolean> {
         try {
             const paymentAmount = "100"; // TODO: Determine payment amount dynamically if needed
-            const tags = [
+            const tags: Tags = [
                 { name: "Providers", value: JSON.stringify({ provider_ids }) },
                 { name: "CallbackId", value: callbackId },
             ];
@@ -162,7 +193,7 @@ export class RandomClient extends BaseClient implements IRandomClient {
     async postVDFOutputAndProof(randomnessRequestId: string, output: string, proof: string): Promise<boolean> {
         try {
             const tags: Tags = [
-                POST_VDF_OUTPUT_AND_PROOF_TAG,
+                TAGS.ACTION.POST_VDF_OUTPUT_AND_PROOF
             ];
             const data = JSON.stringify({ requestId: randomnessRequestId, output, proof });
             const result = await this.messageResult(data, tags);
@@ -176,7 +207,7 @@ export class RandomClient extends BaseClient implements IRandomClient {
     async getAllProviderActivity(): Promise<ProviderActivity[]> {
         try {
             const tags: Tags = [
-                { name: "Action", value: "Get-All-Providers" },
+                TAGS.ACTION.GET_ALL_PROVIDERS
             ];
             const result = await this.dryrun(undefined, tags);
             this.checkResultForErrors(result)
@@ -189,7 +220,7 @@ export class RandomClient extends BaseClient implements IRandomClient {
     async getProviderActivity(providerId: String): Promise<ProviderActivity> {
         try {
             const tags: Tags = [
-                { name: "Action", value: "Get-Provider" },
+                TAGS.ACTION.GET_PROVIDER
             ];
             const data = JSON.stringify({ providerId: providerId })
             const result = await this.dryrun(data, tags);

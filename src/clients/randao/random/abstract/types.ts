@@ -60,3 +60,40 @@ export type ProviderActivity = {
     active_output_requests: RequestList,
     staked: 1
 }
+
+/**
+ * Note the timing parameter in this TimeLockPuzzle is ommitted as this is a constant component of the protocol.
+ */
+export type TimeLockPuzzle = {
+    /**
+     * The timelock puzzle input
+     */
+    input: string
+    /**
+     * The timelock puzzle modulus
+     */
+    modulus: string
+}
+/**
+ * p*q = N
+ */
+export type RSAKey = {
+    p: string,
+    q: string
+}
+
+export type CommitParams = {
+    /**
+     * Id of the randomness request to commit to
+     */
+    requestId: string
+    puzzle: TimeLockPuzzle
+}
+
+export type RevealParams = {
+    /**
+     * Id of the randomness request to reveal
+     */
+    requestId: string
+    rsa_key: RSAKey
+}
