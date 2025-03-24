@@ -1,4 +1,4 @@
-export type ProviderVDFResult = {
+export interface ProviderVDFResult {
     request_id: string;
     provider_id: string;
     input_value: string;
@@ -9,7 +9,7 @@ export type ProviderVDFResult = {
 };
 
 
-export type RandomRequest = {
+export interface RandomRequest {
     request_id: string;
     requester: string;
     callback_id: string;
@@ -20,21 +20,21 @@ export type RandomRequest = {
     created_at: number;
 };
 
-export type ProviderVDFResults = {
+export interface ProviderVDFResults {
     requestResponses: ProviderVDFResult[];
 };
 
 
-export type GetProviderAvailableValuesResponse = {
+export interface GetProviderAvailableValuesResponse {
     providerId: string;
     availibleRandomValues: number;
 };
 
-export type RequestList = {
+export interface RequestList {
     request_ids: string[];
 };
 
-export type GetOpenRandomRequestsResponse = {
+export interface GetOpenRandomRequestsResponse {
     providerId: string;
     activeChallengeRequests: RequestList;
     activeOutputRequests: RequestList;
@@ -42,16 +42,16 @@ export type GetOpenRandomRequestsResponse = {
 
 
 
-export type RandomRequestResponse = {
+export interface RandomRequestResponse {
     randomRequest: RandomRequest;
     providerVDFResults: ProviderVDFResults;
 };
 
-export type GetRandomRequestsResponse = {
+export interface GetRandomRequestsResponse {
     randomRequestResponses: RandomRequestResponse[];
 };
 
-export type ProviderActivity = {
+export interface ProviderActivity {
     active_challenge_requests: RequestList,
     provider_id: string,
     active: number,
@@ -63,8 +63,9 @@ export type ProviderActivity = {
 
 /**
  * Note the timing parameter in this TimeLockPuzzle is ommitted as this is a constant component of the protocol.
+ * @inline 
  */
-export type TimeLockPuzzle = {
+export interface TimeLockPuzzle {
     /**
      * The timelock puzzle input
      */
@@ -76,24 +77,9 @@ export type TimeLockPuzzle = {
 }
 /**
  * p*q = N
+ * @inline 
  */
-export type RSAKey = {
+export interface RSAKey {
     p: string,
     q: string
-}
-
-export type CommitParams = {
-    /**
-     * Id of the randomness request to commit to
-     */
-    requestId: string
-    puzzle: TimeLockPuzzle
-}
-
-export type RevealParams = {
-    /**
-     * Id of the randomness request to reveal
-     */
-    requestId: string
-    rsa_key: RSAKey
 }
