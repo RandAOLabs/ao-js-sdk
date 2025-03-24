@@ -1,4 +1,5 @@
-import { GetProviderAvailableValuesResponse, GetOpenRandomRequestsResponse, GetRandomRequestsResponse, ProviderActivity, TimeLockPuzzle, RSAKey, CommitParams, RevealParams } from "src/clients/randao/random/abstract/types";
+import { CommitParams, RevealParams } from "src/clients/randao/random/abstract/params";
+import { GetProviderAvailableValuesResponse, GetOpenRandomRequestsResponse, GetRandomRequestsResponse, ProviderActivity } from "src/clients/randao/random/abstract/types";
 
 // src/interfaces/IRandomClient.ts
 export interface IRandomClient {

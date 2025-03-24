@@ -10,7 +10,7 @@ export type Tags = Tag[];
  * Tags are key-value pairs that provide metadata and instructions for message processing.
  * @see {@link https://cookbook_ao.g8way.io/concepts/messages.html | Message specification}
  */
-export type Tag = {
+export interface Tag {
     /** The name/key of the tag */
     name: string;
     /** The value associated with the tag */

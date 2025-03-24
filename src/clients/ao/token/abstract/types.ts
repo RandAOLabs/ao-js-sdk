@@ -1,5 +1,5 @@
 
-export type BalanceResponse = {
+export interface BalanceResponse {
     Tags: {
         Balance: string;
         Target: string;
