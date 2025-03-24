@@ -63,6 +63,7 @@ export interface ProviderActivity {
 
 /**
  * Note the timing parameter in this TimeLockPuzzle is ommitted as this is a constant component of the protocol.
+ * @inline 
  */
 export interface TimeLockPuzzle {
     /**
@@ -76,24 +77,9 @@ export interface TimeLockPuzzle {
 }
 /**
  * p*q = N
+ * @inline 
  */
 export interface RSAKey {
     p: string,
     q: string
-}
-
-export interface CommitParams {
-    /**
-     * Id of the randomness request to commit to
-     */
-    requestId: string
-    puzzle: TimeLockPuzzle
-}
-
-export interface RevealParams {
-    /**
-     * Id of the randomness request to reveal
-     */
-    requestId: string
-    rsa_key: RSAKey
 }
