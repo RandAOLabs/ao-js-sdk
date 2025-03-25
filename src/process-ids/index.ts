@@ -6,6 +6,7 @@ import { DEFI } from "src/process-ids/defi";
 import { MISCELLANEOUS } from "src/process-ids/miscellaneous";
 import { RANDAO } from "src/process-ids/randao";
 import { RUNEREALM } from "src/process-ids/rune_realm";
+import { AUTONOMOUS_FINANCE } from "src/process-ids/autonomous-finance";
 
 export const PROCESS_IDS = {
     AO,
@@ -16,4 +17,5 @@ export const PROCESS_IDS = {
     DEFI,
     COMMUNITY_TOKENS,
     MISCELLANEOUS,
+    AUTONOMOUS_FINANCE
 }

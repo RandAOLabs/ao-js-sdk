@@ -1,6 +1,6 @@
 import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
 import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
-import { MessageOutOfBoundsError, JsonParsingError } from "src/core/common/result-utils/ResultUtilsError";
+import { MessageOutOfBoundsError, ResultReadingError, ResultUtilsError } from "src/core/common/result-utils/ResultUtilsError";
 import { Tags } from "src/core/common/types";
 
 /**
@@ -26,7 +26,7 @@ export default class ResultUtils {
             const parsedObject = JSON.parse(data) as T;
             return parsedObject;
         } catch (error) {
-            throw new JsonParsingError(`Invalid JSON in message data at index ${n}: ${result.Messages[n]?.Data}`, error as Error);
+            throw new ResultReadingError(result, error)
         }
     }
 
