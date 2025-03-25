@@ -1,5 +1,6 @@
 import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
 import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
+import { ProcessError } from "src/core/common/result-utils/ProcessError";
 import { MessageOutOfBoundsError, JsonParsingError } from "src/core/common/result-utils/ResultUtilsError";
 import { Tags } from "src/core/common/types";
 
@@ -39,5 +40,16 @@ export default class ResultUtils {
             throw new MessageOutOfBoundsError(n, result.Messages.length);
         }
         return result.Messages[n].Data;
+    }
+
+    /**
+     * 
+     * @throws ProcessError
+     * @param result the result to check for errors.
+     */
+    public static checkForProcessErrors(result: MessageResult | DryRunResult): void {
+        if (result.Error) {
+            throw new ProcessError(result)
+        }
     }
 }

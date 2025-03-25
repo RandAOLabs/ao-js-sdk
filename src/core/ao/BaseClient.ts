@@ -17,6 +17,7 @@ import { ReadOnlyAOClient } from 'src/core/ao/ao-client/ReadOnlyAOClient';
 import { JWKInterface } from 'arweave/node/lib/wallet';
 import { ReadOnlyRetryAOClient } from 'src/core/ao/ao-client';
 import { SortOrder } from 'src/core/ao/abstract';
+import ResultUtils from 'src/core/common/result-utils/ResultUtils';
 
 /**
  * Base client implementation for AO Process interactions.
@@ -86,10 +87,12 @@ export class BaseClient extends IBaseClient {
     /** @protected */
     async result(messageId: string): Promise<MessageResult> {
         try {
-            return await this.ao.result({
+            const result = await this.ao.result({
                 process: this.baseConfig.processId,
                 message: messageId
             });
+            ResultUtils.checkForProcessErrors(result)
+            return result
         } catch (error: any) {
             Logger.error(`Error fetching result: ${error.message}`);
             throw new ResultError(error);
@@ -117,7 +120,9 @@ export class BaseClient extends IBaseClient {
                 id,
                 owner
             };
-            return await this.ao.dryrun(params);
+            const result = await this.ao.dryrun(params);
+            ResultUtils.checkForProcessErrors(result)
+            return result
         } catch (error: any) {
             Logger.error(`Error performing dry run: ${JSON.stringify(error.message)}`);
             throw new DryRunError(error);
