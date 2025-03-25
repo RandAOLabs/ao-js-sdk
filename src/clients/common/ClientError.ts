@@ -9,7 +9,7 @@ export class ClientError<T extends IBaseClient, P = any> extends Error {
         public readonly originalError?: Error
     ) {
         const functionName = func.name;
-        const paramsString = JSON.stringify(params, null, 2);
+        const paramsString = JSON.stringify(params, null);
 
         const fullMessage: string = `
             \n| Error in ${client.constructor.name} |
