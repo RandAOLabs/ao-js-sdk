@@ -11,13 +11,13 @@ export class ProcessError extends Error {
         const errorDetails = result.Error || 'Unknown error';
         const lines = ProcessError.formatMessage(errorDetails);
         const message = ProcessError.addBorders(lines);
-        Logger.error(message);
+        Logger.error(`\n${message}\n`);
         super(message);
     }
 
     private static formatMessage(error: string): string[] {
         const words = error.split(' ');
-        const lines: string[] = [];
+        const lines: string[] = ["Error Originating in Process"];
         let currentLine = '';
 
         for (const word of words) {
