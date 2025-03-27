@@ -1,7 +1,7 @@
 import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
 import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
 import { ProcessError } from "src/core/common/result-utils/ProcessError";
-import { MessageOutOfBoundsError, JsonParsingError } from "src/core/common/result-utils/ResultUtilsError";
+import { MessageOutOfBoundsError, JsonParsingError, MessagesMissingError } from "src/core/common/result-utils/ResultUtilsError";
 import { Tags } from "src/core/common/types";
 
 /**
@@ -20,14 +20,17 @@ export default class ResultUtils {
 
     public static getNthMessageDataJson<T>(result: MessageResult | DryRunResult, n: number): T {
         try {
+            if (!result.Messages) {
+                throw new MessagesMissingError(result)
+            }
             if (n < 0 || n >= result.Messages.length) {
-                throw new MessageOutOfBoundsError(n, result.Messages.length);
+                throw new MessageOutOfBoundsError(result, n);
             }
             const data = result.Messages[n].Data;
             const parsedObject = JSON.parse(data) as T;
             return parsedObject;
-        } catch (error) {
-            throw new JsonParsingError(`Invalid JSON in message data at index ${n}: ${result.Messages[n]?.Data}`, error as Error);
+        } catch (error: any) {
+            throw new JsonParsingError(result, n, error);
         }
     }
 
@@ -37,7 +40,7 @@ export default class ResultUtils {
 
     public static getNthMessageDataString(result: MessageResult | DryRunResult, n: number): string {
         if (n < 0 || n >= result.Messages.length) {
-            throw new MessageOutOfBoundsError(n, result.Messages.length);
+            throw new MessageOutOfBoundsError(result, n);
         }
         return result.Messages[n].Data;
     }
