@@ -32,7 +32,7 @@ export class ReadOnlyAOClient implements IAOClient {
         tags: Tags = [],
         anchor?: string
     ): Promise<string> {
-        throw new AOReadOnlyClientError();
+        throw new AOReadOnlyClientError(this, this.message, { process, data, tags, anchor });
     }
 
     public async results(
@@ -49,9 +49,9 @@ export class ReadOnlyAOClient implements IAOClient {
             return results
         } catch (error: any) {
             if (error.message = RATELIMIT_ERROR_TEXT) {
-                throw await AORateLimitingError.create(this, this.dryrun, params, error)
+                throw new AORateLimitingError(this, this.dryrun, params, await this.getCallingWalletAddress(), error)
             } else {
-                throw await AOClientError.create(this, this.results, params, error);
+                throw new AOClientError(this, this.results, params, await this.getCallingWalletAddress(), error);
             }
         }
 
@@ -63,9 +63,9 @@ export class ReadOnlyAOClient implements IAOClient {
             return result
         } catch (error: any) {
             if (error.message = RATELIMIT_ERROR_TEXT) {
-                throw await AORateLimitingError.create(this, this.dryrun, params, error)
+                throw new AORateLimitingError(this, this.dryrun, params, await this.getCallingWalletAddress(), error)
             } else {
-                throw await AOClientError.create(this, this.result, params, error);
+                throw new AOClientError(this, this.result, params, await this.getCallingWalletAddress(), error);
             }
         }
 
@@ -77,15 +77,15 @@ export class ReadOnlyAOClient implements IAOClient {
             return result
         } catch (error: any) {
             if (error.message = RATELIMIT_ERROR_TEXT) {
-                throw await AORateLimitingError.create(this, this.dryrun, params, error)
+                throw new AORateLimitingError(this, this.dryrun, params, await this.getCallingWalletAddress(), error)
             } else {
-                throw await AOClientError.create(this, this.dryrun, params, error);
+                throw new AOClientError(this, this.dryrun, params, await this.getCallingWalletAddress(), error);
             }
         }
     }
 
     public async getCallingWalletAddress(): Promise<string> {
-        throw new AOReadOnlyClientError();
+        throw new AOReadOnlyClientError(this, this.message, undefined);
     }
 
     public setConfig(aoConnectConfig: ConnectArgsLegacy) {

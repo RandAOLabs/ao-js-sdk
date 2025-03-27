@@ -20,11 +20,13 @@ jest.mock('@permaweb/aoconnect', () => ({
 
 import { ReadOnlyAOClient } from 'src/core/ao/ao-client/ReadOnlyAOClient';
 import { DryRunParams } from 'src/core/ao/ao-client/abstract';
+import { Logger, LogLevel } from 'src/utils';
 
 describe('ReadOnlyAOClient', () => {
     let client: ReadOnlyAOClient;
 
     beforeEach(() => {
+        Logger.setLogLevel(LogLevel.NONE)
         // Reset all mocks before each test
         jest.clearAllMocks();
         client = new ReadOnlyAOClient();
@@ -36,7 +38,7 @@ describe('ReadOnlyAOClient', () => {
 
     it('should return results when fetching results', async () => {
         mockResults.mockResolvedValue({ success: true });
-        const response = await client.results({process:'process-id'});
+        const response = await client.results({ process: 'process-id' });
         expect(response).toBeDefined();
         expect(mockResults).toHaveBeenCalledWith({
             process: 'process-id',
@@ -50,8 +52,8 @@ describe('ReadOnlyAOClient', () => {
     it('should return result when fetching single result', async () => {
         mockResult.mockResolvedValue({ success: true });
         const response = await client.result({
-            process:'process-id',
-             message:'message-id'
+            process: 'process-id',
+            message: 'message-id'
         });
         expect(response).toBeDefined();
         expect(mockResult).toHaveBeenCalledWith({
