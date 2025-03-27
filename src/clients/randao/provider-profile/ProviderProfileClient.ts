@@ -3,6 +3,7 @@ import { ClientError } from "src/clients/common/ClientError";
 import { IProviderProfileClient } from "src/clients/randao/provider-profile/abstract/IProviderProfileClient";
 import { ProviderDetails, ProviderInfo, ProviderInfoDTO } from "src/clients/randao/provider-profile/abstract/types";
 import { Tags } from "src/core";
+import { AO_CONFIGURATIONS } from "src/core/ao/ao-client/configurations";
 import { DryRunCachingClient } from "src/core/ao/client-variants";
 import ResultUtils from "src/core/common/result-utils/ResultUtils";
 import { PROCESS_IDS } from "src/process-ids";
@@ -22,6 +23,7 @@ export class ProviderProfileClient extends DryRunCachingClient implements IProvi
     public static defaultBuilder(): ClientBuilder<ProviderProfileClient> {
         return new ClientBuilder(ProviderProfileClient)
             .withProcessId(PROCESS_IDS.RANDAO.PROFILE)
+            .withAOConfig(AO_CONFIGURATIONS.RANDAO)
     }
 
     /* Interface Provider Profile Functions */
