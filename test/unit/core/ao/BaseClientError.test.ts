@@ -76,7 +76,7 @@ describe("BaseClient Error Handling", () => {
         it('should throw ResultsError and log an error when results fetching fails', async () => {
             // Arrange
             const errorMessage = 'Failed to fetch results';
-            (results as jest.Mock).mockRejectedValueOnce(new Error(errorMessage));
+            (results as jest.Mock).mockRejectedValue(new Error(errorMessage));
             const from = 'start-id';
             const to = 'end-id';
             const limit = 10;
