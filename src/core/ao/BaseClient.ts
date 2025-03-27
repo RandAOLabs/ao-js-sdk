@@ -58,7 +58,6 @@ export class BaseClient extends IBaseClient {
                 anchor
             );
         } catch (error: any) {
-            Logger.error(`Error sending message: ${error.message}`);
             throw new MessageError(error);
         }
     }
@@ -79,7 +78,6 @@ export class BaseClient extends IBaseClient {
                 sort
             });
         } catch (error: any) {
-            Logger.error(`Error fetching results: ${error.message}`);
             throw new ResultsError(error);
         }
     }
@@ -94,7 +92,6 @@ export class BaseClient extends IBaseClient {
             ResultUtils.checkForProcessErrors(result)
             return result
         } catch (error: any) {
-            Logger.error(`Error fetching result: ${error.message}`);
             throw new ResultError(error);
         }
     }
@@ -124,7 +121,6 @@ export class BaseClient extends IBaseClient {
             ResultUtils.checkForProcessErrors(result)
             return result
         } catch (error: any) {
-            Logger.error(`Error performing dry run: ${JSON.stringify(error.message)}`);
             throw new DryRunError(error);
         }
     }
