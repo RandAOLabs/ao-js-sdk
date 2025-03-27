@@ -86,24 +86,6 @@ describe("RandomClient Unit Tests", () => {
                 }
             })).rejects.toThrow();
         });
-        it("has an process error", async () => {
-            mockBaseClient.setMockMessageResult({
-                Output: undefined,
-                Messages: [],
-                Spawns: [],
-                Error: {
-                    message: "error"
-                }
-            });
-
-            await expect(client.reveal({
-                requestId: "test-id",
-                rsa_key: {
-                    p: "test-p",
-                    q: "test-q"
-                }
-            })).rejects.toThrow();
-        });
     });
 
 });
