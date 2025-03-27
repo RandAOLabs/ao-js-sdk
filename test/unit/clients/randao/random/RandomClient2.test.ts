@@ -7,7 +7,7 @@ describe("RandomClient Unit Tests", () => {
     let client: RandomClient;
 
     beforeEach(async () => {
-        Logger.setLogLevel(LogLevel.NONE)
+        // Logger.setLogLevel(LogLevel.NONE)
         // Logger.setLogLevel(LogLevel.DEBUG)
         mockBaseClient = new MockBaseClient();
         client = RandomClient.builder()
