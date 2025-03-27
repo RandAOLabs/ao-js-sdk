@@ -1,8 +1,14 @@
-import { BaseClientError } from "src/core/ao";
 
-export class NftSaleClientError extends BaseClientError {
-    constructor(message: string, cause?: Error) {
-        super(message, cause);
+/**
+ * @deprecated
+ */
+export class NftSaleClientError extends Error {
+    constructor(message: string, originalError?: Error) {
+        super(message);
+        this.name = 'BaseClientError';
+        if (originalError) {
+            this.stack += '\nCaused by: ' + originalError.stack;
+        }
     }
 }
 

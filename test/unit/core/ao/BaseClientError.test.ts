@@ -19,7 +19,8 @@ jest.mock('@permaweb/aoconnect', () => ({
 }));
 
 import { createDataItemSigner } from '@permaweb/aoconnect';
-import { MessageError, Logger, SortOrder, ResultsError, ResultError, DryRunError } from 'src';
+import { Logger, SortOrder } from 'src';
+import { AOClientError } from 'src/core/ao/ao-client';
 import { BaseClient } from 'src/core/ao/BaseClient';
 import { BaseClientConfigBuilder } from 'src/core/ao/configuration/builder';
 
@@ -64,7 +65,7 @@ describe("BaseClient Error Handling", () => {
             const tags = [{ name: 'tag1', value: 'value1' }];
 
             // Act & Assert
-            await expect(client.message(data, tags)).rejects.toThrow(MessageError);
+            await expect(client.message(data, tags)).rejects.toThrow(AOClientError);
             expect(Logger.error).toHaveBeenCalled();
         });
     });
@@ -83,7 +84,7 @@ describe("BaseClient Error Handling", () => {
             const sort = SortOrder.DESCENDING;
 
             // Act & Assert
-            await expect(client.results(from, to, limit, sort)).rejects.toThrow(ResultsError);
+            await expect(client.results(from, to, limit, sort)).rejects.toThrow(AOClientError);
             expect(Logger.error).toHaveBeenCalled();
         });
     });
@@ -95,11 +96,11 @@ describe("BaseClient Error Handling", () => {
         it('should throw ResultError and log an error when result fetching fails', async () => {
             // Arrange
             const errorMessage = 'Failed to fetch result';
-            (result as jest.Mock).mockRejectedValueOnce(new Error(errorMessage));
+            (result as jest.Mock).mockRejectedValue(new Error(errorMessage));
             const messageId = 'message-id';
 
             // Act & Assert
-            await expect(client.result(messageId)).rejects.toThrow(ResultError);
+            await expect(client.result(messageId)).rejects.toThrow(AOClientError);
             expect(Logger.error).toHaveBeenCalled();
         });
     });
@@ -116,7 +117,7 @@ describe("BaseClient Error Handling", () => {
             const tags = [{ name: 'tag1', value: 'value1' }];
 
             // Act & Assert
-            await expect(client.dryrun(data, tags)).rejects.toThrow(DryRunError);
+            await expect(client.dryrun(data, tags)).rejects.toThrow(AOClientError);
             expect(Logger.error).toHaveBeenCalled();
         });
     });
