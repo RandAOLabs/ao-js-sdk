@@ -235,11 +235,13 @@ export class RandomClient extends BaseClient implements IRandomClient {
 
     /* Utilities */
     private checkResultForErrors(result: MessageResult | DryRunResult) {
-        for (let msg of result.Messages) {
-            const tags: Tags = msg.Tags;
-            for (let tag of tags) {
-                if (tag.name == "Error") {
-                    throw new RandomProcessError(`Error originating in process: ${this.getProcessId()}`)
+        if (result.Messages) {
+            for (let msg of result.Messages) {
+                const tags: Tags = msg.Tags;
+                for (let tag of tags) {
+                    if (tag.name == "Error") {
+                        throw new RandomProcessError(`Error originating in process: ${this.getProcessId()}`)
+                    }
                 }
             }
         }
