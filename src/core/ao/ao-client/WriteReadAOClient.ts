@@ -50,7 +50,7 @@ export class WriteReadAOClient extends ReadOnlyRetryAOClient {
             });
             return result
         } catch (error: any) {
-            throw await AOClientError.create(this, this.result, { process, data, tags, anchor }, error);
+            throw new AOClientError(this, this.result, { process, data, tags, anchor }, await this.getCallingWalletAddress(), error);
         }
     }
 
