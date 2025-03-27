@@ -2,7 +2,6 @@ import { IBaseClient } from 'src/core/ao/abstract/IBaseClient';
 import { BaseClientConfig } from 'src/core/ao/configuration/BaseClientConfig';
 import { mergeLists } from 'src/utils/lists';
 import { DEFAULT_TAGS } from 'src/core/ao/constants';
-import { DryRunError, MessageError, ResultError, ResultsError } from 'src/core/ao/BaseClientError';
 import { MessageResult } from '@permaweb/aoconnect/dist/lib/result';
 import { ResultsResponse } from '@permaweb/aoconnect/dist/lib/results';
 import { DryRunResult } from '@permaweb/aoconnect/dist/lib/dryrun';
@@ -49,17 +48,13 @@ export class BaseClient extends IBaseClient {
     /* Core AO Functions */
     /** @protected */
     async message(data: string = '', tags: Tags = [], anchor?: string): Promise<string> {
-        try {
-            const mergedTags = mergeLists(tags, DEFAULT_TAGS, tag => tag.name);
-            return await this.ao.message(
-                this.baseConfig.processId,
-                data,
-                mergedTags,
-                anchor
-            );
-        } catch (error: any) {
-            throw new MessageError(error);
-        }
+        const mergedTags = mergeLists(tags, DEFAULT_TAGS, tag => tag.name);
+        return await this.ao.message(
+            this.baseConfig.processId,
+            data,
+            mergedTags,
+            anchor
+        );
     }
 
     /** @protected */
@@ -69,31 +64,23 @@ export class BaseClient extends IBaseClient {
         limit: number = 25,
         sort: SortOrder = SortOrder.ASCENDING
     ): Promise<ResultsResponse> {
-        try {
-            return await this.ao.results({
-                process: this.baseConfig.processId,
-                from,
-                to,
-                limit,
-                sort
-            });
-        } catch (error: any) {
-            throw new ResultsError(error);
-        }
+        return await this.ao.results({
+            process: this.baseConfig.processId,
+            from,
+            to,
+            limit,
+            sort
+        });
     }
 
     /** @protected */
     async result(messageId: string): Promise<MessageResult> {
-        try {
-            const result = await this.ao.result({
-                process: this.baseConfig.processId,
-                message: messageId
-            });
-            ResultUtils.checkForProcessErrors(result)
-            return result
-        } catch (error: any) {
-            throw new ResultError(error);
-        }
+        const result = await this.ao.result({
+            process: this.baseConfig.processId,
+            message: messageId
+        });
+        ResultUtils.checkForProcessErrors(result)
+        return result
     }
 
     /** @protected */
@@ -107,22 +94,18 @@ export class BaseClient extends IBaseClient {
     }
 
     protected async _dryrun(data: any = '', tags: Tags = [], anchor?: string, id?: string, owner?: string): Promise<DryRunResult> {
-        try {
-            const mergedTags = mergeLists(tags, DEFAULT_TAGS, tag => tag.name);
-            const params: DryRunParams = {
-                process: this.baseConfig.processId,
-                data,
-                tags: mergedTags,
-                anchor,
-                id,
-                owner
-            };
-            const result = await this.ao.dryrun(params);
-            ResultUtils.checkForProcessErrors(result)
-            return result
-        } catch (error: any) {
-            throw new DryRunError(error);
-        }
+        const mergedTags = mergeLists(tags, DEFAULT_TAGS, tag => tag.name);
+        const params: DryRunParams = {
+            process: this.baseConfig.processId,
+            data,
+            tags: mergedTags,
+            anchor,
+            id,
+            owner
+        };
+        const result = await this.ao.dryrun(params);
+        ResultUtils.checkForProcessErrors(result)
+        return result
     }
 
     /* Core AO Functions */
