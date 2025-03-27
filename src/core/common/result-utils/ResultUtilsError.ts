@@ -1,15 +1,13 @@
 import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
 import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
-import { Logger } from "src/utils";
+import { Logger, StringFormatting } from "src/utils";
 
 export class ResultReadingError extends Error {
+    private static readonly MAX_LINE_LENGTH = 80;
 
     constructor(result: MessageResult | DryRunResult, detailMessage?: string, originalError?: Error) {
-        const message = `
-            | Error Reading ${typeof result}: ${JSON.stringify(result)} |
-            | ${detailMessage ? detailMessage : "Unknown Error"} |
-            | Caused by: ${originalError ? JSON.stringify(originalError) : "No upstream error"}|
-        `
+        const errorMessage = `Error Reading ${typeof result}: ${JSON.stringify(result)}\n${detailMessage ? detailMessage : "Unknown Error"}\nCaused by: ${originalError ? JSON.stringify(originalError) : "No upstream error"}`;
+        const message = StringFormatting.wrapMessageInBox(errorMessage, ResultReadingError.MAX_LINE_LENGTH);
         super(message);
         this.name = 'ResultReadingError';
         if (originalError) {
@@ -28,7 +26,7 @@ export class JsonParsingError extends ResultReadingError {
 
 export class MessageOutOfBoundsError extends ResultReadingError {
     constructor(result: MessageResult | DryRunResult, index: number) {
-        super(result, `Index out of bounds: ${index}.Total messages available: ${result.Messages.length}`)
+        super(result, `Index out of bounds: ${index}. Total messages available: ${result.Messages.length}`);
         this.name = 'MessageOutOfBoundsError';
     }
 }
