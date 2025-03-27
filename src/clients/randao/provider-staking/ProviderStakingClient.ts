@@ -5,9 +5,9 @@ import { ProviderDetails } from "src/clients/randao/provider-profile";
 import { IProviderStakingClient } from "src/clients/randao/provider-staking/abstract/IProviderStakingClient";
 import { ProviderStakeInfo } from "src/clients/randao/provider-staking/abstract/types";
 import { Tags } from "src/core";
+import { AO_CONFIGURATIONS } from "src/core/ao/ao-client/configurations";
 import ResultUtils from "src/core/common/result-utils/ResultUtils";
 import { PROCESS_IDS } from "src/process-ids";
-import { RANDAO_PROFILE_PROCESS_ID, RANDAO_STAKING_TOKEN_PROCESS_ID } from "src/processes_ids";
 import { IAutoconfiguration, IDefaultBuilder, Logger, staticImplements } from "src/utils";
 
 /**
@@ -24,6 +24,7 @@ export class ProviderStakingClient extends StakingClient implements IProviderSta
     public static defaultBuilder(): TokenInterfacingClientBuilder<ProviderStakingClient> {
         return new TokenInterfacingClientBuilder(ProviderStakingClient)
             .withProcessId(PROCESS_IDS.RANDAO.STAKING)
+            .withAOConfig(AO_CONFIGURATIONS.RANDAO)
             .withTokenProcessId(PROCESS_IDS.RANDAO.STAKING_TOKEN)
     }
 
