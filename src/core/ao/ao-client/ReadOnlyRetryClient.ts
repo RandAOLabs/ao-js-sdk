@@ -3,7 +3,7 @@ import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
 import { DryRunParams } from "./abstract";
 import { ConnectArgsLegacy } from "./aoconnect-types";
 import { AO_CONFIGURATIONS } from "src/core/ao/ao-client/configurations";
-import { AOAllConfigsFailedError, AOSuspectedRateLimitingError } from "src/core/ao/ao-client/AOClientError";
+import { AOAllConfigsFailedError, AORateLimitingError } from "src/core/ao/ao-client/AOClientError";
 import { MessageResult, ReadResultArgs } from "@permaweb/aoconnect/dist/lib/result";
 import { ReadResultsArgs, ResultsResponse } from "@permaweb/aoconnect/dist/lib/results";
 
@@ -79,7 +79,7 @@ export class ReadOnlyRetryAOClient extends ReadOnlyAOClient {
         try {
             return await initialOperation();
         } catch (error: any) {
-            if (error instanceof AOSuspectedRateLimitingError) {
+            if (error instanceof AORateLimitingError) {
                 this.encounteredErrors.push(error);
             } else {
                 // If it's not a rate limiting error, throw it immediately
@@ -92,7 +92,7 @@ export class ReadOnlyRetryAOClient extends ReadOnlyAOClient {
             try {
                 return await this.tryWithConfig(configIndex, () => operationFn(params));
             } catch (error: any) {
-                if (error instanceof AOSuspectedRateLimitingError) {
+                if (error instanceof AORateLimitingError) {
                     this.encounteredErrors.push(error);
                 } else {
                     // If it's not a rate limiting error, throw it immediately

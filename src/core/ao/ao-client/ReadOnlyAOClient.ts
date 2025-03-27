@@ -7,14 +7,16 @@ import { DryRunParams } from './abstract';
 import { IAOClient } from './abstract/IAOClient';
 import { ConnectArgsLegacy } from './aoconnect-types';
 import { AO_CONFIGURATION_DEFAULT } from 'src/core/ao/ao-client/configurations';
-import { AOClientError, AOReadOnlyClientError, AOSuspectedRateLimitingError } from 'src/core/ao/ao-client/AOClientError';
+import { AOClientError, AOReadOnlyClientError, AORateLimitingError } from 'src/core/ao/ao-client/AOClientError';
 import { SortOrder } from 'src/core/ao/abstract';
 import { Logger } from 'src/utils';
+import { RATELIMIT_ERROR_TEXT } from 'src/core/ao/ao-client/constants';
 
 export class ReadOnlyAOClient implements IAOClient {
     protected _result!: ReadResult;
     protected _results!: ReadResults;
     protected _dryrun!: DryRun;
+    protected activeAOConfig!: ConnectArgsLegacy;
 
     constructor(aoConfig?: ConnectArgsLegacy) {
         if (aoConfig) {
@@ -46,7 +48,11 @@ export class ReadOnlyAOClient implements IAOClient {
             const results = await this._results(params);
             return results
         } catch (error: any) {
-            throw await AOClientError.create(this, this.results, params, error);
+            if (error.message = RATELIMIT_ERROR_TEXT) {
+                throw await AORateLimitingError.create(this, this.dryrun, params, error)
+            } else {
+                throw await AOClientError.create(this, this.results, params, error);
+            }
         }
 
     }
@@ -56,7 +62,11 @@ export class ReadOnlyAOClient implements IAOClient {
             const result = await this._result(params);
             return result
         } catch (error: any) {
-            throw await AOClientError.create(this, this.result, params, error);
+            if (error.message = RATELIMIT_ERROR_TEXT) {
+                throw await AORateLimitingError.create(this, this.dryrun, params, error)
+            } else {
+                throw await AOClientError.create(this, this.result, params, error);
+            }
         }
 
     }
@@ -66,8 +76,8 @@ export class ReadOnlyAOClient implements IAOClient {
             const result = await this._dryrun(params);
             return result
         } catch (error: any) {
-            if (error.message = `Unexpected token '<', \"<html>\r\n<h\"... is not valid JSON`) {
-                throw new AOSuspectedRateLimitingError(error, params);
+            if (error.message = RATELIMIT_ERROR_TEXT) {
+                throw await AORateLimitingError.create(this, this.dryrun, params, error)
             } else {
                 throw await AOClientError.create(this, this.dryrun, params, error);
             }
@@ -84,5 +94,9 @@ export class ReadOnlyAOClient implements IAOClient {
         this._result = result;
         this._results = results;
         this._dryrun = dryrun;
+    }
+
+    public getActiveConfig(): ConnectArgsLegacy {
+        return this.activeAOConfig
     }
 }

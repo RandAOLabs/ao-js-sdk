@@ -3,6 +3,7 @@ import { ReadResultsArgs, ResultsResponse } from '@permaweb/aoconnect/dist/lib/r
 import { DryRunResult, MessageInput } from '@permaweb/aoconnect/dist/lib/dryrun';
 import { Tags } from 'src/core/common';
 import { SortOrder } from 'src/core/ao/abstract';
+import { ConnectArgsLegacy } from 'src/core/ao/ao-client/aoconnect-types';
 
 /**
  * AO interface provides a wrapper for interacting with the Arweave Operating System (AO).
@@ -57,4 +58,10 @@ export interface IAOClient {
      * @throws Error if client is in read-only mode
      */
     getCallingWalletAddress(): Promise<string>;
+
+    /**
+     * Gets the active AO Config for this client.
+     * @returns The Active AO Config which will be used for the next query, however may or may not have been used for previous queries.
+     */
+    getActiveConfig(): ConnectArgsLegacy;
 }
