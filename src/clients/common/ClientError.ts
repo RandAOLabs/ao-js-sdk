@@ -1,7 +1,9 @@
 import { IBaseClient } from "src/core/ao/abstract";
-import { Logger } from "src/utils";
+import { Logger, StringFormatting } from "src/utils";
 
 export class ClientError<T extends IBaseClient, P = any> extends Error {
+    private static readonly MAX_LINE_LENGTH = 100;
+
     constructor(
         public readonly client: T,
         public readonly func: Function,
@@ -11,18 +13,13 @@ export class ClientError<T extends IBaseClient, P = any> extends Error {
         const functionName = func.name;
         const paramsString = JSON.stringify(params, null, 2);
 
-        const fullMessage: string = `
-            | Error in ${client.constructor.name} |
-            | Occurred while executing function: ${functionName} |
-            | With parameters: ${paramsString} |
-            | Process Id: ${client.getProcessId()} |
-            | ReadOnly: ${client.isReadOnly()} |
-            | ${originalError ? `Error was caused by: ${originalError.name}: ${originalError.message}` : `Cause not specified`} |
-        `
+        const errorMessage = `Error in ${client.constructor.name}\nOccurred while executing function: ${functionName}\nWith parameters: ${paramsString}\nProcess Id: ${client.getProcessId()}\nReadOnly: ${client.isReadOnly()}\n${originalError ? `Error was caused by: ${originalError.name}: ${originalError.message}` : `Cause not specified`}`;
+
+        const fullMessage = StringFormatting.wrapMessageInBox(errorMessage, ClientError.MAX_LINE_LENGTH);
         super(fullMessage);
         this.client = client
         this.name = `${client.constructor.name} Error`;
-        Logger.error(fullMessage)
+        Logger.error(`\n${fullMessage}`)
 
         if (originalError) {
             this.stack += '\nCaused by: ' + originalError.stack;

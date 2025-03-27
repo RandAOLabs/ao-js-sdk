@@ -7,7 +7,7 @@ describe("RandomClient Unit Tests", () => {
     let client: RandomClient;
 
     beforeEach(async () => {
-        Logger.setLogLevel(LogLevel.NONE)
+        // Logger.setLogLevel(LogLevel.NONE)
         // Logger.setLogLevel(LogLevel.DEBUG)
         mockBaseClient = new MockBaseClient();
         client = RandomClient.builder()
@@ -76,6 +76,24 @@ describe("RandomClient Unit Tests", () => {
                     Tags: [{ name: "Error", value: "test error" }]
                 }],
                 Spawns: []
+            });
+
+            await expect(client.reveal({
+                requestId: "test-id",
+                rsa_key: {
+                    p: "test-p",
+                    q: "test-q"
+                }
+            })).rejects.toThrow();
+        });
+        it("has an process error", async () => {
+            mockBaseClient.setMockMessageResult({
+                Output: undefined,
+                Messages: [],
+                Spawns: [],
+                Error: {
+                    message: "error"
+                }
             });
 
             await expect(client.reveal({
