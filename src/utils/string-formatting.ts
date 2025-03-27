@@ -5,7 +5,8 @@
 export class StringFormatting {
     public static wrapMessageInBox(message: string, maxLineLength: number = 100): string {
         const lines = StringFormatting.formatMessage(message, maxLineLength);
-        return StringFormatting.addBorders(lines);
+        const boxed = StringFormatting.addBorders(lines);
+        return `\n${boxed}\n`
     }
 
     private static formatMessage(message: string, maxLineLength: number): string[] {
