@@ -12,12 +12,12 @@ export class ClientError<T extends IBaseClient, P = any> extends Error {
         const paramsString = JSON.stringify(params, null, 2);
 
         const fullMessage: string = `
-            \n| Error in ${client.constructor.name} |
-            \n| Occurred while executing function: ${functionName} |
-            \n| With parameters: ${paramsString} |
-            \n| Process Id: ${client.getProcessId()} |
-            \n| ReadOnly: ${client.isReadOnly()} |
-            \n| ${originalError ? `Error was caused by: ${originalError.message}` : `Cause not specified`} |
+            | Error in ${client.constructor.name} |
+            | Occurred while executing function: ${functionName} |
+            | With parameters: ${paramsString} |
+            | Process Id: ${client.getProcessId()} |
+            | ReadOnly: ${client.isReadOnly()} |
+            | ${originalError ? `Error was caused by: ${originalError.name}: ${originalError.message}` : `Cause not specified`} |
         `
         super(fullMessage);
         this.client = client
