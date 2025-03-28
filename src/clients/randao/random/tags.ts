@@ -1,8 +1,8 @@
 
 export const TAGS = {
     ACTION: {
-        COMMIT: { name: "Action", value: "Commit" },
-        REVEAL: { name: "Action", value: "Reveal" },
+        COMMIT: { name: "Action", value: "Commit-Puzzle" },
+        REVEAL: { name: "Action", value: "Reveal-Puzzle-Params" },
         POST_VDF_CHALLENGE: { name: "Action", value: "Post-VDF-Challenge" },
         GET_PROVIDER_RANDOM_BALANCE: { name: "Action", value: "Get-Providers-Random-Balance" },
         UPDATE_PROVIDER_RANDOM_BALANCE: { name: "Action", value: "Update-Providers-Random-Balance" },
