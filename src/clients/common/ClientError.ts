@@ -8,7 +8,8 @@ export class ClientError<T extends IBaseClient, P = any> extends Error {
         public readonly client: T,
         public readonly func: Function,
         public readonly params: P,
-        public readonly originalError?: Error
+        public readonly originalError?: Error,
+        public readonly explanation?: string
     ) {
         const functionName = func.name;
         const paramsString = JSON.stringify(params, null, 2);
