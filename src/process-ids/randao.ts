@@ -10,7 +10,7 @@ export const RANDAO = {
      * Typically retrieved from chain dynamically this value may be stale
      * arns name: api_randao
      */
-    RANDOM: "1dnDvaDRQ7Ao6o1ohTr7NNrN5mp1CpsXFrWm3JJFEs8",
+    RANDOM: "2ExUldxQ5NA_hnElSWYq0_lCBgeQQPxPhFbWDFihDEY",
     STAKING: RANDAO_STAKING_PROCESS_ID,
     PROFILE: RANDAO_STAKING_PROCESS_ID,
 }

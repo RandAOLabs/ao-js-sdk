@@ -1,9 +1,11 @@
 import { StakingClient } from "src/clients/ao";
+import { InputValidationError } from "src/clients/bazar";
 import { ClientError } from "src/clients/common/ClientError";
 import { TokenInterfacingClientBuilder } from "src/clients/common/TokenInterfacingClientBuilder";
 import { ProviderDetails } from "src/clients/randao/provider-profile";
 import { IProviderStakingClient } from "src/clients/randao/provider-staking/abstract/IProviderStakingClient";
 import { ProviderStakeInfo } from "src/clients/randao/provider-staking/abstract/types";
+import { PROVIDER_MINIMUM_STAKE } from "src/clients/randao/provider-staking/constants";
 import { Tags } from "src/core";
 import { AO_CONFIGURATIONS } from "src/core/ao/ao-client/configurations";
 import ResultUtils from "src/core/common/result-utils/ResultUtils";
@@ -26,6 +28,20 @@ export class ProviderStakingClient extends StakingClient implements IProviderSta
             .withProcessId(PROCESS_IDS.RANDAO.STAKING)
             .withAOConfig(AO_CONFIGURATIONS.RANDAO)
             .withTokenProcessId(PROCESS_IDS.RANDAO.STAKING_TOKEN)
+    }
+    /**
+     * @inheritdoc
+     * @override
+     */
+    public async stake(quantity: string, additionaForwardedlTags?: Tags): Promise<boolean> {
+        try {
+            if (quantity < PROVIDER_MINIMUM_STAKE) {
+                throw new InputValidationError(`Attempted to Stake ${quantity}, when minimum stake is ${PROVIDER_MINIMUM_STAKE}`)
+            }
+            return super.stake(quantity, additionaForwardedlTags)
+        } catch (error: any) {
+            throw new ClientError(this, this.stake, { quantity, additionaForwardedlTags }, error);
+        }
     }
 
     public async stakeWithDetails(quantity: string, providerDetails?: ProviderDetails): Promise<boolean> {

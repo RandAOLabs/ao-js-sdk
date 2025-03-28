@@ -67,11 +67,11 @@ export interface ProviderActivity {
  */
 export interface TimeLockPuzzle {
     /**
-     * The timelock puzzle input
+     * The timelock puzzle input base64 (no 0x)
      */
     input: string
     /**
-     * The timelock puzzle modulus
+     * The timelock puzzle modulus base64 (no 0x)
      */
     modulus: string
 }
@@ -80,6 +80,12 @@ export interface TimeLockPuzzle {
  * @inline 
  */
 export interface RSAKey {
+    /**
+     * base64 (no 0x)
+     */
     p: string,
+    /**
+     * base64 (no 0x)
+     */
     q: string
 }
