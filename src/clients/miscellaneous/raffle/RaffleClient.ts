@@ -19,132 +19,134 @@ import { ClientError } from "../../common/ClientError";
 @staticImplements<IAutoconfiguration>()
 @staticImplements<IDefaultBuilder>()
 export class RaffleClient extends BaseClient implements IRaffleClient {
-    public static autoConfiguration(): RaffleClient {
-        return RaffleClient.defaultBuilder()
-            .build()
-    }
+	/** {@inheritDoc IAutoconfiguration.autoConfiguration} */
+	public static autoConfiguration(): RaffleClient {
+		return RaffleClient.defaultBuilder()
+			.build()
+	}
 
-    public static defaultBuilder(): ClientBuilder<RaffleClient> {
-        return new ClientBuilder(RaffleClient)
-            .withProcessId(PROCESS_IDS.MISCELLANEOUS.RAFFLE)
-    }
+	/** {@inheritDoc IDefaultBuilder.defaultBuilder} */
+	public static defaultBuilder(): ClientBuilder<RaffleClient> {
+		return new ClientBuilder(RaffleClient)
+			.withProcessId(PROCESS_IDS.MISCELLANEOUS.RAFFLE)
+	}
 
-    /* Core Raffle Functions */
-    async setRaffleEntrants(entrants: string[]): Promise<boolean> {
-        try {
-            const tags: Tags = [
-                { name: "Action", value: "Update-Raffle-Entry-List" },
-            ];
-            const data = JSON.stringify(entrants);
-            const result = await this.messageResult(data, tags);
-            this.checkResultForErrors(result)
-            return true
-        } catch (error: any) {
-            throw new ClientError(this, this.setRaffleEntrants, { entrants }, error);
-        }
-    }
+	/* Core Raffle Functions */
+	async setRaffleEntrants(entrants: string[]): Promise<boolean> {
+		try {
+			const tags: Tags = [
+				{ name: "Action", value: "Update-Raffle-Entry-List" },
+			];
+			const data = JSON.stringify(entrants);
+			const result = await this.messageResult(data, tags);
+			this.checkResultForErrors(result)
+			return true
+		} catch (error: any) {
+			throw new ClientError(this, this.setRaffleEntrants, { entrants }, error);
+		}
+	}
 
-    async pullRaffle(): Promise<boolean> {
-        try {
-            const tags: Tags = [
-                { name: "Action", value: "Raffle" },
-            ];
-            const result = await this.messageResult(undefined, tags);
-            return true
-        } catch (error: any) {
-            throw new ClientError(this, this.pullRaffle, null, error);
-        }
-    }
+	async pullRaffle(): Promise<boolean> {
+		try {
+			const tags: Tags = [
+				{ name: "Action", value: "Raffle" },
+			];
+			const result = await this.messageResult(undefined, tags);
+			return true
+		} catch (error: any) {
+			throw new ClientError(this, this.pullRaffle, null, error);
+		}
+	}
 
-    async viewEntrants(userId: string): Promise<ViewEntrantsResponse> {
-        try {
-            const tags: Tags = [
-                { name: "Action", value: "View-Entrants" },
-                { name: "UserId", value: userId },
-            ];
-            const result = await this.dryrun(undefined, tags);
-            this.checkResultForErrors(result);
-            return ResultUtils.getFirstMessageDataJson(result);
-        } catch (error: any) {
-            throw new ClientError(this, this.viewEntrants, { userId }, error);
-        }
-    }
+	async viewEntrants(userId: string): Promise<ViewEntrantsResponse> {
+		try {
+			const tags: Tags = [
+				{ name: "Action", value: "View-Entrants" },
+				{ name: "UserId", value: userId },
+			];
+			const result = await this.dryrun(undefined, tags);
+			this.checkResultForErrors(result);
+			return ResultUtils.getFirstMessageDataJson(result);
+		} catch (error: any) {
+			throw new ClientError(this, this.viewEntrants, { userId }, error);
+		}
+	}
 
-    async viewUserPull(userId: string, pullId: string): Promise<RafflePull> {
-        try {
-            const tags: Tags = [
-                { name: "Action", value: "View-Pull" },
-                { name: "UserId", value: userId },
-                { name: "PullId", value: pullId },
-            ];
-            const result = await this.dryrun(undefined, tags);
-            this.checkResultForErrors(result);
-            return ResultUtils.getFirstMessageDataJson(result);
-        } catch (error: any) {
-            throw new ClientError(this, this.viewUserPull, { userId, pullId }, error);
-        }
-    }
+	async viewUserPull(userId: string, pullId: string): Promise<RafflePull> {
+		try {
+			const tags: Tags = [
+				{ name: "Action", value: "View-Pull" },
+				{ name: "UserId", value: userId },
+				{ name: "PullId", value: pullId },
+			];
+			const result = await this.dryrun(undefined, tags);
+			this.checkResultForErrors(result);
+			return ResultUtils.getFirstMessageDataJson(result);
+		} catch (error: any) {
+			throw new ClientError(this, this.viewUserPull, { userId, pullId }, error);
+		}
+	}
 
-    async viewUserPulls(_userId?: string): Promise<ViewPullsResponse> {
-        const userId: string = _userId ? _userId : await this.getCallingWalletAddress();
-        try {
-            const tags: Tags = [
-                { name: "Action", value: "View-Pulls" },
-                { name: "UserId", value: userId },
-            ];
+	async viewUserPulls(_userId?: string): Promise<ViewPullsResponse> {
+		const userId: string = _userId ? _userId : await this.getCallingWalletAddress();
+		try {
+			const tags: Tags = [
+				{ name: "Action", value: "View-Pulls" },
+				{ name: "UserId", value: userId },
+			];
 
-            const result = await this.dryrun(undefined, tags);
-            this.checkResultForErrors(result);
-            const pulls = ResultUtils.getFirstMessageDataJson(result) as RafflePull[];
-            return { pulls };
-        } catch (error: any) {
-            throw new ClientError(this, this.viewUserPulls, { _userId, userId }, error);
-        }
-    }
+			const result = await this.dryrun(undefined, tags);
+			this.checkResultForErrors(result);
+			const pulls = ResultUtils.getFirstMessageDataJson(result) as RafflePull[];
+			return { pulls };
+		} catch (error: any) {
+			throw new ClientError(this, this.viewUserPulls, { _userId, userId }, error);
+		}
+	}
 
-    async viewRaffleOwners(): Promise<ViewRaffleOwnersResponse> {
-        try {
-            const tags: Tags = [
-                { name: "Action", value: "View-Raffle-Owners" },
-            ];
-            const result = await this.dryrun(undefined, tags);
-            this.checkResultForErrors(result);
-            return ResultUtils.getFirstMessageDataJson(result);
-        } catch (error: any) {
-            throw new ClientError(this, this.viewRaffleOwners, null, error);
-        }
-    }
+	async viewRaffleOwners(): Promise<ViewRaffleOwnersResponse> {
+		try {
+			const tags: Tags = [
+				{ name: "Action", value: "View-Raffle-Owners" },
+			];
+			const result = await this.dryrun(undefined, tags);
+			this.checkResultForErrors(result);
+			return ResultUtils.getFirstMessageDataJson(result);
+		} catch (error: any) {
+			throw new ClientError(this, this.viewRaffleOwners, null, error);
+		}
+	}
 
-    /* Core Raffle Functions */
+	/* Core Raffle Functions */
 
-    /* Utilities */
-    async viewMostRecentPull(): Promise<RafflePull> {
-        try {
-            const { pulls } = await this.viewUserPulls();
-            if (pulls.length === 0) {
-                throw new ViewPullError(new Error("No pulls found"));
-            }
-            // Find pull with highest ID
-            const mostRecent = pulls.reduce((max, current) =>
-                current.Id > max.Id ? current : max
-            );
-            return mostRecent;
-        } catch (error: any) {
-            throw new ClientError(this, this.viewMostRecentPull, null, error);
-        }
-    }
-    /* Utilities */
-    /* Private */
-    private checkResultForErrors(result: MessageResult | DryRunResult) {
-        for (let msg of result.Messages) {
-            const tags: Tags = msg.Tags;
-            for (let tag of tags) {
-                if (tag.name == "Error") {
-                    throw new RaffleProcessError(`Error originating in process: ${this.getProcessId()}`)
-                }
-            }
-        }
-    }
-    /* Private */
+	/* Utilities */
+	async viewMostRecentPull(): Promise<RafflePull> {
+		try {
+			const { pulls } = await this.viewUserPulls();
+			if (pulls.length === 0) {
+				throw new ViewPullError(new Error("No pulls found"));
+			}
+			// Find pull with highest ID
+			const mostRecent = pulls.reduce((max, current) =>
+				current.Id > max.Id ? current : max
+			);
+			return mostRecent;
+		} catch (error: any) {
+			throw new ClientError(this, this.viewMostRecentPull, null, error);
+		}
+	}
+	/* Utilities */
+	/* Private */
+	private checkResultForErrors(result: MessageResult | DryRunResult) {
+		for (let msg of result.Messages) {
+			const tags: Tags = msg.Tags;
+			for (let tag of tags) {
+				if (tag.name == "Error") {
+					throw new RaffleProcessError(`Error originating in process: ${this.getProcessId()}`)
+				}
+			}
+		}
+	}
+	/* Private */
 
 }

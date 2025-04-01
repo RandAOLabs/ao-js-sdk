@@ -9,14 +9,16 @@ import { staticImplements, IAutoconfiguration, IDefaultBuilder } from "../../uti
 @staticImplements<IAutoconfiguration>()
 @staticImplements<IDefaultBuilder>()
 export class RNGToken extends TokenClient {
-    public static autoConfiguration(): RNGToken {
-        return RNGToken.defaultBuilder()
-            .build()
-    }
+	/** {@inheritDoc IAutoconfiguration.autoConfiguration} */
+	public static autoConfiguration(): RNGToken {
+		return RNGToken.defaultBuilder()
+			.build()
+	}
 
-    public static defaultBuilder(): ClientBuilder<RNGToken> {
-        return new ClientBuilder(RNGToken)
-            .withAOConfig(AO_CONFIGURATIONS.RANDAO)
-            .withProcessId(PROCESS_IDS.RANDAO.RNG_TOKEN)
-    }
+	/** {@inheritDoc IDefaultBuilder.defaultBuilder} */
+	public static defaultBuilder(): ClientBuilder<RNGToken> {
+		return new ClientBuilder(RNGToken)
+			.withAOConfig(AO_CONFIGURATIONS.RANDAO)
+			.withProcessId(PROCESS_IDS.RANDAO.RNG_TOKEN)
+	}
 }

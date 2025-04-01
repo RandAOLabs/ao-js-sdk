@@ -8,13 +8,15 @@ import { staticImplements, IAutoconfiguration, IDefaultBuilder } from "../../uti
 @staticImplements<IAutoconfiguration>()
 @staticImplements<IDefaultBuilder>()
 export class NABToken extends TokenClient {
-    public static autoConfiguration(): NABToken {
-        return NABToken.defaultBuilder()
-            .build()
-    }
+	/** {@inheritDoc IAutoconfiguration.autoConfiguration} */
+	public static autoConfiguration(): NABToken {
+		return NABToken.defaultBuilder()
+			.build()
+	}
 
-    public static defaultBuilder(): ClientBuilder<NABToken> {
-        return new ClientBuilder(NABToken)
-            .withProcessId(PROCESS_IDS.AO)
-    }
+	/** {@inheritDoc IDefaultBuilder.defaultBuilder} */
+	public static defaultBuilder(): ClientBuilder<NABToken> {
+		return new ClientBuilder(NABToken)
+			.withProcessId(PROCESS_IDS.AO)
+	}
 }

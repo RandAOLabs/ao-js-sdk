@@ -13,34 +13,36 @@ import { IAutoconfiguration, IDefaultBuilder, Logger, staticImplements } from ".
 @staticImplements<IAutoconfiguration>()
 @staticImplements<IDefaultBuilder>()
 export class ProfileRegistryClient extends DryRunCachingClient implements IProfileRegistryClient {
-    /* Constructors */
+	/* Constructors */
 
-    public static autoConfiguration(): ProfileRegistryClient {
-        return ProfileRegistryClient.defaultBuilder()
-            .build()
-    }
+	/** {@inheritDoc IAutoconfiguration.autoConfiguration} */
+	public static autoConfiguration(): ProfileRegistryClient {
+		return ProfileRegistryClient.defaultBuilder()
+			.build()
+	}
 
-    public static defaultBuilder(): ClientBuilder<ProfileRegistryClient> {
-        return new ClientBuilder(ProfileRegistryClient)
-            .withProcessId(PROCESS_IDS.BAZAR.PROFILE_REGISTRY)
-    }
-    /* Constructors */
+	/** {@inheritDoc IDefaultBuilder.defaultBuilder} */
+	public static defaultBuilder(): ClientBuilder<ProfileRegistryClient> {
+		return new ClientBuilder(ProfileRegistryClient)
+			.withProcessId(PROCESS_IDS.BAZAR.PROFILE_REGISTRY)
+	}
+	/* Constructors */
 
-    /* Core Profile Registry Functions */
-    public async getProfileByWalletAddress(walletAddress?: string): Promise<ProfileRegistryEntry[]> {
-        try {
-            if (!walletAddress) {
-                walletAddress = await this.getCallingWalletAddress();
-            }
-            const response = await this.dryrun(
-                JSON.stringify({ Address: walletAddress }),
-                [{ name: "Action", value: "Get-Profiles-By-Delegate" }]
-            );
-            const data = ResultUtils.getFirstMessageDataJson<ProfileRegistryEntry[]>(response);
-            return data
-        } catch (error: any) {
-            throw new ClientError(this, this.getProfileByWalletAddress, { walletAddress }, error);
-        }
-    }
-    /* Core Profile Registry Functions */
+	/* Core Profile Registry Functions */
+	public async getProfileByWalletAddress(walletAddress?: string): Promise<ProfileRegistryEntry[]> {
+		try {
+			if (!walletAddress) {
+				walletAddress = await this.getCallingWalletAddress();
+			}
+			const response = await this.dryrun(
+				JSON.stringify({ Address: walletAddress }),
+				[{ name: "Action", value: "Get-Profiles-By-Delegate" }]
+			);
+			const data = ResultUtils.getFirstMessageDataJson<ProfileRegistryEntry[]>(response);
+			return data
+		} catch (error: any) {
+			throw new ClientError(this, this.getProfileByWalletAddress, { walletAddress }, error);
+		}
+	}
+	/* Core Profile Registry Functions */
 }

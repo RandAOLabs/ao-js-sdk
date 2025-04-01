@@ -18,11 +18,13 @@ import { IAutoconfiguration, IDefaultBuilder, staticImplements } from "../../../
 @staticImplements<IAutoconfiguration>()
 @staticImplements<IDefaultBuilder>()
 export class ProviderStakingClient extends StakingClient implements IProviderStakingClient {
+	/** {@inheritDoc IAutoconfiguration.autoConfiguration} */
 	public static autoConfiguration(): ProviderStakingClient {
 		return ProviderStakingClient.defaultBuilder()
 			.build()
 	}
 
+	/** {@inheritDoc IDefaultBuilder.defaultBuilder} */
 	public static defaultBuilder(): TokenInterfacingClientBuilder<ProviderStakingClient> {
 		return new TokenInterfacingClientBuilder(ProviderStakingClient)
 			.withProcessId(PROCESS_IDS.RANDAO.STAKING)
