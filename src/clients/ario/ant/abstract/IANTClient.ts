@@ -1,4 +1,4 @@
-import { ANTRecord, ANTRecords } from "src/clients/ario/ant/abstract/types";
+import { ANTRecord, ANTRecords } from "./types";
 
 /**
  * Interface for ANT (Arweave Name Token) client operations

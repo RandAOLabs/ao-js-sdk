@@ -1,8 +1,8 @@
-import { BaseArweaveDataService } from "src/core/arweave/ArweaveDataService";
-import { ArweaveGQLBuilder } from "src/core/arweave/gql/ArweaveGQLBuilder";
-import { Logger } from "src/utils/logger/logger";
-import { IMessagesService } from "src/services/messages/abstract/IMessagesService";
-import { GetLatestMessagesError } from "src/services/messages/MessagesServiceError";
+import { BaseArweaveDataService } from "../../core/arweave/ArweaveDataService";
+import { ArweaveGQLBuilder } from "../../core/arweave/gql/ArweaveGQLBuilder";
+import { Logger } from "../../utils/logger/logger";
+import { IMessagesService } from "./abstract/IMessagesService";
+import { GetLatestMessagesError } from "./MessagesServiceError";
 import {
     GetLatestMessagesParams,
     GetLatestMessagesResponse,
@@ -11,10 +11,10 @@ import {
     GetAllMessagesParams,
     GetAllMessagesBySenderParams,
     GetAllMessagesByRecipientParams
-} from "src/services/messages/abstract/types";
-import { ArweaveGQLSortOrder } from "src/core/arweave/gql/types";
-import { ArweaveTransaction } from "src/core/arweave/abstract/types";
-import { DEFAULT_AO_TAGS } from "src/services/messages/constants";
+} from "./abstract/types";
+import { ArweaveGQLSortOrder } from "../../core/arweave/gql/types";
+import { ArweaveTransaction } from "../../core/arweave/abstract/types";
+import { DEFAULT_AO_TAGS } from "./constants";
 
 /**
  * @category On-chain-data

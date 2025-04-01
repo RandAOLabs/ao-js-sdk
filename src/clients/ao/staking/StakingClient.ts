@@ -1,10 +1,10 @@
 
-import { BaseClient } from 'src/core/ao/BaseClient';
-import { Tags } from 'src/core/common/types';
-import { IStakingClient, StakingClientConfig } from 'src/clients/ao/staking/abstract';
-import { TokenClient, TokenClientConfig } from 'src/clients/ao/token';
-import ResultUtils from 'src/core/common/result-utils/ResultUtils';
-import { ClientError } from 'src/clients/common/ClientError';
+import { BaseClient } from '../../../core/ao/BaseClient';
+import { Tags } from '../../../core/common/types';
+import { IStakingClient, StakingClientConfig } from './abstract';
+import { TokenClient, TokenClientConfig } from '../token';
+import ResultUtils from '../../../core/common/result-utils/ResultUtils';
+import { ClientError } from '../../common/ClientError';
 
 /**
  * @category ao-standards

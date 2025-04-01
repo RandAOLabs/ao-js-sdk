@@ -1,4 +1,4 @@
-import { BaseClientConfig } from "src/core/ao/configuration/BaseClientConfig";
+import { BaseClientConfig } from "../../../../core/ao/configuration/BaseClientConfig";
 
 /**
  * Represents a single ANT (Arweave Name Token) record

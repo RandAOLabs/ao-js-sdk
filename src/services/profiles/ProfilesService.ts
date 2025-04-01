@@ -1,12 +1,12 @@
 
-import { ProfileRegistryClient } from "src/clients/bazar/profile-registry/ProfileRegistryClient";
-import { ProfileRegistryEntry } from "src/clients/bazar/profile-registry/abstract";
-import { IProfilesService } from "src/services/profiles/abstract/IProfilesService";
-import { Logger } from "src/utils";
-import { ICache, newCache } from "src/utils/cache";
-import { ConcurrencyManager } from "src/utils/concurrency";
-import { ProfileInfo, ProfileClient } from "src/clients";
-import { BaseClientConfigBuilder } from "src/core/ao/configuration/builder";
+import { ProfileRegistryClient } from "../../clients/bazar/profile-registry/ProfileRegistryClient";
+import { ProfileRegistryEntry } from "../../clients/bazar/profile-registry/abstract";
+import { IProfilesService } from "./abstract/IProfilesService";
+import { Logger } from "../../utils";
+import { ICache, newCache } from "../../utils/cache";
+import { ConcurrencyManager } from "../../utils/concurrency";
+import { ProfileInfo, ProfileClient } from "../../clients";
+import { BaseClientConfigBuilder } from "../../core/ao/configuration/builder";
 
 const MAX_RETRIES = 3;
 

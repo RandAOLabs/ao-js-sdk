@@ -1,5 +1,5 @@
-import { IBaseClient } from "src/core/ao/abstract";
-import { Logger, StringFormatting } from "src/utils";
+import { IBaseClient } from "../../core/ao/abstract";
+import { Logger, StringFormatting } from "../../utils";
 
 export class ClientError<T extends IBaseClient, P = any> extends Error {
     private static readonly MAX_LINE_LENGTH = 100;

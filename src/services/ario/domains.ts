@@ -1,4 +1,4 @@
-import { PROCESS_IDS } from "src/process-ids";
+import { PROCESS_IDS } from "../../process-ids";
 
 /**
  * Common domains for querying using the ARIOService.

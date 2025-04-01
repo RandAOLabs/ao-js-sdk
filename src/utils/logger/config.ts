@@ -1,5 +1,5 @@
-import { Environment } from "src/utils/environment";
-import { LogLevel } from "src/utils/logger/types";
+import { Environment } from "../environment";
+import { LogLevel } from "./types";
 
 export type LogLevelConfig = Record<Environment, LogLevel>;
 

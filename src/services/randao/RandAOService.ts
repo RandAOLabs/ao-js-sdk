@@ -1,5 +1,5 @@
-import { ProviderProfileClient, RandomClient } from "src/clients";
-import { IRandAOService } from "src/services/randao/abstract";
+import { ProviderProfileClient, RandomClient } from "../../clients";
+import { IRandAOService } from "./abstract";
 import { from, lastValueFrom } from "rxjs";
 import { mergeMap } from "rxjs/operators";
 import { ProviderInfoAggregate } from "./abstract/types";

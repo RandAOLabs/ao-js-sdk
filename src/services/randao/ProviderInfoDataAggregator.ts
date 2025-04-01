@@ -1,10 +1,10 @@
-import { ProviderInfo } from "src/clients/randao/provider-profile/abstract/types";
-import { ProviderActivity } from "src/clients/randao/random/abstract/types";
+import { ProviderInfo } from "../../clients/randao/provider-profile/abstract/types";
+import { ProviderActivity } from "../../clients/randao/random/abstract/types";
 import { ProviderInfoAggregate } from "./abstract/types";
-import { MessagesService } from "src/services/messages";
-import { ARIOService } from "src/services/ario";
-import { Domain } from "src/services/ario/domains";
-import RANDOM_PROCESS_TAGS from "src/clients/randao/random/tags";
+import { MessagesService } from "../messages";
+import { ARIOService } from "../ario";
+import { Domain } from "../ario/domains";
+import RANDOM_PROCESS_TAGS from "../../clients/randao/random/tags";
 
 /**
  * Class responsible for aggregating provider data from multiple sources

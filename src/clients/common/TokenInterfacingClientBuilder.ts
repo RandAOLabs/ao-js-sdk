@@ -1,5 +1,5 @@
-import { BaseClient } from "src/core/ao/BaseClient";
-import { IBuilder } from "src/utils/class-interfaces/IBuilder";
+import { BaseClient } from "../../core/ao/BaseClient";
+import { IBuilder } from "../../utils/class-interfaces/IBuilder";
 import { TokenInterfacingClientConfig } from "./TokenInterfacingClientConfig";
 import { TokenInterfacingClientConfigBuilder } from ".";
 

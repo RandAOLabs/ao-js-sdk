@@ -1,6 +1,6 @@
-import { ArweaveTransaction } from "src/core/arweave/abstract/types";
-import { CreditNotice } from "src/services/credit-notices/abstract/types";
-import { TagUtils } from "src/core/common";
+import { ArweaveTransaction } from "../../core/arweave/abstract/types";
+import { CreditNotice } from "./abstract/types";
+import { TagUtils } from "../../core/common";
 
 /**
  * Converter implementation for transforming Arweave transactions to CreditNotice objects

@@ -1,4 +1,4 @@
-import { Logger } from "src/utils/logger";
+import { Logger } from "../logger";
 import pLimit from 'p-limit';
 import pRetry, { FailedAttemptError, Options as PRetryOptions } from "p-retry";
 

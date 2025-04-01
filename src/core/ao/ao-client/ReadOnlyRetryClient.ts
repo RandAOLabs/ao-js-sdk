@@ -2,8 +2,8 @@ import { ReadOnlyAOClient } from "./ReadOnlyAOClient";
 import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
 import { DryRunParams } from "./abstract";
 import { ConnectArgsLegacy } from "./aoconnect-types";
-import { AO_CONFIGURATIONS } from "src/core/ao/ao-client/configurations";
-import { AOAllConfigsFailedError, AORateLimitingError } from "src/core/ao/ao-client/AOClientError";
+import { AO_CONFIGURATIONS } from "./configurations";
+import { AOAllConfigsFailedError, AORateLimitingError } from "./AOClientError";
 import { MessageResult, ReadResultArgs } from "@permaweb/aoconnect/dist/lib/result";
 import { ReadResultsArgs, ResultsResponse } from "@permaweb/aoconnect/dist/lib/results";
 

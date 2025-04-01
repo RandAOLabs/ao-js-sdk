@@ -1,4 +1,4 @@
-import { ICacheConfig } from 'src/utils/cache/abstract/ICacheConfig';
+import { ICacheConfig } from '../../../../utils/cache/abstract/ICacheConfig';
 import { BaseClientConfigBuilder } from './BaseClientConfigBuilder';
 import { DryRunCachingClientConfig } from '../DryRunCachingConfig';
 

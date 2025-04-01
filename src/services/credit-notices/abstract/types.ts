@@ -1,5 +1,5 @@
-import { Tags } from "src/core";
-import { GetAllMessagesByRecipientParams } from "src/services/messages";
+import { Tags } from "../../../core";
+import { GetAllMessagesByRecipientParams } from "../../messages";
 
 /**
  * Parameters for retrieving all credit notices

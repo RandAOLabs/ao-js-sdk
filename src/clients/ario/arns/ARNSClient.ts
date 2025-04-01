@@ -1,15 +1,15 @@
-import { IARNSClient } from "src/clients/ario/arns/abstract/IARNSClient";
-import { ARNSRecord } from "src/clients/ario/arns/abstract/types";
-import { DOMAIN_SEPARATOR } from "src/clients/ario/arns/constants";
-import { DryRunCachingClient } from "src/core/ao/client-variants";
-import ResultUtils from "src/core/common/result-utils/ResultUtils";
-import { IAutoconfiguration, IDefaultBuilder } from "src/utils/class-interfaces";
-import { AO_CONFIGURATIONS } from "src/core/ao/ao-client/configurations";
-import { ClientBuilder } from "src/clients/common";
-import { staticImplements } from "src/utils";
-import { PROCESS_IDS } from "src/process-ids";
-import { ClientError } from "src/clients/common/ClientError";
-import { InputValidationError } from "src/clients/bazar";
+import { IARNSClient } from "./abstract/IARNSClient";
+import { ARNSRecord } from "./abstract/types";
+import { DOMAIN_SEPARATOR } from "./constants";
+import { DryRunCachingClient } from "../../../core/ao/client-variants";
+import ResultUtils from "../../../core/common/result-utils/ResultUtils";
+import { IAutoconfiguration, IDefaultBuilder } from "../../../utils/class-interfaces";
+import { AO_CONFIGURATIONS } from "../../../core/ao/ao-client/configurations";
+import { ClientBuilder } from "../../common";
+import { staticImplements } from "../../../utils";
+import { PROCESS_IDS } from "../../../process-ids";
+import { ClientError } from "../../common/ClientError";
+import { InputValidationError } from "../../bazar";
 
 /**
  * Client for interacting with ARNS (Arweave Name Service) records.

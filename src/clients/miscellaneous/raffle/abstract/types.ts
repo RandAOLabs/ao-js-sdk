@@ -1,4 +1,4 @@
-import { BaseClientConfig } from "src/core";
+import { BaseClientConfig } from "../../../../core";
 
 export interface RaffleClientConfig extends BaseClientConfig {
 }

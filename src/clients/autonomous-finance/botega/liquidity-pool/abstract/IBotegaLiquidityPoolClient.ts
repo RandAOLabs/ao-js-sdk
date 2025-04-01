@@ -1,5 +1,5 @@
-import { IBaseClient } from "src/core/ao/abstract";
-import { ITokenClient } from "src/clients/ao/token/abstract";
+import { IBaseClient } from "../../../../../core/ao/abstract";
+import { ITokenClient } from "../../../../ao/token/abstract";
 import { LPInfo } from "./types";
 
 export interface IBotegaLiquidityPoolClient extends IBaseClient {

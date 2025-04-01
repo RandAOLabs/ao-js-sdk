@@ -1,5 +1,5 @@
-import { ArweaveGQLBuilder } from "src/core/arweave/gql/ArweaveGQLBuilder";
-import { ArweaveGQLResponse, ArweaveTransaction } from "src/core/arweave/abstract/types";
+import { ArweaveGQLBuilder } from "../gql/ArweaveGQLBuilder";
+import { ArweaveGQLResponse, ArweaveTransaction } from "./types";
 
 export interface IBaseArweaveDataService {
     /**

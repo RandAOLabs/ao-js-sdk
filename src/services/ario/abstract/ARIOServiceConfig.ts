@@ -1,6 +1,6 @@
-import { ARNSClient } from "src/clients";
-import { ARNSClientConfig } from "src/clients/ario/arns/abstract/ARNSClientConfig";
-import { ICacheConfig } from "src/utils";
+import { ARNSClient } from "../../../clients";
+import { ARNSClientConfig } from "../../../clients/ario/arns/abstract/ARNSClientConfig";
+import { ICacheConfig } from "../../../utils";
 
 export interface ARIOServiceConfig {
     arnsClient: ARNSClient

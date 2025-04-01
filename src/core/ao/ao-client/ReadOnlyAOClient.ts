@@ -2,15 +2,15 @@ import { connect } from '@permaweb/aoconnect';
 import { MessageResult, ReadResult, ReadResultArgs } from '@permaweb/aoconnect/dist/lib/result';
 import { ReadResults, ReadResultsArgs, ResultsResponse } from '@permaweb/aoconnect/dist/lib/results';
 import { DryRun, DryRunResult } from '@permaweb/aoconnect/dist/lib/dryrun';
-import { Tags } from 'src/core/common';
+import { Tags } from '../../common';
 import { DryRunParams } from './abstract';
 import { IAOClient } from './abstract/IAOClient';
 import { ConnectArgsLegacy } from './aoconnect-types';
-import { AO_CONFIGURATION_DEFAULT } from 'src/core/ao/ao-client/configurations';
-import { AOClientError, AOReadOnlyClientError, AORateLimitingError } from 'src/core/ao/ao-client/AOClientError';
-import { SortOrder } from 'src/core/ao/abstract';
-import { Logger } from 'src/utils';
-import { RATELIMIT_ERROR_TEXT } from 'src/core/ao/ao-client/constants';
+import { AO_CONFIGURATION_DEFAULT } from './configurations';
+import { AOClientError, AOReadOnlyClientError, AORateLimitingError } from './AOClientError';
+import { SortOrder } from '../abstract';
+import { Logger } from '../../../utils';
+import { RATELIMIT_ERROR_TEXT } from './constants';
 import { JWKInterface } from 'arweave/node/lib/wallet';
 
 export class ReadOnlyAOClient implements IAOClient {
