@@ -62,4 +62,8 @@ export class WriteReadAOClient extends ReadOnlyRetryAOClient {
         this._results = results;
         this._dryrun = dryrun;
     }
+
+    public override getWallet(): JWKInterface | any | undefined {
+        return this.wallet
+    }
 }

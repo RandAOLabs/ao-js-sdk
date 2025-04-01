@@ -50,17 +50,6 @@ describe("RandomClient Unit Test", () => {
         jest.clearAllMocks(); // Clear mocks to avoid test contamination
     });
 
-    describe("postVDFChallenge()", () => {
-        it("should post VDF challenge and return true on success", async () => {
-            const randomnessRequestId = "test-request-id";
-            const modulus = "test-modulus";
-            const input = "test-input";
-            const response = await client.postVDFChallenge(randomnessRequestId, modulus, input);
-
-            expect(response).toBe(true);
-        });
-    });
-
     describe("getProviderAvailableValues()", () => {
         it("should fetch provider available values without throwing an error", async () => {
             const providerId = "test-provider-id";
@@ -122,14 +111,4 @@ describe("RandomClient Unit Test", () => {
         });
     });
 
-    describe("postVDFOutputAndProof()", () => {
-        it("should post VDF output and proof and return true on success", async () => {
-            const randomnessRequestId = "test-request-id";
-            const output = "test-output";
-            const proof = "test-proof";
-            const response = await client.postVDFOutputAndProof(randomnessRequestId, output, proof);
-
-            expect(response).toBe(true);
-        });
-    });
 });

@@ -87,19 +87,6 @@ export class RandomClient extends BaseClient implements IRandomClient {
         }
     }
 
-    async postVDFChallenge(randomnessRequestId: string, modulus: string, input: string): Promise<boolean> {
-        try {
-            const tags: Tags = [
-                TAGS.ACTION.POST_VDF_CHALLENGE
-            ];
-            const data = JSON.stringify({ requestId: randomnessRequestId, input, modulus });
-            const result = await this.messageResult(data, tags);
-            this.checkResultForErrors(result)
-            return true
-        } catch (error: any) {
-            throw new ClientError(this, this.postVDFChallenge, { randomnessRequestId, modulus, input }, error);
-        }
-    }
 
     async getProviderAvailableValues(providerId: string): Promise<GetProviderAvailableValuesResponse> {
         try {
@@ -186,21 +173,6 @@ export class RandomClient extends BaseClient implements IRandomClient {
             return await this.tokenClient.transfer(this.getProcessId(), paymentAmount, tags);
         } catch (error: any) {
             throw new ClientError(this, this.createRequest, { provider_ids, requestedInputs, callbackId }, error);
-        }
-    }
-
-
-    async postVDFOutputAndProof(randomnessRequestId: string, output: string, proof: string): Promise<boolean> {
-        try {
-            const tags: Tags = [
-                TAGS.ACTION.POST_VDF_OUTPUT_AND_PROOF
-            ];
-            const data = JSON.stringify({ requestId: randomnessRequestId, output, proof });
-            const result = await this.messageResult(data, tags);
-            this.checkResultForErrors(result)
-            return true
-        } catch (error: any) {
-            throw new ClientError(this, this.postVDFOutputAndProof, { randomnessRequestId, output, proof }, error);
         }
     }
 

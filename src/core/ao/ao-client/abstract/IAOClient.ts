@@ -4,6 +4,7 @@ import { DryRunResult, MessageInput } from '@permaweb/aoconnect/dist/lib/dryrun'
 import { Tags } from 'src/core/common';
 import { SortOrder } from 'src/core/ao/abstract';
 import { ConnectArgsLegacy } from 'src/core/ao/ao-client/aoconnect-types';
+import { JWKInterface } from 'arweave/node/lib/wallet';
 
 /**
  * AO interface provides a wrapper for interacting with the Arweave Operating System (AO).
@@ -64,4 +65,10 @@ export interface IAOClient {
      * @returns The Active AO Config which will be used for the next query, however may or may not have been used for previous queries.
      */
     getActiveConfig(): ConnectArgsLegacy;
+
+    /**
+     * Gets the wallet this client uses to sign messages
+     * @returns the wallet used for message signing
+     */
+    getWallet(): JWKInterface | any | undefined;
 }
