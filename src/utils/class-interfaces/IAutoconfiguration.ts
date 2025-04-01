@@ -1,12 +1,10 @@
 
-export interface IAutoconfiguration{
+export interface IAutoconfiguration {
 
-    /**
-     * Creates a pre-configured instance of the client using the most recent process IDs.
-     * This is the recommended way to instantiate the client for most use cases.
-     * 
-     * @returns A configured instance of the client ready for use
-     * @throws Error if the implementation does not provide auto-configuration
-     */
-    autoConfiguration(): any | Promise<any>;
+	/**
+	 * Creates a pre-configured instance of the class.
+	 * This is the recommended way to instantiate this class for most use cases.
+	 * @returns A pre-configured instance of the class.
+	 */
+	autoConfiguration(): any | Promise<any>;
 }
