@@ -1,4 +1,4 @@
-import { DryRunCachingClientConfig } from "src/core/ao/configuration";
+import { DryRunCachingClientConfig } from "../../../../core/ao/configuration";
 
 /**
  * Configuration for the ARNS client

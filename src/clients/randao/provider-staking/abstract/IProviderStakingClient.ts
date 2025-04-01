@@ -1,5 +1,5 @@
-import { IStakingClient } from "src/clients";
-import { ProviderDetails } from "src/clients/randao/provider-profile";
+import { IStakingClient } from "../../..";
+import { ProviderDetails } from "../../provider-profile";
 
 export interface IProviderStakingClient extends IStakingClient {
     /**

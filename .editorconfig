@@ -1,0 +1,31 @@
+# EditorConfig is awesome: https://EditorConfig.org
+
+# top-most EditorConfig file
+root = true
+
+# TypeScript files
+[*.{ts,tsx}]
+charset = utf-8
+end_of_line = lf
+indent_style = tab
+tab_width = 4
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# Import configuration
+# This helps IDEs understand we want relative paths
+[*.{ts,tsx}]
+ij_typescript_use_path_mapping = false
+ij_typescript_imports_prefer_absolute_path = false
+ij_javascript_use_path_mapping = false
+ij_javascript_imports_prefer_absolute_path = false
+
+# Package files
+[package.json]
+indent_style = tab
+tab_width = 2
+
+# Config files
+[*.{json,yml,yaml}]
+indent_style = tab
+tab_width = 2

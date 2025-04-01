@@ -3,8 +3,8 @@
 import { ResultsResponse } from "@permaweb/aoconnect/dist/lib/results";
 import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
 import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
-import { Tags } from "src/core/common";
-import { ArweaveTransaction } from "src/core/arweave/abstract/types";
+import { Tags } from "../../common";
+import { ArweaveTransaction } from "../../arweave/abstract/types";
 import { JWKInterface } from "arweave/node/lib/wallet";
 
 export abstract class IBaseClient {

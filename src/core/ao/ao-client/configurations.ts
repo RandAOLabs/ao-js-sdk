@@ -1,4 +1,4 @@
-import { ConnectArgsLegacy } from "src/core/ao/ao-client/aoconnect-types";
+import { ConnectArgsLegacy } from "./aoconnect-types";
 
 export const FORWARD_RESEARCH_AO_CONFIG: ConnectArgsLegacy = { CU_URL: 'https://cu.ao-testnet.xyz', MODE: 'legacy' }
 export const ARDRIVE_AO_CONFIG: ConnectArgsLegacy = { CU_URL: 'https://cu.ardrive.io', MODE: 'legacy' }

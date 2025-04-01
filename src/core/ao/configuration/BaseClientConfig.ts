@@ -1,5 +1,5 @@
 import { JWKInterface } from 'arweave/node/lib/wallet.js';
-import { ConnectArgsLegacy } from 'src/core/ao/ao-client/aoconnect-types';
+import { ConnectArgsLegacy } from '../ao-client/aoconnect-types';
 
 /**
  * Base configuration interface shared by all ao clients.

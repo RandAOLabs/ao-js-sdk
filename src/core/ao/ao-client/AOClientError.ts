@@ -1,5 +1,5 @@
-import { IAOClient } from "src/core/ao/ao-client/abstract";
-import { Logger, StringFormatting } from "src/utils";
+import { IAOClient } from "./abstract";
+import { Logger, StringFormatting } from "../../../utils";
 
 
 export class AOClientError<T extends IAOClient, P = any> extends Error {

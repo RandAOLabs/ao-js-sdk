@@ -1,14 +1,14 @@
 import { IBotegaLiquidityPoolClient } from "./abstract";
 import { LPInfo } from "./abstract/types";
-import { DryRunCachingClient } from "src/core/ao/client-variants";
-import { TokenClient } from "src/clients/ao/token/TokenClient";
-import TagUtils from "src/core/common/TagUtils";
-import { ArweaveTransaction } from "src/core/arweave/abstract/types";
-import { ITokenClient } from "src/clients/ao";
-import { Tags } from "src/core/common/types";
+import { DryRunCachingClient } from "../../../../core/ao/client-variants";
+import { TokenClient } from "../../../ao/token/TokenClient";
+import TagUtils from "../../../../core/common/TagUtils";
+import { ArweaveTransaction } from "../../../../core/arweave/abstract/types";
+import { ITokenClient } from "../../../ao";
+import { Tags } from "../../../../core/common/types";
 
-import { BaseClientConfigBuilder, DryRunCachingClientConfigBuilder } from "src/core/ao/configuration/builder";
-import { ClientError } from "src/clients/common/ClientError";
+import { BaseClientConfigBuilder, DryRunCachingClientConfigBuilder } from "../../../../core/ao/configuration/builder";
+import { ClientError } from "../../../common/ClientError";
 
 /**
  * @category Autonomous Finance

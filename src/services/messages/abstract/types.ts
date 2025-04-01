@@ -1,5 +1,5 @@
-import { Tags } from "src/core";
-import { ArweaveTransaction } from "src/core/arweave/abstract/types";
+import { Tags } from "../../../core";
+import { ArweaveTransaction } from "../../../core/arweave/abstract/types";
 
 /**
  * Base interface for message query parameters

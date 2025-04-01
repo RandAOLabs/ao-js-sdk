@@ -1,13 +1,13 @@
 
-import { IProfileClient, ProfileInfo } from "src/clients/bazar/profile/abstract";
-import { Tags, TagUtils } from "src/core";
-import { DryRunCachingClient } from "src/core/ao/client-variants";
-import ResultUtils from "src/core/common/result-utils/ResultUtils";
-import { IAutoconfiguration, IDefaultBuilder, Logger, staticImplements } from "src/utils/index";
+import { IProfileClient, ProfileInfo } from "./abstract";
+import { Tags, TagUtils } from "../../../core";
+import { DryRunCachingClient } from "../../../core/ao/client-variants";
+import ResultUtils from "../../../core/common/result-utils/ResultUtils";
+import { IAutoconfiguration, IDefaultBuilder, Logger, staticImplements } from "../../../utils/index";
 import { ProfileRegistryClient } from "../profile-registry";
-import { ClientBuilder } from "src/clients/common";
-import { NoProfileFoundError } from "src/clients/bazar/profile/ProfileClientError";
-import { ClientError } from "src/clients/common/ClientError";
+import { ClientBuilder } from "../../common";
+import { NoProfileFoundError } from "./ProfileClientError";
+import { ClientError } from "../../common/ClientError";
 
 /**
  * @category Bazar

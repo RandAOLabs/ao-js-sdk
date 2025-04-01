@@ -1,4 +1,4 @@
-import { ProviderStakeInfo } from "src/clients/randao/provider-staking/abstract/types";
+import { ProviderStakeInfo } from "../../provider-staking/abstract/types";
 
 export interface ProviderInfoDTO {
     // /** Active challenge requests JSON string */

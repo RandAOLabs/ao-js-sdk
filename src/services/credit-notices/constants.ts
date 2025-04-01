@@ -1,4 +1,4 @@
-import { Tag } from "src/core";
+import { Tag } from "../../core";
 
 /**
  * Tag used to identify credit notice messages

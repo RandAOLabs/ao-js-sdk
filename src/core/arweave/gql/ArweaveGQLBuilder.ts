@@ -10,8 +10,8 @@ import {
     BlockFields,
     ParentFields,
     ArweaveGQLSortOrder
-} from 'src/core/arweave/gql/types';
-import { ArweaveGQLBuilderError } from 'src/core/arweave/gql/ArweaveGQLBuilderError';
+} from './types';
+import { ArweaveGQLBuilderError } from './ArweaveGQLBuilderError';
 
 /**
  * @category Core

@@ -1,5 +1,5 @@
-import { ITokenClient } from "src/clients";
-import { Tags } from "src/core";
+import { ITokenClient } from "../../..";
+import { Tags } from "../../../../core";
 
 export interface INftClient extends ITokenClient {
     /**

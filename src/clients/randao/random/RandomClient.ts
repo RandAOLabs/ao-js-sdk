@@ -1,20 +1,20 @@
 import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
 import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
-import { TokenClient, TokenClientConfig } from "src/clients/ao";
-import { IRandomClient, RandomClientConfig, GetProviderAvailableValuesResponse, GetOpenRandomRequestsResponse, GetRandomRequestsResponse, ProviderActivity, CommitParams, RevealParams } from "src/clients/randao/random/abstract";
-import { Tags } from "src/core";
-import { BaseClient } from "src/core/ao/BaseClient";
-import ResultUtils from "src/core/common/result-utils/ResultUtils";
-import { IAutoconfiguration, IDefaultBuilder, staticImplements } from "src/utils";
-import { ARIOService } from "src/services";
-import { TokenInterfacingClientBuilder } from "src/clients/common/TokenInterfacingClientBuilder";
-import { Domain } from "src/services/ario/domains";
-import { AO_CONFIGURATIONS } from "src/core/ao/ao-client/configurations";
-import { PROCESS_IDS } from "src/process-ids";
-import { ClientError } from "src/clients/common/ClientError";
-import TAGS from "src/clients/randao/random/tags";
-import { RandomProcessError } from "src/clients/randao/random/RandomProcessError";
-import { IClassBuilder } from "src/utils/class-interfaces/IClientBuilder";
+import { TokenClient, TokenClientConfig } from "../../ao";
+import { IRandomClient, RandomClientConfig, GetProviderAvailableValuesResponse, GetOpenRandomRequestsResponse, GetRandomRequestsResponse, ProviderActivity, CommitParams, RevealParams } from "./abstract";
+import { Tags } from "../../../core";
+import { BaseClient } from "../../../core/ao/BaseClient";
+import ResultUtils from "../../../core/common/result-utils/ResultUtils";
+import { IAutoconfiguration, IDefaultBuilder, staticImplements } from "../../../utils";
+import { ARIOService } from "../../../services";
+import { TokenInterfacingClientBuilder } from "../../common/TokenInterfacingClientBuilder";
+import { Domain } from "../../../services/ario/domains";
+import { AO_CONFIGURATIONS } from "../../../core/ao/ao-client/configurations";
+import { PROCESS_IDS } from "../../../process-ids";
+import { ClientError } from "../../common/ClientError";
+import TAGS from "./tags";
+import { RandomProcessError } from "./RandomProcessError";
+import { IClassBuilder } from "../../../utils/class-interfaces/IClientBuilder";
 
 /**
  * @category RandAO

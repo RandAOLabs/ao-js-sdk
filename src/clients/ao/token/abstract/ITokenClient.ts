@@ -1,6 +1,6 @@
 // src/ITokenClient.ts
 import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
-import { Tags } from "src/core";
+import { Tags } from "../../../../core";
 
 /** 
  * Interface for interacting with ao token processes.

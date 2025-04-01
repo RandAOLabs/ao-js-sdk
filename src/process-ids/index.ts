@@ -1,11 +1,11 @@
-import { AO } from "src/process-ids/ao";
-import { ARIO } from "src/process-ids/ario";
-import { BAZAR } from "src/process-ids/bazar";
-import { COMMUNITY_TOKENS } from "src/process-ids/community_tokens";
-import { DEFI } from "src/process-ids/defi";
-import { MISCELLANEOUS } from "src/process-ids/miscellaneous";
-import { RANDAO } from "src/process-ids/randao";
-import { RUNEREALM } from "src/process-ids/rune_realm";
+import { AO } from "./ao";
+import { ARIO } from "./ario";
+import { BAZAR } from "./bazar";
+import { COMMUNITY_TOKENS } from "./community_tokens";
+import { DEFI } from "./defi";
+import { MISCELLANEOUS } from "./miscellaneous";
+import { RANDAO } from "./randao";
+import { RUNEREALM } from "./rune_realm";
 
 export const PROCESS_IDS = {
     AO,

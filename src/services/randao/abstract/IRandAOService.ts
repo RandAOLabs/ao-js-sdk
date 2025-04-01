@@ -1,4 +1,4 @@
-import { ProviderInfoAggregate } from "src/services/randao";
+import { ProviderInfoAggregate } from "..";
 
 /**
  * Interface for the RandAO Service
