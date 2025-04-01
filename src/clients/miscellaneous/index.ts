@@ -4,5 +4,4 @@
  * @showCategories
  * @module
  */
-export * from "./nft-sale"
 export * from "./raffle"

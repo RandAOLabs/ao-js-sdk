@@ -6,7 +6,6 @@ import { DOMAIN_SEPARATOR, ARN_ROOT_NAME } from 'src/services/ario/constants';
 import { Domain, DOMAIN_DEFAULTS } from 'src/services/ario/domains';
 import { ANTRecordNotFoundError, ARNSRecordNotFoundError } from 'src/services/ario/ARIOError';
 import { ARIOServiceConfig } from 'src/services/ario/abstract/ARIOServiceConfig';
-import { getARNSClientAutoConfiguration } from 'src/clients/ario/arns/ARNSClientAutoConfiguration';
 import { DryRunCachingClientConfigBuilder } from 'src/core/ao/configuration/builder';
 import { Logger } from 'src/utils';
 import { AO_CONFIGURATIONS } from 'src/core/ao/ao-client/configurations';
@@ -25,7 +24,7 @@ export class ARIOService implements IARIOService {
     private config: ARIOServiceConfig;
 
     private constructor(config: ARIOServiceConfig) {
-        this.arnsClient = new ARNSClient(config.arnsClientConfig)
+        this.arnsClient = config.arnsClient
         this.antClientCache = newCache<string, ANTClient>(config.cacheConfig);
         this.config = config
     }
@@ -36,7 +35,7 @@ export class ARIOService implements IARIOService {
                 ARIOService.instance = new ARIOService(config);
             } else {
                 ARIOService.instance = new ARIOService({
-                    arnsClientConfig: getARNSClientAutoConfiguration()
+                    arnsClient: ARNSClient.autoConfiguration()
                 });
             }
         }
@@ -153,7 +152,7 @@ export class ARIOService implements IARIOService {
         // Create and cache new client
         const config = new DryRunCachingClientConfigBuilder()
             .withProcessId(arnsRecord.processId)
-            .withWallet(this.config.arnsClientConfig.wallet)
+            .withWallet(this.arnsClient.getWallet())
             .withAOConfig(AO_CONFIGURATIONS.ARDRIVE)
             .build()
         const antClient = new ANTClient(config);

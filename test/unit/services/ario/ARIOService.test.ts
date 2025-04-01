@@ -34,7 +34,8 @@ describe('ARIOService', () => {
             getProcessInfo: jest.fn(),
             getCallingWalletAddress: jest.fn(),
             isRunningDryRunsAsMessages: jest.fn(),
-            clearCache: jest.fn()
+            clearCache: jest.fn(),
+            getWallet: jest.fn()
         } as any;
 
         mockAntClient = {
@@ -59,10 +60,7 @@ describe('ARIOService', () => {
 
         // Create service instance with empty cache config
         service = ARIOService.getInstance({
-            arnsClientConfig: {
-                processId: 'test-process-id',
-                wallet: {} // Mock wallet config
-            }
+            arnsClient: mockArnsClient
         });
     });
 
