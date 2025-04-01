@@ -1,16 +1,16 @@
 import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
 import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
 
-import { Tags } from "src/core";
-import { IAutoconfiguration, IDefaultBuilder, staticImplements } from "src/utils";
-import { IRaffleClient, RafflePull, ViewPullsResponse, ViewEntrantsResponse, ViewRaffleOwnersResponse } from "src/clients";
-import { ViewPullError } from "src/clients/miscellaneous/raffle/RaffleClientError";
-import { RaffleProcessError } from "src/clients/miscellaneous/raffle/RaffleProcessError";
-import { BaseClient } from "src/core/ao/BaseClient";
-import ResultUtils from "src/core/common/result-utils/ResultUtils";
-import { ClientBuilder } from "src/clients/common";
-import { PROCESS_IDS } from "src/process-ids";
-import { ClientError } from "src/clients/common/ClientError";
+import { Tags } from "../../../core";
+import { IAutoconfiguration, IDefaultBuilder, staticImplements } from "../../../utils";
+import { IRaffleClient, RafflePull, ViewPullsResponse, ViewEntrantsResponse, ViewRaffleOwnersResponse } from "../..";
+import { ViewPullError } from "./RaffleClientError";
+import { RaffleProcessError } from "./RaffleProcessError";
+import { BaseClient } from "../../../core/ao/BaseClient";
+import ResultUtils from "../../../core/common/result-utils/ResultUtils";
+import { ClientBuilder } from "../../common";
+import { PROCESS_IDS } from "../../../process-ids";
+import { ClientError } from "../../common/ClientError";
 
 /**
  * @category Miscellaneous

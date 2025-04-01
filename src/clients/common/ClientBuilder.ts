@@ -1,6 +1,6 @@
-import { BaseClientConfig, BaseClientConfigBuilder } from "src/core";
-import { BaseClient } from "src/core/ao/BaseClient";
-import { IBuilder } from "src/utils/class-interfaces/IBuilder";
+import { BaseClientConfig, BaseClientConfigBuilder } from "../../core";
+import { BaseClient } from "../../core/ao/BaseClient";
+import { IBuilder } from "../../utils/class-interfaces/IBuilder";
 
 export class ClientBuilder<T extends BaseClient> implements IBuilder<T> {
     private configBuilder: BaseClientConfigBuilder;

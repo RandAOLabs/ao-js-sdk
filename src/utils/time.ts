@@ -1,4 +1,4 @@
-import { Logger } from "src/utils/logger";
+import { Logger } from "./logger";
 /**
  * Pauses execution for the specified number of seconds
  * @param seconds Number of seconds to sleep

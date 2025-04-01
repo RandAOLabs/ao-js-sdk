@@ -1,5 +1,5 @@
-import { DryRunCachingClientConfig } from "src/core/ao/configuration";
-import { BaseClientConfig } from "src/core/ao/configuration/BaseClientConfig";
+import { DryRunCachingClientConfig } from "../../../../core/ao/configuration";
+import { BaseClientConfig } from "../../../../core/ao/configuration/BaseClientConfig";
 
 /**
  * Represents an ARNS (Arweave Name Service) record

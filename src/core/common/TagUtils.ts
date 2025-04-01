@@ -1,4 +1,4 @@
-import { Tags } from "src/core/common/types";
+import { Tags } from "./types";
 
 /**
  * Utility class for working with ao process message tags.

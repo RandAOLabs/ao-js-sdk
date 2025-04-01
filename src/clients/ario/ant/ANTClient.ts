@@ -1,9 +1,9 @@
-import { IANTClient } from "src/clients/ario/ant/abstract/IANTClient";
-import { ANTRecord, ANTRecords } from "src/clients/ario/ant/abstract/types";
-import { ClientError } from "src/clients/common/ClientError";
-import { DryRunCachingClient } from "src/core/ao/client-variants";
-import { DryRunCachingClientConfigBuilder } from "src/core/ao/configuration/builder";
-import ResultUtils from "src/core/common/result-utils/ResultUtils";
+import { IANTClient } from "./abstract/IANTClient";
+import { ANTRecord, ANTRecords } from "./abstract/types";
+import { ClientError } from "../../common/ClientError";
+import { DryRunCachingClient } from "../../../core/ao/client-variants";
+import { DryRunCachingClientConfigBuilder } from "../../../core/ao/configuration/builder";
+import ResultUtils from "../../../core/common/result-utils/ResultUtils";
 
 /**
  * Client for interacting with ANT (Arweave Name Token) records.

@@ -5,14 +5,14 @@
  * @module
  */
 // Export ANT client types and interfaces
-export * from "src/clients/ario/ant/abstract";
-export * from "src/clients/ario/ant/constants";
+export * from "./ant/abstract";
+export * from "./ant/constants";
 
 // Export ARNS client types and interfaces
-export * from "src/clients/ario/arns/abstract";
-export * from "src/clients/ario/arns/constants";
+export * from "./arns/abstract";
+export * from "./arns/constants";
 
 
 // Export clients
-export { ANTClient } from "src/clients/ario/ant/ANTClient";
-export { ARNSClient } from "src/clients/ario/arns/ARNSClient";
+export { ANTClient } from "./ant/ANTClient";
+export { ARNSClient } from "./arns/ARNSClient";

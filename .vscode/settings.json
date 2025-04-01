@@ -1,0 +1,9 @@
+{
+	"typescript.preferences.importModuleSpecifier": "relative",
+	"javascript.preferences.importModuleSpecifier": "relative",
+	"typescript.preferences.importModuleSpecifierEnding": "minimal",
+	"javascript.preferences.importModuleSpecifierEnding": "minimal",
+	"editor.insertSpaces": false,
+	"editor.tabSize": 4,
+	"editor.detectIndentation": false
+}

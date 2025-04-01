@@ -1,22 +1,22 @@
-import { IBaseClient } from 'src/core/ao/abstract/IBaseClient';
-import { BaseClientConfig } from 'src/core/ao/configuration/BaseClientConfig';
-import { mergeLists } from 'src/utils/lists';
-import { DEFAULT_TAGS } from 'src/core/ao/constants';
+import { IBaseClient } from './abstract/IBaseClient';
+import { BaseClientConfig } from './configuration/BaseClientConfig';
+import { mergeLists } from '../../utils/lists';
+import { DEFAULT_TAGS } from './constants';
 import { MessageResult } from '@permaweb/aoconnect/dist/lib/result';
 import { ResultsResponse } from '@permaweb/aoconnect/dist/lib/results';
 import { DryRunResult } from '@permaweb/aoconnect/dist/lib/dryrun';
-import { Logger, LogLevel } from 'src/utils';
-import { Tags } from 'src/core/common';
-import { DryRunParams } from 'src/core/ao/ao-client/abstract';
-import { ArweaveDataCachingService } from 'src/core/arweave/ArweaveDataCachingService';
-import { ArweaveTransaction } from 'src/core/arweave/abstract/types';
-import { WriteReadAOClient } from 'src/core/ao/ao-client/WriteReadAOClient';
-import { IAOClient } from 'src/core/ao/ao-client/abstract/IAOClient';
-import { ReadOnlyAOClient } from 'src/core/ao/ao-client/ReadOnlyAOClient';
+import { Logger, LogLevel } from '../../utils';
+import { Tags } from '../common';
+import { DryRunParams } from './ao-client/abstract';
+import { ArweaveDataCachingService } from '../arweave/ArweaveDataCachingService';
+import { ArweaveTransaction } from '../arweave/abstract/types';
+import { WriteReadAOClient } from './ao-client/WriteReadAOClient';
+import { IAOClient } from './ao-client/abstract/IAOClient';
+import { ReadOnlyAOClient } from './ao-client/ReadOnlyAOClient';
 import { JWKInterface } from 'arweave/node/lib/wallet';
-import { ReadOnlyRetryAOClient } from 'src/core/ao/ao-client';
-import { SortOrder } from 'src/core/ao/abstract';
-import ResultUtils from 'src/core/common/result-utils/ResultUtils';
+import { ReadOnlyRetryAOClient } from './ao-client';
+import { SortOrder } from './abstract';
+import ResultUtils from '../common/result-utils/ResultUtils';
 
 /**
  * Base client implementation for AO Process interactions.

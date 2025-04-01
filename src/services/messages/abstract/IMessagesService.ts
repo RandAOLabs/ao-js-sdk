@@ -1,4 +1,4 @@
-import { ArweaveTransaction } from "src/core/arweave/abstract/types";
+import { ArweaveTransaction } from "../../../core/arweave/abstract/types";
 import {
     GetLatestMessagesParams,
     GetLatestMessagesResponse,
@@ -7,7 +7,7 @@ import {
     GetAllMessagesParams,
     GetAllMessagesBySenderParams,
     GetAllMessagesByRecipientParams
-} from "src/services/messages/abstract/types";
+} from "./types";
 
 export interface IMessagesService {
     /**

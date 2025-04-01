@@ -1,4 +1,4 @@
-import { Tags } from "src/core";
+import { Tags } from "../../../../core";
 
 export interface IStakingClient {
     /**

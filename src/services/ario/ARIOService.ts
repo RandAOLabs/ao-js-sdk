@@ -1,16 +1,16 @@
-import { IARIOService } from 'src/services/ario/abstract/IARIOService';
-import { ANTClient } from 'src/clients/ario/ant';
-import { ARNSClient, } from 'src/clients/ario/arns';
-import { ICache, newCache } from 'src/utils/cache';
-import { DOMAIN_SEPARATOR, ARN_ROOT_NAME } from 'src/services/ario/constants';
-import { Domain, DOMAIN_DEFAULTS } from 'src/services/ario/domains';
-import { ANTRecordNotFoundError, ARNSRecordNotFoundError } from 'src/services/ario/ARIOError';
-import { ARIOServiceConfig } from 'src/services/ario/abstract/ARIOServiceConfig';
-import { DryRunCachingClientConfigBuilder } from 'src/core/ao/configuration/builder';
-import { Logger } from 'src/utils';
-import { AO_CONFIGURATIONS } from 'src/core/ao/ao-client/configurations';
-import { ClientError } from 'src/clients/common/ClientError';
-import { InputValidationError } from 'src/clients';
+import { IARIOService } from './abstract/IARIOService';
+import { ANTClient } from '../../clients/ario/ant';
+import { ARNSClient, } from '../../clients/ario/arns';
+import { ICache, newCache } from '../../utils/cache';
+import { DOMAIN_SEPARATOR, ARN_ROOT_NAME } from './constants';
+import { Domain, DOMAIN_DEFAULTS } from './domains';
+import { ANTRecordNotFoundError, ARNSRecordNotFoundError } from './ARIOError';
+import { ARIOServiceConfig } from './abstract/ARIOServiceConfig';
+import { DryRunCachingClientConfigBuilder } from '../../core/ao/configuration/builder';
+import { Logger } from '../../utils';
+import { AO_CONFIGURATIONS } from '../../core/ao/ao-client/configurations';
+import { ClientError } from '../../clients/common/ClientError';
+import { InputValidationError } from '../../clients';
 
 /**
  * Service for handling ARIO operations, including ANT and ARNS record management.

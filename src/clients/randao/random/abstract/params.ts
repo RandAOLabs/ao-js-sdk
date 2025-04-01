@@ -1,4 +1,4 @@
-import { RSAKey, TimeLockPuzzle } from "src/clients/randao/random/abstract/types"
+import { RSAKey, TimeLockPuzzle } from "./types"
 
 /**
  * @inline

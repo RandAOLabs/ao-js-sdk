@@ -1,5 +1,5 @@
-import { GetAllCreditNoticesParams } from "src/services/credit-notices/abstract/types";
-import { CreditNotice } from "src/services/credit-notices/types";
+import { GetAllCreditNoticesParams } from "./types";
+import { CreditNotice } from "../types";
 
 /**
  * Interface for credit notice service operations

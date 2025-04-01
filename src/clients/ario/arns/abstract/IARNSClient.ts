@@ -1,4 +1,4 @@
-import { ARNSRecord } from "src/clients/ario/arns/abstract/types";
+import { ARNSRecord } from "./types";
 
 /**
  * Interface for ARNS (Arweave Name Service) client operations

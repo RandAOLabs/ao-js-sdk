@@ -1,4 +1,4 @@
-import { ProfileRegistryEntry } from "src/clients/bazar/profile-registry/abstract/types";
+import { ProfileRegistryEntry } from "./types";
 
 /** @see {@link https://cookbook_ao.g8way.io/references/registry.html | specification} */
 export interface IProfileRegistryClient {

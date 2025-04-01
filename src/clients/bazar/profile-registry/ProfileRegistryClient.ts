@@ -1,10 +1,10 @@
-import { IProfileRegistryClient, ProfileRegistryEntry } from "src/clients/bazar/profile-registry/abstract";
-import { ClientBuilder } from "src/clients/common";
-import { ClientError } from "src/clients/common/ClientError";
-import { DryRunCachingClient } from "src/core/ao/client-variants";
-import ResultUtils from "src/core/common/result-utils/ResultUtils";
-import { PROCESS_IDS } from "src/process-ids";
-import { IAutoconfiguration, IDefaultBuilder, Logger, staticImplements } from "src/utils/index";
+import { IProfileRegistryClient, ProfileRegistryEntry } from "./abstract";
+import { ClientBuilder } from "../../common";
+import { ClientError } from "../../common/ClientError";
+import { DryRunCachingClient } from "../../../core/ao/client-variants";
+import ResultUtils from "../../../core/common/result-utils/ResultUtils";
+import { PROCESS_IDS } from "../../../process-ids";
+import { IAutoconfiguration, IDefaultBuilder, Logger, staticImplements } from "../../../utils/index";
 
 
 /**

@@ -1,12 +1,12 @@
-import { ICollectionClient, CollectionClientConfig, CollectionInfo, UpdateAssetsRequest } from "src/clients/bazar/collection/abstract";
-import { AuthorizationError, InputValidationError, TransferAllAssetsError } from "src/clients/bazar/collection/CollectionClientError";
-import { TAG_NAMES, ACTIONS, RESPONSE_ACTIONS, STATUS, TRANSFER_RATE_LIMIT, TRANSFER_BATCH_DELAY } from "src/clients/bazar/collection/constants";
-import { NftClient } from "src/clients/bazar/nft";
-import { ClientError } from "src/clients/common/ClientError";
-import { BaseClientConfigBuilder, TagUtils } from "src/core";
-import { BaseClient } from "src/core/ao/BaseClient";
-import ResultUtils from "src/core/common/result-utils/ResultUtils";
-import { Logger } from "src/utils";
+import { ICollectionClient, CollectionClientConfig, CollectionInfo, UpdateAssetsRequest } from "./abstract";
+import { AuthorizationError, InputValidationError, TransferAllAssetsError } from "./CollectionClientError";
+import { TAG_NAMES, ACTIONS, RESPONSE_ACTIONS, STATUS, TRANSFER_RATE_LIMIT, TRANSFER_BATCH_DELAY } from "./constants";
+import { NftClient } from "../nft";
+import { ClientError } from "../../common/ClientError";
+import { BaseClientConfigBuilder, TagUtils } from "../../../core";
+import { BaseClient } from "../../../core/ao/BaseClient";
+import ResultUtils from "../../../core/common/result-utils/ResultUtils";
+import { Logger } from "../../../utils";
 
 
 /**

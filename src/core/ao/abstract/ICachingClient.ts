@@ -1,4 +1,4 @@
-import { IBaseClient } from "src/core/ao/abstract/IBaseClient";
+import { IBaseClient } from "./IBaseClient";
 
 export interface IDryRunCachingClient extends IBaseClient {
     /**

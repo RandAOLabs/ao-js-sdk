@@ -1,8 +1,8 @@
 import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
 import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
-import { ProcessError } from "src/core/common/result-utils/ProcessError";
-import { MessageOutOfBoundsError, JsonParsingError, MessagesMissingError } from "src/core/common/result-utils/ResultUtilsError";
-import { Tags } from "src/core/common/types";
+import { ProcessError } from "./ProcessError";
+import { MessageOutOfBoundsError, JsonParsingError, MessagesMissingError } from "./ResultUtilsError";
+import { Tags } from "../types";
 
 /**
  * Utility class for working with ao process message resykts and dry run results.
