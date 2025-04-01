@@ -19,13 +19,19 @@ import { ClientError } from "../../common/ClientError";
 @staticImplements<IAutoconfiguration>()
 @staticImplements<IDefaultBuilder>()
 export class RaffleClient extends BaseClient implements IRaffleClient {
-	/** {@inheritDoc IAutoconfiguration.autoConfiguration} */
+	/** 
+	 * {@inheritdoc IAutoconfiguration.autoConfiguration}
+	 * @see {@link IAutoconfiguration.autoConfiguration} 
+	 */
 	public static autoConfiguration(): RaffleClient {
 		return RaffleClient.defaultBuilder()
 			.build()
 	}
 
-	/** {@inheritDoc IDefaultBuilder.defaultBuilder} */
+	/** 
+	 * {@inheritdoc IDefaultBuilder.defaultBuilder}
+	 * @see {@link IDefaultBuilder.defaultBuilder} 
+	 */
 	public static defaultBuilder(): ClientBuilder<RaffleClient> {
 		return new ClientBuilder(RaffleClient)
 			.withProcessId(PROCESS_IDS.MISCELLANEOUS.RAFFLE)

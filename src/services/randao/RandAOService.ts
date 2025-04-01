@@ -17,7 +17,10 @@ export class RandAOService implements IRandAOService {
 		private readonly providerProfileClient: ProviderProfileClient,
 	) { }
 
-	/** {@inheritDoc IAutoconfiguration.autoConfiguration} */
+	/** 
+	 * {@inheritdoc IAutoconfiguration.autoConfiguration}
+	 * @see {@link IAutoconfiguration.autoConfiguration} 
+	 */
 	public static async autoConfiguration(): Promise<IRandAOService> {
 		return new RandAOService(
 			await RandomClient.autoConfiguration(),
