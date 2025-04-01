@@ -1,5 +1,5 @@
-import { ICache, ICacheConfig } from "src/utils/cache/abstract";
-import { LRUCacheWrapper } from "src/utils/cache/LRUCacheWrapper";
+import { ICache, ICacheConfig } from "./abstract";
+import { LRUCacheWrapper } from "./LRUCacheWrapper";
 
 
 export { ICache, ICacheConfig };

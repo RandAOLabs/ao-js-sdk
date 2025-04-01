@@ -1,4 +1,4 @@
-import { ProviderDetails, ProviderInfo } from "src/clients/randao/provider-profile/abstract/types";
+import { ProviderDetails, ProviderInfo } from "./types";
 
 export interface IProviderProfileClient {
     /**

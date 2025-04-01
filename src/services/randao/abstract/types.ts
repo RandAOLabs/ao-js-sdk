@@ -1,5 +1,5 @@
-import { ProviderInfo } from "src/clients/randao/provider-profile/abstract/types";
-import { ProviderActivity } from "src/clients/randao/random/abstract/types";
+import { ProviderInfo } from "../../../clients/randao/provider-profile/abstract/types";
+import { ProviderActivity } from "../../../clients/randao/random/abstract/types";
 
 export interface ProviderInfoAggregate {
     providerId: string;

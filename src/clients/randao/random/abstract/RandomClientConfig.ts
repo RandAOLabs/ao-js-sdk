@@ -1,4 +1,4 @@
-import { TokenInterfacingClientConfig } from "src/clients/common/TokenInterfacingClientConfig";
+import { TokenInterfacingClientConfig } from "../../../common/TokenInterfacingClientConfig";
 
 export interface RandomClientConfig extends TokenInterfacingClientConfig {
 }

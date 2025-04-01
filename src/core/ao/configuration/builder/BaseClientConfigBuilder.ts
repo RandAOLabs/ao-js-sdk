@@ -1,8 +1,8 @@
 import { JWKInterface } from 'arweave/node/lib/wallet.js';
-import { IBuilder } from 'src/utils/class-interfaces/IBuilder';
+import { IBuilder } from '../../../../utils/class-interfaces/IBuilder';
 import { BaseClientConfig } from '../BaseClientConfig';
-import { getWalletSafely, Logger } from 'src/utils';
-import { ConnectArgsLegacy } from 'src/core/ao/ao-client/aoconnect-types';
+import { getWalletSafely, Logger } from '../../../../utils';
+import { ConnectArgsLegacy } from '../../ao-client/aoconnect-types';
 
 /**
  * Builder class for constructing BaseClientConfig objects.

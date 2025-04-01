@@ -1,13 +1,13 @@
-import { ClientBuilder } from "src/clients/common";
-import { ClientError } from "src/clients/common/ClientError";
-import { IProviderProfileClient } from "src/clients/randao/provider-profile/abstract/IProviderProfileClient";
-import { ProviderDetails, ProviderInfo, ProviderInfoDTO } from "src/clients/randao/provider-profile/abstract/types";
-import { Tags } from "src/core";
-import { AO_CONFIGURATIONS } from "src/core/ao/ao-client/configurations";
-import { DryRunCachingClient } from "src/core/ao/client-variants";
-import ResultUtils from "src/core/common/result-utils/ResultUtils";
-import { PROCESS_IDS } from "src/process-ids";
-import { IAutoconfiguration, IDefaultBuilder, Logger, staticImplements } from "src/utils";
+import { ClientBuilder } from "../../common";
+import { ClientError } from "../../common/ClientError";
+import { IProviderProfileClient } from "./abstract/IProviderProfileClient";
+import { ProviderDetails, ProviderInfo, ProviderInfoDTO } from "./abstract/types";
+import { Tags } from "../../../core";
+import { AO_CONFIGURATIONS } from "../../../core/ao/ao-client/configurations";
+import { DryRunCachingClient } from "../../../core/ao/client-variants";
+import ResultUtils from "../../../core/common/result-utils/ResultUtils";
+import { PROCESS_IDS } from "../../../process-ids";
+import { IAutoconfiguration, IDefaultBuilder, Logger, staticImplements } from "../../../utils";
 
 /**
  * @category RandAO

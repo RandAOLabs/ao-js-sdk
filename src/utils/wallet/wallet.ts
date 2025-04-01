@@ -1,6 +1,6 @@
 import { createDataItemSigner } from "@permaweb/aoconnect";
 import { JWKInterface } from "arweave/node/lib/wallet";
-import { Logger } from "src/utils";
+import { Logger } from "..";
 
 let lazyWallet: JWKInterface | null = null;
 /**

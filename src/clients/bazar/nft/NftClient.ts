@@ -1,11 +1,11 @@
 
-import { TokenClient, TokenClientConfig } from "src/clients/ao";
-import { INftClient } from "src/clients/bazar/nft/abstract/INftClient";
-import { NFT_QUANTITY } from "src/clients/bazar/nft/constants";
-import { ClientError } from "src/clients/common/ClientError";
-import { Tags } from "src/core";
+import { TokenClient, TokenClientConfig } from "../../ao";
+import { INftClient } from "./abstract/INftClient";
+import { NFT_QUANTITY } from "./constants";
+import { ClientError } from "../../common/ClientError";
+import { Tags } from "../../../core";
 
-import { Logger } from "src/utils/index";
+import { Logger } from "../../../utils/index";
 
 /**
  * @category Bazar

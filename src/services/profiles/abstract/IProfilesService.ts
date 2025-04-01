@@ -1,4 +1,4 @@
-import { ProfileInfo } from "src/clients";
+import { ProfileInfo } from "../../../clients";
 
 
 /**

@@ -1,8 +1,8 @@
-import { TokenClient } from "src/clients/ao";
-import { ClientBuilder } from "src/clients/common";
-import { AO_CONFIGURATIONS } from "src/core/ao/ao-client/configurations";
-import { PROCESS_IDS } from "src/process-ids";
-import { staticImplements, IAutoconfiguration, IDefaultBuilder } from "src/utils";
+import { TokenClient } from "../ao";
+import { ClientBuilder } from "../common";
+import { AO_CONFIGURATIONS } from "../../core/ao/ao-client/configurations";
+import { PROCESS_IDS } from "../../process-ids";
+import { staticImplements, IAutoconfiguration, IDefaultBuilder } from "../../utils";
 /**
  * @category Tokens
  */

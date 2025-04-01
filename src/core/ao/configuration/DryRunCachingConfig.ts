@@ -1,5 +1,5 @@
-import { BaseClientConfig } from "src/core/ao/configuration/BaseClientConfig"
-import { ICacheConfig } from "src/utils"
+import { BaseClientConfig } from "./BaseClientConfig"
+import { ICacheConfig } from "../../../utils"
 
 export interface DryRunCachingClientConfig extends BaseClientConfig {
     cacheConfig?: ICacheConfig

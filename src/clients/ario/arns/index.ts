@@ -1,3 +1,3 @@
-export * from "src/clients/ario/arns/ARNSClient";
-export * from "src/clients/ario/arns/constants";
-export * from "src/clients/ario/arns/abstract";
+export * from "./ARNSClient";
+export * from "./constants";
+export * from "./abstract";

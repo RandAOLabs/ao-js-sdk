@@ -1,7 +1,7 @@
-import { getEnvironment, Environment } from "src/utils/environment";
-import { colors } from "src/utils/logger/colors";
-import { DEFAULT_LOG_LEVELS } from "src/utils/logger/config";
-import { LogLevel } from "src/utils/logger/types";
+import { getEnvironment, Environment } from "../environment";
+import { colors } from "./colors";
+import { DEFAULT_LOG_LEVELS } from "./config";
+import { LogLevel } from "./types";
 
 
 /**

@@ -1,13 +1,13 @@
-import { Logger } from "src/utils/logger/logger";
-import { ICreditNoticeService } from "src/services/credit-notices/abstract/ICreditNoticeService";
-import { GetCreditNoticesError } from "src/services/credit-notices/CreditNoticeServiceError";
-import { GetAllCreditNoticesParams } from "src/services/credit-notices/abstract/types";
-import { MessagesService } from "src/services/messages/MessagesService";
-import { CREDIT_NOTICE_ACTION_TAG, FROM_PROCESS_TAG_NAME, QUANTITY_TAG_NAME } from "src/services/credit-notices/constants";
-import { GetAllMessagesByRecipientParams } from "src/index";
-import { CreditNotice } from "src/services/credit-notices/abstract/types";
-import CreditNoticeConverter from "src/services/credit-notices/CreditNoticeConverter";
-import { Tags } from "src/core";
+import { Logger } from "../../utils/logger/logger";
+import { ICreditNoticeService } from "./abstract/ICreditNoticeService";
+import { GetCreditNoticesError } from "./CreditNoticeServiceError";
+import { GetAllCreditNoticesParams } from "./abstract/types";
+import { MessagesService } from "../messages/MessagesService";
+import { CREDIT_NOTICE_ACTION_TAG, FROM_PROCESS_TAG_NAME, QUANTITY_TAG_NAME } from "./constants";
+import { GetAllMessagesByRecipientParams } from "../../index";
+import { CreditNotice } from "./abstract/types";
+import CreditNoticeConverter from "./CreditNoticeConverter";
+import { Tags } from "../../core";
 
 /**
  * @category On-chain-data

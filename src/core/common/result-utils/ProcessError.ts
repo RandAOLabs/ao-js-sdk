@@ -1,6 +1,6 @@
 import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
 import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
-import { Logger, StringFormatting } from "src/utils";
+import { Logger, StringFormatting } from "../../../utils";
 
 export class ProcessError extends Error {
     constructor(

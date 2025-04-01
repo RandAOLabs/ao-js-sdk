@@ -1,5 +1,5 @@
-import { IGrantToken } from "src/clients/ao/token/abstract/IGrantToken";
-import { ITokenClient } from "src/clients/ao/token/abstract/ITokenClient";
+import { IGrantToken } from "./IGrantToken";
+import { ITokenClient } from "./ITokenClient";
 
 
 

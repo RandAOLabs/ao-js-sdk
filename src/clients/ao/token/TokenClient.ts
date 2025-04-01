@@ -1,11 +1,11 @@
 import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
-import { ITokenClient, IGrantToken } from "src/clients/ao/token/abstract";
-import { TRANSFER_SUCCESS_MESSAGE } from "src/clients/ao/token/constants";
-import { ClientError } from "src/clients/common/ClientError";
-import { Tags, TagUtils } from "src/core";
-import { BaseClient } from "src/core/ao/BaseClient";
-import ResultUtils from "src/core/common/result-utils/ResultUtils";
-import { Logger } from "src/utils/index"
+import { ITokenClient, IGrantToken } from "./abstract";
+import { TRANSFER_SUCCESS_MESSAGE } from "./constants";
+import { ClientError } from "../../common/ClientError";
+import { Tags, TagUtils } from "../../../core";
+import { BaseClient } from "../../../core/ao/BaseClient";
+import ResultUtils from "../../../core/common/result-utils/ResultUtils";
+import { Logger } from "../../../utils/index"
 
 /**
  * @category ao-standards

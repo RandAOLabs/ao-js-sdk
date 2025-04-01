@@ -1,4 +1,4 @@
-import { Tags } from "src/core/common";
+import { Tags } from "../../../common";
 
 export interface DryRunParams {
     process: string;

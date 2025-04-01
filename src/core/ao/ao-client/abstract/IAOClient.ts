@@ -1,9 +1,9 @@
 import { MessageResult, ReadResultArgs } from '@permaweb/aoconnect/dist/lib/result';
 import { ReadResultsArgs, ResultsResponse } from '@permaweb/aoconnect/dist/lib/results';
 import { DryRunResult, MessageInput } from '@permaweb/aoconnect/dist/lib/dryrun';
-import { Tags } from 'src/core/common';
-import { SortOrder } from 'src/core/ao/abstract';
-import { ConnectArgsLegacy } from 'src/core/ao/ao-client/aoconnect-types';
+import { Tags } from '../../../common';
+import { SortOrder } from '../../abstract';
+import { ConnectArgsLegacy } from '../aoconnect-types';
 import { JWKInterface } from 'arweave/node/lib/wallet';
 
 /**

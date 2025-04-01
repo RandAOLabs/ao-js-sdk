@@ -1,3 +1,3 @@
-export * from "src/clients/ario/ant/ANTClient";
-export * from "src/clients/ario/ant/constants";
-export * from "src/clients/ario/ant/abstract";
+export * from "./ANTClient";
+export * from "./constants";
+export * from "./abstract";
