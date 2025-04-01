@@ -111,4 +111,10 @@ export abstract class IBaseClient {
      * @returns Boolean indicating whether or not the client is set to run dryruns as messages. (non default behavior)
      */
     abstract getProcessId(): string;
+
+    /**
+     * Gets the wallet this client uses to sign messages
+     * @returns the wallet used for message signing
+     */
+    abstract getWallet(): JWKInterface | any | undefined;
 }

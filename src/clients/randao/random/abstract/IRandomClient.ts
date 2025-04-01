@@ -40,26 +40,6 @@ export interface IRandomClient {
     getRandomRequestViaCallbackId(callbackId: string): Promise<GetRandomRequestsResponse>;
 
     /**
-     * Submits a Verifiable Delay Function (VDF) challenge, including input and modulus, for a specific randomness request.
-     * @deprecated in favor of {@link IRandomClient.commit}
-     * @param randomnessRequestId - The ID of the randomness request.
-     * @param modulus - The modulus to be used in the challenge.
-     * @param input - The input for the VDF challenge.
-     * @returns - A promise that resolves with a boolean indicating success.
-     */
-    postVDFChallenge(randomnessRequestId: string, modulus: string, input: string): Promise<boolean>;
-
-    /**
-     * Posts a Verifiable Delay Function (VDF) proof and output for a specific randomness request.
-     * @deprecated in favor of {@link IRandomClient.reveal}
-     * @param randomnessRequestId - The ID of the randomness request.
-     * @param output - The output result of the VDF computation.
-     * @param proof - The proof of correctness for the output.
-     * @returns - A promise that resolves with a boolean indicating success.
-     */
-    postVDFOutputAndProof(randomnessRequestId: string, output: string, proof: string): Promise<boolean>;
-
-    /**
      * Creates a new randomness request using a list of provider IDs.
      * @param providersIds - An array of provider IDs to include in the request.
      * @param requestedInputs - The number of requested random inputs.
