@@ -8,13 +8,15 @@ import { staticImplements, IAutoconfiguration, IDefaultBuilder } from "../../uti
 @staticImplements<IAutoconfiguration>()
 @staticImplements<IDefaultBuilder>()
 export class QArweave extends TokenClient {
-    public static autoConfiguration(): QArweave {
-        return QArweave.defaultBuilder()
-            .build()
-    }
+	/** {@inheritDoc IAutoconfiguration.autoConfiguration} */
+	public static autoConfiguration(): QArweave {
+		return QArweave.defaultBuilder()
+			.build()
+	}
 
-    public static defaultBuilder(): ClientBuilder<QArweave> {
-        return new ClientBuilder(QArweave)
-            .withProcessId(PROCESS_IDS.DEFI.WRAPPED_ARWEAVE)
-    }
+	/** {@inheritDoc IDefaultBuilder.defaultBuilder} */
+	public static defaultBuilder(): ClientBuilder<QArweave> {
+		return new ClientBuilder(QArweave)
+			.withProcessId(PROCESS_IDS.DEFI.WRAPPED_ARWEAVE)
+	}
 }

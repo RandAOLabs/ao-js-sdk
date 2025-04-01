@@ -10,13 +10,15 @@ import { staticImplements, IAutoconfiguration, IDefaultBuilder } from "../../uti
 @staticImplements<IAutoconfiguration>()
 @staticImplements<IDefaultBuilder>()
 export class AOToken extends TokenClient {
-    public static autoConfiguration(): AOToken {
-        return AOToken.defaultBuilder()
-            .build()
-    }
+	/** {@inheritDoc IAutoconfiguration.autoConfiguration} */
+	public static autoConfiguration(): AOToken {
+		return AOToken.defaultBuilder()
+			.build()
+	}
 
-    public static defaultBuilder(): ClientBuilder<AOToken> {
-        return new ClientBuilder(AOToken)
-            .withProcessId(PROCESS_IDS.AO)
-    }
+	/** {@inheritDoc IDefaultBuilder.defaultBuilder} */
+	public static defaultBuilder(): ClientBuilder<AOToken> {
+		return new ClientBuilder(AOToken)
+			.withProcessId(PROCESS_IDS.AO)
+	}
 }
