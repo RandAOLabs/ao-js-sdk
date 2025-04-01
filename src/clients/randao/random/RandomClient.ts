@@ -41,7 +41,10 @@ export class RandomClient extends BaseClient implements IRandomClient {
 		this.tokenClient = new TokenClient(tokenConfig)
 	}
 
-	/** {@inheritDoc IAutoconfiguration.autoConfiguration} */
+	/** 
+	 * {@inheritdoc IAutoconfiguration.autoConfiguration}
+	 * @see {@link IAutoconfiguration.autoConfiguration} 
+	 */
 	public static async autoConfiguration(): Promise<RandomClient> {
 		const builder = await RandomClient.defaultBuilder()
 		return builder
@@ -52,7 +55,10 @@ export class RandomClient extends BaseClient implements IRandomClient {
 		return new TokenInterfacingClientBuilder(RandomClient)
 	}
 
-	/** {@inheritDoc IDefaultBuilder.defaultBuilder} */
+	/** 
+	 * {@inheritdoc IDefaultBuilder.defaultBuilder}
+	 * @see {@link IDefaultBuilder.defaultBuilder} 
+	 */
 	public static async defaultBuilder(): Promise<TokenInterfacingClientBuilder<RandomClient>> {
 		const ario = await ARIOService.getInstance()
 		const randomProcessId = await ario.getProcessIdForDomain(Domain.RANDAO_API)
