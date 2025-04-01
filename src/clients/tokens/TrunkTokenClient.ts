@@ -8,12 +8,18 @@ import { staticImplements, IAutoconfiguration, IDefaultBuilder } from "../../uti
 @staticImplements<IAutoconfiguration>()
 @staticImplements<IDefaultBuilder>()
 export class TrunkToken extends TokenClient {
-	/** {@inheritDoc IAutoconfiguration.autoConfiguration} */
+	/** 
+	 * {@inheritdoc IAutoconfiguration.autoConfiguration}
+	 * @see {@link IAutoconfiguration.autoConfiguration} 
+	 */
 	public static autoConfiguration(): TrunkToken {
 		return TrunkToken.defaultBuilder()
 			.build()
 	}
-	/** {@inheritDoc IDefaultBuilder.defaultBuilder} */
+	/** 
+	 * {@inheritdoc IDefaultBuilder.defaultBuilder}
+	 * @see {@link IDefaultBuilder.defaultBuilder} 
+	 */
 	public static defaultBuilder(): ClientBuilder<TrunkToken> {
 		return new ClientBuilder(TrunkToken)
 			.withProcessId(PROCESS_IDS.COMMUNITY_TOKENS.TRUNK)

@@ -15,13 +15,19 @@ import { IAutoconfiguration, IDefaultBuilder, Logger, staticImplements } from ".
 @staticImplements<IAutoconfiguration>()
 @staticImplements<IDefaultBuilder>()
 export class ProviderProfileClient extends DryRunCachingClient implements IProviderProfileClient {
-	/** {@inheritDoc IAutoconfiguration.autoConfiguration} */
+	/** 
+	 * {@inheritdoc IAutoconfiguration.autoConfiguration}
+	 * @see {@link IAutoconfiguration.autoConfiguration} 
+	 */
 	public static autoConfiguration(): ProviderProfileClient {
 		return ProviderProfileClient.defaultBuilder()
 			.build()
 	}
 
-	/** {@inheritDoc IDefaultBuilder.defaultBuilder} */
+	/** 
+	 * {@inheritdoc IDefaultBuilder.defaultBuilder}
+	 * @see {@link IDefaultBuilder.defaultBuilder} 
+	 */
 	public static defaultBuilder(): ClientBuilder<ProviderProfileClient> {
 		return new ClientBuilder(ProviderProfileClient)
 			.withProcessId(PROCESS_IDS.RANDAO.PROFILE)

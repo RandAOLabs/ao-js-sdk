@@ -15,13 +15,19 @@ import { IAutoconfiguration, IDefaultBuilder, Logger, staticImplements } from ".
 export class ProfileRegistryClient extends DryRunCachingClient implements IProfileRegistryClient {
 	/* Constructors */
 
-	/** {@inheritDoc IAutoconfiguration.autoConfiguration} */
+	/** 
+	 * {@inheritdoc IAutoconfiguration.autoConfiguration}
+	 * @see {@link IAutoconfiguration.autoConfiguration} 
+	 */
 	public static autoConfiguration(): ProfileRegistryClient {
 		return ProfileRegistryClient.defaultBuilder()
 			.build()
 	}
 
-	/** {@inheritDoc IDefaultBuilder.defaultBuilder} */
+	/** 
+	 * {@inheritdoc IDefaultBuilder.defaultBuilder}
+	 * @see {@link IDefaultBuilder.defaultBuilder} 
+	 */
 	public static defaultBuilder(): ClientBuilder<ProfileRegistryClient> {
 		return new ClientBuilder(ProfileRegistryClient)
 			.withProcessId(PROCESS_IDS.BAZAR.PROFILE_REGISTRY)

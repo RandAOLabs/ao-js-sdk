@@ -17,14 +17,20 @@ import { ClientError } from "../../common/ClientError";
 @staticImplements<IDefaultBuilder>()
 export class ProfileClient extends DryRunCachingClient implements IProfileClient {
 	/* Constructors */
-	/** {@inheritDoc IAutoconfiguration.autoConfiguration} */
+	/** 
+	 * {@inheritdoc IAutoconfiguration.autoConfiguration}
+	 * @see {@link IAutoconfiguration.autoConfiguration} 
+	 */
 	public static async autoConfiguration(): Promise<ProfileClient> {
 		const builder = await ProfileClient.defaultBuilder()
 		return builder
 			.build()
 	}
 
-	/** {@inheritDoc IDefaultBuilder.defaultBuilder} */
+	/** 
+	 * {@inheritdoc IDefaultBuilder.defaultBuilder}
+	 * @see {@link IDefaultBuilder.defaultBuilder} 
+	 */
 	public static async defaultBuilder(): Promise<ClientBuilder<ProfileClient>> {
 		const registryClient = ProfileRegistryClient.autoConfiguration();
 		const profiles = await registryClient.getProfileByWalletAddress();
