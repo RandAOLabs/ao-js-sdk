@@ -142,6 +142,11 @@ export class BaseClient extends IBaseClient {
     public async getProcessInfo(): Promise<ArweaveTransaction> {
         return await this.arweaveService.getTransactionById(this.baseConfig.processId);
     }
+
+    public getWallet(): JWKInterface | any | undefined {
+        return this.ao.getWallet()
+    }
+
     /* Public Utility */
 
     /* Protected Utility */

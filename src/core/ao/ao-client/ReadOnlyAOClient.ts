@@ -11,6 +11,7 @@ import { AOClientError, AOReadOnlyClientError, AORateLimitingError } from 'src/c
 import { SortOrder } from 'src/core/ao/abstract';
 import { Logger } from 'src/utils';
 import { RATELIMIT_ERROR_TEXT } from 'src/core/ao/ao-client/constants';
+import { JWKInterface } from 'arweave/node/lib/wallet';
 
 export class ReadOnlyAOClient implements IAOClient {
     protected _result!: ReadResult;
@@ -98,5 +99,10 @@ export class ReadOnlyAOClient implements IAOClient {
 
     public getActiveConfig(): ConnectArgsLegacy {
         return this.activeAOConfig
+    }
+
+    public getWallet(): JWKInterface | any | undefined {
+        Logger.warn("Wallet requested from ReadOnly Client Returning undefined")
+        return undefined
     }
 }

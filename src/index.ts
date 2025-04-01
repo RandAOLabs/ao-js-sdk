@@ -7,4 +7,3 @@ export * from "./core/arweave"
 
 export * from './utils/index'
 export * from "./process-ids"
-export { processIds } from './processes_ids'
