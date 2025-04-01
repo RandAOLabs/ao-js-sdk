@@ -18,13 +18,19 @@ import { InputValidationError } from "../../bazar";
 @staticImplements<IAutoconfiguration>()
 @staticImplements<IDefaultBuilder>()
 export class ARNSClient extends DryRunCachingClient implements IARNSClient {
-	/** {@inheritDoc IAutoconfiguration.autoConfiguration} */
+	/** 
+	 * {@inheritdoc IAutoconfiguration.autoConfiguration}
+	 * @see {@link IAutoconfiguration.autoConfiguration} 
+	 */
 	public static autoConfiguration(): ARNSClient {
 		return ARNSClient.defaultBuilder()
 			.build()
 	}
 
-	/** {@inheritDoc IDefaultBuilder.defaultBuilder} */
+	/** 
+	 * {@inheritdoc IDefaultBuilder.defaultBuilder}
+	 * @see {@link IDefaultBuilder.defaultBuilder} 
+	 */
 	public static defaultBuilder(): ClientBuilder<ARNSClient> {
 		return new ClientBuilder(ARNSClient)
 			.withProcessId(PROCESS_IDS.ARIO.ARNS_REGISTRY)

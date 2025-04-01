@@ -23,7 +23,10 @@ export class ProviderInfoDataAggregator {
 		this.aggregateMap = new Map<string, ProviderInfoAggregate>();
 		this.processedProviderIds = new Set<string>();
 	}
-	/** {@inheritDoc IAutoconfiguration.autoConfiguration} */
+	/** 
+	 * {@inheritdoc IAutoconfiguration.autoConfiguration}
+	 * @see {@link IAutoconfiguration.autoConfiguration} 
+	 */
 	public static async autoConfiguration(): Promise<ProviderInfoDataAggregator> {
 		const ario = ARIOService.getInstance()
 		return new ProviderInfoDataAggregator(
