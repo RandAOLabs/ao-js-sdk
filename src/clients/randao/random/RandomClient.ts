@@ -8,7 +8,7 @@ import ResultUtils from "../../../core/common/result-utils/ResultUtils";
 import { IAutoconfiguration, IDefaultBuilder, staticImplements } from "../../../utils";
 import { ARIOService } from "../../../services";
 import { TokenInterfacingClientBuilder } from "../../common/TokenInterfacingClientBuilder";
-import { Domain } from "../../../services/ario/domains";
+import { DOMAIN } from "../../../services/ario/domains";
 import { AO_CONFIGURATIONS } from "../../../core/ao/ao-client/configurations";
 import { PROCESS_IDS } from "../../../process-ids";
 import { ClientError } from "../../common/ClientError";
@@ -61,7 +61,7 @@ export class RandomClient extends BaseClient implements IRandomClient {
 	 */
 	public static async defaultBuilder(): Promise<TokenInterfacingClientBuilder<RandomClient>> {
 		const ario = await ARIOService.getInstance()
-		const randomProcessId = await ario.getProcessIdForDomain(Domain.RANDAO_API)
+		const randomProcessId = await ario.getProcessIdForDomain(DOMAIN.RANDAO_API)
 		return RandomClient.builder()
 			.withProcessId(randomProcessId)
 			.withTokenProcessId(PROCESS_IDS.RANDAO.RNG_TOKEN)
