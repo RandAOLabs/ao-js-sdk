@@ -76,8 +76,7 @@ export class RandomClient extends BaseClient implements IRandomClient {
 				TAGS.ACTION.COMMIT
 			];
 			const data = JSON.stringify(params);
-			const result = await this.messageResult(data, tags);
-			this.checkResultForErrors(result)
+			await this.message(data, tags);
 		} catch (error: any) {
 			throw new ClientError(this, this.commit, params, error);
 		}
@@ -88,8 +87,7 @@ export class RandomClient extends BaseClient implements IRandomClient {
 				TAGS.ACTION.REVEAL
 			];
 			const data = JSON.stringify(params);
-			const result = await this.messageResult(data, tags);
-			this.checkResultForErrors(result)
+			await this.message(data, tags);
 		} catch (error: any) {
 			throw new ClientError(this, this.reveal, params, error);
 		}
