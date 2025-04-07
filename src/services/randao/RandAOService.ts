@@ -4,7 +4,9 @@ import { from, lastValueFrom } from "rxjs";
 import { mergeMap } from "rxjs/operators";
 import { ProviderInfoAggregate } from "./abstract/types";
 import { ProviderInfoDataAggregator } from "./ProviderInfoDataAggregator";
-import { IAutoconfiguration, staticImplements } from "../../utils";
+import { IAutoconfiguration } from "../../utils";
+import { staticImplements } from "../../utils/decorators";
+import { MessagesService } from "../messages";
 
 /**
  * Service for handling RandAO operations
