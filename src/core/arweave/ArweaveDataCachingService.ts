@@ -1,41 +1,48 @@
-import { ArweaveGQLBuilder } from "./gql/ArweaveGQLBuilder";
-import { ArweaveGQLResponse, ArweaveTransaction } from "./abstract/types";
-import { BaseArweaveDataService } from "./ArweaveDataService";
+import { ArweaveGQLResponse } from "./abstract/types";
+import { ArweaveDataService } from "./ArweaveDataService";
 import { ICache, newCache } from "../../utils/cache";
 import { ICacheConfig } from "../../utils/cache/abstract";
+import { IAutoconfiguration, staticImplements } from "../../utils";
+import { IArweaveDataService } from "./abstract";
+import { IArweaveDataCachingService } from "./abstract/IArweaveDataCachingService";
 
 /**
  * @category Core
  */
-export class ArweaveDataCachingService extends BaseArweaveDataService {
-    private cache: ICache<string, ArweaveGQLResponse>;
+@staticImplements<IAutoconfiguration>()
+export class ArweaveDataCachingService extends ArweaveDataService implements IArweaveDataCachingService {
+	private cache: ICache<string, ArweaveGQLResponse>;
 
-    constructor(cacheConfig?: ICacheConfig) {
-        super();
-        this.cache = newCache<string, ArweaveGQLResponse>(cacheConfig);
-    }
+	private constructor(cacheConfig?: ICacheConfig) {
+		super();
+		this.cache = newCache<string, ArweaveGQLResponse>(cacheConfig);
+	}
 
-    public clearCache(): void {
-        this.cache.clear();
-    }
+	public static autoConfiguration(): IArweaveDataCachingService {
+		return new ArweaveDataCachingService()
+	}
 
-    /** @override */
-    public async graphQuery<T = any>(query: string): Promise<T> {
-        const cacheKey = this.createCacheKey(query);
-        const cachedResult = this.cache.get(cacheKey);
+	public clearCache(): void {
+		this.cache.clear();
+	}
 
-        if (cachedResult) {
-            return cachedResult as T;
-        }
+	/** @override */
+	public async graphQuery<T = any>(query: string): Promise<T> {
+		const cacheKey = this.createCacheKey(query);
+		const cachedResult = this.cache.get(cacheKey);
 
-        const result = await super.graphQuery<T>(query);
-        this.cache.set(cacheKey, result as ArweaveGQLResponse);
-        return result;
-    }
+		if (cachedResult) {
+			return cachedResult as T;
+		}
 
-    /* Private */
-    private createCacheKey(query: string): string {
-        return JSON.stringify({ query });
-    }
-    /* Private */
+		const result = await super.graphQuery<T>(query);
+		this.cache.set(cacheKey, result as ArweaveGQLResponse);
+		return result;
+	}
+
+	/* Private */
+	private createCacheKey(query: string): string {
+		return JSON.stringify({ query });
+	}
+	/* Private */
 }

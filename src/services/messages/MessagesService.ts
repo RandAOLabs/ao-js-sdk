@@ -1,145 +1,158 @@
-import { BaseArweaveDataService } from "../../core/arweave/ArweaveDataService";
+import { ArweaveDataService } from "../../core/arweave/ArweaveDataService";
 import { ArweaveGQLBuilder } from "../../core/arweave/gql/ArweaveGQLBuilder";
 import { Logger } from "../../utils/logger/logger";
 import { IMessagesService } from "./abstract/IMessagesService";
 import { GetLatestMessagesError } from "./MessagesServiceError";
 import {
-    GetLatestMessagesParams,
-    GetLatestMessagesResponse,
-    GetLatestMessagesBySenderParams,
-    GetLatestMessagesByRecipientParams,
-    GetAllMessagesParams,
-    GetAllMessagesBySenderParams,
-    GetAllMessagesByRecipientParams
+	GetLatestMessagesParams,
+	GetLatestMessagesResponse,
+	GetLatestMessagesBySenderParams,
+	GetLatestMessagesByRecipientParams,
+	GetAllMessagesParams,
+	GetAllMessagesBySenderParams,
+	GetAllMessagesByRecipientParams
 } from "./abstract/types";
 import { ArweaveGQLSortOrder } from "../../core/arweave/gql/types";
 import { ArweaveTransaction } from "../../core/arweave/abstract/types";
 import { DEFAULT_AO_TAGS } from "./constants";
+import { IArweaveDataService } from "../../core";
+import { IAutoconfiguration, staticImplements } from "../../utils";
 
 /**
  * @category On-chain-data
  */
-export class MessagesService extends BaseArweaveDataService implements IMessagesService {
-    constructor() {
-        super();
-    }
+@staticImplements<IAutoconfiguration>()
+export class MessagesService implements IMessagesService {
+	private constructor(
+		private readonly arweaveDataService: IArweaveDataService
+	) { }
 
-    private async getAllMessagesPaginated(params: GetLatestMessagesParams): Promise<ArweaveTransaction[]> {
-        const allMessages: ArweaveTransaction[] = [];
-        let currentCursor: string | undefined;
-        let hasMore = true;
+	/** 
+	 * {@inheritdoc IAutoconfiguration.autoConfiguration}
+	 * @see {@link IAutoconfiguration.autoConfiguration} 
+	 */
+	public static autoConfiguration(): MessagesService {
+		return new MessagesService(
+			ArweaveDataService.autoConfiguration()
+		)
+	}
 
-        while (hasMore) {
-            const result = await this.getLatestMessages({
-                ...params,
-                cursor: currentCursor,
-                limit: 100
-            });
+	private async getAllMessagesPaginated(params: GetLatestMessagesParams): Promise<ArweaveTransaction[]> {
+		const allMessages: ArweaveTransaction[] = [];
+		let currentCursor: string | undefined;
+		let hasMore = true;
 
-            allMessages.push(...result.messages);
-            hasMore = result.hasNextPage;
-            currentCursor = result.cursor;
-        }
+		while (hasMore) {
+			const result = await this.getLatestMessages({
+				...params,
+				cursor: currentCursor,
+				limit: 100
+			});
 
-        return allMessages;
-    }
+			allMessages.push(...result.messages);
+			hasMore = result.hasNextPage;
+			currentCursor = result.cursor;
+		}
 
-    public async getLatestMessages(params: GetLatestMessagesParams = {}): Promise<GetLatestMessagesResponse> {
-        try {
-            // Combine with user provided tags if any
-            const allTags = params.tags
-                ? [...DEFAULT_AO_TAGS, ...params.tags]
-                : DEFAULT_AO_TAGS;
-            const builder = new ArweaveGQLBuilder()
-                .withAllFields()
-                .sortBy(ArweaveGQLSortOrder.HEIGHT_DESC)
-                .limit(params.limit || 100)
-                .tags(allTags);
+		return allMessages;
+	}
 
-            // Add recipient tag if specified
-            if (params.recipient) {
-                builder.recipient(params.recipient)
-            }
+	public async getLatestMessages(params: GetLatestMessagesParams = {}): Promise<GetLatestMessagesResponse> {
+		try {
+			// Combine with user provided tags if any
+			const allTags = params.tags
+				? [...DEFAULT_AO_TAGS, ...params.tags]
+				: DEFAULT_AO_TAGS;
+			const builder = new ArweaveGQLBuilder()
+				.withAllFields()
+				.sortBy(ArweaveGQLSortOrder.HEIGHT_DESC)
+				.limit(params.limit || 100)
+				.tags(allTags);
 
-            if (params.cursor) {
-                builder.after(params.cursor);
-            }
+			// Add recipient tag if specified
+			if (params.recipient) {
+				builder.recipient(params.recipient)
+			}
 
-            if (params.owner) {
-                builder.owner(params.owner);
-            }
+			if (params.cursor) {
+				builder.after(params.cursor);
+			}
 
-            const response = await this.query(builder);
-            const edges = response.data.transactions.edges;
+			if (params.owner) {
+				builder.owner(params.owner);
+			}
 
-            return {
-                messages: edges.map(edge => edge.node),
-                cursor: edges[edges.length - 1]?.cursor || "",
-                hasNextPage: edges.length === (params.limit || 100)
-            };
-        } catch (error: any) {
-            Logger.error(`Error retrieving latest messages: ${error.message}`);
-            throw new GetLatestMessagesError(error);
-        }
-    }
+			const response = await this.arweaveDataService.query(builder);
+			const edges = response.data.transactions.edges;
 
-    public async getLatestMessagesSentBy(params: GetLatestMessagesBySenderParams): Promise<GetLatestMessagesResponse> {
-        return this.getLatestMessages({
-            ...params,
-            owner: params.id
-        });
-    }
+			return {
+				messages: edges.map(edge => edge.node),
+				cursor: edges[edges.length - 1]?.cursor || "",
+				hasNextPage: edges.length === (params.limit || 100)
+			};
+		} catch (error: any) {
+			Logger.error(`Error retrieving latest messages: ${error.message}`);
+			throw new GetLatestMessagesError(error);
+		}
+	}
 
-    public async getLatestMessagesReceivedBy(params: GetLatestMessagesByRecipientParams): Promise<GetLatestMessagesResponse> {
-        return this.getLatestMessages({
-            ...params,
-            recipient: params.recipientId
-        });
-    }
+	public async getLatestMessagesSentBy(params: GetLatestMessagesBySenderParams): Promise<GetLatestMessagesResponse> {
+		return this.getLatestMessages({
+			...params,
+			owner: params.id
+		});
+	}
 
-    public async getAllMessages(params: GetAllMessagesParams = {}): Promise<ArweaveTransaction[]> {
-        return this.getAllMessagesPaginated(params);
-    }
+	public async getLatestMessagesReceivedBy(params: GetLatestMessagesByRecipientParams): Promise<GetLatestMessagesResponse> {
+		return this.getLatestMessages({
+			...params,
+			recipient: params.recipientId
+		});
+	}
 
-    public async getAllMessagesSentBy(params: GetAllMessagesBySenderParams): Promise<ArweaveTransaction[]> {
-        return this.getAllMessagesPaginated({
-            ...params,
-            owner: params.id
-        });
-    }
+	public async getAllMessages(params: GetAllMessagesParams = {}): Promise<ArweaveTransaction[]> {
+		return this.getAllMessagesPaginated(params);
+	}
 
-    public async getAllMessagesReceivedBy(params: GetAllMessagesByRecipientParams): Promise<ArweaveTransaction[]> {
-        return this.getAllMessagesPaginated({
-            ...params,
-            recipient: params.recipientId
-        });
-    }
+	public async getAllMessagesSentBy(params: GetAllMessagesBySenderParams): Promise<ArweaveTransaction[]> {
+		return this.getAllMessagesPaginated({
+			...params,
+			owner: params.id
+		});
+	}
 
-    public async countAllMessages(params: GetAllMessagesParams): Promise<number> {
-        try {
-            // Always include Data-Protocol:ao tag
-            // Combine with user provided tags if any
-            const allTags = params.tags
-                ? [...DEFAULT_AO_TAGS, ...params.tags]
-                : DEFAULT_AO_TAGS;
-            const builder = new ArweaveGQLBuilder()
-                .tags(allTags)
-                .count()
+	public async getAllMessagesReceivedBy(params: GetAllMessagesByRecipientParams): Promise<ArweaveTransaction[]> {
+		return this.getAllMessagesPaginated({
+			...params,
+			recipient: params.recipientId
+		});
+	}
 
-            // Add recipient tag if specified
-            if (params.recipient) {
-                builder.recipient(params.recipient)
-            }
+	public async countAllMessages(params: GetAllMessagesParams): Promise<number> {
+		try {
+			// Always include Data-Protocol:ao tag
+			// Combine with user provided tags if any
+			const allTags = params.tags
+				? [...DEFAULT_AO_TAGS, ...params.tags]
+				: DEFAULT_AO_TAGS;
+			const builder = new ArweaveGQLBuilder()
+				.tags(allTags)
+				.count()
 
-            if (params.owner) {
-                builder.owner(params.owner);
-            }
+			// Add recipient tag if specified
+			if (params.recipient) {
+				builder.recipient(params.recipient)
+			}
 
-            const response = await this.query(builder);
-            return response.data.transactions.count!
-        } catch (error: any) {
-            Logger.error(`Error retrieving latest messages: ${error.message}`);
-            throw new GetLatestMessagesError(error);
-        }
-    }
+			if (params.owner) {
+				builder.owner(params.owner);
+			}
+
+			const response = await this.arweaveDataService.query(builder);
+			return response.data.transactions.count!
+		} catch (error: any) {
+			Logger.error(`Error retrieving latest messages: ${error.message}`);
+			throw new GetLatestMessagesError(error);
+		}
+	}
 }
