@@ -12,7 +12,8 @@ export const TAGS = {
 		POST_VDF_OUTPUT_AND_PROOF: { name: "Action", value: "Post-VDF-Output-And-Proof" },
 		GET_ALL_PROVIDERS: { name: "Action", value: "Get-All-Providers" },
 		GET_PROVIDER: { name: "Action", value: "Get-Provider" },
-		RESPONSE: { name: "Action", value: "Random-Response" }
+		RESPONSE: { name: "Action", value: "Random-Response" },
+		CREATED_NEW_RANDOM_REQUEST: { name: "Action", value: "Created New Random Request" }
 	}
 }
 
