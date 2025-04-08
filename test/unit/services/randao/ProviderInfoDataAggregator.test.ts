@@ -3,14 +3,18 @@ import { ARIOService } from "src/services/ario";
 import { ProviderInfoDataAggregator } from "src/services/randao/ProviderInfoDataAggregator";
 import { ProviderActivity } from "src/clients/randao/random/abstract/types";
 import { ProviderInfo } from "src/clients/randao/provider-profile/abstract/types";
+import { RandAODataService } from "src/services/randao/RandAODataService";
+import { IRandAODataService } from "src/services/randao/abstract/IRandAODataService";
 
 // Mock dependencies
 jest.mock("src/services/messages");
 jest.mock("src/services/ario");
+jest.mock("src/services/randao/RandAODataService");
 
 describe("ProviderInfoDataAggregator", () => {
 	let mockMessagesService: jest.Mocked<MessagesService>;
 	let mockArioService: jest.Mocked<ARIOService>;
+	let mockRandAODataService: jest.Mocked<IRandAODataService>;
 	let aggregator: ProviderInfoDataAggregator;
 
 	beforeEach(async () => {
@@ -18,18 +22,29 @@ describe("ProviderInfoDataAggregator", () => {
 		jest.clearAllMocks();
 
 		// Setup mock implementations
-		mockMessagesService = new MessagesService() as jest.Mocked<MessagesService>;
+		mockMessagesService = {
+			countAllMessages: jest.fn().mockResolvedValue(5),
+			getLatestMessages: jest.fn().mockResolvedValue({ messages: [] }),
+			getLatestMessagesSentBy: jest.fn().mockResolvedValue({ messages: [] }),
+			getLatestMessagesReceivedBy: jest.fn().mockResolvedValue({ messages: [] }),
+			getAllMessages: jest.fn().mockResolvedValue({ messages: [] }),
+			getMessageById: jest.fn().mockResolvedValue(null),
+			getMessagesByIds: jest.fn().mockResolvedValue({ messages: [] })
+		} as unknown as jest.Mocked<MessagesService>;
+
 		mockArioService = {
 			getProcessIdForDomain: jest.fn().mockResolvedValue("test-process-id"),
 			getInstance: jest.fn()
 		} as unknown as jest.Mocked<ARIOService>;
 
+		mockRandAODataService = {
+			getProviderTotalFullfilledCount: jest.fn().mockResolvedValue(10)
+		} as unknown as jest.Mocked<IRandAODataService>;
+
 		// Mock static methods
 		(ARIOService.getInstance as jest.Mock).mockReturnValue(mockArioService);
-		(MessagesService as jest.Mock).mockImplementation(() => mockMessagesService);
-
-		// Mock countAllMessages
-		mockMessagesService.countAllMessages = jest.fn().mockResolvedValue(5);
+		(MessagesService as unknown as jest.Mock).mockImplementation(() => mockMessagesService);
+		(RandAODataService.autoConfiguration as jest.Mock).mockResolvedValue(mockRandAODataService);
 
 		// Create aggregator instance
 		aggregator = await ProviderInfoDataAggregator.autoConfiguration();
@@ -122,7 +137,7 @@ describe("ProviderInfoDataAggregator", () => {
 			await aggregator.updateProviderData(activity);
 
 			// Assert
-			expect(mockMessagesService.countAllMessages).toHaveBeenCalledTimes(1);
+			expect(mockRandAODataService.getProviderTotalFullfilledCount).toHaveBeenCalledTimes(1);
 		});
 	});
 });

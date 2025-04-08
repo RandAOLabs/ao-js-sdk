@@ -3,9 +3,11 @@ import { ProviderActivity } from "../../clients/randao/random/abstract/types";
 import { ProviderInfoAggregate } from "./abstract/types";
 import { MessagesService } from "../messages";
 import { ARIOService } from "../ario";
-import { Domain } from "../ario/domains";
+import { DOMAIN } from "../ario/domains";
 import RANDOM_PROCESS_TAGS from "../../clients/randao/random/tags";
 import { IAutoconfiguration, staticImplements } from "../../utils";
+import { RandAODataService } from "./RandAODataService";
+import { IRandAODataService } from "./abstract/IRandAODataService";
 
 /**
  * Class responsible for aggregating provider data from multiple sources
@@ -17,8 +19,7 @@ export class ProviderInfoDataAggregator {
 	private processedProviderIds: Set<string>;
 
 	private constructor(
-		private readonly messagesService: MessagesService,
-		private readonly randomProcessId: string
+		private readonly randaoDataService: IRandAODataService,
 	) {
 		this.aggregateMap = new Map<string, ProviderInfoAggregate>();
 		this.processedProviderIds = new Set<string>();
@@ -30,8 +31,7 @@ export class ProviderInfoDataAggregator {
 	public static async autoConfiguration(): Promise<ProviderInfoDataAggregator> {
 		const ario = ARIOService.getInstance()
 		return new ProviderInfoDataAggregator(
-			new MessagesService(),
-			await ario.getProcessIdForDomain(Domain.RANDAO_API)
+			await RandAODataService.autoConfiguration()
 		)
 	}
 	/**
@@ -73,24 +73,11 @@ export class ProviderInfoDataAggregator {
 
 		// Update message count if not already processed
 		if (!this.processedProviderIds.has(providerId)) {
-			const totalFullfullilled = await this.getProviderTotalFullfilledCount(providerId);
+			const totalFullfullilled = await this.randaoDataService.getProviderTotalFullfilledCount(providerId);
 			entry.totalFullfullilled = totalFullfullilled;
 			this.processedProviderIds.add(providerId);
 		}
 
 		this.aggregateMap.set(providerId, entry);
-	}
-
-	/**
-	 * Get message count for a specific provider
-	 * @param providerId The provider ID to get message count for
-	 * @returns Promise resolving to the message count
-	 */
-	private async getProviderTotalFullfilledCount(providerId: string): Promise<number> {
-		return this.messagesService.countAllMessages({
-			owner: providerId,
-			recipient: this.randomProcessId,
-			tags: [RANDOM_PROCESS_TAGS.ACTION.REVEAL]
-		});
 	}
 }

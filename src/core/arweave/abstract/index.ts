@@ -1,1 +1,1 @@
-export * from "./IArweaveBaseClient"
+export * from "./IArweaveDataService"
