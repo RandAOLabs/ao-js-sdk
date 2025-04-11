@@ -1,18 +1,16 @@
-import { createDataItemSigner, connect } from '@permaweb/aoconnect';
-import { Tags } from '../../common';
+import { createDataItemSigner } from '@permaweb/aoconnect';
+import { Tags } from '../../../common';
 import { JWKInterface } from 'arweave/node/lib/wallet';
-import { Environment, getEnvironment, Logger } from '../../../utils';
-import { getArweave } from '../../arweave/arweave';
-import { ConnectArgsLegacy } from './aoconnect-types';
-import { ReadOnlyRetryAOClient } from './ReadOnlyRetryClient';
-import { SendMessage } from '@permaweb/aoconnect/dist/lib/message';
-import { AOClientError } from './AOClientError';
-import { AOMessageIdMissingError } from '../AOError';
+import { Environment, getEnvironment } from '../../../../utils';
+import { getArweave } from '../../../arweave/arweave';
+import { ConnectArgsLegacy } from '../aoconnect-types';
+import { AOClientError } from '../AOClientError';
+import { AOMessageIdMissingError } from '../../AOError';
+import { ReadOnlyAOClient } from './ReadOnlyAOClient';
 
-export class WriteReadAOClient extends ReadOnlyRetryAOClient {
+export class WriteReadAOClient extends ReadOnlyAOClient {
 	private readonly signer: ReturnType<typeof createDataItemSigner>;
 	private readonly wallet: JWKInterface | any;
-	protected _message!: SendMessage;
 
 	/**
 	 * Creates a new WriteReadAOClient instance with the provided signer.
@@ -58,14 +56,6 @@ export class WriteReadAOClient extends ReadOnlyRetryAOClient {
 		}
 	}
 
-	public override setConfig(aoConnectConfig: ConnectArgsLegacy): void {
-		Logger.debug(`Connecting to AO with:`, aoConnectConfig)
-		const { message, result, results, dryrun } = connect(aoConnectConfig);
-		this._message = message;
-		this._result = result;
-		this._results = results;
-		this._dryrun = dryrun;
-	}
 
 	public override getWallet(): JWKInterface | any | undefined {
 		return this.wallet

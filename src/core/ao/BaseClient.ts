@@ -10,11 +10,10 @@ import { Tags } from '../common';
 import { DryRunParams } from './ao-client/abstract';
 import { ArweaveDataCachingService } from '../arweave/ArweaveDataCachingService';
 import { ArweaveTransaction } from '../arweave/abstract/types';
-import { WriteReadAOClient } from './ao-client/WriteReadAOClient';
+import { WriteReadRetryAOClient } from './ao-client/variants/WriteReadRetryAOClient';
 import { IAOClient } from './ao-client/abstract/IAOClient';
-import { ReadOnlyAOClient } from './ao-client/ReadOnlyAOClient';
 import { JWKInterface } from 'arweave/node/lib/wallet';
-import { ReadOnlyRetryAOClient } from './ao-client';
+import { ReadOnlyAOClient, ReadOnlyRetryAOClient, WriteReadAOClient } from './ao-client';
 import { SortOrder } from './abstract';
 import ResultUtils from '../common/result-utils/ResultUtils';
 import { IArweaveDataCachingService } from '../arweave/abstract/IArweaveDataCachingService';
@@ -39,7 +38,7 @@ export class BaseClient extends IBaseClient {
 		super()
 		this.baseConfig = baseConfig;
 		if (baseConfig.wallet) { // Wallet Provided -> Write Read Client
-			this.ao = new WriteReadAOClient(baseConfig.wallet, baseConfig.aoConfig)
+			this.ao = new WriteReadRetryAOClient(baseConfig.wallet, baseConfig.aoConfig)
 		} else { // Wallet Not Provided -> Read Only Client
 			this.ao = new ReadOnlyRetryAOClient(baseConfig.aoConfig)
 		}
@@ -120,7 +119,7 @@ export class BaseClient extends IBaseClient {
 	}
 
 	public setWallet(wallet: JWKInterface | any): void {
-		this.ao = new WriteReadAOClient(wallet)
+		this.ao = new WriteReadRetryAOClient(wallet)
 	}
 
 	/* Public Utility */
@@ -137,7 +136,9 @@ export class BaseClient extends IBaseClient {
 	}
 
 	public isReadOnly(): boolean {
-		return this.ao instanceof ReadOnlyAOClient && !(this.ao instanceof WriteReadAOClient);
+		return this.ao instanceof ReadOnlyAOClient
+			&& !(this.ao instanceof WriteReadRetryAOClient)
+			&& !(this.ao instanceof WriteReadAOClient);
 	}
 
 	public async getProcessInfo(): Promise<ArweaveTransaction> {
