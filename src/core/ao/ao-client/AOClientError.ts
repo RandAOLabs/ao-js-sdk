@@ -1,8 +1,8 @@
-import { IAOClient } from "./abstract";
 import { Logger, StringFormatting } from "../../../utils";
+import { IReadOnlyAOClient } from "./interfaces/IReadOnlyAOClient";
 
 
-export class AOClientError<T extends IAOClient, P = any> extends Error {
+export class AOClientError<T extends IReadOnlyAOClient, P = any> extends Error {
 	private static readonly MAX_LINE_LENGTH = 80;
 	public constructor(
 		public readonly client: T,
@@ -28,7 +28,7 @@ export class AOClientError<T extends IAOClient, P = any> extends Error {
 	}
 }
 
-export class AORateLimitingError<T extends IAOClient, P = any> extends AOClientError<T, P> {
+export class AORateLimitingError<T extends IReadOnlyAOClient, P = any> extends AOClientError<T, P> {
 	public constructor(
 		client: T,
 		func: Function,
@@ -44,7 +44,7 @@ export class AORateLimitingError<T extends IAOClient, P = any> extends AOClientE
 /**
  * Error thrown when attempting write operations on a read-only AO client.
  */
-export class AOReadOnlyClientError<T extends IAOClient, P = any> extends AOClientError<T, P> {
+export class AOReadOnlyClientError<T extends IReadOnlyAOClient, P = any> extends AOClientError<T, P> {
 	public constructor(
 		client: T,
 		func: Function,
@@ -58,7 +58,7 @@ export class AOReadOnlyClientError<T extends IAOClient, P = any> extends AOClien
 }
 
 
-export class AOAllConfigsFailedError<T extends IAOClient, P = any> extends AOClientError<T, P> {
+export class AOAllConfigsFailedError<T extends IReadOnlyAOClient, P = any> extends AOClientError<T, P> {
 	public constructor(
 		client: T,
 		func: Function,
