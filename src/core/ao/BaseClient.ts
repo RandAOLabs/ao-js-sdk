@@ -10,7 +10,6 @@ import { Tags } from '../common';
 import { DryRunParams } from './ao-client/interfaces';
 import { ArweaveDataCachingService } from '../arweave/ArweaveDataCachingService';
 import { ArweaveTransaction } from '../arweave/abstract/types';
-import { WriteReadRetryAOClient } from './ao-client/implementations/WriteReadRetryAOClient';
 import { IWriteReadAOClient } from './ao-client/interfaces/IWriteReadAOClient';
 import { JWKInterface } from 'arweave/node/lib/wallet';
 import { AOReadOnlyClientError, ReadOnlyAOClient, ReadOnlyRetryAOClient, WriteReadAOClient } from './ao-client';
