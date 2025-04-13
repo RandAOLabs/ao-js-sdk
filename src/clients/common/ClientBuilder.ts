@@ -46,7 +46,7 @@ export class ClientBuilder<T extends BaseClient> implements IBuilder<T> {
 	 * @param enabled whether or not to retry on rpc errors.
 	 * @returns The builder instance for method chaining
 	 */
-	withRetriesEnabled(enabled?: false): this {
+	withRetriesEnabled(enabled: boolean): this {
 		this.configBuilder.withRetriesEnabled(enabled)
 		return this;
 	}

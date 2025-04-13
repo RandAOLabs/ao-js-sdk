@@ -36,7 +36,9 @@ export class RandomClient extends BaseClient implements IRandomClient {
 		super(randomConfig)
 		const tokenConfig: TokenClientConfig = {
 			processId: randomConfig.tokenProcessId,
-			wallet: randomConfig.wallet
+			wallet: randomConfig.wallet,
+			aoConfig: randomConfig.aoConfig,
+			retriesEnabled: randomConfig.retriesEnabled
 		}
 		this.tokenClient = new TokenClient(tokenConfig)
 	}
@@ -60,7 +62,7 @@ export class RandomClient extends BaseClient implements IRandomClient {
 	 * @see {@link IDefaultBuilder.defaultBuilder} 
 	 */
 	public static async defaultBuilder(): Promise<TokenInterfacingClientBuilder<RandomClient>> {
-		const ario = await ARIOService.getInstance()
+		const ario = ARIOService.getInstance()
 		const randomProcessId = await ario.getProcessIdForDomain(DOMAIN.RANDAO_API)
 		return RandomClient.builder()
 			.withProcessId(randomProcessId)
