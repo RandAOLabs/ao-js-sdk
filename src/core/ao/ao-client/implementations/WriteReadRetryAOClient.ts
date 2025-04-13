@@ -1,15 +1,15 @@
-import { createDataItemSigner, connect } from '@permaweb/aoconnect';
+import { createDataItemSigner } from '@permaweb/aoconnect';
 import { Tags } from '../../../common';
 import { JWKInterface } from 'arweave/node/lib/wallet';
-import { Environment, getEnvironment, Logger } from '../../../../utils';
-import { getArweave } from '../../../arweave/arweave';
 import { ConnectArgsLegacy } from '../aoconnect-types';
 import { SendMessage } from '@permaweb/aoconnect/dist/lib/message';
 import { AOClientError } from '../AOClientError';
 import { AOMessageIdMissingError } from '../../AOError';
 import { ReadOnlyRetryAOClient } from './ReadOnlyRetryClient';
+import { IWriteReadAOClient } from '../interfaces';
+import { WalletUtils } from '../../../common/WalletUtils';
 
-export class WriteReadRetryAOClient extends ReadOnlyRetryAOClient {
+export class WriteReadRetryAOClient extends ReadOnlyRetryAOClient implements IWriteReadAOClient {
 	private readonly signer: ReturnType<typeof createDataItemSigner>;
 	private readonly wallet: JWKInterface | any;
 	protected _message!: SendMessage;
@@ -24,18 +24,7 @@ export class WriteReadRetryAOClient extends ReadOnlyRetryAOClient {
 		this.signer = createDataItemSigner(wallet);
 	}
 
-	public async getCallingWalletAddress(): Promise<string> {
-		const environment = getEnvironment();
-
-		if (environment === Environment.BROWSER) {
-			return await this.wallet.getActiveAddress();
-		} else {
-			const arweave = getArweave();
-			return await arweave.wallets.jwkToAddress(this.wallet);
-		}
-	}
-
-	public override async message(
+	public async message(
 		process: string,
 		data: string = '',
 		tags: Tags = [],
@@ -58,16 +47,13 @@ export class WriteReadRetryAOClient extends ReadOnlyRetryAOClient {
 		}
 	}
 
-	public override setConfig(aoConnectConfig: ConnectArgsLegacy): void {
-		Logger.debug(`Connecting to AO with:`, aoConnectConfig)
-		const { message, result, results, dryrun } = connect(aoConnectConfig);
-		this._message = message;
-		this._result = result;
-		this._results = results;
-		this._dryrun = dryrun;
+
+	public async getCallingWalletAddress(): Promise<string> {
+		return await WalletUtils.getWalletAddress(this.getWallet())
 	}
 
-	public override getWallet(): JWKInterface | any | undefined {
+
+	public getWallet(): JWKInterface | any | undefined {
 		return this.wallet
 	}
 }

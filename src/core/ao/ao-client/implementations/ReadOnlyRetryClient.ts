@@ -2,13 +2,14 @@ import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
 
 import { MessageResult, ReadResultArgs } from "@permaweb/aoconnect/dist/lib/result";
 import { ReadResultsArgs, ResultsResponse } from "@permaweb/aoconnect/dist/lib/results";
-import { DryRunParams } from "../abstract";
+import { DryRunParams } from "../interfaces";
 import { AORateLimitingError, AOAllConfigsFailedError } from "../AOClientError";
 import { ConnectArgsLegacy } from "../aoconnect-types";
 import { AO_CONFIGURATIONS } from "../configurations";
 import { ReadOnlyAOClient } from "./ReadOnlyAOClient";
+import { IReadOnlyAOClient } from "../interfaces/IReadOnlyAOClient";
 
-export class ReadOnlyRetryAOClient extends ReadOnlyAOClient {
+export class ReadOnlyRetryAOClient extends ReadOnlyAOClient implements IReadOnlyAOClient {
 	private static readonly AO_CONFIGURATIONS: readonly ConnectArgsLegacy[] = [
 		AO_CONFIGURATIONS.RANDAO,
 		AO_CONFIGURATIONS.ARDRIVE,
@@ -103,6 +104,6 @@ export class ReadOnlyRetryAOClient extends ReadOnlyAOClient {
 		}
 
 		// If we get here, all compute units failed
-		throw new AOAllConfigsFailedError(this, this.retryWithConfigs, { params, initialOperation, operationFn }, this.encounteredErrors, await this.getCallingWalletAddress())
+		throw new AOAllConfigsFailedError(this, this.retryWithConfigs, { params, initialOperation, operationFn }, this.encounteredErrors, undefined)
 	}
 }

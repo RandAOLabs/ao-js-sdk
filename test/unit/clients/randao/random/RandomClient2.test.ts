@@ -1,4 +1,3 @@
-import ResultUtils from "src/core/common/result-utils/ResultUtils";
 import { Logger, LogLevel, RandomClient } from "src/index";
 import { MockBaseClient } from "test/unit/clients/MockBaseClient";
 

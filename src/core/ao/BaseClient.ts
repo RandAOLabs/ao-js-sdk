@@ -1,4 +1,4 @@
-import { IBaseClient } from './abstract/IBaseClient';
+import { IProcessClient } from './abstract/IBaseClient';
 import { BaseClientConfig } from './configuration/BaseClientConfig';
 import { mergeLists } from '../../utils/lists';
 import { DEFAULT_TAGS } from './constants';
@@ -7,16 +7,18 @@ import { ResultsResponse } from '@permaweb/aoconnect/dist/lib/results';
 import { DryRunResult } from '@permaweb/aoconnect/dist/lib/dryrun';
 import { Logger, LogLevel } from '../../utils';
 import { Tags } from '../common';
-import { DryRunParams } from './ao-client/abstract';
+import { DryRunParams } from './ao-client/interfaces';
 import { ArweaveDataCachingService } from '../arweave/ArweaveDataCachingService';
 import { ArweaveTransaction } from '../arweave/abstract/types';
-import { WriteReadRetryAOClient } from './ao-client/variants/WriteReadRetryAOClient';
-import { IAOClient } from './ao-client/abstract/IAOClient';
+import { WriteReadRetryAOClient } from './ao-client/implementations/WriteReadRetryAOClient';
+import { IWriteReadAOClient } from './ao-client/interfaces/IWriteReadAOClient';
 import { JWKInterface } from 'arweave/node/lib/wallet';
-import { ReadOnlyAOClient, ReadOnlyRetryAOClient, WriteReadAOClient } from './ao-client';
+import { AOReadOnlyClientError, ReadOnlyAOClient, ReadOnlyRetryAOClient, WriteReadAOClient } from './ao-client';
+import { AOClientBuilder } from './ao-client/AOClientBuilder';
 import { SortOrder } from './abstract';
 import ResultUtils from '../common/result-utils/ResultUtils';
 import { IArweaveDataCachingService } from '../arweave/abstract/IArweaveDataCachingService';
+import { IReadOnlyAOClient } from './ao-client/interfaces/IReadOnlyAOClient';
 
 /**
  * Base client implementation for AO Process interactions.
@@ -24,32 +26,36 @@ import { IArweaveDataCachingService } from '../arweave/abstract/IArweaveDataCach
  * All other clients extend this base implementation.
  * @category Core
  */
-export class BaseClient extends IBaseClient {
+export class BaseClient implements IProcessClient {
 	/* Fields */
 	/** @protected */
 	readonly baseConfig: BaseClientConfig;
 	/** @protected */
-	private ao: IAOClient;
+	private ao: IWriteReadAOClient | IReadOnlyAOClient;
 	private useDryRunAsMessage: boolean = false;
 	private readonly arweaveService: IArweaveDataCachingService;
 	/* Fields */
 	/* Constructors */
 	public constructor(baseConfig: BaseClientConfig) {
-		super()
 		this.baseConfig = baseConfig;
-		if (baseConfig.wallet) { // Wallet Provided -> Write Read Client
-			this.ao = new WriteReadRetryAOClient(baseConfig.wallet, baseConfig.aoConfig)
-		} else { // Wallet Not Provided -> Read Only Client
-			this.ao = new ReadOnlyRetryAOClient(baseConfig.aoConfig)
-		}
+		const builder = new AOClientBuilder()
+			.withWallet(baseConfig.wallet)
+			.withRetriesEnabled(baseConfig.retriesEnabled)
+			.withAOConfig(baseConfig.aoConfig);
+		this.ao = builder.build();
 		this.arweaveService = ArweaveDataCachingService.autoConfiguration();
 	}
 	/* Constructors */
 	/* Core AO Functions */
 	/** @protected */
 	async message(data: string = '', tags: Tags = [], anchor?: string): Promise<string> {
+		if (this.isReadOnly()) {
+			throw new AOReadOnlyClientError(this.ao, this.getCallingWalletAddress, undefined)
+		}
+
 		const mergedTags = mergeLists(tags, DEFAULT_TAGS, tag => tag.name);
-		return await this.ao.message(
+
+		return await (this.ao as IWriteReadAOClient).message(
 			this.baseConfig.processId,
 			data,
 			mergedTags,
@@ -119,7 +125,11 @@ export class BaseClient extends IBaseClient {
 	}
 
 	public setWallet(wallet: JWKInterface | any): void {
-		this.ao = new WriteReadRetryAOClient(wallet)
+		this.ao = new AOClientBuilder()
+			.withWallet(wallet)
+			.withAOConfig(this.baseConfig.aoConfig)
+			.withRetriesEnabled(this.baseConfig.retriesEnabled)
+			.build();
 	}
 
 	/* Public Utility */
@@ -128,7 +138,10 @@ export class BaseClient extends IBaseClient {
 	}
 
 	public async getCallingWalletAddress(): Promise<string> {
-		return this.ao.getCallingWalletAddress()
+		if (this.isReadOnly()) {
+			throw new AOReadOnlyClientError(this.ao, this.getCallingWalletAddress, undefined)
+		}
+		return (this.ao as IWriteReadAOClient).getCallingWalletAddress()
 	}
 
 	public isRunningDryRunsAsMessages(): boolean {
@@ -136,9 +149,7 @@ export class BaseClient extends IBaseClient {
 	}
 
 	public isReadOnly(): boolean {
-		return this.ao instanceof ReadOnlyAOClient
-			&& !(this.ao instanceof WriteReadRetryAOClient)
-			&& !(this.ao instanceof WriteReadAOClient);
+		return !('message' in this.ao);
 	}
 
 	public async getProcessInfo(): Promise<ArweaveTransaction> {
@@ -146,7 +157,10 @@ export class BaseClient extends IBaseClient {
 	}
 
 	public getWallet(): JWKInterface | any | undefined {
-		return this.ao.getWallet()
+		if (this.isReadOnly()) {
+			return undefined;
+		}
+		return (this.ao as IWriteReadAOClient).getWallet();
 	}
 
 	/* Public Utility */
