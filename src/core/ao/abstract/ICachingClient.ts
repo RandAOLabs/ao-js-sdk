@@ -1,8 +1,8 @@
-import { IBaseClient } from "./IBaseClient";
+import { IProcessClient } from "./IBaseClient";
 
-export interface IDryRunCachingClient extends IBaseClient {
-    /**
-     * Clears DryRun Cache 
-     */
-    clearCache(): void;
+export interface IDryRunCachingClient extends IProcessClient {
+	/**
+	 * Clears DryRun Cache 
+	 */
+	clearCache(): void;
 }

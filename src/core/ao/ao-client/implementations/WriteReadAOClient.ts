@@ -1,14 +1,14 @@
 import { createDataItemSigner } from '@permaweb/aoconnect';
 import { Tags } from '../../../common';
 import { JWKInterface } from 'arweave/node/lib/wallet';
-import { Environment, getEnvironment } from '../../../../utils';
-import { getArweave } from '../../../arweave/arweave';
 import { ConnectArgsLegacy } from '../aoconnect-types';
 import { AOClientError } from '../AOClientError';
 import { AOMessageIdMissingError } from '../../AOError';
 import { ReadOnlyAOClient } from './ReadOnlyAOClient';
+import { IWriteReadAOClient } from '../interfaces';
+import { WalletUtils } from '../../../common/WalletUtils';
 
-export class WriteReadAOClient extends ReadOnlyAOClient {
+export class WriteReadAOClient extends ReadOnlyAOClient implements IWriteReadAOClient {
 	private readonly signer: ReturnType<typeof createDataItemSigner>;
 	private readonly wallet: JWKInterface | any;
 
@@ -22,18 +22,7 @@ export class WriteReadAOClient extends ReadOnlyAOClient {
 		this.signer = createDataItemSigner(wallet);
 	}
 
-	public async getCallingWalletAddress(): Promise<string> {
-		const environment = getEnvironment();
-
-		if (environment === Environment.BROWSER) {
-			return await this.wallet.getActiveAddress();
-		} else {
-			const arweave = getArweave();
-			return await arweave.wallets.jwkToAddress(this.wallet);
-		}
-	}
-
-	public override async message(
+	public async message(
 		process: string,
 		data: string = '',
 		tags: Tags = [],
@@ -56,8 +45,11 @@ export class WriteReadAOClient extends ReadOnlyAOClient {
 		}
 	}
 
+	public async getCallingWalletAddress(): Promise<string> {
+		return await WalletUtils.getWalletAddress(this.getWallet())
+	}
 
-	public override getWallet(): JWKInterface | any | undefined {
+	public getWallet(): JWKInterface | any | undefined {
 		return this.wallet
 	}
 }

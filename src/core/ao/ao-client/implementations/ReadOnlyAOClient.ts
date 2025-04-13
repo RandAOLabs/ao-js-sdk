@@ -3,18 +3,17 @@ import { MessageResult, ReadResult, ReadResultArgs } from '@permaweb/aoconnect/d
 import { ReadResults, ReadResultsArgs, ResultsResponse } from '@permaweb/aoconnect/dist/lib/results';
 import { DryRun, DryRunResult } from '@permaweb/aoconnect/dist/lib/dryrun';
 
-import { JWKInterface } from 'arweave/node/lib/wallet';
 import { Logger } from '../../../../utils';
-import { Tags } from '../../../common';
 import { SortOrder } from '../../abstract';
-import { IAOClient, DryRunParams } from '../abstract';
-import { AOReadOnlyClientError, AORateLimitingError, AOClientError } from '../AOClientError';
+import { DryRunParams } from '../interfaces';
+import { AORateLimitingError, AOClientError } from '../AOClientError';
 import { ConnectArgsLegacy } from '../aoconnect-types';
 import { AO_CONFIGURATION_DEFAULT } from '../configurations';
 import { RATELIMIT_ERROR_TEXT } from '../constants';
 import { SendMessage } from '@permaweb/aoconnect/dist/lib/message';
+import { IReadOnlyAOClient } from '../interfaces/IReadOnlyAOClient';
 
-export class ReadOnlyAOClient implements IAOClient {
+export class ReadOnlyAOClient implements IReadOnlyAOClient {
 	protected _result!: ReadResult;
 	protected _results!: ReadResults;
 	protected _dryrun!: DryRun;
@@ -28,15 +27,6 @@ export class ReadOnlyAOClient implements IAOClient {
 		} else {
 			this.setConfig(AO_CONFIGURATION_DEFAULT);
 		}
-	}
-
-	public async message(
-		process: string,
-		data: string = '',
-		tags: Tags = [],
-		anchor?: string
-	): Promise<string> {
-		throw new AOReadOnlyClientError(this, this.message, { process, data, tags, anchor });
 	}
 
 	public async results(
@@ -53,9 +43,9 @@ export class ReadOnlyAOClient implements IAOClient {
 			return results
 		} catch (error: any) {
 			if (error.message = RATELIMIT_ERROR_TEXT) {
-				throw new AORateLimitingError(this, this.dryrun, params, await this.getCallingWalletAddress(), error)
+				throw new AORateLimitingError(this, this.dryrun, params, undefined, error)
 			} else {
-				throw new AOClientError(this, this.results, params, await this.getCallingWalletAddress(), error);
+				throw new AOClientError(this, this.results, params, undefined, error);
 			}
 		}
 
@@ -67,9 +57,9 @@ export class ReadOnlyAOClient implements IAOClient {
 			return result
 		} catch (error: any) {
 			if (error.message = RATELIMIT_ERROR_TEXT) {
-				throw new AORateLimitingError(this, this.dryrun, params, await this.getCallingWalletAddress(), error)
+				throw new AORateLimitingError(this, this.dryrun, params, undefined, error)
 			} else {
-				throw new AOClientError(this, this.result, params, await this.getCallingWalletAddress(), error);
+				throw new AOClientError(this, this.result, params, undefined, error);
 			}
 		}
 
@@ -81,15 +71,11 @@ export class ReadOnlyAOClient implements IAOClient {
 			return result
 		} catch (error: any) {
 			if (error.message = RATELIMIT_ERROR_TEXT) {
-				throw new AORateLimitingError(this, this.dryrun, params, await this.getCallingWalletAddress(), error)
+				throw new AORateLimitingError(this, this.dryrun, params, undefined, error)
 			} else {
-				throw new AOClientError(this, this.dryrun, params, await this.getCallingWalletAddress(), error);
+				throw new AOClientError(this, this.dryrun, params, undefined, error);
 			}
 		}
-	}
-
-	public async getCallingWalletAddress(): Promise<string> {
-		throw new AOReadOnlyClientError(this, this.message, undefined);
 	}
 
 
@@ -104,10 +90,5 @@ export class ReadOnlyAOClient implements IAOClient {
 
 	public getActiveConfig(): ConnectArgsLegacy {
 		return this.activeAOConfig
-	}
-
-	public getWallet(): JWKInterface | any | undefined {
-		Logger.warn("Wallet requested from ReadOnly Client Returning undefined")
-		return undefined
 	}
 }

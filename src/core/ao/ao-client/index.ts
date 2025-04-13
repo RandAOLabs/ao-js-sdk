@@ -1,4 +1,4 @@
-export * from "./variants/WriteReadRetryAOClient"
+export * from "./implementations/WriteReadRetryAOClient"
 export * from "./AOClientError"
 export * from "./constants"
-export * from "./variants"
+export * from "./implementations"
