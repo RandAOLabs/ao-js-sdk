@@ -1,5 +1,5 @@
-const RANDAO_STAKING_PROCESS_ID: string = "vZsz1-g4647mgLxVAji9p38kfSX0AC4aRsu57h22tw0"
-const RANDAO_RNG_TOKEN_PROCESS_ID: string = "kUnKIPp7XS4pBsy1qy7j3S-JJ0ChZ4utbZ-IPxhw_W0"
+const RANDAO_STAKING_PROCESS_ID: string = "wBVNMO7KLGBZxHIRL6Kl1MJhm3ipCF351w4hv72SEY8"
+const RANDAO_RNG_TOKEN_PROCESS_ID: string = "rPpsRk9Rm8_SJ1JF8m9_zjTalkv9Soaa_5U0tYUloeY"
 
 
 
@@ -10,7 +10,7 @@ export const RANDAO = {
      * Typically retrieved from chain dynamically this value may be stale
      * arns name: api_randao
      */
-    RANDOM: "aeu3pyFhfNvw3yWjb3o_WnWBh4f4W-BzWxDqPAbCJjk",
+    RANDOM: "ZBSQD_GeGUdQAiixxKy9Ag1rgJvJ_yFUGExwjW6mA7E",
     STAKING: RANDAO_STAKING_PROCESS_ID,
     PROFILE: RANDAO_STAKING_PROCESS_ID,
 }
