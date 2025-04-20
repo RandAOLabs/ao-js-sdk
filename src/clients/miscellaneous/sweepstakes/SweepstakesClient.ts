@@ -22,7 +22,7 @@ import { TokenClient, TokenClientConfig } from "../../ao";
 export class SweepstakesClient extends BaseClient implements ISweepstakesClient {
 	
 	readonly tokenClient: TokenClient;
-
+	// TODO ETHANAHAHAHHAHAHHA
 	public constructor(config: TokenClientConfig) {
 		super(config);
 		this.tokenClient = new TokenClient(config);
