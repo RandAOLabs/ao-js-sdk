@@ -5,3 +5,4 @@
  * @module
  */
 export * from "./raffle"
+export * from "./sweepstakes"

@@ -1,4 +1,6 @@
 export const MISCELLANEOUS = {
     RAFFLE: "RQZBPcI-EUVb9rdcbiIN0eggYSJNLgdFuD7G_GztreQ",
-    NFT_SALE: "ewO-sg8QM8xK_yM_ERzvbOZ4DCbTGoBK51uZnc3MENw"
+    NFT_SALE: "ewO-sg8QM8xK_yM_ERzvbOZ4DCbTGoBK51uZnc3MENw",
+	SWEEPSTAKES: "x6n78UTg__Nqfm8-xubwARlKc2JcE5tSeHRKqQjrKtw",
+	SWEEPSTAKES_TOKEN: "5ZR9uegKoEhE9fJMbs-MvWLIztMNCVxgpzfeBVE3vqI",
 }
