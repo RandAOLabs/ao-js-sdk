@@ -1,8 +1,3 @@
-import { BaseClientConfig } from "../../../../core";
-
-export interface SweepstakesClientConfig extends BaseClientConfig {
-}
-
 export interface SweepstakesPull {
     CallbackId: string;
     User: string;
@@ -10,10 +5,10 @@ export interface SweepstakesPull {
     Id: number;
 }
 
-export interface ViewPullsResponse {
+export interface ViewSweepstakesPullsResponse {
     pulls: SweepstakesPull[];
 }
 
-export type ViewEntrantsResponse = string[];
+export type ViewSweepstakesEntrantsResponse = string[];
 
 export type ViewSweepstakesOwnersResponse = string[];

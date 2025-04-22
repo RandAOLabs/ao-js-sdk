@@ -1,4 +1,4 @@
-import { SweepstakesPull, ViewPullsResponse, ViewEntrantsResponse, ViewSweepstakesOwnersResponse } from "./types";
+import { SweepstakesPull, ViewSweepstakesPullsResponse, ViewSweepstakesEntrantsResponse, ViewSweepstakesOwnersResponse } from "./types";
 
 /**
  * Interface for the Sweepstakes Client that provides functionality for managing sweepstakess
@@ -19,17 +19,11 @@ export interface ISweepstakesClient {
     pullSweepstakes(): Promise<boolean>;
 
     /**
-     * Retrieves the most recent sweepstakes pull by finding the one with the highest ID.
-     * @returns Promise resolving to the most recent pull details
-     */
-    viewMostRecentPull(): Promise<SweepstakesPull>;
-
-    /**
      * Retrieves the list of entrants for a specific user's sweepstakes.
      * @param userId ID of the user whose sweepstakes entrants to view
      * @returns Promise resolving to array of entrant names
      */
-    viewEntrants(userId: string): Promise<ViewEntrantsResponse>;
+    viewSweepstakesEntrants(userId: string): Promise<ViewSweepstakesEntrantsResponse>;
 
     /**
      * Retrieves details of a specific sweepstakes pull for a user.
@@ -37,14 +31,14 @@ export interface ISweepstakesClient {
      * @param pullId ID of the pull to view
      * @returns Promise resolving to pull details
      */
-    viewUserPull(userId: string, pullId: string): Promise<SweepstakesPull>;
+    viewUserSweepstakesPull(userId: string, pullId: string): Promise<SweepstakesPull>;
 
     /**
      * Retrieves all sweepstakes pulls for a specific user.
      * @param userId ID of the user whose pulls to view
      * @returns Promise resolving to an object containing array of pulls
      */
-    viewUserPulls(userId: string): Promise<ViewPullsResponse>;
+    viewUserSweepstakesPulls(userId: string): Promise<ViewSweepstakesPullsResponse>;
 
     /**
      * Retrieves the list of all sweepstakes owners.
