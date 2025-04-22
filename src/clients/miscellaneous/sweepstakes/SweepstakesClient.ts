@@ -3,15 +3,20 @@ import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
 
 import { Tags } from "../../../core";
 import { IAutoconfiguration, IDefaultBuilder, staticImplements } from "../../../utils";
-import { ISweepstakesClient, SweepstakesPull, ViewPullsResponse, ViewEntrantsResponse, ViewSweepstakesOwnersResponse } from "../..";
+import { ISweepstakesClient, SweepstakesClientConfig, SweepstakesPull, ViewSweepstakesPullsResponse, ViewSweepstakesEntrantsResponse, ViewSweepstakesOwnersResponse } from "./abstract";
 import { ViewPullError } from "./SweepstakesClientError";
 import { SweepstakesProcessError } from "./SweepstakesProcessError";
 import { BaseClient } from "../../../core/ao/BaseClient";
+import { ARIOService } from "../../../services";
+import { DOMAIN } from "../../../services/ario/domains";
+import { AO_CONFIGURATIONS } from "../../../core/ao/ao-client/configurations";
 import ResultUtils from "../../../core/common/result-utils/ResultUtils";
 import { ClientBuilder } from "../../common";
 import { PROCESS_IDS } from "../../../process-ids";
 import { ClientError } from "../../common/ClientError";
 import { TokenClient, TokenClientConfig } from "../../ao";
+import { TokenInterfacingClientBuilder } from "../../common/TokenInterfacingClientBuilder";
+import { IClassBuilder } from "../../../utils/class-interfaces/IClientBuilder";
 
 /**
  * @category Miscellaneous
@@ -19,36 +24,53 @@ import { TokenClient, TokenClientConfig } from "../../ao";
  */
 @staticImplements<IAutoconfiguration>()
 @staticImplements<IDefaultBuilder>()
+@staticImplements<IClassBuilder>()
+
 export class SweepstakesClient extends BaseClient implements ISweepstakesClient {
 	
 	readonly tokenClient: TokenClient;
-	// TODO ETHANAHAHAHHAHAHHA
-	public constructor(config: TokenClientConfig) {
-		super(config);
-		this.tokenClient = new TokenClient(config);
+	// TODO 
+	public constructor(sweepstakesConfig: SweepstakesClientConfig) {
+		super(sweepstakesConfig);
+		const tokenConfig: TokenClientConfig = {
+			processId: sweepstakesConfig.tokenProcessId,
+			wallet: sweepstakesConfig.wallet,
+			aoConfig: sweepstakesConfig.aoConfig,
+			retriesEnabled: sweepstakesConfig.retriesEnabled
+		}
+		this.tokenClient = new TokenClient(tokenConfig);
 	}
 
 	/** 
 	 * {@inheritdoc IAutoconfiguration.autoConfiguration}
 	 * @see {@link IAutoconfiguration.autoConfiguration} 
 	 */
-	public static autoConfiguration(): SweepstakesClient {
-		return SweepstakesClient.defaultBuilder()
+	public static async autoConfiguration(): Promise<SweepstakesClient> {
+		const builder = await SweepstakesClient.defaultBuilder();
+
+		return builder
 			.build()
+	}
+
+	public static builder(): TokenInterfacingClientBuilder<SweepstakesClient> {
+		return new TokenInterfacingClientBuilder(SweepstakesClient)
 	}
 
 	/** 
 	 * {@inheritdoc IDefaultBuilder.defaultBuilder}
 	 * @see {@link IDefaultBuilder.defaultBuilder} 
 	 */
-	public static defaultBuilder(): ClientBuilder<SweepstakesClient> {
-		return new ClientBuilder(SweepstakesClient)
-			.withProcessId(PROCESS_IDS.MISCELLANEOUS.RAFFLE)
+	public static async defaultBuilder(): Promise<TokenInterfacingClientBuilder<SweepstakesClient>> {
+		const sweepstakesProcessId = PROCESS_IDS.MISCELLANEOUS.SWEEPSTAKES
+		return SweepstakesClient.builder()
+			.withProcessId(sweepstakesProcessId)
+			.withTokenProcessId(PROCESS_IDS.MISCELLANEOUS.SWEEPSTAKES_TOKEN)
+			.withAOConfig(AO_CONFIGURATIONS.RANDAO)
 	}
 
 	async registerSweepstakes(entrants: string[]): Promise<boolean> {
 		try {
-			const paymentAmount = "100"; // TODO: Determine payment amount dynamically if needed
+			const paymentAmount = "100000000000"; // TODO: Determine payment amount dynamically if needed
 			const tags: Tags = [
 				{ name: "X-Entrants", value: JSON.stringify({ entrants }) },
 			];
@@ -77,7 +99,7 @@ export class SweepstakesClient extends BaseClient implements ISweepstakesClient 
 	async pullSweepstakes(): Promise<boolean> {
 		try {
 			const tags: Tags = [
-				{ name: "Action", value: "Sweepstakes" },
+				{ name: "Action", value: "Pull-Sweepstakes" },
 			];
 			const result = await this.messageResult(undefined, tags);
 			return true
@@ -86,7 +108,7 @@ export class SweepstakesClient extends BaseClient implements ISweepstakesClient 
 		}
 	}
 
-	async viewEntrants(userId: string): Promise<ViewEntrantsResponse> {
+	async viewSweepstakesEntrants(userId: string): Promise<ViewSweepstakesEntrantsResponse> {
 		try {
 			const tags: Tags = [
 				{ name: "Action", value: "View-Entrants" },
@@ -96,11 +118,11 @@ export class SweepstakesClient extends BaseClient implements ISweepstakesClient 
 			this.checkResultForErrors(result);
 			return ResultUtils.getFirstMessageDataJson(result);
 		} catch (error: any) {
-			throw new ClientError(this, this.viewEntrants, { userId }, error);
+			throw new ClientError(this, this.viewSweepstakesEntrants, { userId }, error);
 		}
 	}
 
-	async viewUserPull(userId: string, pullId: string): Promise<SweepstakesPull> {
+	async viewUserSweepstakesPull(userId: string, pullId: string): Promise<SweepstakesPull> {
 		try {
 			const tags: Tags = [
 				{ name: "Action", value: "View-Pull" },
@@ -111,15 +133,15 @@ export class SweepstakesClient extends BaseClient implements ISweepstakesClient 
 			this.checkResultForErrors(result);
 			return ResultUtils.getFirstMessageDataJson(result);
 		} catch (error: any) {
-			throw new ClientError(this, this.viewUserPull, { userId, pullId }, error);
+			throw new ClientError(this, this.viewUserSweepstakesPull, { userId, pullId }, error);
 		}
 	}
 
-	async viewUserPulls(_userId?: string): Promise<ViewPullsResponse> {
+	async viewUserSweepstakesPulls(_userId?: string): Promise<ViewSweepstakesPullsResponse> {
 		const userId: string = _userId ? _userId : await this.getCallingWalletAddress();
 		try {
 			const tags: Tags = [
-				{ name: "Action", value: "View-Pulls" },
+				{ name: "Action", value: "Get-Sweepstakes" },
 				{ name: "UserId", value: userId },
 			];
 
@@ -128,14 +150,14 @@ export class SweepstakesClient extends BaseClient implements ISweepstakesClient 
 			const pulls = ResultUtils.getFirstMessageDataJson(result) as SweepstakesPull[];
 			return { pulls };
 		} catch (error: any) {
-			throw new ClientError(this, this.viewUserPulls, { _userId, userId }, error);
+			throw new ClientError(this, this.viewUserSweepstakesPulls, { _userId, userId }, error);
 		}
 	}
 
 	async viewSweepstakesOwners(): Promise<ViewSweepstakesOwnersResponse> {
 		try {
 			const tags: Tags = [
-				{ name: "Action", value: "View-Sweepstakes-Owners" },
+				{ name: "Action", value: "View-Sweepstakes-Whitelist" },
 			];
 			const result = await this.dryrun(undefined, tags);
 			this.checkResultForErrors(result);
@@ -147,22 +169,6 @@ export class SweepstakesClient extends BaseClient implements ISweepstakesClient 
 
 	/* Core Sweepstakes Functions */
 
-	/* Utilities */
-	async viewMostRecentPull(): Promise<SweepstakesPull> {
-		try {
-			const { pulls } = await this.viewUserPulls();
-			if (pulls.length === 0) {
-				throw new ViewPullError(new Error("No pulls found"));
-			}
-			// Find pull with highest ID
-			const mostRecent = pulls.reduce((max, current) =>
-				current.Id > max.Id ? current : max
-			);
-			return mostRecent;
-		} catch (error: any) {
-			throw new ClientError(this, this.viewMostRecentPull, null, error);
-		}
-	}
 	/* Utilities */
 	/* Private */
 	private checkResultForErrors(result: MessageResult | DryRunResult) {
