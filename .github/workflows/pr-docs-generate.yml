@@ -4,6 +4,8 @@ on:
   pull_request:
     branches:
       - "**" # Trigger on all branches for PRs
+      
+jobs:
   generate-docs:
     runs-on: ubuntu-latest
     environment:
