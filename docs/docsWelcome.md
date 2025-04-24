@@ -37,7 +37,7 @@ console.log(success) // true if successful
 ### **Node**  
 Create a `.env` file:  
 
-```ini
+```bash
 # Defaults to wallet.json if not specified
 PATH_TO_WALLET="wallet.json" 
 ```

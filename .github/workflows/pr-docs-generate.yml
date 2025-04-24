@@ -1,21 +1,14 @@
-name: Deploy Documentation
+name: Generate Docs
 
 on:
-  push:
+  pull_request:
     branches:
-      - main
-
-jobs:
-  generate-and-deploy-docs:
+      - "**" # Trigger on all branches for PRs
+  generate-docs:
     runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    
-    permissions:
-      contents: write
-      pages: write
-      id-token: write
 
     steps:
       # Checkout the repository
@@ -33,9 +26,3 @@ jobs:
 
       - name: Generate documentation
         run: npm run docs
-
-      - name: Deploy documentation to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          folder: docs-generated
-          branch: gh-pages
