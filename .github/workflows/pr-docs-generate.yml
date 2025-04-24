@@ -4,13 +4,10 @@ on:
   pull_request:
     branches:
       - "**" # Trigger on all branches for PRs
-      
+
 jobs:
   generate-docs:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
       # Checkout the repository
