@@ -1,14 +1,21 @@
 export interface SweepstakesPull {
     CallbackId: string;
-    User: string;
+    Details: string;
     Winner?: string;
     Id: number;
 }
 
-export interface ViewSweepstakesPullsResponse {
-    pulls: SweepstakesPull[];
+export interface SweepstakesData {
+    Entries: string[];
+	PullCount: number;
+	EntryCount: number;
+	Creator: string;
+	Pulls: SweepstakesPull[];
+	Details?: string;
 }
 
-export type ViewSweepstakesEntrantsResponse = string[];
+export interface ViewAllSweepstakesResponse {
+    sweepstakes: SweepstakesData[];
+}
 
-export type ViewSweepstakesOwnersResponse = string[];
+export type ViewOneSweepstakesResponse = SweepstakesData;
