@@ -3,7 +3,7 @@ import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
 
 import { Tags } from "../../../core";
 import { IAutoconfiguration, IDefaultBuilder, staticImplements } from "../../../utils";
-import { ISweepstakesClient, SweepstakesClientConfig, SweepstakesPull, ViewSweepstakesPullsResponse, ViewSweepstakesEntrantsResponse, ViewSweepstakesOwnersResponse } from "./abstract";
+import { ISweepstakesClient, SweepstakesClientConfig, SweepstakesPull, ViewAllSweepstakesResponse, ViewOneSweepstakesResponse } from "./abstract";
 import { ViewPullError } from "./SweepstakesClientError";
 import { SweepstakesProcessError } from "./SweepstakesProcessError";
 import { BaseClient } from "../../../core/ao/BaseClient";
@@ -96,74 +96,74 @@ export class SweepstakesClient extends BaseClient implements ISweepstakesClient 
 		}
 	}
 
-	async pullSweepstakes(): Promise<boolean> {
+	async addSweepstakesEntrant(entrant: string, sweepstakesId: string): Promise<boolean> {
+		try {
+			const tags: Tags = [
+				{ name: "Action", value: "Add-Sweepstakes-Entry" },
+				{ name: "SweepstakesId", value: sweepstakesId },
+				{ name: "Entry", value: entrant },
+			];
+			const result = await this.messageResult(undefined, tags);
+			this.checkResultForErrors(result)
+			return true
+		} catch (error: any) {
+			throw new ClientError(this, this.addSweepstakesEntrant, { entrant }, error);
+		}
+	}
+
+	async pullSweepstakes(sweepstakesId: string, details?: string): Promise<boolean> {
 		try {
 			const tags: Tags = [
 				{ name: "Action", value: "Pull-Sweepstakes" },
+				{ name: "SweepstakesId", value: sweepstakesId },
+				{ name: "Details", value: details || "" },
 			];
 			const result = await this.messageResult(undefined, tags);
 			return true
 		} catch (error: any) {
-			throw new ClientError(this, this.pullSweepstakes, null, error);
+			throw new ClientError(this, this.pullSweepstakes, { sweepstakesId, details }, error);
 		}
 	}
 
-	async viewSweepstakesEntrants(userId: string): Promise<ViewSweepstakesEntrantsResponse> {
-		try {
-			const tags: Tags = [
-				{ name: "Action", value: "View-Entrants" },
-				{ name: "UserId", value: userId },
-			];
-			const result = await this.dryrun(undefined, tags);
-			this.checkResultForErrors(result);
-			return ResultUtils.getFirstMessageDataJson(result);
-		} catch (error: any) {
-			throw new ClientError(this, this.viewSweepstakesEntrants, { userId }, error);
-		}
-	}
-
-	async viewUserSweepstakesPull(userId: string, pullId: string): Promise<SweepstakesPull> {
+	async viewSweepstakesPull(sweepstakesId: string, pullId: string): Promise<SweepstakesPull> {
 		try {
 			const tags: Tags = [
 				{ name: "Action", value: "View-Pull" },
-				{ name: "UserId", value: userId },
+				{ name: "SweepstakesId", value: sweepstakesId },
 				{ name: "PullId", value: pullId },
 			];
 			const result = await this.dryrun(undefined, tags);
 			this.checkResultForErrors(result);
 			return ResultUtils.getFirstMessageDataJson(result);
 		} catch (error: any) {
-			throw new ClientError(this, this.viewUserSweepstakesPull, { userId, pullId }, error);
+			throw new ClientError(this, this.viewSweepstakesPull, { sweepstakesId, pullId }, error);
 		}
 	}
 
-	async viewUserSweepstakesPulls(_userId?: string): Promise<ViewSweepstakesPullsResponse> {
-		const userId: string = _userId ? _userId : await this.getCallingWalletAddress();
+	async viewSweepstakes(sweepstakesId: string): Promise<ViewOneSweepstakesResponse> {
 		try {
 			const tags: Tags = [
-				{ name: "Action", value: "Get-Sweepstakes" },
-				{ name: "UserId", value: userId },
-			];
-
-			const result = await this.dryrun(undefined, tags);
-			this.checkResultForErrors(result);
-			const pulls = ResultUtils.getFirstMessageDataJson(result) as SweepstakesPull[];
-			return { pulls };
-		} catch (error: any) {
-			throw new ClientError(this, this.viewUserSweepstakesPulls, { _userId, userId }, error);
-		}
-	}
-
-	async viewSweepstakesOwners(): Promise<ViewSweepstakesOwnersResponse> {
-		try {
-			const tags: Tags = [
-				{ name: "Action", value: "View-Sweepstakes-Whitelist" },
+				{ name: "Action", value: "View-Sweepstakes" },
+				{ name: "SweepstakesId", value: sweepstakesId },
 			];
 			const result = await this.dryrun(undefined, tags);
 			this.checkResultForErrors(result);
 			return ResultUtils.getFirstMessageDataJson(result);
 		} catch (error: any) {
-			throw new ClientError(this, this.viewSweepstakesOwners, null, error);
+			throw new ClientError(this, this.viewSweepstakes, { sweepstakesId }, error);
+		}
+	}
+
+	async viewAllSweepstakes(): Promise<ViewAllSweepstakesResponse> {
+		try {
+			const tags: Tags = [
+				{ name: "Action", value: "View-Sweepstakes" },
+			];
+			const result = await this.dryrun(undefined, tags);
+			this.checkResultForErrors(result);
+			return ResultUtils.getFirstMessageDataJson(result);
+		} catch (error: any) {
+			throw new ClientError(this, this.viewAllSweepstakes, null, error);
 		}
 	}
 
