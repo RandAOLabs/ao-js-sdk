@@ -68,34 +68,35 @@ export class SweepstakesClient extends BaseClient implements ISweepstakesClient 
 			.withAOConfig(AO_CONFIGURATIONS.RANDAO)
 	}
 
-	async registerSweepstakes(entrants: string[]): Promise<boolean> {
+	async registerSweepstakes(entrants: string[], details: string): Promise<boolean> {
 		try {
 			const paymentAmount = "100000000000"; // TODO: Determine payment amount dynamically if needed
 			const tags: Tags = [
-				{ name: "X-Entrants", value: JSON.stringify({ entrants }) },
+				{ name: "Entrants", value: JSON.stringify(entrants) },
+				{ name: "Details", value: details },
 			];
-
+	
 			return await this.tokenClient.transfer(this.getProcessId(), paymentAmount, tags);
 		} catch (error: any) {
 			throw new ClientError(this, this.registerSweepstakes, { entrants }, error);
 		}
 	}
-
-	/* Core Sweepstakes Functions */
-	async setSweepstakesEntrants(entrants: string[]): Promise<boolean> {
+	
+	async setSweepstakesEntrants(entrants: string[],sweepstakesId: string): Promise<boolean> {
 		try {
 			const tags: Tags = [
 				{ name: "Action", value: "Update-Sweepstakes-Entry-List" },
+				{ name: "SweepstakesId", value: sweepstakesId },
 			];
 			const data = JSON.stringify(entrants);
 			const result = await this.messageResult(data, tags);
 			this.checkResultForErrors(result)
-			return true
+			return true;
 		} catch (error: any) {
 			throw new ClientError(this, this.setSweepstakesEntrants, { entrants }, error);
 		}
 	}
-
+	
 	async addSweepstakesEntrant(entrant: string, sweepstakesId: string): Promise<boolean> {
 		try {
 			const tags: Tags = [
@@ -105,7 +106,7 @@ export class SweepstakesClient extends BaseClient implements ISweepstakesClient 
 			];
 			const result = await this.messageResult(undefined, tags);
 			this.checkResultForErrors(result)
-			return true
+			return true;
 		} catch (error: any) {
 			throw new ClientError(this, this.addSweepstakesEntrant, { entrant }, error);
 		}
