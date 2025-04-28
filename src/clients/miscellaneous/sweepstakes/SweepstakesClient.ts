@@ -143,7 +143,7 @@ export class SweepstakesClient extends BaseClient implements ISweepstakesClient 
 	async viewSweepstakes(sweepstakesId: string): Promise<ViewOneSweepstakesResponse> {
 		try {
 			const tags: Tags = [
-				{ name: "Action", value: "View-Sweepstakes" },
+				{ name: "Action", value: "Get-Sweepstakes" },
 				{ name: "SweepstakesId", value: sweepstakesId },
 			];
 			const result = await this.dryrun(undefined, tags);
@@ -157,7 +157,7 @@ export class SweepstakesClient extends BaseClient implements ISweepstakesClient 
 	async viewAllSweepstakes(): Promise<ViewAllSweepstakesResponse> {
 		try {
 			const tags: Tags = [
-				{ name: "Action", value: "View-Sweepstakes" },
+				{ name: "Action", value: "Get-All-Sweepstakes" },
 			];
 			const result = await this.dryrun(undefined, tags);
 			this.checkResultForErrors(result);
