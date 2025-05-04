@@ -29,10 +29,11 @@ export interface IPIDelegateClient {
     getInfo(): Promise<DryRunResult>;
 
     /**
-     * Gets delegation information.
+     * Gets delegation information for the specified wallet.
+     * @param walletAddress Optional wallet address to get delegations for. If not provided, uses the wallet specified in the configuration.
      * @returns Promise resolving to delegation information details
      */
-    getDelegation(): Promise<string>;
+    getDelegation(walletAddress?: string): Promise<string>;
     
     /**
      * Parse the raw delegation info string into a structured object

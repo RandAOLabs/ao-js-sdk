@@ -26,20 +26,35 @@ export class PIDelegateClient extends BaseClient implements IPIDelegateClient {
     }
 
     /**
-     * Gets delegation information.
+     * Gets delegation information for the specified wallet.
+     * @param walletAddress Optional wallet address to get delegations for. If not provided, uses the wallet specified in the configuration.
      * @returns Promise resolving to delegation information details
      */
-    public async getDelegation(): Promise<string> {
+    public async getDelegation(walletAddress?: string): Promise<string> {
         try {
-            const response = await this.dryrun('', [
+            // Prepare tags for the request
+            const tags = [
                 { name: "Action", value: ACTION_GET_DELEGATIONS }
-            ]);
+            ];
             
-            // Extract data from response
-            const dataString = response.Messages[0].Data;
-            return dataString;
+            // Add wallet address tag if provided
+            if (walletAddress) {
+                tags.push({ name: "Wallet", value: walletAddress });
+            }
+            
+            const response = await this.dryrun('', tags);
+            
+            // Extract data from response with robust error handling
+            if (response?.Messages?.[0]?.Data) {
+                return response.Messages[0].Data;
+            }
+            
+            // Return empty response if no data found
+            return '{"totalFactor":"0","delegationPrefs":[],"lastUpdate":0,"wallet":"unknown"}';
         } catch (error: any) {
-            throw new ClientError(this, this.getDelegation, {}, error);
+            console.error(`[PIDelegateClient] Error in getDelegation:`, error);
+            // Return empty response in case of error
+            return '{"totalFactor":"0","delegationPrefs":[],"lastUpdate":0,"wallet":"unknown"}';
         }
     }
     
