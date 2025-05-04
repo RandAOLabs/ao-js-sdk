@@ -29,8 +29,8 @@ export class PITokenClient extends BaseClient implements IPITokenClient {
     }
     
     /**
-     * Gets yield tick history information.
-     * @returns Promise resolving to tick history data as a string
+     * Gets the tick history from the PI token process.
+     * @returns Promise resolving to the tick history data as a string
      */
     public async getTickHistory(): Promise<string> {
         try {
@@ -38,9 +38,26 @@ export class PITokenClient extends BaseClient implements IPITokenClient {
                 { name: "Action", value: ACTION_GET_YIELD_TICK_HISTORY }
             ]);
             
-            // Extract data from response
-            const dataString = response.Messages[0].Data;
-            return dataString;
+            // Check if response and Messages exist
+            if (!response || !response.Messages || !response.Messages.length) {
+                throw new Error('Invalid response format: No messages returned');
+            }
+            
+            // If Data exists use it, otherwise look for specific tags
+            if (response.Messages[0].Data) {
+                return response.Messages[0].Data;
+            }
+            
+            // Look for tags with tick history data
+            const tickHistoryTag = response.Messages[0].Tags?.find((tag: { name: string, value: string }) => 
+                tag.name === 'Tick-History' || tag.name === 'History');
+                
+            if (tickHistoryTag) {
+                return tickHistoryTag.value;
+            }
+            
+            // Return empty array if no data found - will be parsed as empty array
+            return '[]';
         } catch (error: any) {
             throw new ClientError(this, this.getTickHistory, {}, error);
         }
@@ -75,8 +92,24 @@ export class PITokenClient extends BaseClient implements IPITokenClient {
             
             const response = await this.dryrun('', tags);
             
-            // Extract data from response
-            return response.Messages[0].Data;
+            // Check if response and Messages exist
+            if (!response || !response.Messages || !response.Messages.length) {
+                throw new Error('Invalid response format: No messages returned');
+            }
+            
+            // If Data exists use it
+            if (response.Messages[0].Data) {
+                return response.Messages[0].Data;
+            }
+            
+            // Look for Balance tag which contains the balance value
+            const balanceTag = response.Messages[0].Tags?.find((tag: { name: string, value: string }) => tag.name === 'Balance');
+            if (balanceTag) {
+                return balanceTag.value;
+            }
+            
+            // Default to 0 if no balance found
+            return '0';
         } catch (error: any) {
             throw new ClientError(this, this.getBalance, { target }, error);
         }
@@ -92,8 +125,24 @@ export class PITokenClient extends BaseClient implements IPITokenClient {
                 { name: "Action", value: ACTION_GET_CLAIMABLE_BALANCE }
             ]);
             
-            // Extract data from response
-            return response.Messages[0].Data;
+            // Check if response and Messages exist
+            if (!response || !response.Messages || !response.Messages.length) {
+                throw new Error('Invalid response format: No messages returned');
+            }
+            
+            // If Data exists use it
+            if (response.Messages[0].Data) {
+                return response.Messages[0].Data;
+            }
+            
+            // Look for Balance tag which contains the claimable balance value
+            const balanceTag = response.Messages[0].Tags?.find((tag: { name: string, value: string }) => tag.name === 'Balance');
+            if (balanceTag) {
+                return balanceTag.value;
+            }
+            
+            // Default to 0 if no balance found
+            return '0';
         } catch (error: any) {
             throw new ClientError(this, this.getClaimableBalance, {}, error);
         }
