@@ -10,6 +10,8 @@ import {
 } from "../constants";
 import { PITokenClient } from "../PIToken/PITokenClient";
 import { PITokenClientBuilder } from "../PIToken/PITokenClientBuilder";
+import { AOToken } from "../../tokens/AOTokenClient";
+import { TokenClient } from "../../ao";
 
 /**
  * Client for interacting with the PI Oracle process.
@@ -67,7 +69,26 @@ export class PIOracleClient extends BaseClient implements IPIOracleClient {
      */
     public parsePITokens(piTokensData: string): PIToken[] {
         try {
-            return JSON.parse(piTokensData);
+            const parsed = JSON.parse(piTokensData);
+            
+            // Handle the new format - each token is an array with [ticker, data]
+            if (Array.isArray(parsed) && parsed.length > 0 && Array.isArray(parsed[0])) {
+                // Transform the array format to object format
+                return parsed.map(item => {
+                    const [ticker, data] = item;
+                    // Make sure data has the ticker property
+                    if (typeof data === 'object' && data !== null) {
+                        return {
+                            ...data,
+                            ticker: data.ticker || ticker
+                        } as PIToken;
+                    }
+                    return null;
+                }).filter(Boolean) as PIToken[];
+            }
+            
+            // Handle the old format (array of objects)
+            return parsed;
         } catch (error) {
             throw new Error(`Failed to parse PI tokens data: ${error}`);
         }
@@ -141,6 +162,7 @@ export class PIOracleClient extends BaseClient implements IPIOracleClient {
     /**
      * Creates an array of PITokenClient instances for all available PI tokens
      * @returns An array of PITokenClient instances
+     * @deprecated Use createTokenClientPairsArray instead
      */
     public async createTokenClientsArray(): Promise<PITokenClient[]> {
         try {
@@ -153,8 +175,10 @@ export class PIOracleClient extends BaseClient implements IPIOracleClient {
             
             // Create a client for each token with a valid process ID
             for (const token of tokens) {
-                if (token.flp_token_process) {
-                    const client = this.createTokenClient(token.flp_token_process);
+                // Support both old and new formats
+                const processId = token.flp_token_process || token.process;
+                if (processId) {
+                    const client = this.createTokenClient(processId);
                     tokenClients.push(client);
                 }
             }
@@ -162,6 +186,94 @@ export class PIOracleClient extends BaseClient implements IPIOracleClient {
             return tokenClients;
         } catch (error: any) {
             throw new ClientError(this, this.createTokenClientsArray, {}, error);
+        }
+    }
+    
+    /**
+     * Creates token client pairs for all available PI tokens
+     * The first item is a PITokenClient created with the id field
+     * The second item is a BaseToken client created with the process field
+     * @returns A map of token ticker to [PITokenClient, TokenClient] tuples
+     */
+    public async createTokenClientPairs(): Promise<Map<string, [PITokenClient, TokenClient]>> {
+        try {
+            // Get token data from oracle
+            const tokensData = await this.getPITokens();
+            const tokens = this.parsePITokens(tokensData);
+            
+            // Map to store token client pairs
+            const tokenClientPairs = new Map<string, [PITokenClient, TokenClient]>();
+            
+            // Create client pairs for each token
+            for (const token of tokens) {
+                const ticker = token.ticker || token.flp_token_ticker;
+                const id = token.id;
+                const processId = token.process || token.flp_token_process;
+                
+                // Only create clients if we have both ID and process
+                if (ticker && id && processId) {
+                    // Create PITokenClient using the ID field
+                    const piTokenClient = new PITokenClient({
+                        ...this.baseConfig,
+                        processId: id
+                    });
+                    
+                    // Create AOToken using the process field
+                    const baseTokenClient = AOToken.defaultBuilder()
+                        .withProcessId(processId)
+                        .build();
+                    
+                    // Add the pair to the map
+                    tokenClientPairs.set(ticker, [piTokenClient, baseTokenClient]);
+                }
+            }
+            
+            return tokenClientPairs;
+        } catch (error: any) {
+            throw new ClientError(this, this.createTokenClientPairs, {}, error);
+        }
+    }
+    
+    /**
+     * Creates an array of token client pairs for all available PI tokens
+     * Each pair contains a PITokenClient created with the id field and a BaseToken client created with the process field
+     * @returns An array of [PITokenClient, TokenClient] tuples
+     */
+    public async createTokenClientPairsArray(): Promise<[PITokenClient, TokenClient][]> {
+        try {
+            // Get token data from oracle
+            const tokensData = await this.getPITokens();
+            const tokens = this.parsePITokens(tokensData);
+            
+            // Array to store token client pairs
+            const tokenClientPairs: [PITokenClient, TokenClient][] = [];
+            
+            // Create client pairs for each token
+            for (const token of tokens) {
+                const id = token.id;
+                const processId = token.process || token.flp_token_process;
+                
+                // Only create clients if we have both ID and process
+                if (id && processId) {
+                    // Create PITokenClient using the ID field
+                    const piTokenClient = new PITokenClient({
+                        ...this.baseConfig,
+                        processId: id
+                    });
+                    
+                    // Create AOToken using the process field
+                    const baseTokenClient = AOToken.defaultBuilder()
+                        .withProcessId(processId)
+                        .build();
+                    
+                    // Add the pair to the array
+                    tokenClientPairs.push([piTokenClient, baseTokenClient]);
+                }
+            }
+            
+            return tokenClientPairs;
+        } catch (error: any) {
+            throw new ClientError(this, this.createTokenClientPairsArray, {}, error);
         }
     }
 
