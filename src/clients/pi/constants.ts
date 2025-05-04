@@ -10,6 +10,7 @@ export const DELEGATION_ORACLE_PROCESS_ID = 'It-_AKlEfARBmJdbJew1nG9_hIaZt0t20wQ
  */
 export const ACTION_INFO = 'Info';
 export const ACTION_GET_DELEGATIONS = 'Get-Delegations';
+export const ACTION_SET_DELEGATION = 'Set-Delegation';
 export const ACTION_GET_YIELD_TICK_HISTORY = 'Get-Yield-Tick-History';
 export const ACTION_GET_FLPS = 'Get-FLPs';
 export const ACTION_BALANCE = 'Balance';
