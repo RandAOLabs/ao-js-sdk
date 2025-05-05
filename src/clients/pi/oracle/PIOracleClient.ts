@@ -218,9 +218,10 @@ export class PIOracleClient extends BaseClient implements IPIOracleClient {
                         processId: id
                     });
                     
-                    // Create AOToken using the process field
+                    // Create AOToken using the process field and propagate AO config
                     const baseTokenClient = AOToken.defaultBuilder()
                         .withProcessId(processId)
+                        .withAOConfig(this.baseConfig.aoConfig)
                         .build();
                     
                     // Add the pair to the map
@@ -261,9 +262,10 @@ export class PIOracleClient extends BaseClient implements IPIOracleClient {
                         processId: id
                     });
                     
-                    // Create AOToken using the process field
+                    // Create AOToken using the process field and propagate AO config
                     const baseTokenClient = AOToken.defaultBuilder()
                         .withProcessId(processId)
+                        .withAOConfig(this.baseConfig.aoConfig)
                         .build();
                     
                     // Add the pair to the array
