@@ -13,9 +13,9 @@ export interface TokenData {
   ticker: string;
   /** Token name */
   name: string;
-  /** Current token balance */
+  /** Current PI token balance */
   balance: string;
-  /** Claimable token balance */
+  /** Claimable PI token balance */
   claimableBalance: string;
   /** Token tick history */
   tickHistory: TickHistoryEntry[];
@@ -29,6 +29,11 @@ export interface TokenData {
   logoUrl?: string;
   /** Additional token information from dryrun */
   infoData?: DryRunResult;
+  
+  /** Base token balance */
+  baseBalance?: string;
+  /** Base token info */
+  baseInfo?: DryRunResult;
 }
 
 // TokenClientMap moved to oracle/types.ts to avoid export name collisions
