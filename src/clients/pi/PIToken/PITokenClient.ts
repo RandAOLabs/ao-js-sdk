@@ -33,17 +33,58 @@ export class PITokenClient extends BaseClient implements IPITokenClient {
      * @returns Promise resolving to the tick history data as a string
      */
     public async getTickHistory(): Promise<string> {
+        console.log(`[PITokenClient] Requesting tick history for process ID: ${this.baseConfig.processId}`);
         try {
+            // Log the request
+            console.log(`[PITokenClient] Sending dryrun with Action: ${ACTION_GET_YIELD_TICK_HISTORY}`);
+            
             const response = await this.dryrun('', [
                 { name: "Action", value: ACTION_GET_YIELD_TICK_HISTORY }
             ]);
             
+            // Log the complete response for debugging
+            console.log(`[PITokenClient] Received raw tick history response:`, 
+                        JSON.stringify(response, null, 2).substring(0, 300) + '...');
+            
             // Robust response checking
             try {
+                // Check if we have Messages array
+                if (!response?.Messages || !Array.isArray(response.Messages) || response.Messages.length === 0) {
+                    console.warn(`[PITokenClient] No Messages array in response or it's empty`);
+                    console.log(`[PITokenClient] Response structure:`, Object.keys(response || {}));
+                } else {
+                    console.log(`[PITokenClient] Found Messages array with ${response.Messages.length} items`);
+                }
+                
                 // First check if Data exists in the first message
                 if (response?.Messages?.[0]?.Data) {
                     console.log(`[PITokenClient] Found tick history data in Messages[0].Data`);
+                    // Try to parse the data to verify it's valid JSON
+                    try {
+                        const parsedData = JSON.parse(response.Messages[0].Data);
+                        console.log(`[PITokenClient] Successfully parsed data, found ${Array.isArray(parsedData) ? parsedData.length : 0} tick entries`);
+                        if (Array.isArray(parsedData) && parsedData.length > 0) {
+                            console.log(`[PITokenClient] First tick entry sample:`, JSON.stringify(parsedData[0]).substring(0, 150));
+                        }
+                    } catch (jsonError) {
+                        console.error(`[PITokenClient] Data exists but is not valid JSON:`, jsonError);
+                        console.log(`[PITokenClient] Invalid JSON data (first 200 chars):`, 
+                                   String(response.Messages[0].Data).substring(0, 200));
+                    }
                     return response.Messages[0].Data;
+                } else {
+                    console.warn(`[PITokenClient] No Data field in the first message`);
+                }
+                
+                // Log Tag information if available
+                if (response?.Messages?.[0]?.Tags) {
+                    console.log(`[PITokenClient] Message contains ${response.Messages[0].Tags.length} tags`);
+                    // Log all tags for debugging
+                    response.Messages[0].Tags.forEach((tag: { name: string, value: string }, index: number) => {
+                        console.log(`[PITokenClient] Tag ${index}: ${tag.name} = ${tag.value.substring(0, 50)}${tag.value.length > 50 ? '...' : ''}`);
+                    });
+                } else {
+                    console.warn(`[PITokenClient] No Tags found in the first message`);
                 }
                 
                 // Look for tags with tick history data
@@ -53,6 +94,13 @@ export class PITokenClient extends BaseClient implements IPITokenClient {
                         
                     if (tickHistoryTag) {
                         console.log(`[PITokenClient] Found tick history data in tag: ${tickHistoryTag.name}`);
+                        // Try to parse the data to verify it's valid JSON
+                        try {
+                            const parsedData = JSON.parse(tickHistoryTag.value);
+                            console.log(`[PITokenClient] Successfully parsed tag data, found ${Array.isArray(parsedData) ? parsedData.length : 0} tick entries`);
+                        } catch (jsonError) {
+                            console.error(`[PITokenClient] Tag value exists but is not valid JSON:`, jsonError);
+                        }
                         return tickHistoryTag.value;
                     }
                     
@@ -61,13 +109,29 @@ export class PITokenClient extends BaseClient implements IPITokenClient {
                         tag.name === 'Action' && tag.value === 'Resp-Get-Yield-Tick-History');
                     
                     if (actionTag) {
-                        console.log(`[PITokenClient] Found Resp-Get-Yield-Tick-History action tag, but no data`);
-                        // In this case, it's a valid response but with no data
+                        console.log(`[PITokenClient] Found Resp-Get-Yield-Tick-History action tag, looking for PricePrecisionScaling tag`);
+                        
+                        // Look for precision scaling tag which could indicate a valid response
+                        const precisionTag = response.Messages[0].Tags.find((tag: { name: string, value: string }) => 
+                            tag.name === 'PricePrecisionScaling');
+                            
+                        if (precisionTag) {
+                            console.log(`[PITokenClient] Found PricePrecisionScaling tag: ${precisionTag.value}, response should be valid`);
+                        }
+                        
+                        // In this case, we have a valid response action but no data
+                        // Check if Data is directly in response.Data instead of Message.Data
+                        if ((response as any)?.Data) {
+                            console.log(`[PITokenClient] Found potential tick history data in response.Data`);
+                            return (response as any).Data;
+                        }
+                        
                         return '[]';
                     }
                 }
             } catch (parseError) {
                 console.error(`[PITokenClient] Error parsing tick history response:`, parseError);
+                console.log(`[PITokenClient] Response type:`, typeof response);
                 // Continue to fallback handling
             }
             
@@ -83,7 +147,7 @@ export class PITokenClient extends BaseClient implements IPITokenClient {
             console.warn(`[PITokenClient] No tick history data found in response, returning empty array`);
             return '[]';
         } catch (error: any) {
-            console.error(`[PITokenClient] Error in getTickHistory:`, error);
+            console.error(`[PITokenClient] Error in getTickHistory for ${this.baseConfig.processId}:`, error);
             // Instead of throwing, return an empty array
             return '[]';
         }
