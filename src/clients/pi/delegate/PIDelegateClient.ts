@@ -60,32 +60,36 @@ export class PIDelegateClient extends BaseClient implements IPIDelegateClient {
     }
     
     /**
-     * Sets delegation preferences for the specified wallet.
-     * @param options Options for setting delegation preferences including wallet address, delegation preferences, and total factor
+     * Sets a single delegation preference from one wallet to another.
+     * @param options Options including walletFrom, walletTo, and factor
      * @returns Promise resolving to a string with the result of the operation
      */
     public async setDelegation(options: SetDelegationOptions): Promise<string> {
         try {
-            const { wallet, delegationPrefs, totalFactor = 10000 } = options;
+            const { walletFrom, walletTo, factor } = options;
             
-            if (!wallet) {
-                throw new Error('Wallet address is required');
+            if (!walletFrom) {
+                throw new Error('Source wallet address (walletFrom) is required');
             }
             
-            if (!delegationPrefs || !Array.isArray(delegationPrefs) || delegationPrefs.length === 0) {
-                throw new Error('At least one delegation preference is required');
+            if (!walletTo) {
+                throw new Error('Destination wallet address (walletTo) is required');
             }
             
-            // Create the delegation data object
+            if (factor === undefined || factor < 0) {
+                throw new Error('Factor must be a non-negative number');
+            }
+            
+            // Create the delegation data object with the correct format
             const delegationData = {
-                _key: `base_${wallet}`,
-                lastUpdate: Date.now(),
-                delegationPrefs,
-                totalFactor,
-                wallet
+                walletFrom,
+                walletTo,
+                factor
             };
             
-            // Send the message with the delegation data - stringify the object for message
+            console.log(`Setting delegation: ${factor} from ${walletFrom} to ${walletTo}`);
+            
+            // Send the message with the delegation data
             const tags = [{ name: "Action", value: ACTION_SET_DELEGATION }];
             
             // Use messageResult method to get the full result object with Output data
@@ -93,16 +97,17 @@ export class PIDelegateClient extends BaseClient implements IPIDelegateClient {
             
             // Process the response
             if (response && typeof response === 'object' && response.Output && response.Output.data) {
+                console.log('Delegation set response:', response.Output.data);
                 return response.Output.data;
             }
             
-            return JSON.stringify({ success: true, message: 'Delegation preferences updated' });
+            return JSON.stringify({ success: true, message: 'Delegation preference updated' });
         } catch (error: any) {
             console.error(`[PIDelegateClient] Error in setDelegation:`, error);
             throw new ClientError(
                 this, 
                 this.setDelegation, 
-                { wallet: options.wallet }, 
+                { walletFrom: options.walletFrom, walletTo: options.walletTo }, 
                 new Error(`Failed to set delegation: ${error.message}`)
             );
         }
