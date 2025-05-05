@@ -18,9 +18,20 @@ export class PIOracleClientBuilder extends ClientBuilder<PIOracleClient> {
 
     /**
      * Static method to easily build a default Oracle client
+     * @param cuUrl Optional Compute Unit URL to override the default
      * @returns A configured PIOracleClient instance
      */
-    public static build(): PIOracleClient {
-        return new PIOracleClientBuilder().build();
+    public static build(cuUrl?: string): PIOracleClient {
+        const builder = new PIOracleClientBuilder();
+        
+        // Override the CU URL if provided
+        if (cuUrl) {
+            builder.withAOConfig({
+                MODE: 'legacy',
+                CU_URL: cuUrl
+            });
+        }
+        
+        return builder.build();
     }
 }
