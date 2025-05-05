@@ -4,3 +4,4 @@
 export * from './abstract'
 export * from './PIOracleClient'
 export * from './PIOracleClientBuilder'
+export * from './types'
