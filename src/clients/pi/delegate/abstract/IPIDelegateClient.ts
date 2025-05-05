@@ -19,15 +19,15 @@ export interface DelegationInfo {
 }
 
 /**
- * Interface for setting delegation preferences
+ * Interface for setting a single delegation preference
  */
 export interface SetDelegationOptions {
-    /** The wallet address for which to set delegations */
-    wallet: string;
-    /** Array of delegation preferences (walletTo and factor pairs) */
-    delegationPrefs: DelegationPreference[];
-    /** Total factor value, defaults to 10000 (100%) */
-    totalFactor?: number;
+    /** The wallet address from which the delegation is made (typically the user's wallet) */
+    walletFrom: string;
+    /** The wallet address to delegate to */
+    walletTo: string;
+    /** Factor value representing delegation strength (basis points, out of 10000) */
+    factor: number;
 }
 
 /**
