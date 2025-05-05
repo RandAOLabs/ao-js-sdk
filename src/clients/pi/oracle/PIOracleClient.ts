@@ -71,10 +71,12 @@ export class PIOracleClient extends BaseClient implements IPIOracleClient {
         try {
             const parsed = JSON.parse(piTokensData);
             
+            let tokens: PIToken[];
+            
             // Handle the new format - each token is an array with [ticker, data]
             if (Array.isArray(parsed) && parsed.length > 0 && Array.isArray(parsed[0])) {
                 // Transform the array format to object format
-                return parsed.map(item => {
+                tokens = parsed.map(item => {
                     const [ticker, data] = item;
                     // Make sure data has the ticker property
                     if (typeof data === 'object' && data !== null) {
@@ -85,10 +87,34 @@ export class PIOracleClient extends BaseClient implements IPIOracleClient {
                     }
                     return null;
                 }).filter(Boolean) as PIToken[];
+            } else {
+                // Handle the old format (array of objects)
+                tokens = parsed;
             }
             
-            // Handle the old format (array of objects)
-            return parsed;
+            // Add custom token that the oracle doesn't include
+            const customTokenId = "rxxU4g-7tUHGvF28W2l53hxarpbaFR4NaSnOaxx6MIE";
+            
+            // Check if the token is already in the list
+            const exists = tokens.some(token => 
+                token.id === customTokenId || 
+                token.process === customTokenId || 
+                token.flp_token_process === customTokenId
+            );
+            
+            if (!exists) {
+                // Add the custom token with basic information
+                tokens.push({
+                    id: customTokenId,
+                    process: customTokenId,
+                    ticker: "CUSTOM",
+                    status: "active"
+                } as PIToken);
+                
+                console.log("Added custom token: rxxU4g-7tUHGvF28W2l53hxarpbaFR4NaSnOaxx6MIE");
+            }
+            
+            return tokens;
         } catch (error) {
             throw new Error(`Failed to parse PI tokens data: ${error}`);
         }
