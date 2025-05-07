@@ -48,8 +48,16 @@ export interface ISweepstakesClient {
     viewSweepstakesPull(pullId: string, sweepstakesId: string): Promise<SweepstakesPull>;
 
 	/**
-	 * Retrieves all sweepstakes pulls for a specific user.
-	 * @returns Promise resolving to an object containing array of pulls
+	 * Registers a new sweepstakes.
+	 * @returns Promise resolving to true if successful
 	 */
 	registerSweepstakes(entrants: string[], details: string): Promise<Boolean>;
+
+	/**
+	 * Deletes a sweepstakes or pull by ID
+	 * @param sweepstakesId ID of the sweepstakes to delete
+	 * @param pullId ID of the pull to delete
+	 * @returns Promise resolving to true if successful
+	 */
+	deleteSweepstakesData(sweepstakesId: string, pullId?: string): Promise<Boolean>;
 }
