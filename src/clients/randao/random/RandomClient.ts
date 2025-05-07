@@ -110,12 +110,17 @@ export class RandomClient extends BaseClient implements IRandomClient {
 		}
 	}
 
-	async updateProviderAvailableValues(availableRandomValues: number): Promise<boolean> {
+	async updateProviderAvailableValues(availableRandomValues: number, info?: string): Promise<boolean> {
 		try {
 			const tags: Tags = [
 				TAGS.ACTION.UPDATE_PROVIDER_RANDOM_BALANCE
 			];
-			const data = JSON.stringify({ availableRandomValues });
+			let data: string;
+			if (info) {
+				data = JSON.stringify({ availableRandomValues, info });
+			} else {
+				data = JSON.stringify({ availableRandomValues });
+			}
 			const result = await this.messageResult(data, tags);
 			this.checkResultForErrors(result)
 			return true

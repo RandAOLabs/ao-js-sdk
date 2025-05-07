@@ -58,6 +58,7 @@ export interface ProviderActivity {
     created_at: number,
     random_balance: number,
     active_output_requests: RequestList,
+	provider_info?: string,
     staked: 1
 }
 
