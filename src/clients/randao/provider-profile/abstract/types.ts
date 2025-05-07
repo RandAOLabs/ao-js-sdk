@@ -53,4 +53,5 @@ export interface ProviderInfo {
     stake: ProviderStakeInfo;
     /** Provider ID */
     provider_id: string;
+	provider_info?: string;
 }
