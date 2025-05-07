@@ -112,6 +112,23 @@ export class SweepstakesClient extends BaseClient implements ISweepstakesClient 
 		}
 	}
 
+	async deleteSweepstakesData(sweepstakesId: string, pullId?: string): Promise<Boolean> {
+		try {
+			const tags: Tags = [
+				{ name: "Action", value: "Delete" },
+				{ name: "SweepstakesId", value: sweepstakesId },
+			];
+			if (pullId) {
+				tags.push({ name: "PullId", value: pullId });
+			}
+			const result = await this.messageResult(undefined, tags);
+			this.checkResultForErrors(result)
+			return true;
+		} catch (error: any) {
+			throw new ClientError(this, this.deleteSweepstakesData, { sweepstakesId, pullId }, error);
+		}
+	}
+
 	async pullSweepstakes(sweepstakesId: string, details?: string): Promise<boolean> {
 		try {
 			const tags: Tags = [
