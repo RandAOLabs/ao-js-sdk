@@ -104,6 +104,14 @@ export class BaseClientConfigBuilder implements IBuilder<BaseClientConfig> {
 		this.config.aoConfig = aoConfig;
 		return this;
 	}
+	
+	/**
+	 * Gets the current AO config
+	 * @returns The current AO config or undefined if not set
+	 */
+	getAOConfig(): ConnectArgsLegacy | undefined {
+		return this.config.aoConfig;
+	}
 
 
 	/**
