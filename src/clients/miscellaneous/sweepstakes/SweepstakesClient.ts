@@ -70,7 +70,7 @@ export class SweepstakesClient extends BaseClient implements ISweepstakesClient 
 
 	async registerSweepstakes(entrants: string[], details: string): Promise<boolean> {
 		try {
-			const paymentAmount = "100000000000"; // TODO: Determine payment amount dynamically if needed
+			const paymentAmount = "1000000000"; // TODO: Determine payment amount dynamically if needed
 			const tags: Tags = [
 				{ name: "Entrants", value: JSON.stringify(entrants) },
 				{ name: "Details", value: details },
