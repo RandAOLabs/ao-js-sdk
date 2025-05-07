@@ -13,9 +13,10 @@ export interface IRandomClient {
     /**
      * Updates the count of available random values for a specific provider.
      * @param amount - The new amount of random values available.
+	 * @param info - An optional string containing additional information about the update.
      * @returns - A promise that resolves with a boolean indicating success.
      */
-    updateProviderAvailableValues(amount: number): Promise<boolean>;
+    updateProviderAvailableValues(amount: number, info?: string): Promise<boolean>;
 
     /**
      * Retrieves all open, incomplete randomness requests for a specific provider.
