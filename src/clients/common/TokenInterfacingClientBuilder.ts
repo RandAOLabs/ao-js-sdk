@@ -2,6 +2,7 @@ import { BaseClient } from "../../core/ao/BaseClient";
 import { IBuilder } from "../../utils/class-interfaces/IBuilder";
 import { TokenInterfacingClientConfig, TokenInput } from "./TokenInterfacingClientConfig";
 import { TokenInterfacingClientConfigBuilder } from ".";
+import { ConnectArgsLegacy } from "src/core/ao/ao-client/aoconnect-types";
 
 export class TokenInterfacingClientBuilder<T extends BaseClient> implements IBuilder<T> {
 	private configBuilder: TokenInterfacingClientConfigBuilder;
@@ -51,7 +52,7 @@ export class TokenInterfacingClientBuilder<T extends BaseClient> implements IBui
 	 * @param aoConfig Optional AO configuration for the token
 	 * @returns The builder instance for method chaining
 	 */
-	withToken(input: TokenInput, maybeAOConfig?: any): this {
+	withToken(input: TokenInput, maybeAOConfig?: ConnectArgsLegacy): this {
 		let tokenProcessId: string | undefined;
 		let aoConfig: any;
 	  

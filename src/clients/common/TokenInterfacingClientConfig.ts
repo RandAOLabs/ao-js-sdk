@@ -7,7 +7,7 @@ import { BaseClientConfig } from "../../core/ao/configuration/BaseClientConfig"
  */
 export type TokenInput =
   | string
-  | { tokenProcessId?: string; aoConfig?: any };
+  | { tokenProcessId?: string; aoConfig?: ConnectArgsLegacy };
 
 export interface TokenInterfacingClientConfig extends BaseClientConfig {
     /**
