@@ -2,7 +2,7 @@ import { BaseClient } from "../../core/ao/BaseClient";
 import { IBuilder } from "../../utils/class-interfaces/IBuilder";
 import { TokenInterfacingClientConfig, TokenInput } from "./TokenInterfacingClientConfig";
 import { TokenInterfacingClientConfigBuilder } from ".";
-import { ConnectArgsLegacy } from "src/core/ao/ao-client/aoconnect-types";
+import { ConnectArgsLegacy } from "../../core/ao/ao-client/aoconnect-types";
 
 export class TokenInterfacingClientBuilder<T extends BaseClient> implements IBuilder<T> {
 	private configBuilder: TokenInterfacingClientConfigBuilder;

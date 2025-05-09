@@ -1,4 +1,5 @@
-import { BaseClientConfig } from "../../core/ao/configuration/BaseClientConfig"
+import { BaseClientConfig } from "../../core/ao/configuration/BaseClientConfig";
+import { ConnectArgsLegacy } from "../../core/ao/ao-client/aoconnect-types";
 
 /**
  * Represents input for token configuration that can be either:
