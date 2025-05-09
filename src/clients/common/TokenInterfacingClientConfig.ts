@@ -1,4 +1,5 @@
-import { BaseClientConfig } from "../../core/ao/configuration/BaseClientConfig"
+import { BaseClientConfig } from "../../core/ao/configuration/BaseClientConfig";
+import { ConnectArgsLegacy } from "../../core/ao/ao-client/aoconnect-types";
 
 /**
  * Represents input for token configuration that can be either:
@@ -7,7 +8,7 @@ import { BaseClientConfig } from "../../core/ao/configuration/BaseClientConfig"
  */
 export type TokenInput =
   | string
-  | { tokenProcessId?: string; aoConfig?: any };
+  | { tokenProcessId?: string; aoConfig?: ConnectArgsLegacy };
 
 export interface TokenInterfacingClientConfig extends BaseClientConfig {
     /**
