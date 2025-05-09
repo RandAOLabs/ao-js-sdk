@@ -66,7 +66,7 @@ export class RandomClient extends BaseClient implements IRandomClient {
 		const randomProcessId = await ario.getProcessIdForDomain(DOMAIN.RANDAO_API)
 		return RandomClient.builder()
 			.withProcessId(randomProcessId)
-			.withTokenProcessId(PROCESS_IDS.RANDAO.RNG_TOKEN)
+			.withToken(PROCESS_IDS.RANDAO.RNG_TOKEN,AO_CONFIGURATIONS.RANDAO)
 			.withAOConfig(AO_CONFIGURATIONS.RANDAO)
 	}
 	/* Constructors */

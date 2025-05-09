@@ -35,7 +35,7 @@ export class SweepstakesClient extends BaseClient implements ISweepstakesClient 
 		const tokenConfig: TokenClientConfig = {
 			processId: sweepstakesConfig.tokenProcessId,
 			wallet: sweepstakesConfig.wallet,
-			aoConfig: sweepstakesConfig.aoConfig,
+			aoConfig: AO_CONFIGURATIONS.FORWARD_RESEARCH,
 			retriesEnabled: sweepstakesConfig.retriesEnabled
 		}
 		this.tokenClient = new TokenClient(tokenConfig);
@@ -62,10 +62,10 @@ export class SweepstakesClient extends BaseClient implements ISweepstakesClient 
 	 */
 	public static async defaultBuilder(): Promise<TokenInterfacingClientBuilder<SweepstakesClient>> {
 		const sweepstakesProcessId = PROCESS_IDS.MISCELLANEOUS.SWEEPSTAKES
+		// Use the new withToken method that can accept token process ID and/or AO config
 		return SweepstakesClient.builder()
 			.withProcessId(sweepstakesProcessId)
-			.withTokenProcessId(PROCESS_IDS.MISCELLANEOUS.SWEEPSTAKES_TOKEN)
-			.withAOConfig(AO_CONFIGURATIONS.RANDAO)
+			.withToken(PROCESS_IDS.MISCELLANEOUS.SWEEPSTAKES_TOKEN, AO_CONFIGURATIONS.FORWARD_RESEARCH)
 	}
 
 	async registerSweepstakes(entrants: string[], details: string): Promise<boolean> {
