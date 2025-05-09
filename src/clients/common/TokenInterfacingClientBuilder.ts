@@ -54,7 +54,7 @@ export class TokenInterfacingClientBuilder<T extends BaseClient> implements IBui
 	 */
 	withToken(input: TokenInput, maybeAOConfig?: ConnectArgsLegacy): this {
 		let tokenProcessId: string | undefined;
-		let aoConfig: any;
+		let aoConfig: ConnectArgsLegacy | undefined;
 	  
 		if (typeof input === 'string') {
 		  tokenProcessId = input;
