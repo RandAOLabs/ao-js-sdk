@@ -11,6 +11,7 @@ import {
 import { ClientBuilder } from "../../common";
 
 /**
+ * @category Autonomous Finance
  * Client for interacting with the PI delegate process.
  */
 export class PIDelegateClient extends BaseClient implements IPIDelegateClient {
@@ -32,7 +33,7 @@ export class PIDelegateClient extends BaseClient implements IPIDelegateClient {
 		return new ClientBuilder(PIDelegateClient)
 			.withProcessId(PI_DELEGATE_PROCESS_ID)
 	}
-	
+
 	/**
      * Gets information from the delegate process.
      * @returns Promise resolving to a DryRunResult with delegation information
