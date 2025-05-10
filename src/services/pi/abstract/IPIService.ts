@@ -39,7 +39,10 @@ export interface PITokenExtended {
     [key: string]: any;
 }
 
-// Using DelegationPreference imported from delegate client
+/**
+ * Re-export DelegationPreference from delegate client
+ */
+export { DelegationPreference }
 
 /**
  * Interface for the PI Service 
