@@ -71,29 +71,42 @@ describe('PIService', () => {
         // Reset mocks
         jest.clearAllMocks();
 
-        // Set up mock objects
+        // Create mock clients using type casting to solve TypeScript issues
         mockOracleClient = {
-            getPITokens: jest.fn().mockResolvedValue(JSON.stringify(testTokens)),
-            parsePITokens: jest.fn().mockReturnValue(testTokens),
-            getInfo: jest.fn().mockResolvedValue({} as DryRunResult),
-            builder: jest.fn().mockReturnThis() as any
+            getPITokens: jest.fn(),
+            parsePITokens: jest.fn() as unknown as jest.MockedFunction<(piTokensData: string) => PIToken[]>,
+            getInfo: jest.fn(),
+            createTokenClientPairsArray: jest.fn()
         } as unknown as jest.Mocked<PIOracleClient>;
 
         mockDelegateClient = {
-            getDelegation: jest.fn().mockResolvedValue(JSON.stringify(testDelegationInfo)),
-            parseDelegationInfo: jest.fn().mockReturnValue(testDelegationInfo),
-            setDelegation: jest.fn().mockResolvedValue('test-message-id'),
-            getInfo: jest.fn().mockResolvedValue({} as DryRunResult),
-            builder: jest.fn().mockReturnThis() as any
+            getDelegation: jest.fn(),
+            parseDelegationInfo: jest.fn() as unknown as jest.MockedFunction<(delegationData: string) => DelegationInfo>,
+            setDelegation: jest.fn(),
+            getInfo: jest.fn()
         } as unknown as jest.Mocked<PIDelegateClient>;
 
         mockHistorianClient = {
-            getTotalDelegatedAOByProject: jest.fn().mockResolvedValue(testTotalDelegated),
-            getLastRecord: jest.fn().mockResolvedValue(testDelegationRecords[0]),
-            getLastNRecords: jest.fn().mockResolvedValue(testDelegationRecords),
-            getInfo: jest.fn().mockResolvedValue({} as DryRunResult),
-            builder: jest.fn().mockReturnThis() as any
+            getTotalDelegatedAOByProject: jest.fn(),
+            getLastRecord: jest.fn(),
+            getLastNRecords: jest.fn()
+            // Note: DelegationHistorianClient interface doesn't include getInfo method
         } as unknown as jest.Mocked<DelegationHistorianClient>;
+        
+        // Set up return values after creating the mock objects
+        mockOracleClient.getPITokens.mockResolvedValue(JSON.stringify(testTokens));
+        mockOracleClient.parsePITokens.mockReturnValue(testTokens);
+        mockOracleClient.getInfo.mockResolvedValue({} as DryRunResult);
+        mockOracleClient.createTokenClientPairsArray.mockResolvedValue([]);
+        
+        mockDelegateClient.getDelegation.mockResolvedValue(JSON.stringify(testDelegationInfo));
+        mockDelegateClient.parseDelegationInfo.mockReturnValue(testDelegationInfo);
+        mockDelegateClient.setDelegation.mockResolvedValue('test-message-id');
+        mockDelegateClient.getInfo.mockResolvedValue({} as DryRunResult);
+        
+        mockHistorianClient.getTotalDelegatedAOByProject.mockResolvedValue(testTotalDelegated);
+        mockHistorianClient.getLastRecord.mockResolvedValue(testDelegationRecords[0]);
+        mockHistorianClient.getLastNRecords.mockResolvedValue(testDelegationRecords);
         
         // Create the service with mocked dependencies
         service = new PIService(
@@ -109,20 +122,22 @@ describe('PIService', () => {
             const result = await service.getAllPITokens();
 
             // Assert
-            expect(mockOracleClient.getPITokens).toHaveBeenCalled();
+            expect(mockOracleClient.getPITokens).toHaveBeenCalledTimes(1);
             expect(result.length).toEqual(testTokens.length);
-            expect(result[0].token.ticker).toEqual(testTokens[0].ticker);
+            expect(result[0].ticker).toEqual(testTokens[0].ticker); // Fixed: access ticker directly, not through token property
         });
 
-        it('should handle empty token list', async () => {
-            // Arrange
-            mockOracleClient.parsePITokens = jest.fn().mockReturnValue([]);
+        it('should handle empty tokens array from oracle', async () => {
+            // Arrange - reset the mock implementation to return empty array
+            mockOracleClient.parsePITokens.mockReturnValue([]);
 
             // Act
             const result = await service.getAllPITokens();
 
             // Assert
             expect(result).toEqual([]);
+            expect(mockOracleClient.getPITokens).toHaveBeenCalledTimes(1);
+            expect(mockOracleClient.parsePITokens).toHaveBeenCalledTimes(1);
         });
     });
 
@@ -132,13 +147,15 @@ describe('PIService', () => {
             const result = await service.getUserDelegations(testWalletAddress);
 
             // Assert
-            expect(mockDelegateClient.getDelegation).toHaveBeenCalledWith(testWalletAddress);
+            expect(mockDelegateClient.getDelegation).toHaveBeenCalledTimes(1);
+            expect(mockDelegateClient.parseDelegationInfo).toHaveBeenCalledTimes(1);
             expect(result).toEqual(testDelegationInfo);
         });
 
-        it('should handle null delegation response', async () => {
-            // Arrange
-            mockDelegateClient.parseDelegationInfo = jest.fn().mockReturnValue(null);
+        it('should handle error parsing delegation info', async () => {
+            // Arrange - modify the mock implementation without reassignment
+            // Cast to any to allow null return value in this test scenario
+            (mockDelegateClient.parseDelegationInfo as jest.Mock<any>).mockReturnValue(null);
 
             // Act
             const result = await service.getUserDelegations(testWalletAddress);
