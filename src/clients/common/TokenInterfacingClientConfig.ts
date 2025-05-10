@@ -1,5 +1,6 @@
-import { BaseClientConfig } from "../../core/ao/configuration/BaseClientConfig";
 import { ConnectArgsLegacy } from "../../core/ao/ao-client/aoconnect-types";
+import { BaseClientConfig } from "../../core/ao/configuration/BaseClientConfig"
+
 
 export interface TokenInterfacingClientConfig extends BaseClientConfig {
     /**
