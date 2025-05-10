@@ -77,13 +77,28 @@ describe('PIDataAggregator', () => {
         it('should handle invalid token data gracefully', async () => {
             // This is important as noted in the memory about handling various response formats
             const invalidToken = {} as PIToken;
-
-            // Act
-            await aggregator.updateTokenData(invalidToken);
-
-            // Assert - should not throw an error and return an empty array
-            const tokens = aggregator.getAggregatedTokens();
-            expect(tokens.length).toBe(0);
+            
+            // Mock console.warn to prevent test output noise
+            const originalWarn = console.warn;
+            console.warn = jest.fn();
+            
+            try {
+                // Act
+                await aggregator.updateTokenData(invalidToken);
+    
+                // Assert - should not throw an error and return an empty array
+                const tokens = aggregator.getAggregatedTokens();
+                expect(tokens.length).toBe(0);
+                
+                // Verify the warning was called
+                expect(console.warn).toHaveBeenCalledWith(
+                    'Invalid token data received:',
+                    expect.anything()
+                );
+            } finally {
+                // Restore console.warn
+                console.warn = originalWarn;
+            }
         });
     });
 
@@ -145,34 +160,56 @@ describe('PIDataAggregator', () => {
 
     describe('updateTickHistory', () => {
         it('should update tick history for a token', async () => {
-            // Arrange
+            // Start with a fresh aggregator for this test to avoid interference
+            const testAggregator = new PIDataAggregator();
             const tokenId = 'process1';
             
-            // First add a token to make it detectable
-            await aggregator.updateTokenData({ ...mockTokens[0], process: tokenId });
-
-            // Act
-            await aggregator.updateTickHistory(tokenId, mockTickHistory);
-
-            // Assert
-            const tokens = aggregator.getAggregatedTokens();
+            // Create a token entry first
+            const testToken = { 
+                id: tokenId,
+                ticker: 'TEST',
+                process: tokenId,
+                status: 'active'
+            };
+            await testAggregator.updateTokenData(testToken);
+            
+            // Now explicitly update the tick history
+            await testAggregator.updateTickHistory(tokenId, [...mockTickHistory]);
+            
+            // Get the token and verify its tick history
+            const tokens = testAggregator.getAggregatedTokens();
             const token = tokens.find(t => t.process === tokenId);
+            
+            // Debug logs to see what's happening
+            console.log('Token after update:', JSON.stringify(token));
+            console.log('Expected tick history:', JSON.stringify(mockTickHistory));
+            
             expect(token).toBeDefined();
             expect(token?.tickHistory).toEqual(mockTickHistory);
         });
 
         // Testing response format resilience (consistent with the memory about PITokenClient)
         it('should handle empty tick history gracefully', async () => {
-            // Arrange
+            // Start with a fresh aggregator for this test to avoid interference
+            const testAggregator = new PIDataAggregator();
             const tokenId = 'process1';
-            await aggregator.updateTokenData({ ...mockTokens[0], process: tokenId });
             
-            // Act
-            await aggregator.updateTickHistory(tokenId, []);
+            // Create a token entry first
+            const testToken = { 
+                id: tokenId,
+                ticker: 'TEST',
+                process: tokenId,
+                status: 'active'
+            };
+            await testAggregator.updateTokenData(testToken);
             
-            // Assert - should not throw an error
-            const tokens = aggregator.getAggregatedTokens();
+            // Update with empty tick history
+            await testAggregator.updateTickHistory(tokenId, []);
+            
+            // Get the token and verify its tick history
+            const tokens = testAggregator.getAggregatedTokens();
             const token = tokens.find(t => t.process === tokenId);
+            
             expect(token).toBeDefined();
             expect(token?.tickHistory).toEqual([]);
         });

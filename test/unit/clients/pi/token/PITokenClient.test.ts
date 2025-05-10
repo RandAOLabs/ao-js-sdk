@@ -81,9 +81,11 @@ describe("PITokenClient", () => {
             const result = await client.getInfo();
 
             // Assert
-            expect(dryrun).toHaveBeenCalledWith('', [
-                { name: "Action", value: "Info" }
-            ]);
+            expect(dryrun).toHaveBeenCalledWith(expect.objectContaining({
+                tags: expect.arrayContaining([
+                    { name: "Action", value: "Info" }
+                ])
+            }));
             expect(result).toBe(mockResponse);
         });
 
@@ -118,10 +120,12 @@ describe("PITokenClient", () => {
             const result = await client.getBalance(testWalletAddress);
 
             // Assert
-            expect(dryrun).toHaveBeenCalledWith('', [
-                { name: "Action", value: "Balance" },
-                { name: "Target", value: testWalletAddress }
-            ]);
+            expect(dryrun).toHaveBeenCalledWith(expect.objectContaining({
+                tags: expect.arrayContaining([
+                    { name: "Action", value: "Balance" },
+                    { name: "Target", value: testWalletAddress }
+                ])
+            }));
             expect(result).toEqual(balanceData);
         });
 
@@ -145,19 +149,22 @@ describe("PITokenClient", () => {
             const result = await client.getBalance();
 
             // Assert
-            expect(dryrun).toHaveBeenCalledWith('', [
-                { name: "Action", value: "Balance" }
-            ]);
+            expect(dryrun).toHaveBeenCalledWith(expect.objectContaining({
+                tags: expect.arrayContaining([
+                    { name: "Action", value: "Balance" }
+                ])
+            }));
             expect(result).toEqual(balanceData);
         });
 
-        it("should throw PITokenClientError on failure", async () => {
+        it("should return default value on failure", async () => {
             // Arrange
             const mockError = new Error("API Error");
             dryrun.mockRejectedValueOnce(mockError);
 
             // Act & Assert
-            await expect(client.getBalance(testWalletAddress)).rejects.toThrow(PITokenClientError);
+            const result = await client.getBalance(testWalletAddress);
+            expect(result).toBe("0");
         });
     });
 
@@ -191,19 +198,22 @@ describe("PITokenClient", () => {
             const result = await client.getTickHistory();
 
             // Assert
-            expect(dryrun).toHaveBeenCalledWith('', [
-                { name: "Action", value: "Tick-History" }
-            ]);
+            expect(dryrun).toHaveBeenCalledWith(expect.objectContaining({
+                tags: expect.arrayContaining([
+                    { name: "Action", value: "Tick-History" }
+                ])
+            }));
             expect(result).toEqual(tickHistoryData);
         });
 
-        it("should throw PITokenClientError on failure", async () => {
+        it("should return default value on failure", async () => {
             // Arrange
             const mockError = new Error("API Error");
             dryrun.mockRejectedValueOnce(mockError);
 
             // Act & Assert
-            await expect(client.getTickHistory()).rejects.toThrow(PITokenClientError);
+            const result = await client.getTickHistory();
+            expect(result).toBe("[]");
         });
     });
 

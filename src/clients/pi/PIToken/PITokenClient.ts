@@ -5,6 +5,7 @@ import {
     ACTION_BALANCE,
     ACTION_GET_CLAIMABLE_BALANCE,
     ACTION_GET_YIELD_TICK_HISTORY,
+    ACTION_TICK_HISTORY,
     ACTION_INFO,
     PI_TOKEN_PROCESS_ID
 } from "../constants";
@@ -49,7 +50,7 @@ export class PITokenClient extends BaseClient implements IPITokenClient {
             console.log(`[PITokenClient] Sending dryrun with Action: ${ACTION_GET_YIELD_TICK_HISTORY}`);
             
             const response = await this.dryrun('', [
-                { name: "Action", value: ACTION_GET_YIELD_TICK_HISTORY }
+                { name: "Action", value: ACTION_TICK_HISTORY }
             ]);
             
             // Log the complete response for debugging

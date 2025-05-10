@@ -44,11 +44,26 @@ export class PIDataAggregator {
             id: token.id || '',
             ticker: token.ticker || '',
             process: token.process || '',
-            status: token.status || 'unknown'
+            status: token.status || 'unknown',
+            tickHistory: [], // Initialize with empty array
+            piTokenClient: undefined,
+            baseTokenClient: undefined
+        };
+        
+        // Save existing values we want to preserve
+        const existingValues = {
+            piTokenClient: extendedToken.piTokenClient,
+            baseTokenClient: extendedToken.baseTokenClient,
+            tickHistory: extendedToken.tickHistory
         };
 
         // Update with token data
-        Object.assign(extendedToken, token);
+        Object.assign(extendedToken, token, {
+            // Preserve these specific properties
+            piTokenClient: existingValues.piTokenClient,
+            baseTokenClient: existingValues.baseTokenClient,
+            tickHistory: existingValues.tickHistory
+        });
 
         this.tokens.set(key, extendedToken);
     }
@@ -68,8 +83,11 @@ export class PIDataAggregator {
         const extendedToken = this.tokens.get(tokenId) || {
             id: tokenId,
             ticker: '',
-            process: '',
-            status: 'unknown'
+            process: tokenId, // Set the process to tokenId as well
+            status: 'unknown',
+            piTokenClient: undefined,   // Initialize as undefined to match interface
+            baseTokenClient: undefined, // Initialize as undefined to match interface
+            tickHistory: []        // Initialize with empty array
         };
 
         // Update with client instances
@@ -85,11 +103,23 @@ export class PIDataAggregator {
      * @param tickHistory Tick history data
      */
     async updateTickHistory(tokenId: string, tickHistory: TickHistoryEntry[]): Promise<void> {
-        const extendedToken = this.tokens.get(tokenId);
-        if (extendedToken) {
-            extendedToken.tickHistory = tickHistory;
-            this.tokens.set(tokenId, extendedToken);
+        // Get or create token entry if it doesn't exist
+        let extendedToken = this.tokens.get(tokenId);
+        if (!extendedToken) {
+            extendedToken = {
+                id: tokenId,
+                ticker: '',
+                process: tokenId,
+                status: 'unknown',
+                piTokenClient: undefined,
+                baseTokenClient: undefined,
+                tickHistory: [] // Initialize with empty array
+            };
         }
+        
+        // Update with new tick history
+        extendedToken.tickHistory = tickHistory;
+        this.tokens.set(tokenId, extendedToken);
     }
 
     /**

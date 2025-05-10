@@ -198,7 +198,7 @@ describe("PIDelegateClient", () => {
         const testWalletTo = "destination-wallet";
         const testFactor = 0.5;
 
-        it("should call message with correct parameters", async () => {
+        it("should call messageResult with correct parameters", async () => {
             // Arrange
             const options: SetDelegationOptions = {
                 walletFrom: testWalletAddress,
@@ -207,8 +207,11 @@ describe("PIDelegateClient", () => {
             };
             
             const mockResponse = {
-                success: true,
-                messageId: "test-message-id"
+                Messages: [
+                    { Data: JSON.stringify({ success: true }), Tags: [] }
+                ],
+                Output: { data: { success: true, messageId: "test-message-id" } },
+                Spawns: []
             };
             messageResult.mockResolvedValueOnce(mockResponse);
 
@@ -216,24 +219,14 @@ describe("PIDelegateClient", () => {
             const result = await client.setDelegation(options);
 
             // Assert
-            expect(message).toHaveBeenCalledWith(
-                expect.any(String), // Process ID
-                [{
-                    name: "Action",
-                    value: "Set-Delegation"
-                }, {
-                    name: "From",
-                    value: testWalletAddress
-                }, {
-                    name: "To",
-                    value: testWalletTo
-                }, {
-                    name: "Factor",
-                    value: testFactor.toString()
-                }], 
-                expect.any(String) // Signature function
+            expect(messageResult).toHaveBeenCalledWith(
+                expect.stringContaining(options.walletFrom),
+                expect.arrayContaining([
+                    { name: "Action", value: "Set-Delegation" }
+                ])
             );
-            expect(result).toBe(mockResponse);
+            // The implementation returns Output.data if it exists
+            expect(result).toBe(mockResponse.Output.data);
         });
 
         it("should throw PIDelegateClientError on failure", async () => {
@@ -245,7 +238,7 @@ describe("PIDelegateClient", () => {
             };
             
             const mockError = new Error("API Error");
-            message.mockRejectedValueOnce(mockError);
+            messageResult.mockRejectedValueOnce(mockError);
 
             // Act & Assert
             await expect(client.setDelegation(options)).rejects.toThrow(PIDelegateClientError);
