@@ -9,14 +9,31 @@ import {
   ACTION_GET_LAST_N_RECORDS,
   DELEGATION_HISTORIAN_PROCESS_ID
 } from './constants';
+import { ClientBuilder } from '../../common';
 
+/**
+ * @category Autonomous Finance
+ */
 export class DelegationHistorianClient extends BaseClient implements IDelegationHistorianClient {
   private static DEFAULT_PROCESS_ID = DELEGATION_HISTORIAN_PROCESS_ID;
 
-  constructor(baseConfig: BaseClientConfig) {
-    super(baseConfig);
-  }
+	/** 
+	 * {@inheritdoc IAutoconfiguration.autoConfiguration}
+	 * @see {@link IAutoconfiguration.autoConfiguration} 
+	 */
+	public static autoConfiguration(): DelegationHistorianClient {
+		return DelegationHistorianClient.defaultBuilder()
+			.build()
+	}
 
+	/** 
+	 * {@inheritdoc IDefaultBuilder.defaultBuilder}
+	 * @see {@link IDefaultBuilder.defaultBuilder} 
+	 */
+	public static defaultBuilder(): ClientBuilder<DelegationHistorianClient> {
+		return new ClientBuilder(DelegationHistorianClient)
+			.withProcessId(DELEGATION_HISTORIAN_PROCESS_ID)
+	}
   /**
    * Fetches the total delegated AO by project
    * @returns Array of project delegation totals

@@ -5,6 +5,7 @@ import { PIOracleClient } from "./PIOracleClient";
 
 /**
  * Builder for creating PIOracleClient instances.
+ * @deprecated in favor of @see PIOracleClient.defaultBuilder
  */
 export class PIOracleClientBuilder extends ClientBuilder<PIOracleClient> {
     /**
