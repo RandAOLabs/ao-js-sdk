@@ -1,7 +1,7 @@
 import { PIToken } from "../../../clients/pi/oracle/abstract/IPIOracleClient";
 import { TokenClient } from "../../../clients/ao";
 import { PITokenClient } from "../../../clients/pi/PIToken/PITokenClient";
-import { DelegationInfo } from "../../../clients/pi/delegate/abstract/IPIDelegateClient";
+import { DelegationInfo, DelegationPreference } from "../../../clients/pi/delegate/abstract/IPIDelegateClient";
 import { ProjectDelegationTotal, DelegationRecord } from "../../../clients/pi/historian/IDelegationHistorianClient";
 import { TickHistoryEntry } from "../../../clients/pi/PIToken/abstract/IPITokenClient";
 
@@ -39,13 +39,7 @@ export interface PITokenExtended {
     [key: string]: any;
 }
 
-/**
- * Represents a delegation preference
- */
-export interface DelegationPreference {
-    walletTo: string;
-    factor: number;
-}
+// Using DelegationPreference imported from delegate client
 
 /**
  * Interface for the PI Service 
