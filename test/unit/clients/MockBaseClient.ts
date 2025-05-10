@@ -18,17 +18,9 @@ export class MockBaseClient extends BaseClient {
 	} = {};
 
 	constructor() {
-		// Use a mock wallet instead of trying to load a real one
-		const mockWallet = {
-			kty: 'RSA',
-			e: 'AQAB',
-			n: 'mockKey',
-			d: 'mockKey'
-		};
-
 		super({
 			processId: "mock-process-id",
-			wallet: mockWallet
+			wallet: getWalletLazy()
 		});
 	}
 
