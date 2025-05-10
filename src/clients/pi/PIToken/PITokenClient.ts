@@ -11,8 +11,8 @@ import {
 import { IPITokenClient, TickHistoryEntry } from "./abstract/IPITokenClient";
 
 /**
- * @category Autonomous Finance
  * Client for interacting with a specific PI token process.
+ * @category Autonomous Finance
  */
 export class PITokenClient extends BaseClient implements IPITokenClient {
     /**

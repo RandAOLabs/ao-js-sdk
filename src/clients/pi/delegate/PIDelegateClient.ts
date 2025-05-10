@@ -11,8 +11,8 @@ import {
 import { ClientBuilder } from "../../common";
 
 /**
- * @category Autonomous Finance
  * Client for interacting with the PI delegate process.
+ * @category Autonomous Finance
  */
 export class PIDelegateClient extends BaseClient implements IPIDelegateClient {
     
