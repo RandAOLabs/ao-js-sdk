@@ -80,9 +80,13 @@ describe("PIDelegateClient", () => {
             const result = await client.getInfo();
 
             // Assert
-            expect(dryrun).toHaveBeenCalledWith('', [
-                { name: "Action", value: "Info" }
-            ]);
+            expect(dryrun).toHaveBeenCalledWith(expect.objectContaining({
+                process: testProcessId,
+                tags: [
+                    { name: "Action", value: "Info" },
+                    expect.any(Object) // library tag
+                ]
+            }));
             expect(result).toBe(mockResponse);
         });
 
@@ -118,10 +122,14 @@ describe("PIDelegateClient", () => {
             const result = await client.getDelegation(testWalletAddress);
 
             // Assert
-            expect(dryrun).toHaveBeenCalledWith('', [
-                { name: "Action", value: "Get-Delegation" },
-                { name: "Address", value: testWalletAddress }
-            ]);
+            expect(dryrun).toHaveBeenCalledWith(expect.objectContaining({
+                process: testProcessId,
+                tags: [
+                    { name: "Action", value: "Get-Delegations" },
+                    { name: "Wallet", value: testWalletAddress },
+                    expect.any(Object) // library tag
+                ]
+            }));
             expect(result).toEqual(JSON.stringify({
                 address: testWalletAddress,
                 delegatedTokens: ["TK1", "TK2"]
@@ -149,9 +157,13 @@ describe("PIDelegateClient", () => {
             const result = await client.getDelegation();
 
             // Assert
-            expect(dryrun).toHaveBeenCalledWith('', [
-                { name: "Action", value: "Get-Delegation" }
-            ]);
+            expect(dryrun).toHaveBeenCalledWith(expect.objectContaining({
+                process: testProcessId,
+                tags: [
+                    { name: "Action", value: "Get-Delegation" },
+                    expect.any(Object) // library tag
+                ]
+            }));
             expect(result).toEqual(JSON.stringify({
                 address: "default-wallet",
                 delegatedTokens: ["TK1"]

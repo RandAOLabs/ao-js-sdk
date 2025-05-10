@@ -234,10 +234,14 @@ describe("DelegationHistorianClient", () => {
             const result = await client.getLastNRecords(count);
 
             // Assert
-            expect(dryrun).toHaveBeenCalledWith('', [
-                { name: "Action", value: "Get-Last-N-Records" },
-                { name: "Count", value: count.toString() }
-            ]);
+            expect(dryrun).toHaveBeenCalledWith(expect.objectContaining({
+                process: testProcessId,
+                tags: [
+                    { name: "Action", value: "Get-Last-N-Records" },
+                    { name: "Count", value: count.toString() },
+                    expect.any(Object) // library tag
+                ]
+            }));
             expect(result).toEqual(mockRecords);
         });
 

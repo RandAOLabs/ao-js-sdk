@@ -20,11 +20,11 @@ jest.mock('src/clients/ao/token/TokenClient');
 
 describe('PIDataAggregator', () => {
     let aggregator: PIDataAggregator;
-    let mockOracleClient: PIOracleClient;
-    let mockDelegateClient: PIDelegateClient;
-    let mockHistorianClient: DelegationHistorianClient;
-    let mockPITokenClient: PITokenClient;
-    let mockTokenClient: TokenClient;
+    let mockOracleClient: jest.Mocked<PIOracleClient>;
+    let mockDelegateClient: jest.Mocked<PIDelegateClient>;
+    let mockHistorianClient: jest.Mocked<DelegationHistorianClient>;
+    let mockPITokenClient: jest.Mocked<PITokenClient>;
+    let mockTokenClient: jest.Mocked<TokenClient>;
 
     const mockWalletAddress = 'test-wallet-address';
     
@@ -77,32 +77,32 @@ describe('PIDataAggregator', () => {
         // Reset mocks
         jest.clearAllMocks();
 
-        // Create the mock objects
-        mockOracleClient = {
-            getPITokens: jest.fn().mockResolvedValue(JSON.stringify(mockTokens)),
-            parsePITokens: jest.fn().mockReturnValue(mockTokens),
-            getInfo: jest.fn().mockResolvedValue({} as DryRunResult)
-        } as any;
-
-        mockDelegateClient = {
-            getDelegation: jest.fn().mockResolvedValue(JSON.stringify(mockDelegationInfo)),
-            parseDelegationInfo: jest.fn().mockReturnValue(mockDelegationInfo)
-        } as any;
-
-        mockHistorianClient = {
-            getTotalDelegatedAOByProject: jest.fn().mockResolvedValue(mockProjectDelegations),
-            getLastNRecords: jest.fn().mockResolvedValue(mockDelegationRecords)
-        } as any;
-
-        mockPITokenClient = {
-            getTickHistory: jest.fn().mockResolvedValue(JSON.stringify(mockTickHistory)),
-            parseTickHistory: jest.fn().mockReturnValue(mockTickHistory)
-        } as any;
-
-        mockTokenClient = {} as any;
-
         // Create a new aggregator
         aggregator = new PIDataAggregator();
+        
+        // Set up mock objects with proper typing
+        mockOracleClient = {
+            getPITokens: jest.fn().mockResolvedValue(JSON.stringify(mockTokens)) as jest.Mock<() => Promise<string>>,
+            parsePITokens: jest.fn().mockReturnValue(mockTokens) as jest.Mock<(piTokensData: string) => PIToken[]>,
+            getInfo: jest.fn().mockResolvedValue({} as DryRunResult) as jest.Mock<() => Promise<DryRunResult>>
+        } as unknown as jest.Mocked<PIOracleClient>;
+
+        mockDelegateClient = {
+            getDelegation: jest.fn().mockResolvedValue(JSON.stringify(mockDelegationInfo)) as jest.Mock<(walletAddress?: string) => Promise<string>>,
+            parseDelegationInfo: jest.fn().mockReturnValue(mockDelegationInfo) as jest.Mock<(delegationData: string) => DelegationInfo>
+        } as unknown as jest.Mocked<PIDelegateClient>;
+
+        mockHistorianClient = {
+            getTotalDelegatedAOByProject: jest.fn().mockResolvedValue(mockProjectDelegations) as jest.Mock<() => Promise<ProjectDelegationTotal[]>>,
+            getLastNRecords: jest.fn().mockResolvedValue(mockDelegationRecords) as jest.Mock<(count: number) => Promise<DelegationRecord[]>>
+        } as unknown as jest.Mocked<DelegationHistorianClient>;
+
+        mockPITokenClient = {
+            getTickHistory: jest.fn().mockResolvedValue(JSON.stringify(mockTickHistory)) as jest.Mock<() => Promise<string>>,
+            parseTickHistory: jest.fn().mockReturnValue(mockTickHistory) as jest.Mock<(tickData: string) => TickHistoryEntry[]>
+        } as unknown as jest.Mocked<PITokenClient>;
+
+        mockTokenClient = {} as unknown as jest.Mocked<TokenClient>;
     });
 
     describe('updateTokenData', () => {
