@@ -5,6 +5,7 @@ import { PI_DELEGATE_PROCESS_ID } from "../constants";
 
 /**
  * Builder for creating PIDelegateClient instances.
+ * @deprecated in favor of @see {PIDelegateClient.defaultBuilder}
  */
 export class PIDelegateClientBuilder extends ClientBuilder<PIDelegateClient> {
     constructor() {

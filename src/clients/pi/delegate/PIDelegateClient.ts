@@ -2,17 +2,38 @@ import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
 import { BaseClient } from "../../../core/ao/BaseClient";
 import { ClientError } from "../../common/ClientError";
 import { IPIDelegateClient, DelegationInfo, SetDelegationOptions } from "./abstract/IPIDelegateClient";
-import { 
-    ACTION_GET_DELEGATIONS,
-    ACTION_INFO,
-    ACTION_SET_DELEGATION
+import {
+	ACTION_GET_DELEGATIONS,
+	ACTION_INFO,
+	ACTION_SET_DELEGATION,
+	PI_DELEGATE_PROCESS_ID
 } from "../constants";
+import { ClientBuilder } from "../../common";
 
 /**
  * Client for interacting with the PI delegate process.
  */
 export class PIDelegateClient extends BaseClient implements IPIDelegateClient {
-    /**
+    
+	/** 
+	 * {@inheritdoc IAutoconfiguration.autoConfiguration}
+	 * @see {@link IAutoconfiguration.autoConfiguration} 
+	 */
+	public static autoConfiguration(): PIDelegateClient {
+		return PIDelegateClient.defaultBuilder()
+			.build()
+	}
+
+	/** 
+	 * {@inheritdoc IDefaultBuilder.defaultBuilder}
+	 * @see {@link IDefaultBuilder.defaultBuilder} 
+	 */
+	public static defaultBuilder(): ClientBuilder<PIDelegateClient> {
+		return new ClientBuilder(PIDelegateClient)
+			.withProcessId(PI_DELEGATE_PROCESS_ID)
+	}
+	
+	/**
      * Gets information from the delegate process.
      * @returns Promise resolving to a DryRunResult with delegation information
      */
