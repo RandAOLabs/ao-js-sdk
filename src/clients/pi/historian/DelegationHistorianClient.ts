@@ -1,6 +1,5 @@
 import { DryRunResult } from '@permaweb/aoconnect/dist/lib/dryrun';
 import { BaseClient } from '../../../core/ao/BaseClient';
-import { BaseClientConfig } from '../../../core/ao/configuration/BaseClientConfig';
 import { Tags } from '../../../core/common';
 import { DelegationRecord, IDelegationHistorianClient, ProjectDelegationTotal } from './IDelegationHistorianClient';
 import {
@@ -12,9 +11,8 @@ import {
 import { DelegationHistorianClientError } from './DelegationHistorianClientError';
 import { DelegationHistorianProcessError } from './DelegationHistorianProcessError';
 import { AO_CONFIGURATIONS } from '../../../core/ao/ao-client/configurations';
-import { IAutoconfiguration, IDefaultBuilder, staticImplements } from '../../../utils';
+import { IAutoconfiguration, IDefaultBuilder } from '../../../utils';
 import { ClientBuilder } from '../../common';
-import { IClassBuilder } from '../../../utils/class-interfaces/IClientBuilder';
 
 /**
  * @category Autonomous Finance
@@ -22,23 +20,6 @@ import { IClassBuilder } from '../../../utils/class-interfaces/IClientBuilder';
 export class DelegationHistorianClient extends BaseClient implements IDelegationHistorianClient {
   private static DEFAULT_PROCESS_ID = DELEGATION_HISTORIAN_PROCESS_ID;
 
-	/** 
-	 * {@inheritdoc IAutoconfiguration.autoConfiguration}
-	 * @see {@link IAutoconfiguration.autoConfiguration} 
-	 */
-	public static autoConfiguration(): DelegationHistorianClient {
-		return DelegationHistorianClient.defaultBuilder()
-			.build()
-	}
-
-	/** 
-	 * {@inheritdoc IDefaultBuilder.defaultBuilder}
-	 * @see {@link IDefaultBuilder.defaultBuilder} 
-	 */
-	public static defaultBuilder(): ClientBuilder<DelegationHistorianClient> {
-		return new ClientBuilder(DelegationHistorianClient)
-			.withProcessId(DELEGATION_HISTORIAN_PROCESS_ID)
-	}
   /**
    * Fetches the total delegated AO by project
    * @returns Array of project delegation totals

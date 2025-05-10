@@ -14,7 +14,6 @@ import { PITokenProcessError } from "./PITokenProcessError";
 import { AO_CONFIGURATIONS } from "../../../core/ao/ao-client/configurations";
 import { IAutoconfiguration, IDefaultBuilder, staticImplements } from "../../../utils";
 import { ClientBuilder } from "../../common";
-import { PROCESS_IDS } from "../../../process-ids";
 import { IClassBuilder } from "../../../utils/class-interfaces/IClientBuilder";
 
 /**

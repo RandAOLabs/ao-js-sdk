@@ -1,6 +1,5 @@
 import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
 import { BaseClient } from "../../../core/ao/BaseClient";
-import { BaseClientConfig } from "../../../core/ao/configuration/BaseClientConfig";
 import { Tags } from "../../../core/common";
 import { IPIOracleClient, PIToken } from "./abstract/IPIOracleClient";
 import { 
@@ -11,7 +10,6 @@ import {
 import { PITokenClient } from "../PIToken/PITokenClient";
 import { AOToken } from "../../tokens/AOTokenClient";
 import { TokenClient } from "../../ao";
-import { ClientBuilder } from "../../common";
 import { PIOracleClientError } from "./PIOracleClientError";
 import { PIOracleProcessError } from "./PIOracleProcessError";
 import { AO_CONFIGURATIONS } from "../../../core/ao/ao-client/configurations";
@@ -29,24 +27,6 @@ import { IClassBuilder } from "../../../utils/class-interfaces/IClientBuilder";
 @staticImplements<IClassBuilder>()
 export class PIOracleClient extends BaseClient implements IPIOracleClient {
     private readonly TIMEOUT_MS = 15000; // 15 second timeout for operations
-	
-	/** 
-	 * {@inheritdoc IAutoconfiguration.autoConfiguration}
-	 * @see {@link IAutoconfiguration.autoConfiguration} 
-	 */
-	public static autoConfiguration(): PIOracleClient {
-		return PIOracleClient.defaultBuilder()
-			.build()
-	}
-
-	/** 
-	 * {@inheritdoc IDefaultBuilder.defaultBuilder}
-	 * @see {@link IDefaultBuilder.defaultBuilder} 
-	 */
-	public static defaultBuilder(): ClientBuilder<PIOracleClient> {
-		return new ClientBuilder(PIOracleClient)
-			.withProcessId(DELEGATION_ORACLE_PROCESS_ID)
-	}
 
     /**
      * Gets information about the PI Oracle process.
