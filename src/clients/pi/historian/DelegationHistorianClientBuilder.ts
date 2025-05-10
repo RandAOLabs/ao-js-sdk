@@ -5,6 +5,7 @@ import { DELEGATION_HISTORIAN_PROCESS_ID } from "./constants";
 
 /**
  * Builder for creating DelegationHistorianClient instances.
+ * @deprecated in favor of @see DelegationHistorianClient.defaultBuilder
  */
 export class DelegationHistorianClientBuilder extends ClientBuilder<DelegationHistorianClient> {
     /**
