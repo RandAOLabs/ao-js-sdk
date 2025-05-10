@@ -43,6 +43,11 @@ jest.mock('src/utils/logger/logger', () => {
     };
 });
 
+// Mock console methods to suppress output during tests
+const originalConsoleLog = console.log;
+const originalConsoleWarn = console.warn;
+const originalConsoleError = console.error;
+
 describe("PIDelegateClient", () => {
     let client: PIDelegateClient;
     const testProcessId = "test-pi-delegate-process-id";
@@ -62,7 +67,19 @@ describe("PIDelegateClient", () => {
             .withAOConfig(mockAOConfig)
             .build();
         
+        // Replace console methods with mocks to prevent output during tests
+        console.log = jest.fn();
+        console.warn = jest.fn();
+        console.error = jest.fn();
+        
         jest.clearAllMocks();
+    });
+    
+    afterEach(() => {
+        // Restore original console methods
+        console.log = originalConsoleLog;
+        console.warn = originalConsoleWarn;
+        console.error = originalConsoleError;
     });
 
     describe("getInfo()", () => {
