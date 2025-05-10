@@ -4,7 +4,7 @@ import { PIOracleClient } from 'src/clients/pi/oracle/PIOracleClient';
 import { PIDelegateClient } from 'src/clients/pi/delegate/PIDelegateClient';
 import { DelegationHistorianClient } from 'src/clients/pi/historian/DelegationHistorianClient';
 import { PIToken } from 'src/clients/pi/oracle/abstract/IPIOracleClient';
-import { DelegationInfo, SetDelegationOptions } from 'src/clients/pi/delegate/abstract/IPIDelegateClient';
+import { DelegationInfo } from 'src/clients/pi/delegate/abstract/IPIDelegateClient';
 import { DelegationRecord, ProjectDelegationTotal } from 'src/clients/pi/historian/IDelegationHistorianClient';
 import { PITokenExtended } from 'src/services/pi/abstract/IPIService';
 import { DryRunResult } from '@permaweb/aoconnect/dist/lib/dryrun';
@@ -27,14 +27,22 @@ describe('PIService', () => {
             id: 'id1',
             process: 'process1',
             status: 'active',
-            treasury: 'treasury1'
+            treasury: 'treasury1',
+            name: 'Token 1',
+            total_token_supply: '1000',
+            flp_token_process: 'specific1',
+            deployer: 'owner1'
         },
         { 
             ticker: 'TK2', 
             id: 'id2',
             process: 'process2',
             status: 'active',
-            treasury: 'treasury2'
+            treasury: 'treasury2',
+            name: 'Token 2',
+            total_token_supply: '2000',
+            flp_token_process: 'specific2',
+            deployer: 'owner2'
         }
     ];
 
@@ -46,7 +54,7 @@ describe('PIService', () => {
                 factor: 0.5
             }
         ],
-        totalFactor: "0.5",
+        totalFactor: 0.5,
         lastUpdate: 123456789
     };
 
@@ -190,18 +198,17 @@ describe('PIService', () => {
             const walletFrom = 'sender-address';
             const walletTo = 'recipient-address';
             const factor = 0.5;
-            const expectedOptions: SetDelegationOptions = {
-                walletFrom,
-                walletTo,
-                factor
-            };
             const expectedResult = 'test-message-id';
             
             // Act
             const result = await service.setDelegation(walletFrom, walletTo, factor);
 
             // Assert
-            expect(mockDelegateClient.setDelegation).toHaveBeenCalledWith(expectedOptions);
+            expect(mockDelegateClient.setDelegation).toHaveBeenCalledWith({
+                walletFrom,
+                walletTo,
+                factor
+            });
             expect(result).toEqual(expectedResult);
         });
     });

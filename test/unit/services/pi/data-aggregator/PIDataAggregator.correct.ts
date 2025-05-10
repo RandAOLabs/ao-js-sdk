@@ -4,11 +4,12 @@ import { PIOracleClient } from 'src/clients/pi/oracle/PIOracleClient';
 import { PIDelegateClient } from 'src/clients/pi/delegate/PIDelegateClient';
 import { DelegationHistorianClient } from 'src/clients/pi/historian/DelegationHistorianClient';
 import { PIToken } from 'src/clients/pi/oracle/abstract/IPIOracleClient';
-import { DelegationInfo } from 'src/clients/pi/delegate/abstract/IPIDelegateClient';
+import { DelegationInfo, DelegationPreference } from 'src/clients/pi/delegate/abstract/IPIDelegateClient';
 import { DelegationRecord, ProjectDelegationTotal } from 'src/clients/pi/historian/IDelegationHistorianClient';
 import { PITokenClient } from 'src/clients/pi/PIToken/PITokenClient';
 import { TokenClient } from 'src/clients/ao';
 import { TickHistoryEntry } from 'src/clients/pi/PIToken/abstract/IPITokenClient';
+import { PITokenExtended } from 'src/services/pi/abstract/IPIService';
 import { DryRunResult } from '@permaweb/aoconnect/dist/lib/dryrun';
 
 // Mock the client classes
@@ -34,7 +35,11 @@ describe('PIDataAggregator', () => {
             id: 'id1',
             process: 'process1',
             status: 'active',
-            treasury: 'treasury1'
+            treasury: 'treasury1',
+            name: 'Token 1',
+            total_token_supply: '1000',
+            flp_token_process: 'specific1',
+            deployer: 'owner1'
         }
     ];
 
@@ -46,7 +51,7 @@ describe('PIDataAggregator', () => {
                 factor: 0.5
             }
         ],
-        totalFactor: "0.5",
+        totalFactor: 0.5,
         lastUpdate: 123456789
     };
 

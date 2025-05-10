@@ -80,9 +80,13 @@ describe("DelegationHistorianClient", () => {
             const result = await client.getTotalDelegatedAOByProject();
 
             // Assert
-            expect(dryrun).toHaveBeenCalledWith('', [
-                { name: "Action", value: "Get-Total-Delegated-AO-By-Project" }
-            ]);
+            expect(dryrun).toHaveBeenCalledWith(expect.objectContaining({
+                process: testProcessId,
+                tags: [
+                    { name: "Action", value: "Get-Total-Delegated-AO-By-Project" },
+                    expect.any(Object) // library tag
+                ]
+            }));
             expect(result).toEqual([
                 { projectId: "project1", amount: "100" },
                 { projectId: "project2", amount: "200" }
@@ -160,9 +164,13 @@ describe("DelegationHistorianClient", () => {
             const result = await client.getLastRecord();
 
             // Assert
-            expect(dryrun).toHaveBeenCalledWith('', [
-                { name: "Action", value: "Get-Last-Record" }
-            ]);
+            expect(dryrun).toHaveBeenCalledWith(expect.objectContaining({
+                process: testProcessId,
+                tags: [
+                    { name: "Action", value: "Get-Last-Record" },
+                    expect.any(Object) // library tag
+                ]
+            }));
             expect(result).toEqual(mockRecord);
         });
 
@@ -261,10 +269,14 @@ describe("DelegationHistorianClient", () => {
             const result = await client.getLastNRecords(10); // Use the default count explicitly
 
             // Assert
-            expect(dryrun).toHaveBeenCalledWith('', [
-                { name: "Action", value: "Get-Last-N-Records" },
-                { name: "Count", value: "10" }
-            ]);
+            expect(dryrun).toHaveBeenCalledWith(expect.objectContaining({
+                process: testProcessId,
+                tags: [
+                    { name: "Action", value: "Get-Last-N-Records" },
+                    { name: "Count", value: "10" },
+                    expect.any(Object) // library tag
+                ]
+            }));
             expect(result).toEqual(mockRecords);
         });
 
