@@ -19,7 +19,7 @@ import { IClassBuilder } from "../../../utils/class-interfaces/IClientBuilder";
 
 /**
  * Client for interacting with a specific PI token process.
- * @category PI
+ * @category Autonomous Finance
  */
 @staticImplements<IAutoconfiguration>()
 @staticImplements<IDefaultBuilder>()

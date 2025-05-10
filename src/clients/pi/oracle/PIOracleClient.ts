@@ -11,6 +11,7 @@ import {
 import { PITokenClient } from "../PIToken/PITokenClient";
 import { AOToken } from "../../tokens/AOTokenClient";
 import { TokenClient } from "../../ao";
+import { ClientBuilder } from "../../common";
 import { PIOracleClientError } from "./PIOracleClientError";
 import { PIOracleProcessError } from "./PIOracleProcessError";
 import { AO_CONFIGURATIONS } from "../../../core/ao/ao-client/configurations";
@@ -21,13 +22,31 @@ import { IClassBuilder } from "../../../utils/class-interfaces/IClientBuilder";
 /**
  * Client for interacting with the PI Oracle process.
  * The Oracle provides information about all available PI tokens.
- * @category PI
+ * @category Autonomous Finance
  */
 @staticImplements<IAutoconfiguration>()
 @staticImplements<IDefaultBuilder>()
 @staticImplements<IClassBuilder>()
 export class PIOracleClient extends BaseClient implements IPIOracleClient {
     private readonly TIMEOUT_MS = 15000; // 15 second timeout for operations
+	
+	/** 
+	 * {@inheritdoc IAutoconfiguration.autoConfiguration}
+	 * @see {@link IAutoconfiguration.autoConfiguration} 
+	 */
+	public static autoConfiguration(): PIOracleClient {
+		return PIOracleClient.defaultBuilder()
+			.build()
+	}
+
+	/** 
+	 * {@inheritdoc IDefaultBuilder.defaultBuilder}
+	 * @see {@link IDefaultBuilder.defaultBuilder} 
+	 */
+	public static defaultBuilder(): ClientBuilder<PIOracleClient> {
+		return new ClientBuilder(PIOracleClient)
+			.withProcessId(DELEGATION_ORACLE_PROCESS_ID)
+	}
 
     /**
      * Gets information about the PI Oracle process.

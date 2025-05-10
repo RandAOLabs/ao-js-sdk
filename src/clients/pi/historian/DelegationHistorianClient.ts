@@ -17,19 +17,28 @@ import { ClientBuilder } from '../../common';
 import { IClassBuilder } from '../../../utils/class-interfaces/IClientBuilder';
 
 /**
- * Client for interacting with the Delegation Historian process.
- * @category PI
+ * @category Autonomous Finance
  */
-@staticImplements<IAutoconfiguration>()
-@staticImplements<IDefaultBuilder>()
-@staticImplements<IClassBuilder>()
 export class DelegationHistorianClient extends BaseClient implements IDelegationHistorianClient {
   private static DEFAULT_PROCESS_ID = DELEGATION_HISTORIAN_PROCESS_ID;
 
-  constructor(baseConfig: BaseClientConfig) {
-    super(baseConfig);
-  }
+	/** 
+	 * {@inheritdoc IAutoconfiguration.autoConfiguration}
+	 * @see {@link IAutoconfiguration.autoConfiguration} 
+	 */
+	public static autoConfiguration(): DelegationHistorianClient {
+		return DelegationHistorianClient.defaultBuilder()
+			.build()
+	}
 
+	/** 
+	 * {@inheritdoc IDefaultBuilder.defaultBuilder}
+	 * @see {@link IDefaultBuilder.defaultBuilder} 
+	 */
+	public static defaultBuilder(): ClientBuilder<DelegationHistorianClient> {
+		return new ClientBuilder(DelegationHistorianClient)
+			.withProcessId(DELEGATION_HISTORIAN_PROCESS_ID)
+	}
   /**
    * Fetches the total delegated AO by project
    * @returns Array of project delegation totals
