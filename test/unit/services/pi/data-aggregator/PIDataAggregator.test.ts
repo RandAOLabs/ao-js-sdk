@@ -180,10 +180,6 @@ describe('PIDataAggregator', () => {
             const tokens = testAggregator.getAggregatedTokens();
             const token = tokens.find(t => t.process === tokenId);
             
-            // Debug logs to see what's happening
-            console.log('Token after update:', JSON.stringify(token));
-            console.log('Expected tick history:', JSON.stringify(mockTickHistory));
-            
             expect(token).toBeDefined();
             expect(token?.tickHistory).toEqual(mockTickHistory);
         });
