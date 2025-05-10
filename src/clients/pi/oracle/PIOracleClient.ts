@@ -15,9 +15,9 @@ import { TokenClient } from "../../ao";
 import { ClientBuilder } from "../../common";
 
 /**
- * @category Autonomous Finance
  * Client for interacting with the PI Oracle process.
  * The Oracle provides information about all available PI tokens.
+ * @category Autonomous Finance
  */
 export class PIOracleClient extends BaseClient implements IPIOracleClient {
     private readonly TIMEOUT_MS = 15000; // 15 second timeout for operations
