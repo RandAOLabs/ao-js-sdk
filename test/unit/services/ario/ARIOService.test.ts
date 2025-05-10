@@ -82,8 +82,8 @@ describe('ARIOService', () => {
             // Verify ANTClient was only constructed once for 'randao'
             expect(ANTClient).toHaveBeenCalledTimes(1);
             expect(ANTClient).toHaveBeenCalledWith(expect.objectContaining({
-                processId: expect.any(String)
-                // Note: wallet may be undefined in the test environment, consistent with PITokenClient improvements
+                processId: expect.any(String),
+                wallet: expect.anything()
             }));
         });
 
@@ -125,8 +125,8 @@ describe('ARIOService', () => {
             expect(result).toBe(txId);
             expect(mockAntClient.getRecord).toHaveBeenCalledWith('nft');
             expect(ANTClient).toHaveBeenCalledWith(expect.objectContaining({
-                processId: expect.any(String)
-                // Note: wallet may be undefined in the test environment, consistent with PITokenClient improvements
+                processId: expect.any(String),
+                wallet: expect.anything()
             }));
         });
 
