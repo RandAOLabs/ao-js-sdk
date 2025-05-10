@@ -25,7 +25,7 @@ import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
 import { PIDelegateClient } from "src/clients/pi/delegate/PIDelegateClient";
 import { PIDelegateClientError } from "src/clients/pi/delegate/PIDelegateClientError";
 import { DelegationPreference, SetDelegationOptions } from "src/clients/pi/delegate/abstract/IPIDelegateClient";
-import { AO_CONFIGURATIONS } from "src/core/ao/ao-client/configurations";
+import { ConnectArgsLegacy } from "src/core/ao/ao-client/aoconnect-types";
 
 // Mock the logger
 jest.mock('src/utils/logger/logger', () => {
@@ -49,10 +49,17 @@ describe("PIDelegateClient", () => {
     const testWalletAddress = "test-wallet-address";
 
     beforeEach(() => {
-        // Create a new client using the builder
+        // Create a mock AO config for testing to avoid real network requests
+        const mockAOConfig: ConnectArgsLegacy = {
+            MODE: 'legacy',
+            GRAPHQL_URL: 'https://mock-graphql-for-testing',
+            MU_URL: 'https://mock-mu-for-testing'
+        };
+        
+        // Create a new client using the builder with mock config
         client = PIDelegateClient.builder()
             .withProcessId(testProcessId)
-            .withAOConfig(AO_CONFIGURATIONS.RANDAO)
+            .withAOConfig(mockAOConfig)
             .build();
         
         jest.clearAllMocks();
