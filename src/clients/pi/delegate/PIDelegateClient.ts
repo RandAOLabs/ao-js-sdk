@@ -1,16 +1,27 @@
 import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
 import { BaseClient } from "../../../core/ao/BaseClient";
-import { ClientError } from "../../common/ClientError";
+import { Tags } from "../../../core/common";
 import { IPIDelegateClient, DelegationInfo, SetDelegationOptions } from "./abstract/IPIDelegateClient";
 import { 
     ACTION_GET_DELEGATIONS,
     ACTION_INFO,
-    ACTION_SET_DELEGATION
+    ACTION_SET_DELEGATION,
+    PI_DELEGATE_PROCESS_ID
 } from "../constants";
+import { PIDelegateClientError } from "./PIDelegateClientError";
+import { PIDelegateProcessError } from "./PIDelegateProcessError";
+import { AO_CONFIGURATIONS } from "../../../core/ao/ao-client/configurations";
+import { IAutoconfiguration, IDefaultBuilder, staticImplements } from "../../../utils";
+import { ClientBuilder } from "../../common";
+import { IClassBuilder } from "../../../utils/class-interfaces/IClientBuilder";
 
 /**
  * Client for interacting with the PI delegate process.
+ * @category PI
  */
+@staticImplements<IAutoconfiguration>()
+@staticImplements<IDefaultBuilder>()
+@staticImplements<IClassBuilder>()
 export class PIDelegateClient extends BaseClient implements IPIDelegateClient {
     /**
      * Gets information from the delegate process.
@@ -22,7 +33,7 @@ export class PIDelegateClient extends BaseClient implements IPIDelegateClient {
                 { name: "Action", value: ACTION_INFO }
             ]);
         } catch (error: any) {
-            throw new ClientError(this, this.getInfo, {}, error);
+            throw new PIDelegateClientError(this, this.getInfo, {}, error);
         }
     }
 
@@ -104,7 +115,7 @@ export class PIDelegateClient extends BaseClient implements IPIDelegateClient {
             return JSON.stringify({ success: true, message: 'Delegation preference updated' });
         } catch (error: any) {
             console.error(`[PIDelegateClient] Error in setDelegation:`, error);
-            throw new ClientError(
+            throw new PIDelegateClientError(
                 this, 
                 this.setDelegation, 
                 { walletFrom: options.walletFrom, walletTo: options.walletTo }, 
@@ -137,5 +148,68 @@ export class PIDelegateClient extends BaseClient implements IPIDelegateClient {
                 wallet: "unknown"
             };
         }
+    }
+
+    /**
+     * Check if the result contains any error tags from the process
+     * @param result The result to check for errors
+     * @private
+     */
+    private checkResultForErrors(result: DryRunResult) {
+        for (let msg of result.Messages) {
+            const tags: Tags = msg.Tags;
+            for (let tag of tags) {
+                if (tag.name == "Error") {
+                    throw new PIDelegateProcessError(`Error originating in process: ${this.getProcessId()}`)
+                }
+            }
+        }
+    }
+
+    /**
+     * {@inheritdoc IAutoconfiguration.autoConfiguration}
+     * @see {@link IAutoconfiguration.autoConfiguration} 
+     */
+    public static async autoConfiguration(): Promise<PIDelegateClient> {
+        const builder = await PIDelegateClient.defaultBuilder();
+        return builder.build();
+    }
+
+    /**
+     * Create a new builder instance for PIDelegateClient
+     * @returns A new builder instance
+     */
+    public static builder(): ClientBuilder<PIDelegateClient> {
+        return new ClientBuilder(PIDelegateClient);
+    }
+
+    /** 
+     * {@inheritdoc IDefaultBuilder.defaultBuilder}
+     * @see {@link IDefaultBuilder.defaultBuilder} 
+     */
+    public static async defaultBuilder(): Promise<ClientBuilder<PIDelegateClient>> {
+        return PIDelegateClient.builder()
+            .withProcessId(PI_DELEGATE_PROCESS_ID)
+            .withAOConfig(AO_CONFIGURATIONS.RANDAO);
+    }
+
+    /**
+     * Static method to easily build a default Delegate client
+     * @param cuUrl Optional Compute Unit URL to override the default
+     * @returns A configured PIDelegateClient instance
+     */
+    public static build(cuUrl?: string): PIDelegateClient {
+        const builder = PIDelegateClient.builder()
+            .withProcessId(PI_DELEGATE_PROCESS_ID);
+        
+        // Override the CU URL if provided
+        if (cuUrl) {
+            builder.withAOConfig({
+                MODE: 'legacy',
+                CU_URL: cuUrl
+            });
+        }
+        
+        return builder.build();
     }
 }
