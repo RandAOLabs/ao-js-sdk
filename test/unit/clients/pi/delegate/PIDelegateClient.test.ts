@@ -196,9 +196,9 @@ describe("PIDelegateClient", () => {
                 factor: testFactor
             };
             
-            const mockResponse: MessageResult = {
-                id: "test-message-id",
-                sortKey: "test-sort-key",
+            const mockResponse = {
+                success: true,
+                messageId: "test-message-id"
             };
             messageResult.mockResolvedValueOnce(mockResponse);
 

@@ -258,7 +258,7 @@ describe("DelegationHistorianClient", () => {
             dryrun.mockResolvedValueOnce(mockResponse);
 
             // Act
-            const result = await client.getLastNRecords();
+            const result = await client.getLastNRecords(10); // Use the default count explicitly
 
             // Assert
             expect(dryrun).toHaveBeenCalledWith('', [
