@@ -1,33 +1,14 @@
-import { jest } from '@jest/globals';
 import { PIDataAggregator } from 'src/services/pi/PIDataAggregator';
-import { PIOracleClient } from 'src/clients/pi/oracle/PIOracleClient';
-import { PIDelegateClient } from 'src/clients/pi/delegate/PIDelegateClient';
-import { DelegationHistorianClient } from 'src/clients/pi/historian/DelegationHistorianClient';
 import { PIToken } from 'src/clients/pi/oracle/abstract/IPIOracleClient';
 import { DelegationInfo } from 'src/clients/pi/delegate/abstract/IPIDelegateClient';
 import { DelegationRecord, ProjectDelegationTotal } from 'src/clients/pi/historian/IDelegationHistorianClient';
-import { PITokenClient } from 'src/clients/pi/PIToken/PITokenClient';
-import { TokenClient } from 'src/clients/ao';
 import { TickHistoryEntry } from 'src/clients/pi/PIToken/abstract/IPITokenClient';
-import { DryRunResult } from '@permaweb/aoconnect/dist/lib/dryrun';
 
-// Mock the client classes
-jest.mock('src/clients/pi/oracle/PIOracleClient');
-jest.mock('src/clients/pi/delegate/PIDelegateClient');
-jest.mock('src/clients/pi/historian/DelegationHistorianClient');
-jest.mock('src/clients/pi/PIToken/PITokenClient');
-jest.mock('src/clients/ao/token/TokenClient');
-
+// Using a clean test approach to avoid TypeScript errors
 describe('PIDataAggregator', () => {
     let aggregator: PIDataAggregator;
-    let mockOracleClient: PIOracleClient;
-    let mockDelegateClient: PIDelegateClient;
-    let mockHistorianClient: DelegationHistorianClient;
-    let mockPITokenClient: PITokenClient;
-    let mockTokenClient: TokenClient;
-
-    const mockWalletAddress = 'test-wallet-address';
     
+    // Test data with proper types matching the actual interfaces
     const mockTokens: PIToken[] = [
         { 
             ticker: 'TK1', 
@@ -39,7 +20,7 @@ describe('PIDataAggregator', () => {
     ];
 
     const mockDelegationInfo: DelegationInfo = {
-        wallet: mockWalletAddress,
+        wallet: 'test-wallet-address',
         delegationPrefs: [
             {
                 walletTo: 'process1',
@@ -73,35 +54,12 @@ describe('PIDataAggregator', () => {
         }
     ];
 
+    // Simple mock clients (using any type to avoid TypeScript errors)
+    const mockPITokenClient = {} as any;
+    const mockTokenClient = {} as any;
+
     beforeEach(() => {
-        // Reset mocks
-        jest.clearAllMocks();
-
-        // Create the mock objects
-        mockOracleClient = {
-            getPITokens: jest.fn().mockResolvedValue(JSON.stringify(mockTokens)),
-            parsePITokens: jest.fn().mockReturnValue(mockTokens),
-            getInfo: jest.fn().mockResolvedValue({} as DryRunResult)
-        } as any;
-
-        mockDelegateClient = {
-            getDelegation: jest.fn().mockResolvedValue(JSON.stringify(mockDelegationInfo)),
-            parseDelegationInfo: jest.fn().mockReturnValue(mockDelegationInfo)
-        } as any;
-
-        mockHistorianClient = {
-            getTotalDelegatedAOByProject: jest.fn().mockResolvedValue(mockProjectDelegations),
-            getLastNRecords: jest.fn().mockResolvedValue(mockDelegationRecords)
-        } as any;
-
-        mockPITokenClient = {
-            getTickHistory: jest.fn().mockResolvedValue(JSON.stringify(mockTickHistory)),
-            parseTickHistory: jest.fn().mockReturnValue(mockTickHistory)
-        } as any;
-
-        mockTokenClient = {} as any;
-
-        // Create a new aggregator
+        // Create a new aggregator for each test
         aggregator = new PIDataAggregator();
     });
 
@@ -117,13 +75,13 @@ describe('PIDataAggregator', () => {
         });
 
         it('should handle invalid token data gracefully', async () => {
-            // Arrange
+            // This is important as noted in the memory about handling various response formats
             const invalidToken = {} as PIToken;
 
             // Act
             await aggregator.updateTokenData(invalidToken);
 
-            // Assert
+            // Assert - should not throw an error and return an empty array
             const tokens = aggregator.getAggregatedTokens();
             expect(tokens.length).toBe(0);
         });
@@ -202,6 +160,22 @@ describe('PIDataAggregator', () => {
             expect(token).toBeDefined();
             expect(token?.tickHistory).toEqual(mockTickHistory);
         });
+
+        // Testing response format resilience (consistent with the memory about PITokenClient)
+        it('should handle empty tick history gracefully', async () => {
+            // Arrange
+            const tokenId = 'process1';
+            await aggregator.updateTokenData({ ...mockTokens[0], process: tokenId });
+            
+            // Act
+            await aggregator.updateTickHistory(tokenId, []);
+            
+            // Assert - should not throw an error
+            const tokens = aggregator.getAggregatedTokens();
+            const token = tokens.find(t => t.process === tokenId);
+            expect(token).toBeDefined();
+            expect(token?.tickHistory).toEqual([]);
+        });
     });
 
     describe('getAggregatedTokens', () => {
@@ -224,7 +198,7 @@ describe('PIDataAggregator', () => {
             // Act
             const tokens = aggregator.getAggregatedTokens();
 
-            // Assert
+            // Assert - defensive coding approach as noted in memory
             expect(tokens).toEqual([]);
         });
     });
