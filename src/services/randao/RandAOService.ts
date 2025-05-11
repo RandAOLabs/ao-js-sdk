@@ -6,7 +6,6 @@ import { ProviderInfoAggregate } from "./abstract/types";
 import { ProviderInfoDataAggregator } from "./ProviderInfoDataAggregator";
 import { IAutoconfiguration } from "../../utils";
 import { staticImplements } from "../../utils/decorators";
-import { MessagesService } from "../messages";
 
 /**
  * Service for handling RandAO operations

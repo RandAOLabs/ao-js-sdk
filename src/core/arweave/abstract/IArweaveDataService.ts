@@ -21,8 +21,15 @@ export interface IArweaveDataService {
 	/**
 	 * Retrieves a transaction by its ID
 	 * @param id The transaction ID to retrieve
-	 * @returns Promise resolving to the transaction data
+	 * @returns Promise resolving to the transaction
 	 * @throws ArweaveGraphQLError if the query fails or transaction not found
 	 */
 	getTransactionById(id: string): Promise<ArweaveTransaction>;
+
+	/**
+	 * Retrieves data for a transaction by its ID
+	 * @param id The transaction ID to retrieve
+	 * @returns Promise resolving to the transaction data
+	 */
+	getTransactionData<T>(id: string): Promise<T>
 }

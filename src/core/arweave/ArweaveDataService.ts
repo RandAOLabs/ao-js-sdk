@@ -5,8 +5,9 @@ import { Logger } from '../../utils/logger/logger';
 import { getArweave } from './arweave';
 import { ArweaveGQLBuilder } from './gql/ArweaveGQLBuilder';
 import { ArweaveGQLResponse, ArweaveTransaction } from './abstract/types';
-import { IAutoconfiguration } from '../../utils';
+import { IAutoconfiguration, JsonUtils } from '../../utils';
 import { staticImplements } from '../../utils/decorators';
+import { ARWEAVE_DOT_NET_CONFIG } from './constants';
 
 /**
  * @category Core
@@ -61,5 +62,12 @@ export class ArweaveDataService implements IArweaveDataService {
 		}
 
 		return transaction;
+	}
+
+	public async getTransactionData<T>(id: string): Promise<T>{
+		const localarweavefortest = Arweave.init(ARWEAVE_DOT_NET_CONFIG)
+		const raw = (await localarweavefortest.transactions.get(id)).data.toString()
+		
+		return JsonUtils.parse(raw)
 	}
 }

@@ -3,6 +3,7 @@ import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
 import { ProcessError } from "./ProcessError";
 import { MessageOutOfBoundsError, JsonParsingError, MessagesMissingError } from "./ResultUtilsError";
 import { Tags } from "../types";
+import { JsonUtils } from "../../../utils";
 
 /**
  * Utility class for working with ao process message resykts and dry run results.
@@ -27,6 +28,7 @@ export default class ResultUtils {
                 throw new MessageOutOfBoundsError(result, n);
             }
             const data = result.Messages[n].Data;
+			JsonUtils.parse
             const parsedObject = JSON.parse(data) as T;
             return parsedObject;
         } catch (error: any) {
