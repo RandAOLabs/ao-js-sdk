@@ -1,4 +1,4 @@
-import { ArweaveTransaction } from "../../../core/arweave/abstract/types";
+import { ArweaveTransaction } from "../../../../core/arweave/abstract/types";
 import {
 	GetLatestMessagesParams,
 	GetLatestMessagesResponse,

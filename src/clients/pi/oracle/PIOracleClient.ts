@@ -9,7 +9,6 @@ import {
     DELEGATION_ORACLE_PROCESS_ID
 } from "../constants";
 import { PITokenClient } from "../PIToken/PITokenClient";
-import { PITokenClientBuilder } from "../PIToken/PITokenClientBuilder";
 import { AOToken } from "../../tokens/AOTokenClient";
 import { TokenClient } from "../../ao";
 import { ClientBuilder } from "../../common";

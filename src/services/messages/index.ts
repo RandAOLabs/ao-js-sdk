@@ -1,4 +1,2 @@
-export * from "./MessagesService"
-export * from "./MessagesServiceError"
-export * from "./constants"
-export * from "./abstract"
+export * from './message-service';
+export * from './reactive-message-service';
