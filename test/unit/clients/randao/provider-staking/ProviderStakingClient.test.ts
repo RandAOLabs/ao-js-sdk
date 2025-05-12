@@ -17,7 +17,7 @@ const messageResult: MessageResult = {
 jest.spyOn(BaseClient.prototype, 'result').mockResolvedValue(messageResult);
 const dryRunResult: DryRunResult = {
     Output: undefined,
-    Messages: [{ Data: JSON.stringify({ providerId: "test-provider", stake: "1000" }), Tags: [] }],
+    Messages: [{ Data: JSON.stringify({ providerId: "test-provider", stake: "10000000000000" }), Tags: [] }],
     Spawns: []
 };
 jest.spyOn(BaseClient.prototype, 'dryrun').mockResolvedValue(dryRunResult);
