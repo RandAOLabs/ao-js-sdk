@@ -32,4 +32,12 @@ export interface IArweaveDataService {
 	 * @returns Promise resolving to the transaction data
 	 */
 	getTransactionData<T>(id: string): Promise<T>
+
+	/**
+	 * Gets the balance of an Arweave wallet address in Winston
+	 * @param address The Arweave wallet address
+	 * @returns Promise resolving to the wallet balance in Winston (divide by 1000000000000 to get AR)
+	 * @throws Error if the address is invalid or request fails
+	 */
+	getWalletBalance(address: string): Promise<number>;
 }
