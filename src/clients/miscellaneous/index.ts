@@ -6,3 +6,4 @@
  */
 export * from "./raffle"
 export * from "./sweepstakes"
+export * from "./faucet"
