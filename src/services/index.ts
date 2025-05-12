@@ -9,5 +9,6 @@ export * from "./ario"
 export * from "./profiles"
 export * from "./credit-notices"
 export * from "./randao"
+export * from "./autonomous-finance"
 export * from "./pi"
 // export * from "./randao" // Not needed yet

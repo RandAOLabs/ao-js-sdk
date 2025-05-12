@@ -6,7 +6,7 @@ import { Logger, LogLevel } from "src/utils";
 import { ArweaveTransaction } from "src/core/arweave/abstract/types";
 
 // Mock MessagesService
-jest.mock("src/services/messages/MessagesService");
+jest.mock("src/services/messages/message-service/MessagesService");
 
 describe("CreditNoticeService", () => {
 	let service: CreditNoticeService;
