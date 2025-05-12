@@ -21,8 +21,23 @@ export interface IArweaveDataService {
 	/**
 	 * Retrieves a transaction by its ID
 	 * @param id The transaction ID to retrieve
-	 * @returns Promise resolving to the transaction data
+	 * @returns Promise resolving to the transaction
 	 * @throws ArweaveGraphQLError if the query fails or transaction not found
 	 */
 	getTransactionById(id: string): Promise<ArweaveTransaction>;
+
+	/**
+	 * Retrieves data for a transaction by its ID
+	 * @param id The transaction ID to retrieve
+	 * @returns Promise resolving to the transaction data
+	 */
+	getTransactionData<T>(id: string): Promise<T>
+
+	/**
+	 * Gets the balance of an Arweave wallet address in Winston
+	 * @param address The Arweave wallet address
+	 * @returns Promise resolving to the wallet balance in Winston (divide by 1000000000000 to get AR)
+	 * @throws Error if the address is invalid or request fails
+	 */
+	getWalletBalance(address: string): Promise<number>;
 }

@@ -1,22 +1,9 @@
-import { ArweaveDataService } from "../../core/arweave/ArweaveDataService";
-import { ArweaveGQLBuilder } from "../../core/arweave/gql/ArweaveGQLBuilder";
-import { Logger } from "../../utils/logger/logger";
-import { IMessagesService } from "./abstract/IMessagesService";
-import { GetLatestMessagesError } from "./MessagesServiceError";
-import {
-	GetLatestMessagesParams,
-	GetLatestMessagesResponse,
-	GetLatestMessagesBySenderParams,
-	GetLatestMessagesByRecipientParams,
-	GetAllMessagesParams,
-	GetAllMessagesBySenderParams,
-	GetAllMessagesByRecipientParams
-} from "./abstract/types";
-import { ArweaveGQLSortOrder } from "../../core/arweave/gql/types";
-import { ArweaveTransaction } from "../../core/arweave/abstract/types";
+import { IArweaveDataService, ArweaveDataService, ArweaveGQLBuilder, ArweaveGQLSortOrder } from "../../../core";
+import { ArweaveTransaction } from "../../../core/arweave/abstract/types";
+import { staticImplements, IAutoconfiguration, Logger } from "../../../utils";
+import { IMessagesService, GetLatestMessagesParams, GetLatestMessagesResponse, GetLatestMessagesBySenderParams, GetLatestMessagesByRecipientParams, GetAllMessagesParams, GetAllMessagesBySenderParams, GetAllMessagesByRecipientParams } from "./abstract";
 import { DEFAULT_AO_TAGS } from "./constants";
-import { IArweaveDataService } from "../../core";
-import { IAutoconfiguration, staticImplements } from "../../utils";
+import { GetLatestMessagesError } from "./MessagesServiceError";
 
 /**
  * @category On-chain-data
@@ -83,6 +70,9 @@ export class MessagesService implements IMessagesService {
 			}
 
 			const response = await this.arweaveDataService.query(builder);
+			if (!response.data){
+				Logger.info(response)
+			}
 			const edges = response.data.transactions.edges;
 
 			return {
@@ -91,6 +81,7 @@ export class MessagesService implements IMessagesService {
 				hasNextPage: edges.length === (params.limit || 100)
 			};
 		} catch (error: any) {
+			
 			Logger.error(`Error retrieving latest messages: ${error.message}`);
 			throw new GetLatestMessagesError(error);
 		}

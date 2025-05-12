@@ -5,8 +5,15 @@ import { Logger } from '../../utils/logger/logger';
 import { getArweave } from './arweave';
 import { ArweaveGQLBuilder } from './gql/ArweaveGQLBuilder';
 import { ArweaveGQLResponse, ArweaveTransaction } from './abstract/types';
-import { IAutoconfiguration } from '../../utils';
+import { IAutoconfiguration, JsonUtils } from '../../utils';
 import { staticImplements } from '../../utils/decorators';
+import { ARWEAVE_DOT_NET_HTTP_CONFIG } from './constants';
+import { 
+	AxiosHttpClient, 
+	HttpRequestConfig, 
+	IHttpClient, 
+	ResponseType
+} from '../../utils/http';
 
 /**
  * @category Core
@@ -14,14 +21,17 @@ import { staticImplements } from '../../utils/decorators';
 @staticImplements<IAutoconfiguration>()
 export class ArweaveDataService implements IArweaveDataService {
 	private readonly arweave: Arweave;
+	private readonly httpClient: IHttpClient;
 
 	protected constructor() {
 		this.arweave = getArweave();
+		this.httpClient = new AxiosHttpClient(ARWEAVE_DOT_NET_HTTP_CONFIG);
 	}
 
 	public static autoConfiguration(): IArweaveDataService {
-		return new ArweaveDataService
+		return new ArweaveDataService();
 	}
+
 	/** @protected */
 	public async graphQuery<T = any>(query: string): Promise<T> {
 		try {
@@ -34,6 +44,7 @@ export class ArweaveDataService implements IArweaveDataService {
 			throw new ArweaveGraphQLError(query, error);
 		}
 	}
+
 	/** @protected */
 	public async query(builder: ArweaveGQLBuilder): Promise<ArweaveGQLResponse> {
 		if (!builder) {
@@ -43,6 +54,7 @@ export class ArweaveDataService implements IArweaveDataService {
 		const builtQuery = builder.build();
 		return this.graphQuery<ArweaveGQLResponse>(builtQuery.query);
 	}
+
 	/** @protected */
 	public async getTransactionById(id: string): Promise<ArweaveTransaction> {
 		if (!id) {
@@ -61,5 +73,41 @@ export class ArweaveDataService implements IArweaveDataService {
 		}
 
 		return transaction;
+	}
+
+	public async getTransactionData<T>(id: string): Promise<T> {
+		if (!id) {
+			throw new Error('No transaction ID provided');
+		}
+
+		try {
+			const requestConfig: HttpRequestConfig<ArrayBuffer> = {
+				responseType: ResponseType.ArrayBuffer,
+				transformResponse: [(data: ArrayBuffer) => data]
+			};
+
+			const response = await this.httpClient.get<ArrayBuffer>(`/${id}`, requestConfig);
+			// Convert ArrayBuffer to string and parse JSON
+			const decoder = new TextDecoder('utf-8');
+			const jsonString = decoder.decode(response);
+			return JsonUtils.parse<T>(jsonString);
+		} catch (error: any) {
+			Logger.error(`Failed to get transaction data: ${error.message}`);
+			throw error;
+		}
+	}
+
+	public async getWalletBalance(address: string): Promise<number> {
+		if (!address) {
+			throw new Error('No wallet address provided');
+		}
+
+		try {
+			const response = await this.httpClient.get<number>(`/wallet/${address}/balance`);
+			return response;
+		} catch (error: any) {
+			Logger.error(`Failed to get wallet balance: ${error.message}`);
+			throw error;
+		}
 	}
 }

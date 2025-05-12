@@ -1,8 +1,14 @@
 /**
- * Process IDs for PI-related processes
+ * @deprecated in favor of @see PROCESS_IDS
  */
 export const PI_TOKEN_PROCESS_ID = 'UcBPqkaVI7W4I_YMznrt2JUoyc_7TScCdZWOOSBvMSU';
+/**
+ * @deprecated in favor of @see PROCESS_IDS
+ */
 export const PI_DELEGATE_PROCESS_ID = 'cuxSKjGJ-WDB9PzSkVkVVrIBSh3DrYHYz44usQOj5yE';
+/**
+ * @deprecated in favor of @see PROCESS_IDS
+ */
 export const DELEGATION_ORACLE_PROCESS_ID = 'It-_AKlEfARBmJdbJew1nG9_hIaZt0t20wQc28mFGBE';
 
 /**

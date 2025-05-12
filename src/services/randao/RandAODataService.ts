@@ -2,10 +2,10 @@ import { IAutoconfiguration, Logger } from "../../utils";
 import { staticImplements } from "../../utils/decorators";
 import { ARIOService, IARIOService } from "../ario";
 import { DOMAIN } from "../ario/domains";
-import { IMessagesService, MessagesService } from "../messages";
 import { IRandAODataService } from "./abstract/IRandAODataService";
 import RANDOM_PROCESS_TAGS from "../../clients/randao/random/tags";
 import { SYSTEM_TAGS } from "../../core/common/tags";
+import { IMessagesService, MessagesService } from "../messages";
 
 
 /**
