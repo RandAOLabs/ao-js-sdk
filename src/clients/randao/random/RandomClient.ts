@@ -174,7 +174,7 @@ export class RandomClient extends BaseClient implements IRandomClient {
 
 	async createRequest(provider_ids: string[], requestedInputs?: number, callbackId: string = ''): Promise<boolean> {
 		try {
-			const paymentAmount = "100"; // TODO: Determine payment amount dynamically if needed
+			const paymentAmount = "1000000000"; // TODO: Determine payment amount dynamically if needed
 			const tags: Tags = [
 				{ name: "Providers", value: JSON.stringify({ provider_ids }) },
 				{ name: "CallbackId", value: callbackId },
