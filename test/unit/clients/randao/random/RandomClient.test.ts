@@ -100,7 +100,7 @@ describe("RandomClient Unit Test", () => {
             // Assert that tokenClient.transfer was called with the correct arguments
             expect(mockTokenClient.transfer).toHaveBeenCalledWith(
                 expect.any(String), // getProcessId() result
-                "100", // Payment amount
+                "1000000000", // Payment amount
                 expect.arrayContaining([
                     expect.objectContaining({
                         name: "Providers",

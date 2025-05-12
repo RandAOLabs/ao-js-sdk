@@ -21,7 +21,7 @@ jest.spyOn(BaseClient.prototype, 'messageResult').mockResolvedValue(messageResul
 const mockProviderInfoDTO: ProviderInfoDTO = {
     provider_id: "test-provider",
     provider_details: JSON.stringify({ name: "Test Provider", description: "Test Description" }),
-    stake: JSON.stringify({ amount: "1000" }),
+    stake: JSON.stringify({ amount: "10000000000000" }),
     created_at: Date.now()
 }
 
@@ -82,13 +82,13 @@ describe("ProviderProfileClient Unit Test", () => {
                 {
                     provider_id: "provider1",
                     provider_details: JSON.stringify({ name: "Provider 1" }),
-                    stake: JSON.stringify({ amount: "1000" }),
+                    stake: JSON.stringify({ amount: "10000000000000" }),
                     created_at: Date.now()
                 },
                 {
                     provider_id: "provider2",
                     provider_details: JSON.stringify({ name: "Provider 2" }),
-                    stake: JSON.stringify({ amount: "2000" }),
+                    stake: JSON.stringify({ amount: "20000000000000" }),
                     created_at: Date.now()
                 }
             ];
@@ -105,9 +105,9 @@ describe("ProviderProfileClient Unit Test", () => {
             // Verify proper parsing of provider details and stake
             expect(result).toHaveLength(2);
             expect(result[0].provider_details).toEqual({ name: "Provider 1" });
-            expect(result[0].stake).toEqual({ amount: "1000" });
+            expect(result[0].stake).toEqual({ amount: "10000000000000" });
             expect(result[1].provider_details).toEqual({ name: "Provider 2" });
-            expect(result[1].stake).toEqual({ amount: "2000" });
+            expect(result[1].stake).toEqual({ amount: "20000000000000" });
         });
     });
 
@@ -144,28 +144,28 @@ describe("ProviderProfileClient Unit Test", () => {
             const dto: ProviderInfoDTO = {
                 provider_id: "test-provider",
                 provider_details: undefined,
-                stake: JSON.stringify({ amount: "1000" }),
+                stake: JSON.stringify({ amount: "10000000000000" }),
                 created_at: Date.now()
             };
 
             const result = (client as any)._parseProviderInfoDTO(dto);
 
             expect(result.provider_details).toBeUndefined();
-            expect(result.stake).toEqual({ amount: "1000" });
+            expect(result.stake).toEqual({ amount: "10000000000000" });
         });
 
         it("should properly parse JSON strings in DTO", async () => {
             const dto: ProviderInfoDTO = {
                 provider_id: "test-provider",
                 provider_details: JSON.stringify({ name: "Test", description: "Test Description" }),
-                stake: JSON.stringify({ amount: "1000", locked: true }),
+                stake: JSON.stringify({ amount: "10000000000000", locked: true }),
                 created_at: Date.now()
             };
 
             const result = (client as any)._parseProviderInfoDTO(dto);
 
             expect(result.provider_details).toEqual({ name: "Test", description: "Test Description" });
-            expect(result.stake).toEqual({ amount: "1000", locked: true });
+            expect(result.stake).toEqual({ amount: "10000000000000", locked: true });
         });
     });
 });
