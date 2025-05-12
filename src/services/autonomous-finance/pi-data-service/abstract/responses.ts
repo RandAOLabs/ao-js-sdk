@@ -16,6 +16,16 @@ export interface DelegationPreference {
 /**
  * Represents a complete delegation preferences response
  */
+/**
+ * Represents a delegation preferences response with balance information
+ */
+export interface DelegationPreferencesResponseWithBalance extends DelegationPreferencesResponse {
+    /**
+     * The wallet balance in Winston (divide by 1000000000000 to get AR)
+     */
+    balance: number;
+}
+
 export interface DelegationPreferencesResponse {
     /**
      * Base key identifier

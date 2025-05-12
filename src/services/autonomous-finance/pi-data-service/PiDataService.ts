@@ -9,7 +9,7 @@ import { ArweaveTransaction } from '../../../core/arweave/abstract/types';
 import { Logger } from '../../../utils/logger/logger';
 import { TagUtils } from '../../../core/common';
 import { ArweaveDataService, IArweaveDataService } from '../../../core';
-import { DelegationPreferencesResponse } from './abstract/responses';
+import { DelegationPreferencesResponse, DelegationPreferencesResponseWithBalance } from './abstract/responses';
 
 /**
  * Implementation of the Pi Data Service that provides streaming data capabilities
@@ -43,6 +43,52 @@ export class PiDataService implements IPiDataService {
 			map(delegations => this.filterLatestDelegations(delegations)),
 			mergeMap(delegations => this.getDelegationResponses(delegations)),
 			map(responses => this.filterUniqueWallets(responses))
+		);
+	}
+
+	/**
+	 * Gets all current delegations with their allocation responses and wallet balances
+	 * @returns Observable stream of allocation response messages with balances
+	 */
+	/**
+	 * Gets all current delegations with their allocation responses and wallet balances
+	 * @returns Observable stream of allocation response messages with balances
+	 */
+	public getAllPiDelegationPreferencesWithBalances(): Observable<DelegationPreferencesResponseWithBalance[]> {
+		return this.getAllPiDelegationPreferences().pipe(
+			mergeMap(async (responses) => this.fetchWalletBalancesForResponses(responses))
+		);
+	}
+
+	/**
+	 * Fetches wallet balances for an array of delegation responses
+	 * @param responses Array of delegation responses to fetch balances for
+	 * @returns Promise resolving to array of responses with balances (excluding any that failed to fetch)
+	 * @private
+	 */
+	private async fetchWalletBalancesForResponses(
+		responses: DelegationPreferencesResponse[]
+	): Promise<DelegationPreferencesResponseWithBalance[]> {
+		// Fetch balances for all wallets in parallel
+		const responsesWithBalances = await Promise.all(
+			responses.map(async (response) => {
+				try {
+					const balance = await this.arweaveDataService.getWalletBalance(response.wallet);
+					return {
+						...response,
+						balance
+					};
+				} catch (error: any) {
+					Logger.error(`Failed to get balance for wallet ${response.wallet}: ${error.message}`);
+					// Skip responses where balance fetch fails
+					return null;
+				}
+			})
+		);
+
+		// Filter out null responses where balance fetch failed
+		return responsesWithBalances.filter(
+			(response): response is DelegationPreferencesResponseWithBalance => response !== null
 		);
 	}
 
@@ -100,7 +146,7 @@ export class PiDataService implements IPiDataService {
 							Logger.debug(`Skipping response message due to missing id: ${JSON.stringify(responseMessage)}`);
 							return [];
 						}
-						return []//this.arweaveDataService.getTransactionData<DelegationPreferencesResponse>(responseMessage.id);
+						return this.arweaveDataService.getTransactionData<DelegationPreferencesResponse>(responseMessage.id);
 					})
 				),
 				MAX_CONCURRENT // Concurrency limit
