@@ -30,6 +30,12 @@ export interface GetProviderAvailableValuesResponse {
     availibleRandomValues: number;
 };
 
+export interface GetUserInfoResponse {
+    user_id: string;
+    balance: number;
+    created_at: number;
+};
+
 export interface RequestList {
     request_ids: string[];
 };
