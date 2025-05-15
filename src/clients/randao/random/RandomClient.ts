@@ -1,7 +1,7 @@
 import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
 import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
 import { TokenClient, TokenClientConfig } from "../../ao";
-import { IRandomClient, RandomClientConfig, GetProviderAvailableValuesResponse, GetOpenRandomRequestsResponse, GetRandomRequestsResponse, ProviderActivity, CommitParams, RevealParams } from "./abstract";
+import { IRandomClient, RandomClientConfig, GetProviderAvailableValuesResponse, GetOpenRandomRequestsResponse, GetRandomRequestsResponse, ProviderActivity, CommitParams, RevealParams, GetUserInfoResponse } from "./abstract";
 import { Tags } from "../../../core";
 import { BaseClient } from "../../../core/ao/BaseClient";
 import ResultUtils from "../../../core/common/result-utils/ResultUtils";
@@ -84,6 +84,7 @@ export class RandomClient extends BaseClient implements IRandomClient {
 			throw new ClientError(this, this.commit, params, error);
 		}
 	}
+
 	async reveal(params: RevealParams): Promise<void> {
 		try {
 			const tags: Tags = [
@@ -96,7 +97,6 @@ export class RandomClient extends BaseClient implements IRandomClient {
 		}
 	}
 
-
 	async getProviderAvailableValues(providerId: string): Promise<GetProviderAvailableValuesResponse> {
 		try {
 			const tags: Tags = [
@@ -108,6 +108,57 @@ export class RandomClient extends BaseClient implements IRandomClient {
 			return await ResultUtils.getFirstMessageDataJson(result)
 		} catch (error: any) {
 			throw new ClientError(this, this.getProviderAvailableValues, { providerId }, error);
+		}
+	}
+
+	async getUserInfo(userId: string): Promise<GetUserInfoResponse> {
+		try {
+			const tags: Tags = [
+				{ name: "Action", value: "Get-User-Info" }
+			];
+			const data = JSON.stringify({ userId });
+			const result = await this.dryrun(data, tags);
+			this.checkResultForErrors(result)
+			return await ResultUtils.getFirstMessageDataJson(result)
+		} catch (error: any) {
+			throw new ClientError(this, this.getUserInfo, { userId }, error);
+		}
+	}
+
+	async getAllUserInfo(): Promise<GetUserInfoResponse[]> {
+		try {
+			const tags: Tags = [
+				{ name: "Action", value: "Get-All-User-Info" }
+			];
+	
+			const result = await this.dryrun(undefined, tags);
+			this.checkResultForErrors(result)
+			return await ResultUtils.getFirstMessageDataJson(result)
+		} catch (error: any) {
+			throw new ClientError(this, this.getAllUserInfo, {  }, error);
+		}
+	}
+
+	async redeem(providersIds?: string[], requestedInputs?: number, callbackId?: string): Promise<boolean> {
+		try {
+			const tags: Tags = [
+				{ name: "Action", value: "Redeem-Random-Credit" }
+			];
+			if (providersIds) {
+				tags.push({ name: "Providers", value: JSON.stringify({ provider_ids: providersIds }) });
+			}
+			if (requestedInputs) {
+				tags.push({ name: "RequestedInputs", value: JSON.stringify({ requested_inputs: requestedInputs }) });
+			}
+			if (callbackId) {
+				tags.push({ name: "CallbackId", value: callbackId });
+			}
+			const data = JSON.stringify({ providersIds, requestedInputs, callbackId });
+			const result = await this.dryrun(data, tags);
+			this.checkResultForErrors(result)
+			return true
+		} catch (error: any) {
+			throw new ClientError(this, this.redeem, { providersIds, requestedInputs, callbackId }, error);
 		}
 	}
 
@@ -185,6 +236,21 @@ export class RandomClient extends BaseClient implements IRandomClient {
 			return await this.tokenClient.transfer(this.getProcessId(), paymentAmount, tags);
 		} catch (error: any) {
 			throw new ClientError(this, this.createRequest, { provider_ids, requestedInputs, callbackId }, error);
+		}
+	}
+
+	async prepay(quantity: number, userId?: string): Promise<boolean> {
+		try {
+			const paymentAmount = quantity.toString(); 
+			const tags: Tags = [];
+
+			if (userId) {
+				tags.push({ name: "UserId", value: userId });
+			}
+
+			return await this.tokenClient.transfer(this.getProcessId(), paymentAmount, tags);
+		} catch (error: any) {
+			throw new ClientError(this, this.prepay, { quantity, userId }, error);
 		}
 	}
 
