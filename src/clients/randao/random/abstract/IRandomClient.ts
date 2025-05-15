@@ -1,5 +1,5 @@
 import { CommitParams, RevealParams } from "./params";
-import { GetProviderAvailableValuesResponse, GetOpenRandomRequestsResponse, GetRandomRequestsResponse, ProviderActivity } from "./types";
+import { GetProviderAvailableValuesResponse, GetOpenRandomRequestsResponse, GetRandomRequestsResponse, ProviderActivity, GetUserInfoResponse } from "./types";
 
 // src/interfaces/IRandomClient.ts
 export interface IRandomClient {
@@ -62,12 +62,36 @@ export interface IRandomClient {
      */
     getProviderActivity(providerId: String): Promise<ProviderActivity>
 
+	/**
+	 * Gets a users current balance
+	 * @returns - A promise that resolves with the users current balance
+	 */
+	getUserInfo(userId: string): Promise<GetUserInfoResponse>
+
+	/**
+	 * Gets all users current balances
+	 * @returns - A promise that resolves with an array of users current balances
+	 */
+	getAllUserInfo(): Promise<GetUserInfoResponse[]>
+
     /**
      * Posts a timeunlocked commitement to a randomness request
      */
     commit(params: CommitParams): Promise<void>
+
     /**
      * Posts a timeunlocked commitement to a randomness request
      */
     reveal(params: RevealParams): Promise<void>
+
+	/**	
+	 * Prepays for future random requests
+	 */
+	prepay(quantity: number, userId?: string): Promise<boolean>
+
+	/**
+	 * Redeem random credits
+	 */
+	redeem(providersIds?: string[], requestedInputs?: number, callbackId?: string): Promise<boolean>
+
 }
