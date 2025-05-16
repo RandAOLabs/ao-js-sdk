@@ -3,6 +3,11 @@ import { GetProviderAvailableValuesResponse, GetOpenRandomRequestsResponse, GetR
 
 // src/interfaces/IRandomClient.ts
 export interface IRandomClient {
+	/**
+	 * Triggers resolution of stuck contests
+	 */
+	crank(): Promise<void>
+
     /**
      * Retrieves the number of available random values associated with the specified provider.
      * @param provider - The identifier for the provider.

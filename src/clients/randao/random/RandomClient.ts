@@ -73,6 +73,17 @@ export class RandomClient extends BaseClient implements IRandomClient {
 	/* Constructors */
 
 	/* Core Random Functions */
+	async crank(): Promise<void> {
+		try {
+			const tags: Tags = [
+				TAGS.ACTION.CRANK
+			];
+			await this.message(undefined, tags);
+		} catch (error: any) {
+			throw new ClientError(this, this.commit, {}, error);
+		}
+	}
+
 	async commit(params: CommitParams): Promise<void> {
 		try {
 			const tags: Tags = [
