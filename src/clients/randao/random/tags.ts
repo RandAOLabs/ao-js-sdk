@@ -1,6 +1,7 @@
 
 export const TAGS = {
 	ACTION: {
+		CRANK: {name: "Action", value: "Crank" },
 		COMMIT: { name: "Action", value: "Commit-Puzzle" },
 		REVEAL: { name: "Action", value: "Reveal-Puzzle-Params" },
 		POST_VDF_CHALLENGE: { name: "Action", value: "Post-VDF-Challenge" },
