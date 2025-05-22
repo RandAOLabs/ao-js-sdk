@@ -8,6 +8,11 @@ export interface IRandomClient {
 	 */
 	crank(): Promise<void>
 
+	/**
+	 * Claim provider rewards
+	 */
+	 claimRewards(): Promise<void>
+
     /**
      * Retrieves the number of available random values associated with the specified provider.
      * @param provider - The identifier for the provider.

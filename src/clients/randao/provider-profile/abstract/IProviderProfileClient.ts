@@ -19,4 +19,5 @@ export interface IProviderProfileClient {
      * @returns Promise resolving to the provider info
      */
     getProviderInfo(providerId?: string): Promise<ProviderInfo>;
+
 }
