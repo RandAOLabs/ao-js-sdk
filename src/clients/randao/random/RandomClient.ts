@@ -80,7 +80,18 @@ export class RandomClient extends BaseClient implements IRandomClient {
 			];
 			await this.message(undefined, tags);
 		} catch (error: any) {
-			throw new ClientError(this, this.commit, {}, error);
+			throw new ClientError(this, this.crank, {}, error);
+		}
+	}
+
+	async claimRewards(): Promise<void> {
+		try {
+			const tags: Tags = [
+				{ name: "Action", value: "Claim-Fulfillment-Rewards" }
+			];
+			await this.message(undefined, tags);
+		} catch (error: any) {
+			throw new ClientError(this, this.claimRewards, {}, error);
 		}
 	}
 

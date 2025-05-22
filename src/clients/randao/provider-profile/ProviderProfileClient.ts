@@ -48,6 +48,7 @@ export class ProviderProfileClient extends DryRunCachingClient implements IProvi
 			throw new ClientError(this, this.updateDetails, { providerDetails }, error);
 		}
 	}
+
 	async getAllProvidersInfo(): Promise<ProviderInfo[]> {
 		try {
 			const tags: Tags = [
