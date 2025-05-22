@@ -57,6 +57,44 @@ export interface GetRandomRequestsResponse {
     randomRequestResponses: RandomRequestResponse[];
 };
 
+export interface SystemSpecs {
+    arch: string;
+    uptime: number;
+    cpuCount: number;
+    memoryTotalBytes: number;
+    token: string;
+}
+
+export interface PerformanceMetrics {
+    loadAverage: number[];
+    memoryUsedPercent: number;
+    diskUsedPercent: number;
+    network: {
+        rx_sec: number;
+        tx_sec: number;
+    };
+}
+
+export interface ExecutionMetrics {
+    stepTimingsMs: Record<string, number>;
+}
+
+export interface HealthStatus {
+    errorTotal: number;
+    errorsLastHour: number;
+    errorsLastDay: number;
+    status: "healthy" | "degraded";
+}
+
+export interface MonitoringData {
+    providerVersion: string;
+    timestamp: string;
+    systemSpecs: SystemSpecs;
+    performance: PerformanceMetrics;
+    executionMetrics: ExecutionMetrics;
+    health: HealthStatus;
+}
+
 export interface ProviderActivity {
     active_challenge_requests: RequestList,
     provider_id: string,
@@ -64,7 +102,7 @@ export interface ProviderActivity {
     created_at: number,
     random_balance: number,
     active_output_requests: RequestList,
-	provider_info?: string,
+    provider_info?: string | MonitoringData,
     staked: 1
 }
 
