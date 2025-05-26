@@ -9,7 +9,7 @@ import { ArweaveTransaction } from '../../../core/arweave/abstract/types';
 import { Logger } from '../../../utils/logger/logger';
 import { TagUtils } from '../../../core/common';
 import { ArweaveDataService, IArweaveDataService } from '../../../core';
-import { DelegationPreferencesResponse, DelegationPreferencesResponseWithBalance } from './abstract/responses';
+import { DelegationPreferencesResponse, DelegationPreferencesResponseWithBalance, SimplifiedDelegationResponse } from './abstract/responses';
 
 /**
  * Implementation of the Pi Data Service that provides streaming data capabilities
@@ -50,13 +50,40 @@ export class PiDataService implements IPiDataService {
 	 * Gets all current delegations with their allocation responses and wallet balances
 	 * @returns Observable stream of allocation response messages with balances
 	 */
-	/**
-	 * Gets all current delegations with their allocation responses and wallet balances
-	 * @returns Observable stream of allocation response messages with balances
-	 */
 	public getAllPiDelegationPreferencesWithBalances(): Observable<DelegationPreferencesResponseWithBalance[]> {
 		return this.getAllPiDelegationPreferences().pipe(
 			mergeMap(async (responses) => this.fetchWalletBalancesForResponses(responses))
+		);
+	}
+
+	/**
+	 * Gets current delegations for a specific delegated address with simplified response format
+	 * @param delegatedTo The wallet address to get delegations for
+	 * @returns Observable stream of simplified delegation responses where walletTo matches delegatedTo
+	 */
+	public getCurrentDelegationsForAddress(delegatedTo: string): Observable<SimplifiedDelegationResponse[]> {
+		return this.getAllPiDelegationPreferencesWithBalances().pipe(
+			map(responses => responses.filter(response => 
+				response.delegationPrefs.some(pref => pref.walletTo === delegatedTo)
+			)),
+			map(responses => responses.map(response => {
+				// Find the matching delegation preference
+				const matchingPref = response.delegationPrefs.find(pref => pref.walletTo === delegatedTo)!;
+				
+				// Calculate percentage based on factor relative to total factor
+				const percentDelegated = (matchingPref.factor / response.totalFactor) * 100;
+				
+				// Calculate delegated amount based on percentage of total balance
+				const arweaveAmountDelegated = Math.floor(response.balance * (percentDelegated / 100));
+
+				return {
+					delegatorWalletAddress: response.wallet,
+					delegatedWalletAddress: delegatedTo,
+					totalArweaveOwned: response.balance,
+					percentDelegated,
+					arweaveAmountDelegated
+				};
+			}))
 		);
 	}
 
@@ -175,11 +202,6 @@ export class PiDataService implements IPiDataService {
 		return Array.from(walletMap.values());
 	}
 
-	/**
-	 * Gets the latest response message for a delegation transaction
-	 * @param delegation The delegation transaction to get response for
-	 * @returns Observable that resolves to the latest response message or undefined if none found
-	 */
 	private getLatestDelegationResponse(
 		delegation: ArweaveTransaction,
 	): Observable<ArweaveTransaction | undefined> {

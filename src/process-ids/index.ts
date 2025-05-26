@@ -7,6 +7,7 @@ import { MISCELLANEOUS } from "./miscellaneous";
 import { RANDAO } from "./randao";
 import { RUNEREALM } from "./rune_realm";
 import { AUTONOMOUS_FINANCE } from "./autonomous-finance";
+import { ARCAO } from "./arcao";
 
 export const PROCESS_IDS = {
     AO,
@@ -18,4 +19,5 @@ export const PROCESS_IDS = {
     COMMUNITY_TOKENS,
     MISCELLANEOUS,
 	AUTONOMOUS_FINANCE,
+	ARCAO,
 }
