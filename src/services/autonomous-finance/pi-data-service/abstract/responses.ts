@@ -54,6 +54,8 @@ export interface SimplifiedDelegationResponse {
      * Amount of Arweave being delegated in Winston
      */
     arweaveAmountDelegated: number;
+
+	timestamp: number
 }
 
 export interface DelegationPreferencesResponse {
