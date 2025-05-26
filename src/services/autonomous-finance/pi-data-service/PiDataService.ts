@@ -1,4 +1,4 @@
-import { Observable, from, map, mergeMap } from 'rxjs';
+import { Observable, from, map, mergeMap, timestamp } from 'rxjs';
 import { IPiDataService } from './abstract/IPiDataService';
 import { IReactiveMessageService, ReactiveMessageService } from '../../messages';
 import { IAutoconfiguration } from '../../../utils/class-interfaces/IAutoconfiguration';
@@ -80,8 +80,9 @@ export class PiDataService implements IPiDataService {
 					delegatorWalletAddress: response.wallet,
 					delegatedWalletAddress: delegatedTo,
 					totalArweaveOwned: response.balance,
+					timestamp: response.lastUpdate,
 					percentDelegated,
-					arweaveAmountDelegated
+					arweaveAmountDelegated,
 				};
 			}))
 		);
