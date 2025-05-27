@@ -60,6 +60,7 @@ describe("ProviderInfoDataAggregator", () => {
 				active: 1,
 				created_at: Date.now(),
 				random_balance: 0,
+				fulfillment_rewards: 0,
 				staked: 1
 			};
 			const providerInfo: ProviderInfo = {
@@ -93,6 +94,7 @@ describe("ProviderInfoDataAggregator", () => {
 				active: 1,
 				created_at: Date.now(),
 				random_balance: 0,
+				fulfillment_rewards: 0,
 				staked: 1
 			};
 			const info: ProviderInfo = {
@@ -129,6 +131,7 @@ describe("ProviderInfoDataAggregator", () => {
 				active: 1,
 				created_at: Date.now(),
 				random_balance: 0,
+				fulfillment_rewards: 0,
 				staked: 1
 			};
 
