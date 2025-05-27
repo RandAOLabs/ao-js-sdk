@@ -26,6 +26,38 @@ export interface DelegationPreferencesResponseWithBalance extends DelegationPref
     balance: number;
 }
 
+/**
+ * Simplified delegation response focused on delegation amounts and percentages
+ */
+export interface SimplifiedDelegationResponse {
+    /**
+     * The wallet address of the delegator
+     */
+    delegatorWalletAddress: string;
+
+    /**
+     * The wallet address being delegated to
+     */
+    delegatedWalletAddress: string;
+
+    /**
+     * Total amount of Arweave owned by delegator in Winston
+     */
+    totalArweaveOwned: number;
+
+    /**
+     * Percentage of total Arweave being delegated (0-100)
+     */
+    percentDelegated: number;
+
+    /**
+     * Amount of Arweave being delegated in Winston
+     */
+    arweaveAmountDelegated: number;
+
+	timestamp: number
+}
+
 export interface DelegationPreferencesResponse {
     /**
      * Base key identifier
