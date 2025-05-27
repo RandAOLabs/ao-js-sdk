@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
 import { ArweaveTransaction } from "../../../../core/arweave/abstract/types";
-import { DelegationPreferencesResponse, DelegationPreferencesResponseWithBalance } from './responses';
+import { DelegationPreferencesResponse, DelegationPreferencesResponseWithBalance, SimplifiedDelegationResponse } from './responses';
 
 /**
  * Interface for Pi Data Service operations
@@ -17,4 +17,11 @@ export interface IPiDataService {
      * @returns Observable stream of allocation response messages with balances
      */
     getAllPiDelegationPreferencesWithBalances(): Observable<DelegationPreferencesResponseWithBalance[]>;
+
+    /**
+     * Gets current delegations for a specific delegated address with simplified response format
+     * @param delegatedTo The wallet address to get delegations for
+     * @returns Observable stream of simplified delegation responses where walletTo matches delegatedTo
+     */
+    getCurrentDelegationsForAddress(delegatedTo: string): Observable<SimplifiedDelegationResponse[]>;
 }

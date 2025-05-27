@@ -1,7 +1,7 @@
 import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
 import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
 import { TokenClient, TokenClientConfig } from "../../ao";
-import { IRandomClient, RandomClientConfig, GetProviderAvailableValuesResponse, GetOpenRandomRequestsResponse, GetRandomRequestsResponse, ProviderActivity, CommitParams, RevealParams, GetUserInfoResponse } from "./abstract";
+import { IRandomClient, RandomClientConfig, GetProviderAvailableValuesResponse, GetOpenRandomRequestsResponse, GetRandomRequestsResponse, ProviderActivity, CommitParams, RevealParams, GetUserInfoResponse, MonitoringData } from "./abstract";
 import { Tags } from "../../../core";
 import { BaseClient } from "../../../core/ao/BaseClient";
 import ResultUtils from "../../../core/common/result-utils/ResultUtils";
@@ -184,14 +184,14 @@ export class RandomClient extends BaseClient implements IRandomClient {
 		}
 	}
 
-	async updateProviderAvailableValues(availableRandomValues: number, info?: string): Promise<boolean> {
+	async updateProviderAvailableValues(availableRandomValues: number, info?: MonitoringData): Promise<boolean> {
 		try {
 			const tags: Tags = [
 				TAGS.ACTION.UPDATE_PROVIDER_RANDOM_BALANCE,
 			];
 			let data = JSON.stringify({ availableRandomValues });
 			if (info) {
-				tags.push({ name: "ProviderInfo", value: info });
+				tags.push({ name: "ProviderInfo", value: JSON.stringify(info) });
 			}
 			const result = await this.messageResult(data, tags);
 			this.checkResultForErrors(result)

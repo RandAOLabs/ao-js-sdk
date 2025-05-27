@@ -1,5 +1,5 @@
 import { CommitParams, RevealParams } from "./params";
-import { GetProviderAvailableValuesResponse, GetOpenRandomRequestsResponse, GetRandomRequestsResponse, ProviderActivity, GetUserInfoResponse } from "./types";
+import { GetProviderAvailableValuesResponse, GetOpenRandomRequestsResponse, GetRandomRequestsResponse, ProviderActivity, GetUserInfoResponse, MonitoringData } from "./types";
 
 // src/interfaces/IRandomClient.ts
 export interface IRandomClient {
@@ -11,7 +11,7 @@ export interface IRandomClient {
 	/**
 	 * Claim provider rewards
 	 */
-	 claimRewards(): Promise<void>
+	claimRewards(): Promise<void>
 
     /**
      * Retrieves the number of available random values associated with the specified provider.
@@ -23,10 +23,10 @@ export interface IRandomClient {
     /**
      * Updates the count of available random values for a specific provider.
      * @param amount - The new amount of random values available.
-	 * @param info - An optional string containing additional information about the update.
+     * @param info - An optional MonitoringData object containing provider monitoring information.
      * @returns - A promise that resolves with a boolean indicating success.
      */
-    updateProviderAvailableValues(amount: number, info?: string): Promise<boolean>;
+    updateProviderAvailableValues(amount: number, info?: MonitoringData): Promise<boolean>;
 
     /**
      * Retrieves all open, incomplete randomness requests for a specific provider.
