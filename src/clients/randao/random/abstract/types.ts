@@ -103,6 +103,7 @@ export interface ProviderActivity {
     random_balance: number,
     active_output_requests: RequestList,
     provider_info?: string | MonitoringData,
+	fulfillment_rewards: number,
     staked: 1
 }
 

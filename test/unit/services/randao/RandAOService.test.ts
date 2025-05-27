@@ -143,6 +143,7 @@ describe("RandAOService", () => {
 				active: 1,
 				created_at: Date.now(),
 				random_balance: 100,
+				fulfillment_rewards: 0,
 				staked: 1,
 				active_challenge_requests: { request_ids: [] },
 				active_output_requests: { request_ids: [] }

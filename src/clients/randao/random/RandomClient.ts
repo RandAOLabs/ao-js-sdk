@@ -80,7 +80,18 @@ export class RandomClient extends BaseClient implements IRandomClient {
 			];
 			await this.message(undefined, tags);
 		} catch (error: any) {
-			throw new ClientError(this, this.commit, {}, error);
+			throw new ClientError(this, this.crank, {}, error);
+		}
+	}
+
+	async claimRewards(): Promise<void> {
+		try {
+			const tags: Tags = [
+				{ name: "Action", value: "Claim-Fulfillment-Rewards" }
+			];
+			await this.message(undefined, tags);
+		} catch (error: any) {
+			throw new ClientError(this, this.claimRewards, {}, error);
 		}
 	}
 
@@ -253,10 +264,12 @@ export class RandomClient extends BaseClient implements IRandomClient {
 	async prepay(quantity: number, userId?: string): Promise<boolean> {
 		try {
 			const paymentAmount = quantity.toString(); 
-			const tags: Tags = [];
+			const tags: Tags = [
+				{ name: "Prepayment", value: "true" },
+			];
 
 			if (userId) {
-				tags.push({ name: "UserId", value: userId });
+				tags.push({ name: "PrepaymentUser", value: userId });
 			}
 
 			return await this.tokenClient.transfer(this.getProcessId(), paymentAmount, tags);
