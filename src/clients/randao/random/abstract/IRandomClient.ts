@@ -73,14 +73,14 @@ export interface IRandomClient {
     getProviderActivity(providerId: String): Promise<ProviderActivity>
 
 	/**
-	 * Gets a users current balance
-	 * @returns - A promise that resolves with the users current balance
+	 * Gets a users info: internal balance/created at time
+	 * @returns - A promise that resolves with the users info object
 	 */
 	getUserInfo(userId: string): Promise<GetUserInfoResponse>
 
 	/**
-	 * Gets all users current balances
-	 * @returns - A promise that resolves with an array of users current balances
+	 * Gets all users info: internal balance/created at time
+	 * @returns - A promise that resolves with an array of users info objects
 	 */
 	getAllUserInfo(): Promise<GetUserInfoResponse[]>
 
