@@ -264,10 +264,12 @@ export class RandomClient extends BaseClient implements IRandomClient {
 	async prepay(quantity: number, userId?: string): Promise<boolean> {
 		try {
 			const paymentAmount = quantity.toString(); 
-			const tags: Tags = [];
+			const tags: Tags = [
+				{ name: "Prepayment", value: "true" },
+			];
 
 			if (userId) {
-				tags.push({ name: "UserId", value: userId });
+				tags.push({ name: "PrepaymentUser", value: userId });
 			}
 
 			return await this.tokenClient.transfer(this.getProcessId(), paymentAmount, tags);
