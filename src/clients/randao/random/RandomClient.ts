@@ -161,7 +161,7 @@ export class RandomClient extends BaseClient implements IRandomClient {
 		}
 	}
 
-	async redeem(providersIds?: string[], requestedInputs?: number, callbackId?: string): Promise<string> {
+	async redeem(providersIds?: string[], requestedInputs?: number, callbackId?: string): Promise<boolean> {
 		try {
 			const tags: Tags = [
 				{ name: "Action", value: "Redeem-Random-Credit" }
@@ -177,8 +177,9 @@ export class RandomClient extends BaseClient implements IRandomClient {
 			}
 			const data = JSON.stringify({ providersIds, requestedInputs, callbackId });
 			const result = await this.message(data, tags);
+			console.log(result)
 			//this.checkResultForErrors(result)
-			return result
+			return true
 		} catch (error: any) {
 			throw new ClientError(this, this.redeem, { providersIds, requestedInputs, callbackId }, error);
 		}
