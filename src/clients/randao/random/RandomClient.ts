@@ -176,8 +176,9 @@ export class RandomClient extends BaseClient implements IRandomClient {
 				tags.push({ name: "CallbackId", value: callbackId });
 			}
 			const data = JSON.stringify({ providersIds, requestedInputs, callbackId });
-			const result = await this.dryrun(data, tags);
-			this.checkResultForErrors(result)
+			const result = await this.message(data, tags);
+			console.log(result)
+			//this.checkResultForErrors(result)
 			return true
 		} catch (error: any) {
 			throw new ClientError(this, this.redeem, { providersIds, requestedInputs, callbackId }, error);
