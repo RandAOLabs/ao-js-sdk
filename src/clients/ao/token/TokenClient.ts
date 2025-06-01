@@ -5,13 +5,45 @@ import { ClientError } from "../../common/ClientError";
 import { Tags, TagUtils } from "../../../core";
 import { BaseClient } from "../../../core/ao/BaseClient";
 import ResultUtils from "../../../core/common/result-utils/ResultUtils";
-import { Logger } from "../../../utils/index"
+import { Logger } from "../../../utils/index";
+import { IAutoconfiguration, IDefaultBuilder, staticImplements } from "../../../utils";
+import { ClientBuilder } from "../../common/ClientBuilder";
+import { AO_CONFIGURATION_DEFAULT } from "../../../core/ao/ao-client/configurations";
 
 /**
  * @category ao-standards
  * @see {@link https://cookbook_ao.g8way.io/references/token.html | specification}
  */
+@staticImplements<IAutoconfiguration>()
+@staticImplements<IDefaultBuilder>()
 export class TokenClient extends BaseClient implements ITokenClient, IGrantToken {
+    /* Constructors */
+
+    /**
+     * {@inheritdoc IAutoconfiguration.autoConfiguration}
+     * @see {@link IAutoconfiguration.autoConfiguration} 
+     */
+    public static async autoConfiguration(): Promise<TokenClient> {
+        const builder = await TokenClient.defaultBuilder();
+        return builder.build();
+    }
+
+    /**
+     * Creates a builder for TokenClient instances
+     * @returns A new builder for TokenClient
+     */
+    public static builder(): ClientBuilder<TokenClient> {
+        return new ClientBuilder(TokenClient);
+    }
+
+    /** 
+     * {@inheritdoc IDefaultBuilder.defaultBuilder}
+     * @see {@link IDefaultBuilder.defaultBuilder} 
+     */
+    public static async defaultBuilder(): Promise<ClientBuilder<TokenClient>> {
+        return TokenClient.builder()
+            .withAOConfig(AO_CONFIGURATION_DEFAULT);
+    }
     /* Constructors */
 
     /* Core Token Functions */
