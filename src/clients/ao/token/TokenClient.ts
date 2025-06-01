@@ -23,8 +23,8 @@ export class TokenClient extends BaseClient implements ITokenClient, IGrantToken
      * {@inheritdoc IAutoconfiguration.autoConfiguration}
      * @see {@link IAutoconfiguration.autoConfiguration} 
      */
-    public static async autoConfiguration(): Promise<TokenClient> {
-        const builder = await TokenClient.defaultBuilder();
+    public static autoConfiguration(): TokenClient {
+        const builder = TokenClient.defaultBuilder();
         return builder.build();
     }
 
@@ -40,7 +40,7 @@ export class TokenClient extends BaseClient implements ITokenClient, IGrantToken
      * {@inheritdoc IDefaultBuilder.defaultBuilder}
      * @see {@link IDefaultBuilder.defaultBuilder} 
      */
-    public static async defaultBuilder(): Promise<ClientBuilder<TokenClient>> {
+    public static defaultBuilder(): ClientBuilder<TokenClient> {
         return TokenClient.builder()
             .withAOConfig(AO_CONFIGURATION_DEFAULT);
     }
