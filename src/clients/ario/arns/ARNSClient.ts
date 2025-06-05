@@ -34,7 +34,7 @@ export class ARNSClient extends DryRunCachingClient implements IARNSClient {
 	public static defaultBuilder(): ClientBuilder<ARNSClient> {
 		return new ClientBuilder(ARNSClient)
 			.withProcessId(PROCESS_IDS.ARIO.ARNS_REGISTRY)
-			.withAOConfig(AO_CONFIGURATIONS.ARDRIVE)
+			.withAOConfig(AO_CONFIGURATIONS.RANDAO)
 	}
 
 	/**

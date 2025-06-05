@@ -153,7 +153,7 @@ export class ARIOService implements IARIOService {
 		const config = new DryRunCachingClientConfigBuilder()
 			.withProcessId(arnsRecord.processId)
 			.withWallet(this.arnsClient.getWallet())
-			.withAOConfig(AO_CONFIGURATIONS.ARDRIVE)
+			.withAOConfig(AO_CONFIGURATIONS.RANDAO)
 			.build()
 		const antClient = new ANTClient(config);
 		this.antClientCache.set(antName, antClient);
