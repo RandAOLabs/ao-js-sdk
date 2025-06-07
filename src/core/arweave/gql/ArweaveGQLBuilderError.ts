@@ -31,4 +31,12 @@ export class ArweaveGQLBuilderError extends Error {
     static invalidCursor(): ArweaveGQLBuilderError {
         return new ArweaveGQLBuilderError('Cursor cannot be empty');
     }
+
+    static invalidBlockTimestamp(): ArweaveGQLBuilderError {
+        return new ArweaveGQLBuilderError('Block timestamp must be a positive number');
+    }
+
+    static invalidBlockHeight(): ArweaveGQLBuilderError {
+        return new ArweaveGQLBuilderError('Block height must be a positive number');
+    }
 }

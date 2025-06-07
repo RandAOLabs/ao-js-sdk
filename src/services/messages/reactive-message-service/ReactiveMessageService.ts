@@ -103,6 +103,7 @@ export class ReactiveMessageService implements IReactiveMessageService {
                             cursor: currentCursor,
                             limit: 100
                         });
+						Logger.debug(response.messages)
 
                         // Always emit messages array (empty if none found)
                         subscriber.next(response.messages);

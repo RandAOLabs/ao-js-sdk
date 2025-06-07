@@ -69,6 +69,14 @@ export class MessagesService implements IMessagesService {
 				builder.owner(params.owner);
 			}
 
+			if (params.minBlockHeight) {
+				builder.minBlockHeight(params.minBlockHeight);
+			}
+
+			if (params.maxBlockHeight) {
+				builder.maxBlockHeight(params.maxBlockHeight);
+			}
+
 			const response = await this.arweaveDataService.query(builder);
 			if (!response.data){
 				Logger.info(response)
@@ -137,6 +145,14 @@ export class MessagesService implements IMessagesService {
 
 			if (params.owner) {
 				builder.owner(params.owner);
+			}
+
+			if (params.minBlockHeight) {
+				builder.minBlockHeight(params.minBlockHeight);
+			}
+
+			if (params.maxBlockHeight) {
+				builder.maxBlockHeight(params.maxBlockHeight);
 			}
 
 			const response = await this.arweaveDataService.query(builder);

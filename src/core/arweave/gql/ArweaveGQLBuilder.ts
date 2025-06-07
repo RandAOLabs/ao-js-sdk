@@ -11,12 +11,14 @@ import {
     ParentFields,
     ArweaveGQLSortOrder
 } from './types';
+import { IArweaveGQLBuilder } from './abstract/IArweaveGQLBuilder';
 import { ArweaveGQLBuilderError } from './ArweaveGQLBuilderError';
+import { Logger } from '../../../utils';
 
 /**
  * @category Core
  */
-export class ArweaveGQLBuilder {
+export class ArweaveGQLBuilder implements IArweaveGQLBuilder {
     private filters: ArweaveGQLFilter = {};
     private options: ArweaveGQLOptions = {};
     private fields: NodeFields = {
@@ -50,6 +52,43 @@ export class ArweaveGQLBuilder {
     public owner(address: string): this {
         if (!address) throw ArweaveGQLBuilderError.invalidOwner();
         this.filters.owner = { address };
+        return this;
+    }
+
+    /**
+     * Filter transactions that occurred after the specified block timestamp
+     * @param timestamp Unix timestamp in seconds
+     * @returns this builder instance
+     */
+    /**
+     * Filter transactions after the specified block height
+     * @param height Block height
+     * @returns this builder instance
+     */
+    public minBlockHeight(height: number): this {
+        if (height < 0) {
+            throw ArweaveGQLBuilderError.invalidBlockHeight();
+        }
+        this.filters.blockHeight = {
+            ...this.filters.blockHeight,
+            min: height
+        };
+        return this;
+    }
+
+    /**
+     * Filter transactions before the specified block height
+     * @param height Block height
+     * @returns this builder instance
+     */
+    public maxBlockHeight(height: number): this {
+        if (height < 0) {
+            throw ArweaveGQLBuilderError.invalidBlockHeight();
+        }
+        this.filters.blockHeight = {
+            ...this.filters.blockHeight,
+            max: height
+        };
         return this;
     }
 
@@ -206,6 +245,14 @@ export class ArweaveGQLBuilder {
             } else if (key === 'owner' && typeof value === 'object' && value.address) {
                 // Handle owner
                 filterConditions.push(`owners: ["${value.address}"]`);
+            } else if (key === 'blockHeight' && typeof value === 'object') {
+                // Handle block height
+                if (value.min || value.max) {
+                    const conditions = [];
+                    if (value.min) conditions.push(`min: ${value.min}`);
+                    if (value.max) conditions.push(`max: ${value.max}`);
+                    filterConditions.push(`block: { ${conditions.join(', ')} }`);
+                }
             } else if (Array.isArray(value)) {
                 // Handle arrays (ids, recipients)
                 filterConditions.push(`${key}: ["${value.join('", "')}"]`);
@@ -246,7 +293,6 @@ export class ArweaveGQLBuilder {
                 }
             }
         `.trim();
-
         return { query };
     }
 }

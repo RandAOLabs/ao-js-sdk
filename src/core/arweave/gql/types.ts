@@ -8,6 +8,10 @@ export interface ArweaveGQLFilter {
         name: string;
         value: string;
     }[];
+    blockHeight?: {
+        min?: number;
+        max?: number;
+    };
 }
 
 export interface ArweaveGQLOptions {
