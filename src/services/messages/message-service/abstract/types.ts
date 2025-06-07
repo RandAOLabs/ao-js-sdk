@@ -20,6 +20,16 @@ interface BaseMessageQueryParams {
 	 * Tags to filter messages by
 	 */
 	tags?: Tags;
+
+	/**
+	 * Filter messages after this block height
+	 */
+	minBlockHeight?: number;
+
+	/**
+	 * Filter messages before this block height
+	 */
+	maxBlockHeight?: number;
 }
 
 /**

@@ -14,3 +14,13 @@ export const ARWEAVE_DOT_NET_HTTP_CONFIG: HttpClientConfig = {
 	baseURL: "https://arweave.net",
 	timeout: 30000
 } as const;
+
+export const ARWEAVE_BLOCK_TIMES = {
+	2023: {
+		APRIL: 1395080,
+	},
+	2025:{
+		APRIL:1640635,
+		MAY: 1660951
+	}
+}
