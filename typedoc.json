@@ -39,9 +39,9 @@
     "treatValidationWarningsAsErrors": false,
     "logLevel": "Verbose",
     "disableSources": false,
-    "sourceLinkTemplate": "https://github.com/RandAOLabs/ao-process-clients/blob/main/{path}#L{line}",
+    "sourceLinkTemplate": "https://github.com/RandAOLabs/ao-js-sdk/blob/main/{path}#L{line}",
     "navigationLinks": {
-        "GitHub": "https://github.com/RandAOLabs/ao-process-clients"
+        "GitHub": "https://github.com/RandAOLabs/ao-js-sdk"
     },
     "visibilityFilters": {
         "protected": false,
