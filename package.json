@@ -20,7 +20,7 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/RandAOLabs/ao-process-clients.git"
+		"url": "git+https://github.com/RandAOLabs/ao-js-sdk.git"
 	},
 	"author": "RandAO",
 	"license": "MIT",
