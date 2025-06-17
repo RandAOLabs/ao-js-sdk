@@ -84,3 +84,52 @@ export interface DelegationPreferencesResponse {
      */
     wallet: string;
 }
+
+
+export interface MintReportMessageData {
+    Nonce: number;
+    YieldCycle: string;
+    IndexInBatch: number;
+    TotalMinted: string;
+    DistributionTick: number;
+    TotalInBatch: number;
+    Timestamp: number;
+    AoExchangedForPi: string;
+    TotalInflow: string;
+    TriggerMintReportId: string;
+    AoKept: string;
+    SupplyBefore: string;
+    Id: string;
+    CSVHeaders: string;
+    SupplyAfter: string;
+    DelegationsCSV: string;
+}
+
+export interface DelegationHistoryData {
+    projectYields: Record<string, string>;
+    Nonce: string;
+    delegationTable: {
+        [walletAddress: string]: {
+            delegationPrefs: {
+                walletTo: string;
+                factor: string;
+            }[];
+        };
+    };
+    projectBps: Record<string, string>;
+}
+
+export interface FLPYieldHistoryEntry {
+    timestamp: number;
+    projectYields: Record<string, string>;
+    Nonce: string;
+    delegationTable: {
+        [walletAddress: string]: {
+            delegationPrefs: {
+                walletTo: string;
+                factor: string;
+            }[];
+        };
+    };
+    projectBps: Record<string, string>;
+}
