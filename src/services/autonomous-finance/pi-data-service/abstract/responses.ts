@@ -104,3 +104,32 @@ export interface MintReportMessageData {
     SupplyAfter: string;
     DelegationsCSV: string;
 }
+
+export interface DelegationHistoryData {
+    projectYields: Record<string, string>;
+    Nonce: string;
+    delegationTable: {
+        [walletAddress: string]: {
+            delegationPrefs: {
+                walletTo: string;
+                factor: string;
+            }[];
+        };
+    };
+    projectBps: Record<string, string>;
+}
+
+export interface FLPYieldHistoryEntry {
+    timestamp: number;
+    projectYields: Record<string, string>;
+    Nonce: string;
+    delegationTable: {
+        [walletAddress: string]: {
+            delegationPrefs: {
+                walletTo: string;
+                factor: string;
+            }[];
+        };
+    };
+    projectBps: Record<string, string>;
+}

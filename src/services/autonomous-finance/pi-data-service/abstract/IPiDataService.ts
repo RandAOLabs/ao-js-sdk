@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
 import { ArweaveTransaction } from "../../../../core/arweave/abstract/types";
-import { DelegationPreferencesResponse, DelegationPreferencesResponseWithBalance, SimplifiedDelegationResponse } from './responses';
+import { DelegationPreferencesResponse, DelegationPreferencesResponseWithBalance, SimplifiedDelegationResponse, FLPYieldHistoryEntry } from './responses';
 
 /**
  * Interface for Pi Data Service operations
@@ -30,4 +30,10 @@ export interface IPiDataService {
      * @returns Observable stream of Arweave transactions matching the criteria
      */
     getMintReportMessages(): Observable<ArweaveTransaction[]>;
+
+    /**
+     * Gets all FLP yield history entries with timestamps
+     * @returns Observable stream of FLP yield history entries
+     */
+    getFLPYieldHistory(): Observable<FLPYieldHistoryEntry[]>;
 }
