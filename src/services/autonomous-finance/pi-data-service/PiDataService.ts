@@ -222,4 +222,18 @@ export class PiDataService implements IPiDataService {
 			recipient : responseRecipient
 		});
 	}
+
+	/**
+	 * Gets all messages with the Add-Own-Mint-Report action between PI_TOKEN_PROCESS_ID endpoints
+	 * @returns Observable stream of Arweave transactions matching the criteria
+	 */
+	public getMintReportMessages(): Observable<ArweaveTransaction[]> {
+		return this.reactiveMessageService.streamAllMessages({
+			tags: [
+				{ name: 'Action', value: 'Add-Own-Mint-Report' },
+				{ name: 'From-Process', value: AUTONOMOUS_FINANCE.PI_TOKEN_PROCESS_ID }
+			],
+			recipient: AUTONOMOUS_FINANCE.PI_TOKEN_PROCESS_ID
+		});
+	}
 }

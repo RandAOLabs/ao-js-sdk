@@ -24,4 +24,10 @@ export interface IPiDataService {
      * @returns Observable stream of simplified delegation responses where walletTo matches delegatedTo
      */
     getCurrentDelegationsForAddress(delegatedTo: string): Observable<SimplifiedDelegationResponse[]>;
+
+    /**
+     * Gets all messages with the Add-Own-Mint-Report action between PI_TOKEN_PROCESS_ID endpoints
+     * @returns Observable stream of Arweave transactions matching the criteria
+     */
+    getMintReportMessages(): Observable<ArweaveTransaction[]>;
 }
