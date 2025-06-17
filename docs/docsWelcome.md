@@ -9,7 +9,7 @@ You've just unlocked the gateway to **AO Development**. These docs will be your 
 ## 🚀 Install  
 
 ```sh
-npm i ao-process-clients
+npm i ao-js-sdk
 ```
 
 ---
@@ -17,7 +17,7 @@ npm i ao-process-clients
 ## ⚡ Quick Start  
 
 ```ts
-import { TokenClient } from 'ao-process-clients'
+import { TokenClient } from 'ao-js-sdk'
 
 // Initialize token client
 const tokenClient = TokenClient.autoConfiguration()
@@ -66,4 +66,4 @@ Seamless interaction with **Arweave/AO**, including but not limited to:
 
 <p align="center">  
   With ❤️ from the ArcAO Team.  
-</p>  
+</p>
