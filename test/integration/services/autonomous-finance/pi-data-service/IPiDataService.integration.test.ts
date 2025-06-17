@@ -48,4 +48,13 @@ describe('IPiDataService Integration Tests', () => {
             console.log('First Message Response:', JSON.stringify(messages[0], null, 2));
         }
     }, 100000);
+
+    it('should get all mint report messages', async () => {
+        const messages = await lastValueFrom(service.getMintReportMessages().pipe(toArray()));
+        const flatMessages = messages.flat();
+        console.log(`Found ${flatMessages.length} mint report messages`);
+        if (flatMessages.length > 0) {
+            console.log('First mint report message ID:', flatMessages[0].id);
+        }
+    }, 100000);
 });
