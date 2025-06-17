@@ -84,3 +84,23 @@ export interface DelegationPreferencesResponse {
      */
     wallet: string;
 }
+
+
+export interface MintReportMessageData {
+    Nonce: number;
+    YieldCycle: string;
+    IndexInBatch: number;
+    TotalMinted: string;
+    DistributionTick: number;
+    TotalInBatch: number;
+    Timestamp: number;
+    AoExchangedForPi: string;
+    TotalInflow: string;
+    TriggerMintReportId: string;
+    AoKept: string;
+    SupplyBefore: string;
+    Id: string;
+    CSVHeaders: string;
+    SupplyAfter: string;
+    DelegationsCSV: string;
+}
