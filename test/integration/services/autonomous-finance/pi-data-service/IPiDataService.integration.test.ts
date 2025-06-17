@@ -1,7 +1,7 @@
 import { lastValueFrom, toArray } from 'rxjs';
 import { PiDataService } from 'src/services/autonomous-finance/pi-data-service/PiDataService';
 import { Logger, LogLevel } from '../../../../../src';
-import { DelegationPreferencesResponseWithBalance, MintReportMessageData } from 'src/services/autonomous-finance/pi-data-service/abstract/responses';
+import { DelegationPreferencesResponseWithBalance, MintReportMessageData, DelegationHistoryData, FLPYieldHistoryEntry } from 'src/services/autonomous-finance/pi-data-service/abstract/responses';
 
 describe('IPiDataService Integration Tests', () => {
     let service: PiDataService;
@@ -67,6 +67,17 @@ describe('IPiDataService Integration Tests', () => {
             const firstMessage = flatMessages[0];
             const messageData = await service['arweaveDataService'].getTransactionData<MintReportMessageData>(firstMessage.id!);
             Logger.info(messageData);
+        }
+    }, 100000);
+
+    it('should get FLP yield history with timestamps', async () => {
+        const entriesArray = await lastValueFrom(service.getFLPYieldHistory().pipe(toArray()));
+        const entries = entriesArray.flat();
+        Logger.info(`Found ${entries.length} FLP yield history entries`);
+        
+        if (entries.length > 0) {
+            const firstEntry = entries[0];
+            Logger.info(firstEntry);
         }
     }, 100000);
 });

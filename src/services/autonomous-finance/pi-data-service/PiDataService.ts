@@ -9,7 +9,7 @@ import { ArweaveTransaction } from '../../../core/arweave/abstract/types';
 import { Logger } from '../../../utils/logger/logger';
 import { TagUtils } from '../../../core/common';
 import { ArweaveDataService, IArweaveDataService } from '../../../core';
-import { DelegationPreferencesResponse, DelegationPreferencesResponseWithBalance, SimplifiedDelegationResponse } from './abstract/responses';
+import { DelegationPreferencesResponse, DelegationPreferencesResponseWithBalance, SimplifiedDelegationResponse, DelegationHistoryData, FLPYieldHistoryEntry } from './abstract/responses';
 
 /**
  * Implementation of the Pi Data Service that provides streaming data capabilities
@@ -235,5 +235,50 @@ export class PiDataService implements IPiDataService {
 			],
 			recipient: AUTONOMOUS_FINANCE.PI_TOKEN_PROCESS_ID
 		});
+	}
+
+	/**
+	 * Gets all direct delegation history messages from PI_DELEGATE_PROCESS_ID to PI_DELEGATION_HISTORIAN
+	 * @returns Observable stream of Arweave transactions matching the criteria
+	 */
+	/**
+	 * Gets all FLP yield history entries with timestamps
+	 * @returns Observable stream of FLP yield history entries
+	 */
+	public getFLPYieldHistory(): Observable<FLPYieldHistoryEntry[]> {
+		return this.reactiveMessageService.streamAllMessages({
+			tags: [
+				{ name: 'Action', value: 'Save-Direct-Delegation-History' },
+				{ name: 'From-Process', value: AUTONOMOUS_FINANCE.PI_DELEGATE_PROCESS_ID }
+			],
+			recipient: AUTONOMOUS_FINANCE.PI_DELEGATION_HISTORIAN
+		}).pipe(
+			mergeMap(async (transactions) => {
+				const entries = await Promise.all(
+					transactions.map(async (tx) => {
+						if (!tx.id) {
+							Logger.debug(`Skipping transaction due to missing id: ${JSON.stringify(tx)}`);
+							return null;
+						}
+
+						try {
+							const data = await this.arweaveDataService.getTransactionData<DelegationHistoryData>(tx.id);
+							return {
+								...data,
+								timestamp: tx.block?.timestamp || 0
+							};
+						} catch (error: any) {
+							Logger.error(`Failed to get transaction data for ${tx.id}: ${error.message}`);
+							return null;
+						}
+					})
+				);
+
+				// Filter out null entries and sort by timestamp descending
+				return entries
+					.filter((entry): entry is FLPYieldHistoryEntry => entry !== null)
+					.sort((a, b) => b.timestamp - a.timestamp);
+			})
+		);
 	}
 }
