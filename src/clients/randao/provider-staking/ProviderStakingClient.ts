@@ -44,9 +44,6 @@ export class ProviderStakingClient extends StakingClient implements IProviderSta
 	 */
 	public async stake(quantity: string, additionaForwardedlTags?: Tags): Promise<boolean> {
 		try {
-			if (quantity < PROVIDER_MINIMUM_STAKE) {
-				throw new InputValidationError(`Attempted to Stake ${quantity}, when minimum stake is ${PROVIDER_MINIMUM_STAKE}`)
-			}
 			return super.stake(quantity, additionaForwardedlTags)
 		} catch (error: any) {
 			throw new ClientError(this, this.stake, { quantity, additionaForwardedlTags }, error);

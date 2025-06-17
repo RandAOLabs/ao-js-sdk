@@ -152,7 +152,7 @@ function processFile(filePath, docsUrl) {
 // Main execution
 try {
     const distDir = path.join(process.cwd(), 'dist');
-    const docsUrl = 'https://randaolabs.github.io/ao-process-clients';
+    const docsUrl = 'https://randaolabs.github.io/ao-js-sdk';
 
     if (!fs.existsSync(distDir)) {
         console.error('❌ dist/ directory not found. Run tsc first.');
