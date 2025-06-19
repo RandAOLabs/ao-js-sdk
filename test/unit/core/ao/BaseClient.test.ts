@@ -1,7 +1,7 @@
-import { SortOrder } from 'src';
 import { BaseClient } from 'src/core/ao/BaseClient';
 import { BaseClientConfigBuilder } from 'src/core/ao/configuration/builder';
 import { DEFAULT_TAGS } from 'src/core/ao/constants';
+import { SortOrder } from '../../../../src/core/ao/abstract/types';
 
 // Create mock functions for IAOClient implementation
 const message = jest.fn();

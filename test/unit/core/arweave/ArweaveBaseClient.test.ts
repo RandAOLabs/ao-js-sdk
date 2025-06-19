@@ -1,4 +1,5 @@
-import { ArweaveDataService, IArweaveDataService } from '../../../../src';
+import { IArweaveDataService } from '../../../../src/core/arweave/abstract/IArweaveDataService';
+import { ArweaveDataService } from '../../../../src/core/arweave/ArweaveDataService';
 import { ArweaveGraphQLError } from '../../../../src/core/arweave/ArweaveDataServiceError';
 import { ArweaveGQLBuilder } from '../../../../src/core/arweave/gql/ArweaveGQLBuilder';
 
