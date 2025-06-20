@@ -3,7 +3,7 @@ import { IPiDataService } from './abstract/IPiDataService';
 import { IReactiveMessageService, ReactiveMessageService } from '../../messages';
 import { IAutoconfiguration } from '../../../utils/class-interfaces/IAutoconfiguration';
 import { staticImplements } from '../../../utils/decorators/staticImplements';
-import { AUTONOMOUS_FINANCE, PI_DELEGATE_PROCESS_ID } from '../../../process-ids/autonomous-finance';
+import { AUTONOMOUS_FINANCE, PI_DELEGATE_PROCESS_ID } from '../../../processes/ids/autonomous-finance';
 import { ACTION_SET_DELEGATION } from '../../../clients/pi/constants';
 import { ArweaveTransaction } from '../../../core/arweave/abstract/types';
 import { Logger } from '../../../utils/logger/logger';

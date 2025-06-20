@@ -1,6 +1,6 @@
 import { TokenClient } from "../ao";
 import { ClientBuilder } from "../common";
-import { COMMUNITY_TOKENS } from "../../process-ids/community_tokens";
+import { COMMUNITY_TOKENS } from "../../processes/ids/community_tokens";
 import { staticImplements, IAutoconfiguration, IDefaultBuilder } from "../../utils";
 /**
  * @category Tokens

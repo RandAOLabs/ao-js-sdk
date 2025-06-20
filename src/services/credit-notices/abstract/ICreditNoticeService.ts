@@ -1,5 +1,5 @@
-import { GetAllCreditNoticesParams } from "./types";
-import { CreditNotice } from "../types";
+import { GetAllCreditNoticesParams, GetCreditNoticesForPeriodParams } from "./types";
+import { CreditNotice } from "./types";
 
 /**
  * Interface for credit notice service operations
@@ -20,4 +20,20 @@ export interface ICreditNoticeService {
      * @returns Promise resolving to array of credit notices
      */
     getCreditNoticesFromProcess(recipientId: string, tokenId: string, amountSent?: string): Promise<CreditNotice[]>;
+    
+    /**
+     * Get all credit notices from a specific process within a date range
+     * @param params Parameters containing the token process ID and date range
+     * @returns Promise resolving to array of credit notices within the specified period
+     */
+    getAllCreditNoticesFromProcessForPeriod(params: GetCreditNoticesForPeriodParams): Promise<CreditNotice[]>;
+
+
+	/**
+     * Get credit notices from and entity yo an entity
+     * @param fromEntityId entity that sent the credit notice
+     * @param toEntityId entity that received the credit notice
+     * @returns Promise resolving to array of credit notices
+     */
+    getCreditNoticesBetween(fromEntityId: string, toEntityId: string): Promise<CreditNotice[]>;
 }

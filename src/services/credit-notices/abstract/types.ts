@@ -10,6 +10,18 @@ export interface GetAllCreditNoticesParams extends Omit<GetAllMessagesByRecipien
 }
 
 /**
+ * Parameters for retrieving credit notices from a process for a specific time period
+ */
+export interface GetCreditNoticesForPeriodParams {
+    /** The token process ID to get credit notices from */
+    tokenProcessId: string;
+    /** Start date for the period */
+    fromDate: Date;
+    /** End date for the period */
+    toDate: Date;
+}
+
+/**
  * Represents a credit notice with essential fields extracted from an Arweave transaction
  */
 export interface CreditNotice {
