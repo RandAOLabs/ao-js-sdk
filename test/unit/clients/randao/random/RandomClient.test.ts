@@ -1,7 +1,8 @@
 import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
 import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
-import { RandomClient, TokenClient } from "src/clients";
 import { BaseClient } from "src/core/ao/BaseClient";
+import { RandomClient } from "../../../../../src/clients/randao/random/RandomClient";
+import { TokenClient } from "../../../../../src/clients/ao/token/TokenClient";
 
 jest.mock("src/services/ario/ARIOService", () => ({
     ARIOService: {

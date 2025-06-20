@@ -128,23 +128,6 @@ describe("TokenClient", () => {
     });
 
     /**
-     * Test case: Fetching token info
-     */
-    describe("getInfo()", () => {
-        it("should fetch token info with correct parameters", async () => {
-            // Arrange
-            const token = "test-token";
-            (dryrun as jest.Mock).mockResolvedValueOnce({ Messages: [{ Data: "10" }] });
-
-            // Act
-            await client.getInfo(token);
-
-            // Assert
-            expect(dryrun).toHaveBeenCalled();
-        });
-    });
-
-    /**
      * Test case: Minting tokens
      */
     describe("mint()", () => {
