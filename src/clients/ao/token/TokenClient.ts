@@ -1,5 +1,5 @@
 import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
-import { ITokenClient, IGrantToken } from "./abstract";
+import { ITokenClient, IGrantToken, TokenInfo } from "./abstract";
 import { TRANSFER_SUCCESS_MESSAGE } from "./constants";
 import { ClientError } from "../../common/ClientError";
 import { Tags, TagUtils } from "../../../core";
@@ -95,16 +95,49 @@ export class TokenClient extends BaseClient implements ITokenClient, IGrantToken
         }
     }
 
-    public async getInfo(token: string): Promise<void> {
+    /**
+     * Gets information about the token.
+     * @param token Optional token process ID to get information for. If not provided, uses the current process ID.
+     * @returns Promise resolving to TokenInfo with token information
+     */
+    public async getInfo(token?: string): Promise<TokenInfo> {
         try {
             const response = await this.dryrun('', [
                 { name: "Action", value: "Info" },
-                { name: "Target", value: token }
             ]);
-            // TODO unimplemented
+            
+            return this.extractTokenInfoFromTags(response);
         } catch (error: any) {
             throw new ClientError(this, this.getInfo, { token }, error);
         }
+    }
+
+    /**
+     * Extracts Token information from tags
+     * @param result The DryRun result containing tags
+     * @returns TokenInfo object with extracted tag values
+     * @private
+     */
+    private extractTokenInfoFromTags(result: DryRunResult): TokenInfo {
+        if (!result.Messages || result.Messages.length === 0) {
+            throw new Error("No messages found in result");
+        }
+        
+        const tags = result.Messages[0].Tags;
+        
+        return {
+            dataProtocol: TagUtils.getTagValue(tags, "Data-Protocol"),
+            variant: TagUtils.getTagValue(tags, "Variant"),
+            type: TagUtils.getTagValue(tags, "Type"),
+            reference: TagUtils.getTagValue(tags, "Reference"),
+            action: TagUtils.getTagValue(tags, "Action"),
+            logo: TagUtils.getTagValue(tags, "Logo"),
+            totalSupply: TagUtils.getTagValue(tags, "TotalSupply"),
+            name: TagUtils.getTagValue(tags, "Name"),
+            ticker: TagUtils.getTagValue(tags, "Ticker"),
+            denomination: TagUtils.getTagValue(tags, "Denomination"),
+            transferRestricted: TagUtils.getTagValue(tags, "TransferRestricted")
+        };
     }
 
     public async mint(quantity: string): Promise<boolean> {

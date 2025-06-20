@@ -1,6 +1,7 @@
 // src/ITokenClient.ts
 import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
 import { Tags } from "../../../../core";
+import { TokenInfo } from "./types";
 
 /** 
  * Interface for interacting with ao token processes.
@@ -37,13 +38,12 @@ export interface ITokenClient {
     transfer(recipient: string, quantity: string, forwardedTags?: Tags): Promise<boolean>;
 
     /**
-     * @todo return value is broken
      * Gets information about a token process including name, ticker, logo, and denomination.
      * These are immutable parameters set when the token process was spawned.
-     * @param token The token process ID to get information for
-     * @returns Promise resolving when the token information is retrieved
+     * @param token Optional token process ID to get information for. If not provided, uses the current process ID.
+     * @returns Promise resolving to TokenInfo with token information
      */
-    getInfo(token: string): Promise<void>;
+    getInfo(token?: string): Promise<TokenInfo>;
 
     /**
      * Mints new tokens, increasing the total supply.
