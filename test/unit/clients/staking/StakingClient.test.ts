@@ -1,9 +1,10 @@
 import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
 import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
-import { StakingClient, StakingClientConfig, TokenClient } from "src";
 import { ClientError } from "src/clients/common/ClientError";
 import { BaseClient } from "src/core/ao/BaseClient";
 import { getWallet } from "src/utils/wallet/environmentWallet";
+import { TokenClient } from "../../../../src/clients/ao/token/TokenClient";
+import { StakingClient, StakingClientConfig } from "../../../../src";
 
 
 // Mock individual methods of BaseClient using jest.spyOn
