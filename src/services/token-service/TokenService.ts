@@ -1,5 +1,6 @@
 import { DryRunCachingTokenClient } from "../../clients/ao/token/DryRunCachingTokenClient";
 import { DryRunCachingClientConfigBuilder } from "../../core";
+import ResultUtils from "../../core/common/result-utils/ResultUtils";
 import { ICaching } from "../../utils/class-interfaces/ICaching";
 import { CreditNotice, CreditNoticeService } from "../credit-notices";
 import { ITokenService, TokenBalance } from "./abstract";
@@ -115,31 +116,33 @@ export class TokenService implements ITokenService, ICaching {
 		const extractedBalances: TokenBalance[] = [];
 		let nextCursor: string | undefined = undefined;
 		
-		if (!result.Messages || result.Messages.length === 0) {
+		// Use ResultUtils to parse the data from the message
+		const data = ResultUtils.getFirstMessageDataJson(result);
+		
+		// If no data was parsed, return empty balances
+		if (!data) {
 			return { balances: extractedBalances };
 		}
 		
-		const message = result.Messages[0];
-		if (!message.Data) {
-			return { balances: extractedBalances };
-		}
-		
-		const data = JSON.parse(message.Data);
-		
-		// Process balances data
-		if (data.balances && Array.isArray(data.balances)) {
-			for (const balance of data.balances) {
-				if (balance.address && balance.balance) {
-					extractedBalances.push({
-						entityId: balance.address,
-						balance: BigInt(balance.balance)
-					});
-				}
+		// Process balances data - the data is expected to be in format { "id123":"10000", "id456":"10000" }
+		// Convert this object format to TokenBalance array
+		for (const [entityId, balance] of Object.entries(data)) {
+			if (entityId && balance) {
+				extractedBalances.push({
+					entityId,
+					balance: BigInt(balance)
+				});
 			}
 		}
 		
-		// Extract cursor for pagination
-		nextCursor = data.cursor;
+		// Extract cursor for pagination if it exists in the result
+		// Check if there's a cursor in the Messages[0].Tags
+		if (result.Messages && result.Messages.length > 0 && result.Messages[0].Tags) {
+			const cursorTag = result.Messages[0].Tags.find((tag: any) => tag.name === 'Cursor');
+			if (cursorTag) {
+				nextCursor = cursorTag.value;
+			}
+		}
 		
 		return { 
 			balances: extractedBalances,
