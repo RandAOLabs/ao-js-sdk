@@ -1,15 +1,16 @@
 import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
-import { IDryRunCachingClient } from "../abstract/ICachingClient"
 import { BaseClient } from "../BaseClient";
 import { DryRunCachingClientConfig } from "../configuration";
 import { Tags } from "../../common";
 import { Logger } from "../../../utils";
 import { ICache, newCache } from "../../../utils/cache";
+import { ICaching } from "../../../utils/class-interfaces/ICaching";
+import { IProcessClient } from "../abstract";
 
 /**
  * @category Core
  */
-export class DryRunCachingClient extends BaseClient implements IDryRunCachingClient {
+export class DryRunCachingClient extends BaseClient implements ICaching, IProcessClient {
     private cache: ICache<string, DryRunResult>;
 
     public constructor(config: DryRunCachingClientConfig) {

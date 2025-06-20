@@ -1,6 +1,6 @@
 import { TokenClient } from "../ao";
 import { ClientBuilder } from "../common";
-import { PROCESS_IDS } from "../../process-ids";
+import { PROCESS_IDS } from "../../processes/ids";
 import { staticImplements, IAutoconfiguration, IDefaultBuilder } from "../../utils";
 
 /**
