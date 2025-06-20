@@ -6,4 +6,4 @@ export * from "./core/ao/index"
 export * from "./core/arweave"
 
 export * from './utils/index'
-export * from "./process-ids"
+export * from "./processes"

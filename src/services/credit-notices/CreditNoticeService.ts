@@ -1,7 +1,7 @@
 import { Logger } from "../../utils/logger/logger";
 import { ICreditNoticeService } from "./abstract/ICreditNoticeService";
 import { GetCreditNoticesError } from "./CreditNoticeServiceError";
-import { GetAllCreditNoticesParams } from "./abstract/types";
+import { GetAllCreditNoticesParams, GetCreditNoticesForPeriodParams } from "./abstract/types";
 import { CREDIT_NOTICE_ACTION_TAG, FROM_PROCESS_TAG_NAME, QUANTITY_TAG_NAME } from "./constants";
 import { GetAllMessagesByRecipientParams, IAutoconfiguration, IMessagesService, MessagesService } from "../../index";
 import { staticImplements } from "../../utils/decorators";
@@ -19,12 +19,21 @@ export class CreditNoticeService implements ICreditNoticeService {
 		private readonly messagesService: IMessagesService,
 	) { }
 
+
 	public static autoConfiguration(): CreditNoticeService {
 		return new CreditNoticeService(
 			MessagesService.autoConfiguration()
 		)
 	}
 
+
+	public async getCreditNoticesBetween(fromEntityId: string, toEntityId: string): Promise<CreditNotice[]> {
+		return this.getAllCreditNoticesReceivedById({
+				recipientId: toEntityId,
+				additionalTags: [{ name: FROM_PROCESS_TAG_NAME, value: fromEntityId }]
+			});
+	}
+	
 	public async getAllCreditNoticesReceivedById(params: GetAllCreditNoticesParams): Promise<CreditNotice[]> {
 		try {
 			// Add the Credit Notice action tag
@@ -65,6 +74,43 @@ export class CreditNoticeService implements ICreditNoticeService {
 			});
 		} catch (error: any) {
 			Logger.error(`Error retrieving credit notices from process: ${error.message}`);
+			throw new GetCreditNoticesError(error);
+		}
+	}
+
+	/**
+	 * Get all credit notices from a specific process within a date range
+	 * @param params Parameters containing the token process ID and date range
+	 * @returns Promise resolving to array of credit notices within the specified period
+	 */
+	public async getAllCreditNoticesFromProcessForPeriod(params: GetCreditNoticesForPeriodParams): Promise<CreditNotice[]> {
+		try {
+			// Create tags array with the From-Process tag
+			const tags: Tags = [
+				{ name: FROM_PROCESS_TAG_NAME, value: params.tokenProcessId },
+				CREDIT_NOTICE_ACTION_TAG
+			];
+
+			// Get all credit notices from the process (using wildcard "*" to get all recipients)
+			const transactions = await this.messagesService.getAllMessages({
+				tags
+			});
+
+			const allNotices = CreditNoticeConverter.convertMany(transactions)
+
+			// Filter notices by date range
+			return allNotices.filter(notice => {
+				// Skip notices without timestamp
+				if (!notice.blockTimeStamp) return false;
+				
+				// Convert timestamp to Date (blockTimeStamp is in milliseconds)
+				const noticeDate = new Date(notice.blockTimeStamp*1000);
+				
+				// Check if the notice is within the date range
+				return noticeDate >= params.fromDate && noticeDate <= params.toDate;
+			});
+		} catch (error: any) {
+			Logger.error(`Error retrieving credit notices for period: ${error.message}`);
 			throw new GetCreditNoticesError(error);
 		}
 	}

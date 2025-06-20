@@ -1,5 +1,5 @@
 import { FairLaunchProcessClient } from "./FairLaunchProcessClient";
-import { AUTONOMOUS_FINANCE } from "../../../process-ids/autonomous-finance";
+import { AUTONOMOUS_FINANCE } from "../../../processes/ids/autonomous-finance";
 
 
 /**

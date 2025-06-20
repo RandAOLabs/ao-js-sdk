@@ -3,7 +3,7 @@ import { ClientBuilder } from "../../common";
 import { ClientError } from "../../common/ClientError";
 import { DryRunCachingClient } from "../../../core/ao/client-variants";
 import ResultUtils from "../../../core/common/result-utils/ResultUtils";
-import { PROCESS_IDS } from "../../../process-ids";
+import { PROCESS_IDS } from "../../../processes/ids";
 import { IAutoconfiguration, IDefaultBuilder, Logger, staticImplements } from "../../../utils/index";
 
 

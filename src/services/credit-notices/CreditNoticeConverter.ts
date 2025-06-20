@@ -1,6 +1,7 @@
 import { ArweaveTransaction } from "../../core/arweave/abstract/types";
 import { CreditNotice } from "./abstract/types";
 import { TagUtils } from "../../core/common";
+import { Logger } from "../../utils";
 
 /**
  * Converter implementation for transforming Arweave transactions to CreditNotice objects
@@ -41,5 +42,10 @@ export default class CreditNoticeConverter {
             blockTimeStamp: source.block?.timestamp
         };
     }
+
+	public static convertMany(transactions: ArweaveTransaction[]): CreditNotice[] {
+		Logger.debug(transactions)
+		return transactions.map((transaction)=>CreditNoticeConverter.convert(transaction))
+	}
 
 }
