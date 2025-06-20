@@ -1,6 +1,6 @@
 import { TokenClient } from "../ao";
 import { ClientBuilder } from "../common";
-import { BAZAR } from "../../process-ids/bazar";
+import { BAZAR } from "../../processes/ids/bazar";
 import { staticImplements, IAutoconfiguration, IDefaultBuilder } from "../../utils";
 /**
  * @category Tokens

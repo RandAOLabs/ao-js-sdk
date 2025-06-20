@@ -12,7 +12,7 @@ import { DOMAIN } from "../../../services/ario/domains";
 import { AO_CONFIGURATIONS } from "../../../core/ao/ao-client/configurations";
 import ResultUtils from "../../../core/common/result-utils/ResultUtils";
 import { ClientBuilder } from "../../common";
-import { PROCESS_IDS } from "../../../process-ids";
+import { PROCESS_IDS } from "../../../processes/ids";
 import { ClientError } from "../../common/ClientError";
 import { TokenClient, TokenClientConfig } from "../../ao";
 import { TokenInterfacingClientBuilder } from "../../common/TokenInterfacingClientBuilder";

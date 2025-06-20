@@ -9,7 +9,7 @@ import { PROVIDER_MINIMUM_STAKE } from "./constants";
 import { Tags } from "../../../core";
 import { AO_CONFIGURATIONS } from "../../../core/ao/ao-client/configurations";
 import ResultUtils from "../../../core/common/result-utils/ResultUtils";
-import { PROCESS_IDS } from "../../../process-ids";
+import { PROCESS_IDS } from "../../../processes/ids";
 import { IAutoconfiguration, IDefaultBuilder, staticImplements } from "../../../utils";
 
 /**

@@ -7,7 +7,7 @@ import { Tags } from "../../../core";
 import { AO_CONFIGURATIONS } from "../../../core/ao/ao-client/configurations";
 import { DryRunCachingClient } from "../../../core/ao/client-variants";
 import ResultUtils from "../../../core/common/result-utils/ResultUtils";
-import { PROCESS_IDS } from "../../../process-ids";
+import { PROCESS_IDS } from "../../../processes/ids";
 import { IAutoconfiguration, IDefaultBuilder, Logger, staticImplements } from "../../../utils";
 
 /**

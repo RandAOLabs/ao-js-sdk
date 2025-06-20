@@ -9,7 +9,7 @@ import { RaffleProcessError } from "./RaffleProcessError";
 import { BaseClient } from "../../../core/ao/BaseClient";
 import ResultUtils from "../../../core/common/result-utils/ResultUtils";
 import { ClientBuilder } from "../../common";
-import { PROCESS_IDS } from "../../../process-ids";
+import { PROCESS_IDS } from "../../../processes/ids";
 import { ClientError } from "../../common/ClientError";
 
 /**
