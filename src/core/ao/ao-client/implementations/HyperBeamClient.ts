@@ -7,7 +7,7 @@ import { Logger } from '../../../../utils';
 import { SortOrder } from '../../abstract';
 import { DryRunParams } from '../interfaces';
 import { AORateLimitingError, AOClientError } from '../AOClientError';
-import { ConnectArgsLegacy } from '../aoconnect-types';
+import { ConnectArgsLegacy, ConnectArgsMainnetFull } from '../aoconnect-types';
 import { AO_CONFIGURATION_DEFAULT } from '../configurations';
 import { RATELIMIT_ERROR_TEXT } from '../constants';
 import { SendMessage } from '@permaweb/aoconnect/dist/lib/message';
@@ -69,29 +69,20 @@ export class ReadOnlyLegacyAOClient implements IReadOnlyAOClient {
 	}
 
 	public async dryrun(params: DryRunParams): Promise<DryRunResult> {
-		try {
-			const result = await this._dryrun(params);
-			return result
-		} catch (error: any) {
-			if (error.message = RATELIMIT_ERROR_TEXT) {
-				throw new AORateLimitingError(this, this.dryrun, params, undefined, error)
-			} else {
-				throw new AOClientError(this, this.dryrun, params, undefined, error);
-			}
-		}
+		throw new Error("No dryruns on HyperBeam Silly")
 	}
 
 
-	public setConfig(aoConnectConfig: ConnectArgsLegacy): void {
+	public setConfig(aoConnectConfig: ConnectArgsMainnetFull): void {
 		Logger.debug(`Connecting to AO with:`, aoConnectConfig)
-		const { message, result, results, dryrun, request } = connect(aoConnectConfig);
+		const { message, result, results, request } = connect(aoConnectConfig);
 		this._message = message;
 		this._result = result;
 		this._results = results;
 		this._dryrun = dryrun;
 	}
 
-	public getActiveConfig(): ConnectArgsLegacy {
+	public getActiveConfig(): ConnectArgsMainnetFull {
 		return this.activeAOConfig
 	}
 }

@@ -19,17 +19,17 @@ jest.mock('@permaweb/aoconnect', () => ({
 }));
 
 import { Logger, LogLevel } from 'src/utils';
-import { ReadOnlyAOClient } from '../../../../../src/core/ao/ao-client';
+import { ReadOnlyLegacyAOClient } from '../../../../../src/core/ao/ao-client';
 import { DryRunParams } from '../../../../../src/core/ao/ao-client/interfaces';
 
 describe('ReadOnlyAOClient', () => {
-	let client: ReadOnlyAOClient;
+	let client: ReadOnlyLegacyAOClient;
 
 	beforeEach(() => {
 		Logger.setLogLevel(LogLevel.NONE)
 		// Reset all mocks before each test
 		jest.clearAllMocks();
-		client = new ReadOnlyAOClient();
+		client = new ReadOnlyLegacyAOClient();
 	});
 
 	it('should return results when fetching results', async () => {

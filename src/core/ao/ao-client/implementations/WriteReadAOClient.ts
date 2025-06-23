@@ -4,11 +4,11 @@ import { JWKInterface } from 'arweave/node/lib/wallet';
 import { ConnectArgsLegacy } from '../aoconnect-types';
 import { AOClientError } from '../AOClientError';
 import { AOMessageIdMissingError } from '../../AOError';
-import { ReadOnlyAOClient } from './ReadOnlyAOClient';
+import { ReadOnlyLegacyAOClient } from './ReadOnlyAOClient';
 import { IWriteReadAOClient } from '../interfaces';
 import { WalletUtils } from '../../../common/WalletUtils';
 
-export class WriteReadAOClient extends ReadOnlyAOClient implements IWriteReadAOClient {
+export class WriteReadAOClient extends ReadOnlyLegacyAOClient implements IWriteReadAOClient {
 	private readonly signer: ReturnType<typeof createDataItemSigner>;
 	private readonly wallet: JWKInterface | any;
 

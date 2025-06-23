@@ -6,10 +6,10 @@ import { DryRunParams } from "../interfaces";
 import { AORateLimitingError, AOAllConfigsFailedError } from "../AOClientError";
 import { ConnectArgsLegacy } from "../aoconnect-types";
 import { AO_CONFIGURATIONS } from "../configurations";
-import { ReadOnlyAOClient } from "./ReadOnlyAOClient";
+import { ReadOnlyLegacyAOClient } from "./ReadOnlyAOClient";
 import { IReadOnlyAOClient } from "../interfaces/IReadOnlyAOClient";
 
-export class ReadOnlyRetryAOClient extends ReadOnlyAOClient implements IReadOnlyAOClient {
+export class ReadOnlyRetryAOClient extends ReadOnlyLegacyAOClient implements IReadOnlyAOClient {
 	private static readonly AO_CONFIGURATIONS: readonly ConnectArgsLegacy[] = [
 		AO_CONFIGURATIONS.RANDAO,
 		AO_CONFIGURATIONS.ARDRIVE,

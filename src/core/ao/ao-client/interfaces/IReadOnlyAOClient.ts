@@ -31,6 +31,7 @@ export interface IReadOnlyAOClient {
 	result(params: ReadResultArgs): Promise<MessageResult>;
 
 	/**
+	 * @deprecated
 	 * Performs a dry run of a message without actually sending it.
 	 * @param params - The dry run parameters
 	 * @returns Promise resolving to the dry run result
