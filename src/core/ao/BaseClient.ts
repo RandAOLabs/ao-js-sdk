@@ -12,7 +12,7 @@ import { ArweaveDataCachingService } from '../arweave/ArweaveDataCachingService'
 import { ArweaveTransaction } from '../arweave/abstract/types';
 import { IWriteReadAOClient } from './ao-client/interfaces/IWriteReadAOClient';
 import { JWKInterface } from 'arweave/node/lib/wallet';
-import { AOReadOnlyClientError, ReadOnlyAOClient, ReadOnlyRetryAOClient, WriteReadAOClient } from './ao-client';
+import { AOReadOnlyClientError, ReadOnlyLegacyAOClient, ReadOnlyRetryAOClient, WriteReadAOClient } from './ao-client';
 import { AOClientBuilder } from './ao-client/AOClientBuilder';
 import { SortOrder } from './abstract';
 import ResultUtils from '../common/result-utils/ResultUtils';

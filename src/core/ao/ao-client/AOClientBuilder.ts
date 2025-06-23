@@ -2,7 +2,7 @@ import { JWKInterface } from "arweave/node/lib/wallet";
 import { IBuilder } from "../../../utils";
 import { ConnectArgsLegacy } from "./aoconnect-types";
 import { IReadOnlyAOClient } from "./interfaces/IReadOnlyAOClient";
-import { ReadOnlyAOClient, ReadOnlyRetryAOClient, WriteReadAOClient, WriteReadRetryAOClient } from "./implementations";
+import { ReadOnlyLegacyAOClient, ReadOnlyRetryAOClient, WriteReadAOClient, WriteReadRetryAOClient } from "./implementations";
 import { IWriteReadAOClient } from "./interfaces";
 
 export class AOClientBuilder implements IBuilder<IReadOnlyAOClient | IWriteReadAOClient> {
@@ -20,7 +20,7 @@ export class AOClientBuilder implements IBuilder<IReadOnlyAOClient | IWriteReadA
 		// Otherwise return read-only client
 		return this.retriesEnabled
 			? new ReadOnlyRetryAOClient(this.aoConfig)
-			: new ReadOnlyAOClient(this.aoConfig);
+			: new ReadOnlyLegacyAOClient(this.aoConfig);
 	}
 
 	reset(): this {
