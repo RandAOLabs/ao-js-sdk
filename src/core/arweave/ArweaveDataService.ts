@@ -8,10 +8,10 @@ import { ArweaveGQLResponse, ArweaveTransaction } from './abstract/types';
 import { IAutoconfiguration, JsonUtils } from '../../utils';
 import { staticImplements } from '../../utils/decorators';
 import { ARWEAVE_DOT_NET_HTTP_CONFIG } from './constants';
-import { 
-	AxiosHttpClient, 
-	HttpRequestConfig, 
-	IHttpClient, 
+import {
+	AxiosHttpClient,
+	HttpRequestConfig,
+	IHttpClient,
 	ResponseType
 } from '../../utils/http';
 
@@ -75,7 +75,7 @@ export class ArweaveDataService implements IArweaveDataService {
 		return transaction;
 	}
 
-	public async getTransactionData<T>(id: string): Promise<T> {
+	public async getTransactionDataString(id: string): Promise<string> {
 		if (!id) {
 			throw new Error('No transaction ID provided');
 		}
@@ -87,14 +87,18 @@ export class ArweaveDataService implements IArweaveDataService {
 			};
 
 			const response = await this.httpClient.get<ArrayBuffer>(`/${id}`, requestConfig);
-			// Convert ArrayBuffer to string and parse JSON
+			// Convert ArrayBuffer to string
 			const decoder = new TextDecoder('utf-8');
-			const jsonString = decoder.decode(response);
-			return JsonUtils.parse<T>(jsonString);
+			return decoder.decode(response);
 		} catch (error: any) {
 			Logger.error(`Failed to get transaction data: ${error.message}`);
 			throw error;
 		}
+	}
+
+	public async getTransactionData<T>(id: string): Promise<T> {
+		const dataString = await this.getTransactionDataString(id);
+		return JsonUtils.parse<T>(dataString);
 	}
 
 	public async getWalletBalance(address: string): Promise<number> {
