@@ -27,11 +27,18 @@ export interface IArweaveDataService {
 	getTransactionById(id: string): Promise<ArweaveTransaction>;
 
 	/**
-	 * Retrieves data for a transaction by its ID
+	 * Retrieves data for a transaction by its ID and parses it as JSON
 	 * @param id The transaction ID to retrieve
-	 * @returns Promise resolving to the transaction data
+	 * @returns Promise resolving to the parsed transaction data
 	 */
 	getTransactionData<T>(id: string): Promise<T>
+
+	/**
+	 * Retrieves data for a transaction by its ID as a string
+	 * @param id The transaction ID to retrieve
+	 * @returns Promise resolving to the transaction data as a string
+	 */
+	getTransactionDataString(id: string): Promise<string>;
 
 	/**
 	 * Gets the balance of an Arweave wallet address in Winston
