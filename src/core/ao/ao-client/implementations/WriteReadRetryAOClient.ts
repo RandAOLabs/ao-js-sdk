@@ -2,12 +2,12 @@ import { createDataItemSigner } from '@permaweb/aoconnect';
 import { Tags } from '../../../common';
 import { JWKInterface } from 'arweave/node/lib/wallet';
 import { ConnectArgsLegacy } from '../aoconnect-types';
-import { SendMessage } from '@permaweb/aoconnect/dist/lib/message';
 import { AOClientError } from '../AOClientError';
 import { AOMessageIdMissingError } from '../../AOError';
 import { ReadOnlyRetryAOClient } from './ReadOnlyRetryClient';
 import { IWriteReadAOClient } from '../interfaces';
 import { WalletUtils } from '../../../common/WalletUtils';
+import { SendMessage } from '../../abstract';
 
 export class WriteReadRetryAOClient extends ReadOnlyRetryAOClient implements IWriteReadAOClient {
 	private readonly signer: ReturnType<typeof createDataItemSigner>;

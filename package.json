@@ -1,6 +1,6 @@
 {
 	"name": "ao-js-sdk",
-	"version": "0.0.13",
+	"version": "0.0.14",
 	"description": "A modular TypeScript API client library for AO Process interactions",
 	"main": "dist/src/index.js",
 	"types": "dist/src/index.d.ts",
@@ -49,7 +49,8 @@
 		"lru-cache": "^11.0.2",
 		"p-limit": "3.1.0",
 		"p-retry": "4.6.1",
-		"rxjs": "^7.8.2"
+		"rxjs": "^7.8.2",
+		"zod": "^4.0.5"
 	},
 	"peerDependencies": {
 		"@permaweb/aoconnect": "0.0.77",

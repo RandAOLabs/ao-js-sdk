@@ -1,18 +1,16 @@
 // src/IBaseClient.ts
 
-import { ResultsResponse } from "@permaweb/aoconnect/dist/lib/results";
-import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
-import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
 import { Tags } from "../../common";
 import { ArweaveTransaction } from "../../arweave/abstract/types";
 import { JWKInterface } from "arweave/node/lib/wallet";
+import { DryRunResult, MessageResult, ResultsResponse } from "./ao-connect-types";
 
 export interface IProcessClient {
 	/* AO Interaction Methods */
 
 	/**
 	 * Send a message to an ao Message Unit (mu) targeting an ao process.
-	 * 
+	 *
 	 * @param data Optional data to be passed to the message
 	 * @param tags Optional tags to be passed to the message
 	 * @param anchor Optional 32 byte anchor to be set on the DataItem
@@ -23,7 +21,7 @@ export interface IProcessClient {
 
 	/**
 	 * Read a batch of results from a process. Can be used as a polling mechanism for new results.
-	 * 
+	 *
 	 * @param from Optional cursor starting point
 	 * @param to Optional cursor ending point
 	 * @param limit Optional number of results to return (default: 25)
@@ -35,7 +33,7 @@ export interface IProcessClient {
 
 	/**
 	 * Read the result of a message evaluation from an ao Compute Unit (cu).
-	 * 
+	 *
 	 * @param messageId ID of the message to get result for
 	 * @returns Promise resolving to MessageResult containing Messages, Spawns, Output, Error
 	 * @throws ResultError if there is an error fetching the result
@@ -69,7 +67,7 @@ export interface IProcessClient {
 	/**
 	 * Retrieves the transaction that created this process. This transaction contains
 	 * the initial state and configuration of the process in its tags.
-	 * 
+	 *
 	 * @returns Promise resolving to the transaction data containing process creation details
 	 * @throws ArweaveGraphQLError if there is an error retrieving the transaction
 	 */
@@ -95,7 +93,7 @@ export interface IProcessClient {
 
 	/**
 	 * Controls whether dryrun executes as a message or simulation.
-	 * 
+	 *
 	 * @param enabled When true, dryrun will execute as a real message. When false (default), executes as a simulation.
 	 */
 	setDryRunAsMessage(enabled: boolean): void;
