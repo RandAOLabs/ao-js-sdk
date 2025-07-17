@@ -1,14 +1,14 @@
-import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
 import { TokenClient } from "./TokenClient";
 import { ICache, Logger, newCache } from "../../../utils";
 import { DryRunCachingClientConfig, Tags } from "../../../core";
 import { ICaching } from "../../../utils/class-interfaces/ICaching";
 import { ITokenClient } from "./abstract";
+import { DryRunResult } from "../../../core/ao/abstract";
 
 
 export class DryRunCachingTokenClient extends TokenClient implements ICaching, ITokenClient {
 	private cache: ICache<string, DryRunResult>;
-	
+
 	public constructor(config: DryRunCachingClientConfig) {
 		super(config)
 		this.cache = newCache<string, DryRunResult>(config.cacheConfig);

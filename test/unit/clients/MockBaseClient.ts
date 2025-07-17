@@ -1,8 +1,7 @@
 import { BaseClient } from "src/core/ao/BaseClient";
-import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
-import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
+
 import { getWalletLazy } from "src/utils";
-import { IProcessClient } from "../../../src/core/ao/abstract";
+import { DryRunResult, IProcessClient, MessageResult } from "../../../src/core/ao/abstract";
 
 /**
  * Mock implementation of BaseClient for testing.

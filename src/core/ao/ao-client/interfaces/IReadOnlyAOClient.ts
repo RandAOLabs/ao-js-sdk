@@ -1,9 +1,6 @@
-import { MessageResult, ReadResultArgs } from '@permaweb/aoconnect/dist/lib/result';
-import { ReadResultsArgs, ResultsResponse } from '@permaweb/aoconnect/dist/lib/results';
-import { DryRunResult, MessageInput } from '@permaweb/aoconnect/dist/lib/dryrun';
-import { Tags } from '../../../common';
+
+import { DryRunResult, MessageInput, MessageResult, ReadResultArgs, ReadResultsArgs, ResultsResponse } from '../../abstract';
 import { ConnectArgsLegacy } from '../aoconnect-types';
-import { JWKInterface } from 'arweave/node/lib/wallet';
 
 /**
  * AO interface provides a wrapper for interacting with the Arweave Operating System (AO).
