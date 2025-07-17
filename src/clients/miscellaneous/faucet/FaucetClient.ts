@@ -1,5 +1,4 @@
-import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
-import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
+
 
 import { Tags } from "../../../core";
 import { IAutoconfiguration, IDefaultBuilder, staticImplements } from "../../../utils";
@@ -16,6 +15,7 @@ import { ClientError } from "../../common/ClientError";
 import { TokenClient, TokenClientConfig } from "../../ao";
 import { TokenInterfacingClientBuilder } from "../../common/TokenInterfacingClientBuilder";
 import { IClassBuilder } from "../../../utils/class-interfaces/IClientBuilder";
+import { DryRunResult, MessageResult } from "../../../core/ao/abstract";
 
 /**
  * @category Miscellaneous
@@ -26,11 +26,11 @@ import { IClassBuilder } from "../../../utils/class-interfaces/IClientBuilder";
 @staticImplements<IClassBuilder>()
 
 export class FaucetClient extends BaseClient implements IFaucetClient {
-	
+
 	readonly tokenClient: TokenClient;
 	public constructor(faucetConfig: FaucetClientConfig) {
 		super(faucetConfig);
-		
+
 		const tokenConfig: TokenClientConfig = {
 			processId: faucetConfig.tokenProcessId,
 			wallet: faucetConfig.wallet,
@@ -40,9 +40,9 @@ export class FaucetClient extends BaseClient implements IFaucetClient {
 		this.tokenClient = new TokenClient(tokenConfig);
 	}
 
-	/** 
+	/**
 	 * {@inheritdoc IAutoconfiguration.autoConfiguration}
-	 * @see {@link IAutoconfiguration.autoConfiguration} 
+	 * @see {@link IAutoconfiguration.autoConfiguration}
 	 */
 	public static async autoConfiguration(): Promise<FaucetClient> {
 		const builder = await FaucetClient.defaultBuilder();
@@ -55,9 +55,9 @@ export class FaucetClient extends BaseClient implements IFaucetClient {
 		return new TokenInterfacingClientBuilder(FaucetClient)
 	}
 
-	/** 
+	/**
 	 * {@inheritdoc IDefaultBuilder.defaultBuilder}
-	 * @see {@link IDefaultBuilder.defaultBuilder} 
+	 * @see {@link IDefaultBuilder.defaultBuilder}
 	 */
 	public static async defaultBuilder(): Promise<TokenInterfacingClientBuilder<FaucetClient>> {
 		return FaucetClient.builder()
@@ -73,13 +73,13 @@ export class FaucetClient extends BaseClient implements IFaucetClient {
 			const tags: Tags = [
 				{ name: "Note", value: "Faucet" },
 			];
-	
+
 			return await this.tokenClient.transfer(this.getProcessId(), paymentAmount, tags);
 		} catch (error: any) {
 			throw new ClientError(this, this.useFaucet, {}, error);
 		}
 	}
-	
+
 	/* Core Faucet Functions */
 
 	/* Utilities */

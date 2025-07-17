@@ -1,13 +1,11 @@
-import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
 
-import { MessageResult, ReadResultArgs } from "@permaweb/aoconnect/dist/lib/result";
-import { ReadResultsArgs, ResultsResponse } from "@permaweb/aoconnect/dist/lib/results";
 import { DryRunParams } from "../interfaces";
 import { AORateLimitingError, AOAllConfigsFailedError } from "../AOClientError";
 import { ConnectArgsLegacy } from "../aoconnect-types";
 import { AO_CONFIGURATIONS } from "../configurations";
 import { ReadOnlyAOClient } from "./ReadOnlyAOClient";
 import { IReadOnlyAOClient } from "../interfaces/IReadOnlyAOClient";
+import { DryRunResult, MessageResult, ReadResultArgs, ReadResultsArgs, ResultsResponse } from "../../abstract";
 
 export class ReadOnlyRetryAOClient extends ReadOnlyAOClient implements IReadOnlyAOClient {
 	private static readonly AO_CONFIGURATIONS: readonly ConnectArgsLegacy[] = [

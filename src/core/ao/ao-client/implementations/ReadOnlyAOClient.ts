@@ -1,16 +1,12 @@
 import { connect } from '@permaweb/aoconnect';
-import { MessageResult, ReadResult, ReadResultArgs } from '@permaweb/aoconnect/dist/lib/result';
-import { ReadResults, ReadResultsArgs, ResultsResponse } from '@permaweb/aoconnect/dist/lib/results';
-import { DryRun, DryRunResult } from '@permaweb/aoconnect/dist/lib/dryrun';
 
 import { Logger } from '../../../../utils';
-import { SortOrder } from '../../abstract';
+import { DryRun, DryRunResult, MessageResult, ReadResult, ReadResultArgs, ReadResults, ReadResultsArgs, ResultsResponse, SendMessage, SortOrder } from '../../abstract';
 import { DryRunParams } from '../interfaces';
 import { AORateLimitingError, AOClientError } from '../AOClientError';
 import { ConnectArgsLegacy } from '../aoconnect-types';
 import { AO_CONFIGURATION_DEFAULT } from '../configurations';
 import { RATELIMIT_ERROR_TEXT } from '../constants';
-import { SendMessage } from '@permaweb/aoconnect/dist/lib/message';
 import { IReadOnlyAOClient } from '../interfaces/IReadOnlyAOClient';
 
 export class ReadOnlyAOClient implements IReadOnlyAOClient {
