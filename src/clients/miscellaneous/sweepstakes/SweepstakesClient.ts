@@ -1,5 +1,4 @@
-import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
-import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
+
 
 import { Tags } from "../../../core";
 import { IAutoconfiguration, IDefaultBuilder, staticImplements } from "../../../utils";
@@ -17,6 +16,7 @@ import { ClientError } from "../../common/ClientError";
 import { TokenClient, TokenClientConfig } from "../../ao";
 import { TokenInterfacingClientBuilder } from "../../common/TokenInterfacingClientBuilder";
 import { IClassBuilder } from "../../../utils/class-interfaces/IClientBuilder";
+import { DryRunResult, MessageResult } from "../../../core/ao/abstract";
 
 /**
  * @category Miscellaneous
@@ -27,11 +27,11 @@ import { IClassBuilder } from "../../../utils/class-interfaces/IClientBuilder";
 @staticImplements<IClassBuilder>()
 
 export class SweepstakesClient extends BaseClient implements ISweepstakesClient {
-	
+
 	readonly tokenClient: TokenClient;
 	public constructor(sweepstakesConfig: SweepstakesClientConfig) {
 		super(sweepstakesConfig);
-		
+
 		const tokenConfig: TokenClientConfig = {
 			processId: sweepstakesConfig.tokenProcessId,
 			wallet: sweepstakesConfig.wallet,
@@ -41,9 +41,9 @@ export class SweepstakesClient extends BaseClient implements ISweepstakesClient 
 		this.tokenClient = new TokenClient(tokenConfig);
 	}
 
-	/** 
+	/**
 	 * {@inheritdoc IAutoconfiguration.autoConfiguration}
-	 * @see {@link IAutoconfiguration.autoConfiguration} 
+	 * @see {@link IAutoconfiguration.autoConfiguration}
 	 */
 	public static async autoConfiguration(): Promise<SweepstakesClient> {
 		const builder = await SweepstakesClient.defaultBuilder();
@@ -56,9 +56,9 @@ export class SweepstakesClient extends BaseClient implements ISweepstakesClient 
 		return new TokenInterfacingClientBuilder(SweepstakesClient)
 	}
 
-	/** 
+	/**
 	 * {@inheritdoc IDefaultBuilder.defaultBuilder}
-	 * @see {@link IDefaultBuilder.defaultBuilder} 
+	 * @see {@link IDefaultBuilder.defaultBuilder}
 	 */
 	public static async defaultBuilder(): Promise<TokenInterfacingClientBuilder<SweepstakesClient>> {
 		return SweepstakesClient.builder()
@@ -75,14 +75,14 @@ export class SweepstakesClient extends BaseClient implements ISweepstakesClient 
 				{ name: "Entrants", value: JSON.stringify(entrants) },
 				{ name: "Details", value: details },
 			];
-	
+
 			return await this.tokenClient.transfer(this.getProcessId(), paymentAmount, tags);
 		} catch (error: any) {
 			throw new ClientError(this, this.registerSweepstakes, { entrants }, error);
 		}
 	}
-	
-	async setSweepstakesEntrants(entrants: string[],sweepstakesId: string): Promise<boolean> {
+
+	async setSweepstakesEntrants(entrants: string[], sweepstakesId: string): Promise<boolean> {
 		try {
 			const tags: Tags = [
 				{ name: "Action", value: "Update-Sweepstakes-Entry-List" },
@@ -96,7 +96,7 @@ export class SweepstakesClient extends BaseClient implements ISweepstakesClient 
 			throw new ClientError(this, this.setSweepstakesEntrants, { entrants }, error);
 		}
 	}
-	
+
 	async addSweepstakesEntrant(entrant: string, sweepstakesId: string): Promise<boolean> {
 		try {
 			const tags: Tags = [

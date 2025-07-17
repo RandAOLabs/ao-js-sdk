@@ -1,6 +1,6 @@
-import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
 import { CollectionClient, TAG_NAMES, ACTIONS, Logger, STATUS, RESPONSE_ACTIONS, AuthorizationError, InputValidationError, getWalletSafely } from "src";
 import { ClientError } from "src/clients/common/ClientError";
+import { MessageResult } from "../../../../src/core/ao/abstract";
 
 
 jest.mock('src/utils/logger/logger');

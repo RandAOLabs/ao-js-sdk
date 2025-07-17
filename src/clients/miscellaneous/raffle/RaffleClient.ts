@@ -1,5 +1,4 @@
-import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
-import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
+
 
 import { Tags } from "../../../core";
 import { IAutoconfiguration, IDefaultBuilder, staticImplements } from "../../../utils";
@@ -11,6 +10,7 @@ import ResultUtils from "../../../core/common/result-utils/ResultUtils";
 import { ClientBuilder } from "../../common";
 import { PROCESS_IDS } from "../../../processes/ids";
 import { ClientError } from "../../common/ClientError";
+import { DryRunResult, MessageResult } from "../../../core/ao/abstract";
 
 /**
  * @category Miscellaneous
@@ -19,18 +19,18 @@ import { ClientError } from "../../common/ClientError";
 @staticImplements<IAutoconfiguration>()
 @staticImplements<IDefaultBuilder>()
 export class RaffleClient extends BaseClient implements IRaffleClient {
-	/** 
+	/**
 	 * {@inheritdoc IAutoconfiguration.autoConfiguration}
-	 * @see {@link IAutoconfiguration.autoConfiguration} 
+	 * @see {@link IAutoconfiguration.autoConfiguration}
 	 */
 	public static autoConfiguration(): RaffleClient {
 		return RaffleClient.defaultBuilder()
 			.build()
 	}
 
-	/** 
+	/**
 	 * {@inheritdoc IDefaultBuilder.defaultBuilder}
-	 * @see {@link IDefaultBuilder.defaultBuilder} 
+	 * @see {@link IDefaultBuilder.defaultBuilder}
 	 */
 	public static defaultBuilder(): ClientBuilder<RaffleClient> {
 		return new ClientBuilder(RaffleClient)

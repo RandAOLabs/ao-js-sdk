@@ -1,5 +1,4 @@
-import { DryRunResult } from "@permaweb/aoconnect/dist/lib/dryrun";
-import { MessageResult } from "@permaweb/aoconnect/dist/lib/result";
+
 import { TokenClient, TokenClientConfig } from "../../ao";
 import { IRandomClient, RandomClientConfig, GetProviderAvailableValuesResponse, GetOpenRandomRequestsResponse, GetRandomRequestsResponse, ProviderActivity, CommitParams, RevealParams, GetUserInfoResponse, MonitoringData } from "./abstract";
 import { Tags } from "../../../core";
@@ -15,6 +14,7 @@ import { ClientError } from "../../common/ClientError";
 import TAGS from "./tags";
 import { RandomProcessError } from "./RandomProcessError";
 import { IClassBuilder } from "../../../utils/class-interfaces/IClientBuilder";
+import { DryRunResult, MessageResult } from "../../../core/ao/abstract";
 
 /**
  * @category RandAO
@@ -43,9 +43,9 @@ export class RandomClient extends BaseClient implements IRandomClient {
 		this.tokenClient = new TokenClient(tokenConfig)
 	}
 
-	/** 
+	/**
 	 * {@inheritdoc IAutoconfiguration.autoConfiguration}
-	 * @see {@link IAutoconfiguration.autoConfiguration} 
+	 * @see {@link IAutoconfiguration.autoConfiguration}
 	 */
 	public static async autoConfiguration(): Promise<RandomClient> {
 		const builder = await RandomClient.defaultBuilder()
@@ -57,9 +57,9 @@ export class RandomClient extends BaseClient implements IRandomClient {
 		return new TokenInterfacingClientBuilder(RandomClient)
 	}
 
-	/** 
+	/**
 	 * {@inheritdoc IDefaultBuilder.defaultBuilder}
-	 * @see {@link IDefaultBuilder.defaultBuilder} 
+	 * @see {@link IDefaultBuilder.defaultBuilder}
 	 */
 	public static async defaultBuilder(): Promise<TokenInterfacingClientBuilder<RandomClient>> {
 		const ario = ARIOService.getInstance()
@@ -152,12 +152,12 @@ export class RandomClient extends BaseClient implements IRandomClient {
 			const tags: Tags = [
 				{ name: "Action", value: "Get-All-User-Info" }
 			];
-	
+
 			const result = await this.dryrun(undefined, tags);
 			this.checkResultForErrors(result)
 			return await ResultUtils.getFirstMessageDataJson(result)
 		} catch (error: any) {
-			throw new ClientError(this, this.getAllUserInfo, {  }, error);
+			throw new ClientError(this, this.getAllUserInfo, {}, error);
 		}
 	}
 
@@ -264,7 +264,7 @@ export class RandomClient extends BaseClient implements IRandomClient {
 
 	async prepay(quantity: number, userId?: string): Promise<boolean> {
 		try {
-			const paymentAmount = quantity.toString(); 
+			const paymentAmount = quantity.toString();
 			const tags: Tags = [
 				{ name: "Prepayment", value: "true" },
 			];
