@@ -1,7 +1,9 @@
 import { Tag } from "../../../core/common/types";
+import { ARIO } from "../../../processes/ids/ario";
 
 const ACTION_TAG_NAME = "Action"
 const NAME_TAG_NAME = "Name"
+const FROM_PROCESS_TAG_NAME = "From-Process"
 
 // Type helper to ensure all values are Tags or Tag-generating functions while maintaining IntelliSense
 type TagRecord<T extends Record<string, Tag | ((value: string) => Tag)>> = T;
@@ -112,6 +114,9 @@ export const ARNS_TAGS = {
 		//
 		NAME: (value: string) => {
 			return { name: NAME_TAG_NAME, value: value }
+		},
+		FROM_PROCESS: (processId: string) => {
+			return { name: FROM_PROCESS_TAG_NAME, value: processId }
 		},
 	} satisfies TagRecord<Record<string, Tag | ((value: string) => Tag)>>
 } as const
