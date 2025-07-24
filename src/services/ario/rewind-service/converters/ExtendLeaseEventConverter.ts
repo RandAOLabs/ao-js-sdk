@@ -1,6 +1,6 @@
 import { ArweaveTransaction } from "../../../../core/arweave/abstract/types";
-import { IExtendLeaseEvent } from "../arns-event/abstract/IExtendLeaseEvent";
-import { ExtendLeaseEvent } from "../arns-event/ExtendLeaseEvent";
+import { IExtendLeaseEvent } from "../events/ARNameEvent/abstract/IExtendLeaseEvent";
+import { ExtendLeaseEvent } from "../events/ARNameEvent/ExtendLeaseEvent";
 
 /**
  * Converter implementation for transforming Arweave transactions to ExtendLeaseEvent objects

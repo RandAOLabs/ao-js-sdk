@@ -5,11 +5,11 @@ import { IAutoconfiguration } from '../../../utils/class-interfaces/IAutoconfigu
 import { staticImplements } from '../../../utils/decorators/staticImplements';
 import { Logger } from '../../../utils/logger/logger';
 import {
-    GetAllMessagesParams,
-    GetAllMessagesBySenderParams,
-    GetAllMessagesByRecipientParams,
-    GetLatestMessagesParams,
-    GetLatestMessagesResponse
+	GetAllMessagesParams,
+	GetAllMessagesBySenderParams,
+	GetAllMessagesByRecipientParams,
+	GetLatestMessagesParams,
+	GetLatestMessagesResponse
 } from '../message-service/abstract/types';
 import { IReactiveMessageService } from './abstract/IReactiveMessageService';
 
@@ -18,108 +18,93 @@ import { IReactiveMessageService } from './abstract/IReactiveMessageService';
  */
 @staticImplements<IAutoconfiguration>()
 export class ReactiveMessageService implements IReactiveMessageService {
-    constructor(
-        private readonly messagesService: IMessagesService
-    ) { }
+	constructor(
+		private readonly messagesService: IMessagesService
+	) { }
 
-    /**
-     * Creates a pre-configured instance of ReactiveMessageService
-     * @returns A pre-configured ReactiveMessageService instance
-     */
-    public static autoConfiguration(): ReactiveMessageService {
-        return new ReactiveMessageService(
-            MessagesService.autoConfiguration()
-        );
-    }
+	/**
+	 * Creates a pre-configured instance of ReactiveMessageService
+	 * @returns A pre-configured ReactiveMessageService instance
+	 */
+	public static autoConfiguration(): ReactiveMessageService {
+		return new ReactiveMessageService(
+			MessagesService.autoConfiguration()
+		);
+	}
 
-    /**
-     * Streams all messages matching the given filters as they are fetched
-     * @param params Parameters for filtering messages
-     * @returns Observable that emits arrays of messages as they are fetched
-     */
-    streamAllMessages(params: GetAllMessagesParams): Observable<ArweaveTransaction[]> {
-        return this.streamMessagesPaginated(params);
-    }
+	streamAllMessages(params: GetAllMessagesParams): Observable<ArweaveTransaction[]> {
+		return this.streamMessagesPaginated(params);
+	}
 
-    /**
-     * Streams all messages sent by a specific address
-     * @param params Parameters for filtering messages, including required sender ID
-     * @returns Observable that emits arrays of messages as they are fetched
-     */
-    streamAllMessagesSentBy(params: GetAllMessagesBySenderParams): Observable<ArweaveTransaction[]> {
-        return this.streamMessagesPaginated({
-            ...params,
-            owner: params.id
-        });
-    }
+	streamAllMessagesSentBy(params: GetAllMessagesBySenderParams): Observable<ArweaveTransaction[]> {
+		return this.streamMessagesPaginated({
+			...params,
+			owner: params.id
+		});
+	}
 
-    /**
-     * Gets the latest message matching the given filters
-     * @param params Parameters for filtering messages
-     * @returns Observable that emits a single message or undefined if none found
-     */
-    getLatestMessage(params: GetAllMessagesParams): Observable<ArweaveTransaction | undefined> {
-        return new Observable<ArweaveTransaction | undefined>(subscriber => {
-            (async () => {
-                try {
-                    const response = await this.messagesService.getLatestMessages({
-                        ...params,
-                        limit: 1
-                    });
-                    // Ensure response.messages exists and handle undefined case
-                    if (!response || !response.messages) {
-                        subscriber.next(undefined);
-                    } else {
-                        subscriber.next(response.messages[0] || undefined);
-                    }
-                    subscriber.complete();
-                } catch (error: any) {
-                    Logger.error(`Error fetching latest message: ${error.message}`);
-                    subscriber.error(error);
-                }
-            })();
+	getLatestMessage(params: GetAllMessagesParams): Observable<ArweaveTransaction | undefined> {
+		return new Observable<ArweaveTransaction | undefined>(subscriber => {
+			(async () => {
+				try {
+					const response = await this.messagesService.getLatestMessages({
+						...params,
+						limit: 1
+					});
+					// Ensure response.messages exists and handle undefined case
+					if (!response || !response.messages) {
+						subscriber.next(undefined);
+					} else {
+						subscriber.next(response.messages[0] || undefined);
+					}
+					subscriber.complete();
+				} catch (error: any) {
+					Logger.error(`Error fetching latest message: ${error.message}`);
+					subscriber.error(error);
+				}
+			})();
 
-            return () => {};
-        });
-    }
+			return () => { };
+		});
+	}
 
-    /**
-     * Streams messages using pagination, continuously fetching next pages while available.
-     * Uses a while loop to handle pagination with cursor, emitting messages as they arrive.
-     * @param params Parameters for filtering messages
-     * @returns Observable that emits arrays of messages as they are fetched
-     * @private
-     */
-    private streamMessagesPaginated(params: GetLatestMessagesParams): Observable<ArweaveTransaction[]> {
-        return new Observable<ArweaveTransaction[]>(subscriber => {
-            (async () => {
-                try {
-                    let currentCursor: string | undefined;
-                    let hasMore = true;
+	/**
+	 * Streams messages using pagination, continuously fetching next pages while available.
+	 * Uses a while loop to handle pagination with cursor, emitting messages as they arrive.
+	 * @param params Parameters for filtering messages
+	 * @returns Observable that emits arrays of messages as they are fetched
+	 * @private
+	 */
+	private streamMessagesPaginated(params: GetLatestMessagesParams): Observable<ArweaveTransaction[]> {
+		return new Observable<ArweaveTransaction[]>(subscriber => {
+			(async () => {
+				try {
+					let currentCursor: string | undefined;
+					let hasMore = true;
 
-                    while (hasMore) {
-                        const response = await this.messagesService.getLatestMessages({
-                            ...params,
-                            cursor: currentCursor,
-                            limit: 100
-                        });
+					while (hasMore) {
+						const response = await this.messagesService.getLatestMessages({
+							...params,
+							cursor: currentCursor,
+							limit: 100
+						});
 
-                        // Always emit messages array (empty if none found)
-                        subscriber.next(response.messages);
+						// Always emit messages array (empty if none found)
+						subscriber.next(response.messages);
 
-                        // Update pagination state
-                        hasMore = response.hasNextPage;
-                        currentCursor = response.cursor;
-                    }
+						// Update pagination state
+						hasMore = response.hasNextPage;
+						currentCursor = response.cursor;
+					}
 
-                    subscriber.complete();
-                } catch (error: any) {
-                    Logger.error(`Error fetching messages: ${error.message}`);
-                    subscriber.error(error);
-                }
-            })();
+					subscriber.complete();
+				} catch (error: any) {
+					Logger.error(`Error fetching messages: ${error.message}`);
+					subscriber.error(error);
+				}
+			})();
 
-            return () => {};
-        });
-    }
+			return () => { };
+		});
+	}
 }

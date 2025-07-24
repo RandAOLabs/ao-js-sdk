@@ -1,13 +1,13 @@
-import { ArweaveTransaction } from "../../../../core/arweave/abstract/types";
-import { IArweaveDataService } from "../../../../core/arweave/abstract/IArweaveDataService";
-import { ArweaveDataService } from "../../../../core/arweave/ArweaveDataService";
-import { CurrencyAmount } from "../../../../models/currency/CurrencyAmount";
-import { ReassignNameNoticeTransactionData } from "../../arns-data-service/abstract/transaction-data/ReassignNameNoticeTransactionData";
+import { ArweaveTransaction } from "../../../../../core/arweave/abstract/types";
+import { IArweaveDataService } from "../../../../../core/arweave/abstract/IArweaveDataService";
+import { ArweaveDataService } from "../../../../../core/arweave/ArweaveDataService";
+import { CurrencyAmount } from "../../../../../models/currency/CurrencyAmount";
+import { ReassignNameNoticeTransactionData } from "../../../arns-data-service/abstract/transaction-data/ReassignNameNoticeTransactionData";
 import { IReassignNameEvent } from "./abstract/IReassignNameEvent";
-import { ARNSNameEvent } from "./ARNSNameEvent";
-import { ARIO_TOKEN } from "../../../../processes/maps/currencies";
+import { ARNameEvent } from "./ARNameEvent";
+import { ARIO_TOKEN } from "../../../../../processes/maps/currencies";
 
-export class ReassignNameEvent extends ARNSNameEvent implements IReassignNameEvent {
+export class ReassignNameEvent extends ARNameEvent implements IReassignNameEvent {
 	private readonly transactionDataPromise: Promise<ReassignNameNoticeTransactionData>;
 	private readonly arweaveDataService: IArweaveDataService;
 

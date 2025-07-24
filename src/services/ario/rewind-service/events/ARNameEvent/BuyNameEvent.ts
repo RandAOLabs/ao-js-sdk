@@ -1,13 +1,13 @@
-import { ArweaveTransaction } from "../../../../core/arweave/abstract/types";
-import { IArweaveDataService } from "../../../../core/arweave/abstract/IArweaveDataService";
-import { ArweaveDataService } from "../../../../core/arweave/ArweaveDataService";
-import { CurrencyAmount } from "../../../../models/currency/CurrencyAmount";
-import { BuyNameNoticeTransactionData } from "../../arns-data-service/abstract/transaction-data/BuyNameNoticeTransactionData";
+import { ArweaveTransaction } from "../../../../../core/arweave/abstract/types";
+import { IArweaveDataService } from "../../../../../core/arweave/abstract/IArweaveDataService";
+import { ArweaveDataService } from "../../../../../core/arweave/ArweaveDataService";
+import { CurrencyAmount } from "../../../../../models/currency/CurrencyAmount";
+import { BuyNameNoticeTransactionData } from "../../../arns-data-service/abstract/transaction-data/BuyNameNoticeTransactionData";
 import { IBuyNameEvent } from "./abstract/IBuyNameEvent";
-import { ARNSNameEvent } from "./ARNSNameEvent";
-import { ARIO_TOKEN } from "../../../../processes/maps/currencies";
+import { ARNameEvent } from "./ARNameEvent";
+import { ARIO_TOKEN } from "../../../../../processes/maps/currencies";
 
-export class BuyNameEvent extends ARNSNameEvent implements IBuyNameEvent {
+export class BuyNameEvent extends ARNameEvent implements IBuyNameEvent {
 	private readonly transactionDataPromise: Promise<BuyNameNoticeTransactionData>;
 	private readonly arweaveDataService: IArweaveDataService;
 

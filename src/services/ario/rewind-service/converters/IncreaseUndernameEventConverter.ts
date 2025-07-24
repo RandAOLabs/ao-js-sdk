@@ -1,6 +1,6 @@
 import { ArweaveTransaction } from "../../../../core/arweave/abstract/types";
-import { IIncreaseUndernameEvent } from "../arns-event/abstract/IIncreaseUndernameEvent";
-import { IncreaseUndernameEvent } from "../arns-event/IncreaseUndernameEvent";
+import { IIncreaseUndernameEvent } from "../events/ARNameEvent/abstract/IIncreaseUndernameEvent";
+import { IncreaseUndernameEvent } from "../events/ARNameEvent/IncreaseUndernameEvent";
 
 /**
  * Converter implementation for transforming Arweave transactions to IncreaseUndernameEvent objects

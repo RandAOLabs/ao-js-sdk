@@ -1,13 +1,13 @@
-import { ArweaveTransaction } from "../../../../core/arweave/abstract/types";
-import { IArweaveDataService } from "../../../../core/arweave/abstract/IArweaveDataService";
-import { ArweaveDataService } from "../../../../core/arweave/ArweaveDataService";
-import { CurrencyAmount } from "../../../../models/currency/CurrencyAmount";
-import { ExtendLeaseNoticeTransactionData } from "../../arns-data-service/abstract/transaction-data/ExtendLeaseNoticeTransactionData";
+import { ArweaveTransaction } from "../../../../../core/arweave/abstract/types";
+import { IArweaveDataService } from "../../../../../core/arweave/abstract/IArweaveDataService";
+import { ArweaveDataService } from "../../../../../core/arweave/ArweaveDataService";
+import { CurrencyAmount } from "../../../../../models/currency/CurrencyAmount";
+import { ExtendLeaseNoticeTransactionData } from "../../../arns-data-service/abstract/transaction-data/ExtendLeaseNoticeTransactionData";
 import { IExtendLeaseEvent } from "./abstract/IExtendLeaseEvent";
-import { ARNSNameEvent } from "./ARNSNameEvent";
-import { ARIO_TOKEN } from "../../../../processes/maps/currencies";
+import { ARNameEvent } from "./ARNameEvent";
+import { ARIO_TOKEN } from "../../../../../processes/maps/currencies";
 
-export class ExtendLeaseEvent extends ARNSNameEvent implements IExtendLeaseEvent {
+export class ExtendLeaseEvent extends ARNameEvent implements IExtendLeaseEvent {
 	private readonly transactionDataPromise: Promise<ExtendLeaseNoticeTransactionData>;
 	private readonly arweaveDataService: IArweaveDataService;
 
