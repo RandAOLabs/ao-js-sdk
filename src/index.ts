@@ -7,3 +7,4 @@ export * from "./core/arweave"
 
 export * from './utils/index'
 export * from "./processes"
+export * from "./models"

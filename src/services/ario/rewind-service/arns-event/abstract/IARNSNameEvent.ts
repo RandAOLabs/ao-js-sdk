@@ -1,7 +1,5 @@
 
-export interface IARNSEvent {
+export interface IARNSNameEvent {
 	getARNSProcessId(): string;
-	getANTProcessId(): string;
 	getARNSName(): string;
-	getARNSFullName(): string;
 }

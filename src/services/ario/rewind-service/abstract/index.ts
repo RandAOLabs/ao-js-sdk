@@ -1,1 +1,1 @@
-export * from "./ARIORewindService"
+export * from "./IARIORewindService"

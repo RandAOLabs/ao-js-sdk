@@ -7,6 +7,9 @@ import { ARIO } from "../../../processes/ids/ario";
 import { ARNS_TAGS } from "./tags";
 
 
+/**
+ * @category ARIO
+ */
 @staticImplements<IAutoconfiguration>()
 export class ARNSDataService implements IARNSDataService {
 	constructor(
@@ -27,8 +30,8 @@ export class ARNSDataService implements IARNSDataService {
 		return this.reactiveMessageService.streamAllMessages({
 			tags: [
 				ARNS_TAGS.ACTION.BUYNAME_NOTICE,
-				ARNS_TAGS.ACTION.NAME(name),
-				ARNS_TAGS.ACTION.FROM_PROCESS(ARIO.ARNS_REGISTRY)
+				ARNS_TAGS.NAME(name),
+				ARNS_TAGS.FROM_PROCESS(ARIO.ARNS_REGISTRY)
 			]
 		})
 	}
@@ -37,8 +40,8 @@ export class ARNSDataService implements IARNSDataService {
 		return this.reactiveMessageService.streamAllMessages({
 			tags: [
 				ARNS_TAGS.ACTION.RECORD_NOTICE,
-				ARNS_TAGS.ACTION.NAME(name),
-				ARNS_TAGS.ACTION.FROM_PROCESS(ARIO.ARNS_REGISTRY)
+				ARNS_TAGS.NAME(name),
+				ARNS_TAGS.FROM_PROCESS(ARIO.ARNS_REGISTRY)
 			]
 		})
 	}
@@ -47,8 +50,8 @@ export class ARNSDataService implements IARNSDataService {
 		return this.reactiveMessageService.streamAllMessages({
 			tags: [
 				ARNS_TAGS.ACTION.UPGRADENAME_NOTICE,
-				ARNS_TAGS.ACTION.NAME(name),
-				ARNS_TAGS.ACTION.FROM_PROCESS(ARIO.ARNS_REGISTRY)
+				ARNS_TAGS.NAME(name),
+				ARNS_TAGS.FROM_PROCESS(ARIO.ARNS_REGISTRY)
 			]
 		})
 	}
@@ -57,8 +60,8 @@ export class ARNSDataService implements IARNSDataService {
 		return this.reactiveMessageService.streamAllMessages({
 			tags: [
 				ARNS_TAGS.ACTION.EXTENDLEASE_NOTICE,
-				ARNS_TAGS.ACTION.NAME(name),
-				ARNS_TAGS.ACTION.FROM_PROCESS(ARIO.ARNS_REGISTRY)
+				ARNS_TAGS.NAME(name),
+				ARNS_TAGS.FROM_PROCESS(ARIO.ARNS_REGISTRY)
 			]
 		})
 	}
@@ -67,8 +70,8 @@ export class ARNSDataService implements IARNSDataService {
 		return this.reactiveMessageService.streamAllMessages({
 			tags: [
 				ARNS_TAGS.ACTION.INCREASEUNDERNAMELIMIT_NOTICE,
-				ARNS_TAGS.ACTION.NAME(name),
-				ARNS_TAGS.ACTION.FROM_PROCESS(ARIO.ARNS_REGISTRY)
+				ARNS_TAGS.NAME(name),
+				ARNS_TAGS.FROM_PROCESS(ARIO.ARNS_REGISTRY)
 			]
 		})
 	}
@@ -77,8 +80,8 @@ export class ARNSDataService implements IARNSDataService {
 		return this.reactiveMessageService.streamAllMessages({
 			tags: [
 				ARNS_TAGS.ACTION.REASSIGNNAME_NOTICE,
-				ARNS_TAGS.ACTION.NAME(name),
-				ARNS_TAGS.ACTION.FROM_PROCESS(ARIO.ARNS_REGISTRY)
+				ARNS_TAGS.NAME(name),
+				ARNS_TAGS.FROM_PROCESS(ARIO.ARNS_REGISTRY)
 			]
 		})
 	}
@@ -87,8 +90,8 @@ export class ARNSDataService implements IARNSDataService {
 		return this.reactiveMessageService.streamAllMessages({
 			tags: [
 				ARNS_TAGS.ACTION.RETURNEDNAME_NOTICE,
-				ARNS_TAGS.ACTION.NAME(name),
-				ARNS_TAGS.ACTION.FROM_PROCESS(ARIO.ARNS_REGISTRY)
+				ARNS_TAGS.NAME(name),
+				ARNS_TAGS.FROM_PROCESS(ARIO.ARNS_REGISTRY)
 			]
 		})
 	}
