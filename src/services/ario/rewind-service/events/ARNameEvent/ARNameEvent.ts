@@ -24,6 +24,11 @@ export class ARNameEvent implements IARNameEvent {
 		return TagUtils.getTagValue(this.getTags(), ARNS_NAME_TAG_NAME)!;
 	}
 
+	toString(): string {
+		const timestamp = new Date(this.getEventTimeStamp() * 1000).toISOString();
+		return `${this.constructor.name}{messageId: ${this.getEventMessageId()}, timestamp: ${timestamp}, arnsName: ${this.getARNSName()}, processId: ${this.getARNSProcessId()}}`;
+	}
+
 	// Private //
 	private getTags(): Tags {
 		return this.arweaveTransaction.tags!
