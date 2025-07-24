@@ -3,7 +3,7 @@ import { IncreaseUndernameNoticeTransactionData } from "../../../../arns-data-se
 import { IARNameEvent } from "./IARNameEvent";
 
 export interface IIncreaseUndernameEvent extends IARNameEvent {
-	getNotice(): Promise<IncreaseUndernameNoticeTransactionData>;
+	getNoticeData(): Promise<IncreaseUndernameNoticeTransactionData>;
 	getTotalFee(): Promise<CurrencyAmount>;
 	getPayer(): Promise<string>;
 	getType(): Promise<string>;

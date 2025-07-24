@@ -26,27 +26,27 @@ export class RecordEvent extends ARNameEvent implements IRecordEvent {
 		);
 	}
 
-	async getNotice(): Promise<RecordNoticeTransactionData> {
+	async getNoticeData(): Promise<RecordNoticeTransactionData> {
 		return await this.transactionDataPromise;
 	}
 
 	async getPurchasePrice(): Promise<CurrencyAmount> {
-		const notice = await this.getNotice();
+		const notice = await this.getNoticeData();
 		return new CurrencyAmount(BigInt(notice.purchasePrice), ARIO_TOKEN.decimals);
 	}
 
 	async getType(): Promise<string> {
-		const notice = await this.getNotice();
+		const notice = await this.getNoticeData();
 		return notice.type;
 	}
 
 	async getStartTime(): Promise<number> {
-		const notice = await this.getNotice();
+		const notice = await this.getNoticeData();
 		return notice.startTimestamp;
 	}
 
 	async getUndernameLimit(): Promise<number> {
-		const notice = await this.getNotice();
+		const notice = await this.getNoticeData();
 		return notice.undernameLimit;
 	}
 }

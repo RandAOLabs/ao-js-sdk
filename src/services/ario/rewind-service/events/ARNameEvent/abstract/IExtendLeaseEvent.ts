@@ -3,7 +3,7 @@ import { ExtendLeaseNoticeTransactionData } from "../../../../arns-data-service/
 import { IARNameEvent } from "./IARNameEvent";
 
 export interface IExtendLeaseEvent extends IARNameEvent {
-	getNotice(): Promise<ExtendLeaseNoticeTransactionData>;
+	getNoticeData(): Promise<ExtendLeaseNoticeTransactionData>;
 	getTotalFee(): Promise<CurrencyAmount>;
 	getPayer(): Promise<string>;
 	getType(): Promise<string>;

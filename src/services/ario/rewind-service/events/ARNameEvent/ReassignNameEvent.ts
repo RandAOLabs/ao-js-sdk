@@ -25,33 +25,37 @@ export class ReassignNameEvent extends ARNameEvent implements IReassignNameEvent
 			this.arweaveTransaction.id
 		);
 	}
+	async getReassignedProcessId(): Promise<string> {
+		const notice = await this.getNoticeData();
+		return notice.processId;
+	}
 
-	async getNotice(): Promise<ReassignNameNoticeTransactionData> {
+	async getNoticeData(): Promise<ReassignNameNoticeTransactionData> {
 		return await this.transactionDataPromise;
 	}
 
 	async getPurchasePrice(): Promise<CurrencyAmount> {
-		const notice = await this.getNotice();
+		const notice = await this.getNoticeData();
 		return new CurrencyAmount(BigInt(notice.purchasePrice), ARIO_TOKEN.decimals);
 	}
 
 	async getType(): Promise<string> {
-		const notice = await this.getNotice();
+		const notice = await this.getNoticeData();
 		return notice.type;
 	}
 
 	async getStartTime(): Promise<number> {
-		const notice = await this.getNotice();
+		const notice = await this.getNoticeData();
 		return notice.startTimestamp;
 	}
 
 	async getEndTime(): Promise<number> {
-		const notice = await this.getNotice();
+		const notice = await this.getNoticeData();
 		return notice.endTimestamp;
 	}
 
 	async getUndernameLimit(): Promise<number> {
-		const notice = await this.getNotice();
+		const notice = await this.getNoticeData();
 		return notice.undernameLimit;
 	}
 }

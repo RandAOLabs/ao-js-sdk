@@ -24,27 +24,27 @@ export class ReturnedNameEvent extends ARNameEvent implements IReturnedNameEvent
 		);
 	}
 
-	async getNotice(): Promise<ReturnedNameNoticeTransactionData> {
+	async getNoticeData(): Promise<ReturnedNameNoticeTransactionData> {
 		return await this.transactionDataPromise;
 	}
 
 	async getInitiator(): Promise<string> {
-		const notice = await this.getNotice();
+		const notice = await this.getNoticeData();
 		return notice.initiator;
 	}
 
 	async getStartTime(): Promise<number> {
-		const notice = await this.getNotice();
+		const notice = await this.getNoticeData();
 		return notice.startTimestamp;
 	}
 
 	async getEndTime(): Promise<number> {
-		const notice = await this.getNotice();
+		const notice = await this.getNoticeData();
 		return notice.endTimestamp;
 	}
 
 	async getName(): Promise<string> {
-		const notice = await this.getNotice();
+		const notice = await this.getNoticeData();
 		return notice.name;
 	}
 }

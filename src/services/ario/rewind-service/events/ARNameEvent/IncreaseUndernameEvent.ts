@@ -26,37 +26,37 @@ export class IncreaseUndernameEvent extends ARNameEvent implements IIncreaseUnde
 		);
 	}
 
-	async getNotice(): Promise<IncreaseUndernameNoticeTransactionData> {
+	async getNoticeData(): Promise<IncreaseUndernameNoticeTransactionData> {
 		return await this.transactionDataPromise;
 	}
 
 	async getTotalFee(): Promise<CurrencyAmount> {
-		const notice = await this.getNotice();
+		const notice = await this.getNoticeData();
 		return new CurrencyAmount(BigInt(notice.totalFee), ARIO_TOKEN.decimals);
 	}
 
 	async getPayer(): Promise<string> {
-		const notice = await this.getNotice();
+		const notice = await this.getNoticeData();
 		return notice.fundingPlan.address;
 	}
 
 	async getType(): Promise<string> {
-		const notice = await this.getNotice();
+		const notice = await this.getNoticeData();
 		return notice.record.type;
 	}
 
 	async getStartTime(): Promise<number> {
-		const notice = await this.getNotice();
+		const notice = await this.getNoticeData();
 		return notice.record.startTimestamp;
 	}
 
 	async getUndernameLimit(): Promise<number> {
-		const notice = await this.getNotice();
+		const notice = await this.getNoticeData();
 		return notice.record.undernameLimit;
 	}
 
 	async getRecordsCount(): Promise<number> {
-		const notice = await this.getNotice();
+		const notice = await this.getNoticeData();
 		return notice.recordsCount;
 	}
 }
