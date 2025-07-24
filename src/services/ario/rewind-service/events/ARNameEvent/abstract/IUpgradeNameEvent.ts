@@ -3,7 +3,7 @@ import { UpgradeNameNoticeTransactionData } from "../../../../arns-data-service/
 import { IARNameEvent } from "./IARNameEvent";
 
 export interface IUpgradeNameEvent extends IARNameEvent {
-	getNotice(): Promise<UpgradeNameNoticeTransactionData>;
+	getNoticeData(): Promise<UpgradeNameNoticeTransactionData>;
 	getPurchasePrice(): Promise<CurrencyAmount>;
 	getType(): Promise<string>;
 	getStartTime(): Promise<number>;

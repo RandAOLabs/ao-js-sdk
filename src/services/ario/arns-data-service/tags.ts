@@ -1,5 +1,4 @@
 import { Tag } from "../../../core/common/types";
-import { ARIO } from "../../../processes/ids/ario";
 
 export const ARNS_ACTION_TAG_NAME = "Action"
 export const ARNS_NAME_TAG_NAME = "Name"

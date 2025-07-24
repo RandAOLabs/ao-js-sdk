@@ -3,7 +3,7 @@ import { RecordNoticeTransactionData } from "../../../../arns-data-service/abstr
 import { IARNameEvent } from "./IARNameEvent";
 
 export interface IRecordEvent extends IARNameEvent {
-	getNotice(): Promise<RecordNoticeTransactionData>;
+	getNoticeData(): Promise<RecordNoticeTransactionData>;
 	getPurchasePrice(): Promise<CurrencyAmount>;
 	getType(): Promise<string>;
 	getStartTime(): Promise<number>;

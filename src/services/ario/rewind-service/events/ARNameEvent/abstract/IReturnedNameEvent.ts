@@ -2,7 +2,7 @@ import { ReturnedNameNoticeTransactionData } from "../../../../arns-data-service
 import { IARNameEvent } from "./IARNameEvent";
 
 export interface IReturnedNameEvent extends IARNameEvent {
-	getNotice(): Promise<ReturnedNameNoticeTransactionData>;
+	getNoticeData(): Promise<ReturnedNameNoticeTransactionData>;
 	getInitiator(): Promise<string>;
 	getStartTime(): Promise<number>;
 	getEndTime(): Promise<number>;
