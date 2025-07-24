@@ -68,7 +68,22 @@ describe("TokenClient", () => {
 		it("should fetch balance with correct parameters", async () => {
 			// Arrange
 			const identifier = "test-identifier";
-			const mockResponse = { Messages: [{ Data: "10" }] };
+			const mockResponse = {
+				Messages: [
+					{
+						Data: "\"14410475982006561026494\"",
+						Tags: [
+							{ name: "Data-Protocol", value: "ao" },
+							{ name: "Variant", value: "ao.TN.1" },
+							{ name: "Type", value: "Message" },
+							{ name: "Reference", value: "2206" },
+							{ name: "Action", value: "Balance-Response" },
+							{ name: "Account", value: "V4XAxkILMSopedTbzS9aG7PUBESljte11vebh45Ccyo" },
+							{ name: "Balance", value: "14410475982006561026494" }
+						]
+					}
+				]
+			};
 			(dryrun as jest.Mock).mockResolvedValueOnce(mockResponse);
 
 			// Act
