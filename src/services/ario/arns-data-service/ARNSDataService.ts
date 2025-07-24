@@ -3,8 +3,8 @@ import { ArweaveTransaction } from "../../../core/arweave/abstract/types";
 import { IARNSDataService } from "./abstract";
 import { staticImplements, IAutoconfiguration } from "../../../utils";
 import { IReactiveMessageService, ReactiveMessageService } from "../../messages";
-import { ARNS_TAGS } from "../shared";
 import { ARIO } from "../../../processes/ids/ario";
+import { ARNS_TAGS } from "./tags";
 
 
 @staticImplements<IAutoconfiguration>()
