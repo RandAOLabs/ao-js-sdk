@@ -1,6 +1,6 @@
 import { ArweaveTransaction } from "../../../../core/arweave/abstract/types";
-import { IBuyNameEvent } from "../arns-event/abstract/IBuyNameEvent";
-import { BuyNameEvent } from "../arns-event/BuyNameEvent";
+import { IBuyNameEvent } from "../events/ARNameEvent/abstract/IBuyNameEvent";
+import { BuyNameEvent } from "../events/ARNameEvent/BuyNameEvent";
 
 /**
  * Converter implementation for transforming Arweave transactions to BuyNameEvent objects

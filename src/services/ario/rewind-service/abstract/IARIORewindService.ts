@@ -1,5 +1,5 @@
 import { Observable } from "rxjs";
-import { IARNSNameEvent, IARNSUndernameNameEvent } from "../arns-event";
+import { IARNameEvent, IANTEvent, IARNSEvent } from "../events";
 
 /**
  * ARIO Rewind Service
@@ -16,5 +16,5 @@ export interface IARIORewindService {
 	 * @param fullName The full ARNS name to get event history for
 	 * @returns Observable of ARNS undername name events
 	 */
-	getEventHistory(fullName: string): Observable<IARNSNameEvent[]>;
+	getEventHistory(fullName: string): Observable<IARNSEvent[]>;
 }

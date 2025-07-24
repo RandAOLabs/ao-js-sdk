@@ -1,9 +1,8 @@
 import { Observable, merge } from "rxjs";
 import { map, scan, startWith } from "rxjs/operators";
 import { staticImplements, IAutoconfiguration } from "../../../utils";
-import { IReactiveMessageService, ReactiveMessageService } from "../../messages";
-import { IARIORewindService } from "./abstract";
-import { IARNSNameEvent, IARNSUndernameNameEvent } from "./arns-event";
+import { IANTEventHistoryService, IARIORewindService, IARNameEventHistoryService } from "./abstract";
+import { IARNameEvent, IANTEvent, IARNSEvent } from "./events";
 import { ARNSDataService, IARNSDataService } from "../arns-data-service";
 import { FullARNSName } from "../shared/arns/FullARNSName";
 import {
@@ -15,6 +14,9 @@ import {
 	ReturnedNameEventConverter,
 	UpgradeNameEventConverter
 } from "./converters";
+import { ANTDataService, IANTDataService } from "../ant-data-service";
+import { ARNameEventHistoryService } from "./ARNameEventHistoryService";
+import { ANTEventHistoryService } from "./ANTEventHistoryService";
 
 /**
  * @category ARIO
@@ -22,7 +24,8 @@ import {
 @staticImplements<IAutoconfiguration>()
 export class ARIORewindService implements IARIORewindService {
 	constructor(
-		private readonly arnsDataService: IARNSDataService,
+		private readonly arnEventHistoryService: IARNameEventHistoryService,
+		private readonly antEventHistoryService: IANTEventHistoryService
 	) { }
 
 	/**
@@ -31,34 +34,33 @@ export class ARIORewindService implements IARIORewindService {
 	 */
 	public static autoConfiguration(): IARIORewindService {
 		return new ARIORewindService(
-			ARNSDataService.autoConfiguration(),
+			ARNameEventHistoryService.autoConfiguration(),
+			ANTEventHistoryService.autoConfiguration()
 		);
 	}
 
-	getEventHistory(fullName: string): Observable<IARNSNameEvent[]> {
+	getEventHistory(fullName: string): Observable<IARNSEvent[]> {
 		const fullARNSName = new FullARNSName(fullName);
 
-		return this.getARNSNameEvents(fullARNSName.getARNSName());
-		// TODO: Add undername events support
-		// if (fullARNSName.hasUndername()) {
-		// 	this.getUnderNameEvents(fullARNSName.getUndername()!)
-		// }
-	}
+		const buyNameEvents = this.arnEventHistoryService.getBuyNameEvents(fullARNSName.getARNSName())//This One
+		const extendLeaseEvents = this.arnEventHistoryService.getExtendLeaseEvents(fullARNSName.getARNSName())
+		const increaseUndernameEvents = this.arnEventHistoryService.getIncreaseUndernameEvents(fullARNSName.getARNSName())
+		const reassugnNameEvents = this.arnEventHistoryService.getReassignNameEvents(fullARNSName.getARNSName())//This one
+		const recordEvents = this.arnEventHistoryService.getRecordEvents(fullARNSName.getARNSName())
+		const returnedNameEvents = this.arnEventHistoryService.getReturnedNameEvents(fullARNSName.getARNSName())
+		const upgradeNameEvents = this.arnEventHistoryService.getUpgradeNameEvents(fullARNSName.getARNSName())
 
-	// Private //
-
-	private getARNSNameEvents(name: string): Observable<IARNSNameEvent[]> {
 		return merge(
-			this.getBuyNameEvents(name),
-			this.getExtendLeaseEvents(name),
-			this.getIncreaseUndernameEvents(name),
-			this.getReassignNameEvents(name),
-			this.getRecordEvents(name),
-			this.getReturnedNameEvents(name),
-			this.getUpgradeNameEvents(name)
+			buyNameEvents,
+			extendLeaseEvents,
+			increaseUndernameEvents,
+			reassugnNameEvents,
+			recordEvents,
+			returnedNameEvents,
+			upgradeNameEvents,
 		).pipe(
 			// Accumulate events as they arrive from different sources
-			scan((allEvents: IARNSNameEvent[], newEvents: IARNSNameEvent[]) => {
+			scan((allEvents: IARNameEvent[], newEvents: IARNameEvent[]) => {
 				return [...allEvents, ...newEvents];
 			}, []),
 			// Start with an empty array
@@ -66,51 +68,5 @@ export class ARIORewindService implements IARIORewindService {
 		);
 	}
 
-	private getBuyNameEvents(name: string): Observable<IARNSNameEvent[]> {
-		return this.arnsDataService.getBuyNameNotices(name).pipe(
-			map(transactions => BuyNameEventConverter.convertMany(transactions))
-		);
-	}
-
-	private getExtendLeaseEvents(name: string): Observable<IARNSNameEvent[]> {
-		return this.arnsDataService.getExtendLeaseNotices(name).pipe(
-			map(transactions => ExtendLeaseEventConverter.convertMany(transactions))
-		);
-	}
-
-	private getIncreaseUndernameEvents(name: string): Observable<IARNSNameEvent[]> {
-		return this.arnsDataService.getIncreaseUndernameNotices(name).pipe(
-			map(transactions => IncreaseUndernameEventConverter.convertMany(transactions))
-		);
-	}
-
-	private getReassignNameEvents(name: string): Observable<IARNSNameEvent[]> {
-		return this.arnsDataService.getReassignNameNotices(name).pipe(
-			map(transactions => ReassignNameEventConverter.convertMany(transactions))
-		);
-	}
-
-	private getRecordEvents(name: string): Observable<IARNSNameEvent[]> {
-		return this.arnsDataService.getRecordNotices(name).pipe(
-			map(transactions => RecordEventConverter.convertMany(transactions))
-		);
-	}
-
-	private getReturnedNameEvents(name: string): Observable<IARNSNameEvent[]> {
-		return this.arnsDataService.getReturnedNameNotices(name).pipe(
-			map(transactions => ReturnedNameEventConverter.convertMany(transactions))
-		);
-	}
-
-	private getUpgradeNameEvents(name: string): Observable<IARNSNameEvent[]> {
-		return this.arnsDataService.getUpgradeNameNotices(name).pipe(
-			map(transactions => UpgradeNameEventConverter.convertMany(transactions))
-		);
-	}
-
-	private getUnderNameEvents(undername: string): Observable<IARNSNameEvent[]> {
-
-		throw new Error("Method not implemented.");//TODO
-	}
 
 }

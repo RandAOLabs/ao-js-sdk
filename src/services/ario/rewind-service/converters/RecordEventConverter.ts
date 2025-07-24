@@ -1,6 +1,6 @@
 import { ArweaveTransaction } from "../../../../core/arweave/abstract/types";
-import { IRecordEvent } from "../arns-event/abstract/IRecordEvent";
-import { RecordEvent } from "../arns-event/RecordEvent";
+import { IRecordEvent } from "../events/ARNameEvent/abstract/IRecordEvent";
+import { RecordEvent } from "../events/ARNameEvent/RecordEvent";
 
 /**
  * Converter implementation for transforming Arweave transactions to RecordEvent objects

@@ -1,6 +1,6 @@
 import { ArweaveTransaction } from "../../../../core/arweave/abstract/types";
-import { IReturnedNameEvent } from "../arns-event/abstract/IReturnedNameEvent";
-import { ReturnedNameEvent } from "../arns-event/ReturnedNameEvent";
+import { IReturnedNameEvent } from "../events/ARNameEvent/abstract/IReturnedNameEvent";
+import { ReturnedNameEvent } from "../events/ARNameEvent/ReturnedNameEvent";
 
 /**
  * Converter implementation for transforming Arweave transactions to ReturnedNameEvent objects

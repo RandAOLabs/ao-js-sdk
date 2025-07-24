@@ -1,6 +1,6 @@
 import { ArweaveTransaction } from "../../../../core/arweave/abstract/types";
-import { IUpgradeNameEvent } from "../arns-event/abstract/IUpgradeNameEvent";
-import { UpgradeNameEvent } from "../arns-event/UpgradeNameEvent";
+import { IUpgradeNameEvent } from "../events/ARNameEvent/abstract/IUpgradeNameEvent";
+import { UpgradeNameEvent } from "../events/ARNameEvent/UpgradeNameEvent";
 
 /**
  * Converter implementation for transforming Arweave transactions to UpgradeNameEvent objects

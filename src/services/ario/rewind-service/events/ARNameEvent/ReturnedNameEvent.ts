@@ -1,11 +1,11 @@
-import { ArweaveTransaction } from "../../../../core/arweave/abstract/types";
-import { IArweaveDataService } from "../../../../core/arweave/abstract/IArweaveDataService";
-import { ArweaveDataService } from "../../../../core/arweave/ArweaveDataService";
-import { ReturnedNameNoticeTransactionData } from "../../arns-data-service/abstract/transaction-data/ReturnedNameNoticeTransactionData";
+import { ArweaveTransaction } from "../../../../../core/arweave/abstract/types";
+import { IArweaveDataService } from "../../../../../core/arweave/abstract/IArweaveDataService";
+import { ArweaveDataService } from "../../../../../core/arweave/ArweaveDataService";
+import { ReturnedNameNoticeTransactionData } from "../../../arns-data-service/abstract/transaction-data/ReturnedNameNoticeTransactionData";
 import { IReturnedNameEvent } from "./abstract/IReturnedNameEvent";
-import { ARNSNameEvent } from "./ARNSNameEvent";
+import { ARNameEvent } from "./ARNameEvent";
 
-export class ReturnedNameEvent extends ARNSNameEvent implements IReturnedNameEvent {
+export class ReturnedNameEvent extends ARNameEvent implements IReturnedNameEvent {
 	private readonly transactionDataPromise: Promise<ReturnedNameNoticeTransactionData>;
 	private readonly arweaveDataService: IArweaveDataService;
 

@@ -1,6 +1,6 @@
 import { ArweaveTransaction } from "../../../../core/arweave/abstract/types";
-import { IReassignNameEvent } from "../arns-event/abstract/IReassignNameEvent";
-import { ReassignNameEvent } from "../arns-event/ReassignNameEvent";
+import { IReassignNameEvent } from "../events/ARNameEvent/abstract/IReassignNameEvent";
+import { ReassignNameEvent } from "../events/ARNameEvent/ReassignNameEvent";
 
 /**
  * Converter implementation for transforming Arweave transactions to ReassignNameEvent objects

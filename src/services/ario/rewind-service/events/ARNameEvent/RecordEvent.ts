@@ -1,13 +1,13 @@
-import { ArweaveTransaction } from "../../../../core/arweave/abstract/types";
-import { IArweaveDataService } from "../../../../core/arweave/abstract/IArweaveDataService";
-import { ArweaveDataService } from "../../../../core/arweave/ArweaveDataService";
-import { CurrencyAmount } from "../../../../models/currency/CurrencyAmount";
-import { RecordNoticeTransactionData } from "../../arns-data-service/abstract/transaction-data/RecordNoticeTransactionData";
+import { ArweaveTransaction } from "../../../../../core/arweave/abstract/types";
+import { IArweaveDataService } from "../../../../../core/arweave/abstract/IArweaveDataService";
+import { ArweaveDataService } from "../../../../../core/arweave/ArweaveDataService";
+import { CurrencyAmount } from "../../../../../models/currency/CurrencyAmount";
+import { RecordNoticeTransactionData } from "../../../arns-data-service/abstract/transaction-data/RecordNoticeTransactionData";
 import { IRecordEvent } from "./abstract/IRecordEvent";
-import { ARNSNameEvent } from "./ARNSNameEvent";
-import { ARIO_TOKEN } from "../../../../processes/maps/currencies";
+import { ARNameEvent } from "./ARNameEvent";
+import { ARIO_TOKEN } from "../../../../../processes/maps/currencies";
 
-export class RecordEvent extends ARNSNameEvent implements IRecordEvent {
+export class RecordEvent extends ARNameEvent implements IRecordEvent {
 	private readonly transactionDataPromise: Promise<RecordNoticeTransactionData>;
 	private readonly arweaveDataService: IArweaveDataService;
 
