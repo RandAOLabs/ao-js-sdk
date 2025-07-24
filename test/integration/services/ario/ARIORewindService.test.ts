@@ -5,12 +5,10 @@ import { firstValueFrom, lastValueFrom, timeout } from "rxjs";
 import { ARNSDataService } from "../../../../src";
 
 describe("ARIORewindService Integration Tests", () => {
-	let service: ARIORewindService;
+	let service: IARIORewindService;
 
 	beforeEach(() => {
-		service = new ARIORewindService(
-			ARNSDataService.autoConfiguration(),
-		);
+		service = ARIORewindService.autoConfiguration()
 	});
 
 	it("should get event history for a domain and print results", async () => {
@@ -21,8 +19,12 @@ describe("ARIORewindService Integration Tests", () => {
 		const eventHistory$ = service.getEventHistory(testDomainName);
 		const result = await lastValueFrom(eventHistory$.pipe(timeout(30000)));
 
-		Logger.info(`Event history result for '${testDomainName}':`, result[0].getARNSName());
 		Logger.info(`Number of events found: ${result.length}`);
+
+		// Loop through all results and print their toString() output
+		for (let i = 0; i < result.length; i++) {
+			Logger.info(`Event ${i + 1}: ${result[i].toString()}`);
+		}
 
 
 

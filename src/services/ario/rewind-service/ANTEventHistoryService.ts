@@ -1,8 +1,10 @@
 import { Observable } from "rxjs";
+import { map } from "rxjs/operators";
 import { staticImplements, IAutoconfiguration } from "../../../utils";
 import { IANTEvent } from "./events";
 import { ANTDataService, IANTDataService } from "../ant-data-service";
 import { IANTEventHistoryService } from "./abstract/IANTEventHistoryService";
+import { ANTEvent } from "./events/ANTEvent/ANTEvent";
 
 /**
  * @category ARIO
@@ -25,10 +27,9 @@ export class ANTEventHistoryService implements IANTEventHistoryService {
 
 
 	public getANTEvents(processId: string): Observable<IANTEvent[]> {
-
-		this.antDataService.getStateNotices(processId)
-
-		throw new Error("Method not implemented.");//TODO
+		return this.antDataService.getStateNotices(processId).pipe(
+			map(transactions => transactions.map(transaction => new ANTEvent(transaction)))
+		);
 	}
 
 }
