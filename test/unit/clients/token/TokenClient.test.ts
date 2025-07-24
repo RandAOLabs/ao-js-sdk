@@ -91,7 +91,7 @@ describe("TokenClient", () => {
 
 			// Assert
 			expect(dryrun).toHaveBeenCalled();
-			expect(response).toEqual("10");
+			expect(response).toEqual("14410475982006561026494");
 		});
 	});
 
