@@ -19,7 +19,7 @@ export class ARNSDataService implements IARNSDataService {
 	 */
 	public static autoConfiguration(): IARNSDataService {
 		return new ARNSDataService(
-			ReactiveMessageService.autoConfiguration()
+			ReactiveMessageService.autoConfiguration(),
 		);
 	}
 
