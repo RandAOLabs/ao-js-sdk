@@ -9,6 +9,9 @@ import { ANT_TAGS } from "./tags";
 import { IArweaveDataService, ArweaveDataService } from "../../../core";
 import { AntState } from "./types";
 
+/**
+ * @category ARIO
+ */
 @staticImplements<IAutoconfiguration>()
 export class ANTDataService implements IANTDataService {
 	constructor(

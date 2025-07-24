@@ -1,5 +1,5 @@
-import { IARNSEvent } from "./IARNSNameEvent";
+import { IARNSNameEvent } from "./IARNSNameEvent";
 
-export interface IARNSNameEvent extends IARNSEvent {
+export interface IARNSUndernameNameEvent extends IARNSNameEvent {
 	getARNSUnderName(): string;
 }
