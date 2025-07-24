@@ -1,7 +1,7 @@
 import { ITokenClient, IGrantToken, TokenInfo } from "./abstract";
 import { TRANSFER_SUCCESS_MESSAGE } from "./constants";
 import { ClientError } from "../../common/ClientError";
-import { Tags, TagUtils } from "../../../core";
+import { Tag, Tags, TagUtils } from "../../../core";
 import { BaseClient } from "../../../core/ao/BaseClient";
 import ResultUtils from "../../../core/common/result-utils/ResultUtils";
 import { Logger } from "../../../utils/index";
@@ -56,7 +56,7 @@ export class TokenClient extends BaseClient implements ITokenClient, IGrantToken
 				{ name: "Action", value: "Balance" },
 				{ name: "Target", value: identifier }
 			]);
-			return response.Messages[0].Data // Unsafe Typing
+			return response.Messages[0].Tags.find((tag: Tag) => tag.name === "Balance").value;
 		} catch (error: any) {
 			throw new ClientError(this, this.balance, identifier, error);
 		}
