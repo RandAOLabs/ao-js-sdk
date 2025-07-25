@@ -1,5 +1,4 @@
 import { IARNSClient } from "./abstract/IARNSClient";
-import { ARNSRecord } from "./abstract/types";
 import { DOMAIN_SEPARATOR } from "./constants";
 import { DryRunCachingClient } from "../../../core/ao/client-variants";
 import ResultUtils from "../../../core/common/result-utils/ResultUtils";
@@ -10,6 +9,8 @@ import { staticImplements } from "../../../utils";
 import { PROCESS_IDS } from "../../../processes/ids";
 import { ClientError } from "../../common/ClientError";
 import { InputValidationError } from "../../bazar";
+import { ARNS_QUERY_TAGS } from "../../../models";
+import { ARNSRecordResponse } from "./abstract";
 
 /**
  * Client for interacting with ARNS (Arweave Name Service) records.
@@ -18,18 +19,18 @@ import { InputValidationError } from "../../bazar";
 @staticImplements<IAutoconfiguration>()
 @staticImplements<IDefaultBuilder>()
 export class ARNSClient extends DryRunCachingClient implements IARNSClient {
-	/** 
+	/**
 	 * {@inheritdoc IAutoconfiguration.autoConfiguration}
-	 * @see {@link IAutoconfiguration.autoConfiguration} 
+	 * @see {@link IAutoconfiguration.autoConfiguration}
 	 */
 	public static autoConfiguration(): ARNSClient {
 		return ARNSClient.defaultBuilder()
 			.build()
 	}
 
-	/** 
+	/**
 	 * {@inheritdoc IDefaultBuilder.defaultBuilder}
-	 * @see {@link IDefaultBuilder.defaultBuilder} 
+	 * @see {@link IDefaultBuilder.defaultBuilder}
 	 */
 	public static defaultBuilder(): ClientBuilder<ARNSClient> {
 		return new ClientBuilder(ARNSClient)
@@ -42,16 +43,16 @@ export class ARNSClient extends DryRunCachingClient implements IARNSClient {
 	 * @param name - The name to get the ARNS record for
 	 * @returns Promise resolving to the ARNS record if found, undefined otherwise
 	 */
-	public async getRecord(name: string): Promise<ARNSRecord | undefined> {
+	public async getRecord(name: string): Promise<ARNSRecordResponse | undefined> {
 		try {
 			// Validate name format
 			this.validateDomainFormat(name);
 
 			const result = await this.dryrun('', [
-				{ name: "Action", value: "Record" },
-				{ name: "Name", value: name }
+				ARNS_QUERY_TAGS.ACTION.RECORD,
+				ARNS_QUERY_TAGS.NAME(name)
 			]);
-			return ResultUtils.getFirstMessageDataJson<ARNSRecord>(result);
+			return ResultUtils.getFirstMessageDataJson<ARNSRecordResponse>(result);
 		} catch (error: any) {
 			throw new ClientError(this, this.getRecord, { name }, error);
 		}

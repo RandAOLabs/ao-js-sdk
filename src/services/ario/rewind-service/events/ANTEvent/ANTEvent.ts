@@ -3,12 +3,12 @@ import { ArweaveTransaction } from "../../../../../core/arweave/abstract/types";
 import { IArweaveDataService } from "../../../../../core/arweave/abstract/IArweaveDataService";
 import { ArweaveDataService } from "../../../../../core/arweave/ArweaveDataService";
 import { FROM_PROCESS_TAG_NAME } from "../../../../credit-notices/constants";
-import { ARNS_NAME_TAG_NAME } from "../../../arns-data-service/tags";
-import { AntState } from "../../../ant-data-service/types";
+import { ARNS_NAME_TAG_NAME } from "../../../../../models/ario/arns/tags";
 import { IANTEvent } from "./abstract";
+import { ANTState } from "../../../../../models";
 
 export class ANTEvent implements IANTEvent {
-	private readonly transactionDataPromise: Promise<AntState>;
+	private readonly transactionDataPromise: Promise<ANTState>;
 	private readonly arweaveDataService: IArweaveDataService;
 
 	constructor(
@@ -20,12 +20,12 @@ export class ANTEvent implements IANTEvent {
 			throw new Error('Transaction ID is required for ANTEvent');
 		}
 
-		this.transactionDataPromise = this.arweaveDataService.getTransactionData<AntState>(
+		this.transactionDataPromise = this.arweaveDataService.getTransactionData<ANTState>(
 			this.arweaveTransaction.id
 		);
 	}
 
-	async getNoticeData(): Promise<AntState> {
+	async getNoticeData(): Promise<ANTState> {
 		return await this.transactionDataPromise;
 	}
 

@@ -1,5 +1,6 @@
 import { Observable } from "rxjs";
-import { IARNameEvent, IANTEvent, IARNSEvent } from "../events";
+import { IARNSEvent } from "../events";
+import { ARNameDetail } from "./responseTypes";
 
 /**
  * ARIO Rewind Service
@@ -17,4 +18,6 @@ export interface IARIORewindService {
 	 * @returns Observable of ARNS undername name events
 	 */
 	getEventHistory(fullName: string): Observable<IARNSEvent[]>;
+
+	getAntDetail(fullName: string): Promise<ARNameDetail>;
 }

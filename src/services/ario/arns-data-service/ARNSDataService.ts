@@ -4,7 +4,7 @@ import { IARNSDataService } from "./abstract";
 import { staticImplements, IAutoconfiguration } from "../../../utils";
 import { IReactiveMessageService, ReactiveMessageService } from "../../messages";
 import { ARIO } from "../../../processes/ids/ario";
-import { ARNS_TAGS } from "./tags";
+import { ARNS_RESPONSE_TAGS } from "../../../models/ario/arns/tags";
 
 
 /**
@@ -29,9 +29,9 @@ export class ARNSDataService implements IARNSDataService {
 	getBuyNameNotices(name: string): Observable<ArweaveTransaction[]> {
 		return this.reactiveMessageService.streamAllMessages({
 			tags: [
-				ARNS_TAGS.ACTION.BUYNAME_NOTICE,
-				ARNS_TAGS.NAME(name),
-				ARNS_TAGS.FROM_PROCESS(ARIO.ARNS_REGISTRY)
+				ARNS_RESPONSE_TAGS.ACTION.BUYNAME_NOTICE,
+				ARNS_RESPONSE_TAGS.NAME(name),
+				ARNS_RESPONSE_TAGS.FROM_PROCESS(ARIO.ARNS_REGISTRY)
 			]
 		})
 	}
@@ -39,9 +39,9 @@ export class ARNSDataService implements IARNSDataService {
 	getRecordNotices(name: string): Observable<ArweaveTransaction[]> {
 		return this.reactiveMessageService.streamAllMessages({
 			tags: [
-				ARNS_TAGS.ACTION.RECORD_NOTICE,
-				ARNS_TAGS.NAME(name),
-				ARNS_TAGS.FROM_PROCESS(ARIO.ARNS_REGISTRY)
+				ARNS_RESPONSE_TAGS.ACTION.RECORD_NOTICE,
+				ARNS_RESPONSE_TAGS.NAME(name),
+				ARNS_RESPONSE_TAGS.FROM_PROCESS(ARIO.ARNS_REGISTRY)
 			]
 		})
 	}
@@ -49,9 +49,9 @@ export class ARNSDataService implements IARNSDataService {
 	getUpgradeNameNotices(name: string): Observable<ArweaveTransaction[]> {
 		return this.reactiveMessageService.streamAllMessages({
 			tags: [
-				ARNS_TAGS.ACTION.UPGRADENAME_NOTICE,
-				ARNS_TAGS.NAME(name),
-				ARNS_TAGS.FROM_PROCESS(ARIO.ARNS_REGISTRY)
+				ARNS_RESPONSE_TAGS.ACTION.UPGRADENAME_NOTICE,
+				ARNS_RESPONSE_TAGS.NAME(name),
+				ARNS_RESPONSE_TAGS.FROM_PROCESS(ARIO.ARNS_REGISTRY)
 			]
 		})
 	}
@@ -59,9 +59,9 @@ export class ARNSDataService implements IARNSDataService {
 	getExtendLeaseNotices(name: string): Observable<ArweaveTransaction[]> {
 		return this.reactiveMessageService.streamAllMessages({
 			tags: [
-				ARNS_TAGS.ACTION.EXTENDLEASE_NOTICE,
-				ARNS_TAGS.NAME(name),
-				ARNS_TAGS.FROM_PROCESS(ARIO.ARNS_REGISTRY)
+				ARNS_RESPONSE_TAGS.ACTION.EXTENDLEASE_NOTICE,
+				ARNS_RESPONSE_TAGS.NAME(name),
+				ARNS_RESPONSE_TAGS.FROM_PROCESS(ARIO.ARNS_REGISTRY)
 			]
 		})
 	}
@@ -69,9 +69,9 @@ export class ARNSDataService implements IARNSDataService {
 	getIncreaseUndernameNotices(name: string): Observable<ArweaveTransaction[]> {
 		return this.reactiveMessageService.streamAllMessages({
 			tags: [
-				ARNS_TAGS.ACTION.INCREASEUNDERNAMELIMIT_NOTICE,
-				ARNS_TAGS.NAME(name),
-				ARNS_TAGS.FROM_PROCESS(ARIO.ARNS_REGISTRY)
+				ARNS_RESPONSE_TAGS.ACTION.INCREASEUNDERNAMELIMIT_NOTICE,
+				ARNS_RESPONSE_TAGS.NAME(name),
+				ARNS_RESPONSE_TAGS.FROM_PROCESS(ARIO.ARNS_REGISTRY)
 			]
 		})
 	}
@@ -79,9 +79,9 @@ export class ARNSDataService implements IARNSDataService {
 	getReassignNameNotices(name: string): Observable<ArweaveTransaction[]> {
 		return this.reactiveMessageService.streamAllMessages({
 			tags: [
-				ARNS_TAGS.ACTION.REASSIGNNAME_NOTICE,
-				ARNS_TAGS.NAME(name),
-				ARNS_TAGS.FROM_PROCESS(ARIO.ARNS_REGISTRY)
+				ARNS_RESPONSE_TAGS.ACTION.REASSIGNNAME_NOTICE,
+				ARNS_RESPONSE_TAGS.NAME(name),
+				ARNS_RESPONSE_TAGS.FROM_PROCESS(ARIO.ARNS_REGISTRY)
 			]
 		})
 	}
@@ -89,9 +89,9 @@ export class ARNSDataService implements IARNSDataService {
 	getReturnedNameNotices(name: string): Observable<ArweaveTransaction[]> {
 		return this.reactiveMessageService.streamAllMessages({
 			tags: [
-				ARNS_TAGS.ACTION.RETURNEDNAME_NOTICE,
-				ARNS_TAGS.NAME(name),
-				ARNS_TAGS.FROM_PROCESS(ARIO.ARNS_REGISTRY)
+				ARNS_RESPONSE_TAGS.ACTION.RETURNEDNAME_NOTICE,
+				ARNS_RESPONSE_TAGS.NAME(name),
+				ARNS_RESPONSE_TAGS.FROM_PROCESS(ARIO.ARNS_REGISTRY)
 			]
 		})
 	}

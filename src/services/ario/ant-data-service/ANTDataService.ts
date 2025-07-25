@@ -5,9 +5,9 @@ import { ArweaveTransaction, ArweaveTransactionWithData } from "../../../core/ar
 import { IANTDataService } from "./abstract";
 import { staticImplements, IAutoconfiguration } from "../../../utils";
 import { IReactiveMessageService, ReactiveMessageService } from "../../messages";
-import { ANT_TAGS } from "./tags";
 import { IArweaveDataService, ArweaveDataService } from "../../../core";
-import { AntState } from "./types";
+import { ANT_RESPONSE_TAGS } from "../../../models/ario/ant/tags";
+import { ANTState } from "../../../models";
 
 /**
  * @category ARIO
@@ -33,8 +33,8 @@ export class ANTDataService implements IANTDataService {
 	getStateNotices(processId: string): Observable<ArweaveTransaction[]> {
 		return this.reactiveMessageService.streamAllMessages({
 			tags: [
-				ANT_TAGS.ACTION.STATE_NOTICE,
-				ANT_TAGS.ACTION.FROM_PROCESS(processId)
+				ANT_RESPONSE_TAGS.ACTION.STATE_NOTICE,
+				ANT_RESPONSE_TAGS.FROM_PROCESS(processId)
 			]
 		})
 	}
@@ -47,7 +47,7 @@ export class ANTDataService implements IANTDataService {
 				}
 
 				const dataObservables = transactions.map(transaction =>
-					from(this.arweaveDataService.getTransactionData<AntState>(transaction.id!)).pipe(
+					from(this.arweaveDataService.getTransactionData<ANTState>(transaction.id!)).pipe(
 						map((data): ArweaveTransactionWithData => ({
 							transaction,
 							data

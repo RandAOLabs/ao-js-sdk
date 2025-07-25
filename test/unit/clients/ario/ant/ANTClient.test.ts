@@ -1,11 +1,11 @@
 
 import { ANTClient } from "src/clients/ario/ant/ANTClient";
 import { BaseClient } from "src/core/ao/BaseClient";
-import { ANTRecord, ANTRecords } from "src/clients/ario/ant/abstract/types";
 import { DryRunCachingClientConfigBuilder } from "src/core/ao/configuration/builder";
 import { ClientError } from "src/clients/common/ClientError";
 import { Logger, LogLevel } from "src/utils";
 import { DryRunResult, MessageResult } from "../../../../../src/core/ao/abstract";
+import { AntRecord } from "../../../../../src";
 
 // Mock BaseClient methods
 jest.spyOn(BaseClient.prototype, 'message').mockResolvedValue("test-message-id");
@@ -16,24 +16,16 @@ const messageResult: MessageResult = {
 }
 jest.spyOn(BaseClient.prototype, 'result').mockResolvedValue(messageResult);
 
-const mockAntRecord: ANTRecord = {
+const mockAntRecord: AntRecord = {
 	transactionId: "test-tx-id",
-	name: "test",
-	metadata: {
-		owner: "test-owner",
-		controller: "test-controller"
-	}
+	ttlSeconds: 0
 };
 
-const mockAntRecords: ANTRecords = {
+const mockAntRecords = {
 	"test": mockAntRecord,
 	"test2": {
-		transactionId: "test-tx-id-2",
-		name: "test2",
-		metadata: {
-			owner: "test-owner-2",
-			controller: "test-controller-2"
-		}
+		transactionId: "test-tx-id2",
+		ttlSeconds: 1
 	}
 };
 

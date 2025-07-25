@@ -1,20 +1,20 @@
-import { ANTRecord, ANTRecords } from "./types";
+import { AntRecord } from "../../../../models";
 
 /**
  * Interface for ANT (Arweave Name Token) client operations
  */
 export interface IANTClient {
-    /**
-     * Retrieves all ANT records
-     * @returns Promise resolving to a record of ANT records
-     */
-    getRecords(): Promise<ANTRecords>;
+	/**
+	 * Retrieves all ANT records
+	 * @returns Promise resolving to a record of ANT records
+	 */
+	getRecords(): Promise<AntRecord>;
 
-    /**
-     * Retrieves a specific ANT record by name
-     * @param name - The name of the ANT record to retrieve
-     * @returns Promise resolving to the ANT record if found, undefined otherwise
-     */
-    getRecord(name: string): Promise<ANTRecord | undefined>;
+	/**
+	 * Retrieves a specific ANT record by name
+	 * @param name - The name of the ANT record to retrieve
+	 * @returns Promise resolving to the ANT record if found, undefined otherwise
+	 */
+	getRecord(name: string): Promise<AntRecord | undefined>;
 
 }

@@ -1,6 +1,6 @@
 import { IARIOService } from './abstract/IARIOService';
 import { ANTClient } from '../../../clients/ario/ant';
-import { ARNSClient, } from '../../../clients/ario/arns';
+import { ARNSClient, ARNSRecordResponse, } from '../../../clients/ario/arns';
 import { ICache, newCache } from '../../../utils/cache';
 import { DOMAIN_SEPARATOR, ARN_ROOT_NAME } from './constants';
 import { DOMAIN, DOMAIN_DEFAULTS } from './domains';
@@ -11,6 +11,7 @@ import { Logger } from '../../../utils';
 import { AO_CONFIGURATIONS } from '../../../core/ao/ao-client/configurations';
 import { ClientError } from '../../../clients/common/ClientError';
 import { InputValidationError } from '../../../clients';
+import { ANTState, FullARNSName } from '../../../models';
 
 /**
  * Service for handling ARIO operations, including ANT and ARNS record management.
@@ -29,6 +30,7 @@ export class ARIOService implements IARIOService {
 		this.config = config
 	}
 
+
 	public static getInstance(config?: ARIOServiceConfig): ARIOService {
 		if (!ARIOService.instance) {
 			if (config) {
@@ -41,6 +43,18 @@ export class ARIOService implements IARIOService {
 		}
 		return ARIOService.instance;
 	}
+
+	async getANTStateForARName(fullName: string): Promise<ANTState> {
+		const fullARNSName = new FullARNSName(fullName);
+		const antClient = await this._getOrCreateAntClient(fullARNSName.getARNSName());
+		return await antClient.getState()
+	}
+
+	async getARNSRecordForARName(fullName: string): Promise<ARNSRecordResponse | undefined> {
+		const fullARNSName = new FullARNSName(fullName);
+		return this.arnsClient.getRecord(fullARNSName.getARNSName())
+	}
+
 
 	/**
 	 * Gets the process ID for a given domain.

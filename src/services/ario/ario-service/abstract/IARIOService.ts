@@ -1,3 +1,5 @@
+import { ARNSRecordResponse } from '../../../../clients';
+import { ANTState } from '../../../../models';
 import { DOMAIN } from '../domains';
 
 /**
@@ -37,4 +39,9 @@ export interface IARIOService {
 	 * @throws {ANTRecordNotFoundError} If no ANT record exists for the ANT name
 	 */
 	getProcessIdForDomain(domain: DOMAIN | string): Promise<string>;
+
+
+	getANTStateForARName(fullName: string): Promise<ANTState>
+
+	getARNSRecordForARName(fullName: string): Promise<ARNSRecordResponse | undefined>
 }
