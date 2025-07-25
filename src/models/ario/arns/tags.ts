@@ -7,7 +7,7 @@ export const ARNS_FROM_PROCESS_TAG_NAME = "From-Process"
 // Type helper to ensure all values are Tags or Tag-generating functions while maintaining IntelliSense
 type TagRecord<T extends Record<string, Tag | ((value: string) => Tag)>> = T;
 
-export const ARNS_TAGS = {
+export const ARNS_QUERY_TAGS = {
 	ACTION: {
 		RECORD: {
 			name: ARNS_ACTION_TAG_NAME,
@@ -81,6 +81,14 @@ export const ARNS_TAGS = {
 			name: ARNS_ACTION_TAG_NAME,
 			value: "Delegations"
 		},
+	} satisfies TagRecord<Record<string, Tag | ((value: string) => Tag)>>,
+	NAME: (value: string) => {
+		return { name: ARNS_NAME_TAG_NAME, value: value }
+	},
+}
+
+export const ARNS_RESPONSE_TAGS = {
+	ACTION: {
 		//
 		RECORD_NOTICE: {
 			name: ARNS_ACTION_TAG_NAME,

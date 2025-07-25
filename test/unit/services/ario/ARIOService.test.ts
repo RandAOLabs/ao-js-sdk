@@ -1,9 +1,8 @@
 import { ANTClient } from 'src/clients/ario/ant';
-import { ANTRecord } from 'src/clients/ario/ant/types';
-import { ARNSClient } from 'src/clients/ario/arns';
+import { ARNSClient, ARNSRecordResponse } from 'src/clients/ario/arns';
 import { ARNSRecord } from 'src/clients/ario/arns/types';
 import { BaseClientConfig } from 'src/core/ao/configuration';
-import { ANTRecordNotFoundError, ARIOService, ARNSRecordNotFoundError } from '../../../../src';
+import { AntRecord, ANTRecordNotFoundError, ARIOService, ARNSRecordNotFoundError } from '../../../../src';
 import { ARN_ROOT_NAME } from '../../../../src/services/ario/ario-service/constants';
 
 // Mock the clients
@@ -70,9 +69,21 @@ describe('ARIOService', () => {
 			const domain2 = 'other_randao';
 			const processId = 'process123';
 			const txId = 'tx123';
+			const arnsRecordResponse: ARNSRecordResponse = {
+				startTimestamp: 0,
+				endTimestamp: 0,
+				type: '',
+				purchasePrice: 0,
+				undernameLimit: 0,
+				processId: '1212'
+			}
 
-			mockArnsClient.getRecord.mockResolvedValue({ name: domain1, processId });
-			mockAntClient.getRecord.mockResolvedValue({ name: 'nft', transactionId: txId });
+			const antrecord: AntRecord = {
+				transactionId: '3YxCUcMRTNz2lb3Y9sdWnwYfSOZABIvdfGL8yGEqTn8',
+				ttlSeconds: 0
+			}
+			mockArnsClient.getRecord.mockResolvedValue(arnsRecordResponse);
+			mockAntClient.getRecord.mockResolvedValue(antrecord);
 
 			// Execute
 			await service.getProcessIdForDomain(domain1);
@@ -92,8 +103,20 @@ describe('ARIOService', () => {
 			const processId = 'process123';
 			const txId = 'tx123';
 
-			mockArnsClient.getRecord.mockResolvedValueOnce({ name: domain, processId });
-			mockAntClient.getRecord.mockResolvedValueOnce({ name: ARN_ROOT_NAME, transactionId: txId });
+			const antrecord: AntRecord = {
+				transactionId: txId,
+				ttlSeconds: 0
+			}
+			const arnsRecordResponse: ARNSRecordResponse = {
+				startTimestamp: 0,
+				endTimestamp: 0,
+				type: '',
+				purchasePrice: 0,
+				undernameLimit: 0,
+				processId: '1212'
+			}
+			mockArnsClient.getRecord.mockResolvedValueOnce(arnsRecordResponse);
+			mockAntClient.getRecord.mockResolvedValueOnce(antrecord);
 
 			// Execute
 			const result = await service.getProcessIdForDomain(domain);
@@ -114,8 +137,20 @@ describe('ARIOService', () => {
 			const processId = 'process123';
 			const txId = 'tx123';
 
-			mockArnsClient.getRecord.mockResolvedValueOnce({ name: domain, processId });
-			mockAntClient.getRecord.mockResolvedValueOnce({ name: 'nft', transactionId: txId });
+			const antrecord: AntRecord = {
+				transactionId: txId,
+				ttlSeconds: 0
+			}
+			const arnsRecordResponse: ARNSRecordResponse = {
+				startTimestamp: 0,
+				endTimestamp: 0,
+				type: '',
+				purchasePrice: 0,
+				undernameLimit: 0,
+				processId: '1212'
+			}
+			mockArnsClient.getRecord.mockResolvedValueOnce(arnsRecordResponse);
+			mockAntClient.getRecord.mockResolvedValueOnce(antrecord);
 
 			// Execute
 			const result = await service.getProcessIdForDomain(domain);
@@ -140,8 +175,16 @@ describe('ARIOService', () => {
 
 		it('should throw ARNSRecordNotFoundError when ARNS record has no processId', async () => {
 			// Setup
+			const arnsRecordResponse: ARNSRecordResponse = {
+				startTimestamp: 0,
+				endTimestamp: 0,
+				type: '',
+				purchasePrice: 0,
+				undernameLimit: 0,
+				processId: ''
+			}
 			const domain = 'randao';
-			mockArnsClient.getRecord.mockResolvedValueOnce({ name: domain } as ARNSRecord);
+			mockArnsClient.getRecord.mockResolvedValueOnce(arnsRecordResponse);
 
 			// Execute & Verify
 			await expect(service.getProcessIdForDomain(domain)).rejects.toThrow(ARNSRecordNotFoundError);
@@ -149,8 +192,16 @@ describe('ARIOService', () => {
 
 		it('should throw ANTRecordNotFoundError when ANT record not found', async () => {
 			// Setup
+			const arnsRecordResponse: ARNSRecordResponse = {
+				startTimestamp: 0,
+				endTimestamp: 0,
+				type: '',
+				purchasePrice: 0,
+				undernameLimit: 0,
+				processId: '1212'
+			}
 			const domain = 'randao';
-			mockArnsClient.getRecord.mockResolvedValueOnce({ name: domain, processId: 'process123' });
+			mockArnsClient.getRecord.mockResolvedValueOnce(arnsRecordResponse);
 			mockAntClient.getRecord.mockResolvedValueOnce(undefined);
 
 			// Execute & Verify
@@ -160,8 +211,16 @@ describe('ARIOService', () => {
 		it('should throw ANTRecordNotFoundError when ANT record has no transactionId', async () => {
 			// Setup
 			const domain = 'randao';
-			mockArnsClient.getRecord.mockResolvedValueOnce({ name: domain, processId: 'process123' });
-			mockAntClient.getRecord.mockResolvedValueOnce({ name: ARN_ROOT_NAME } as ANTRecord);
+			const arnsRecordResponse: ARNSRecordResponse = {
+				startTimestamp: 0,
+				endTimestamp: 0,
+				type: '',
+				purchasePrice: 0,
+				undernameLimit: 0,
+				processId: '1212'
+			}
+			mockArnsClient.getRecord.mockResolvedValueOnce(arnsRecordResponse);
+			mockAntClient.getRecord.mockResolvedValueOnce({ name: ARN_ROOT_NAME } as unknown as AntRecord);
 
 			// Execute & Verify
 			await expect(service.getProcessIdForDomain(domain)).rejects.toThrow(ANTRecordNotFoundError);
