@@ -1,10 +1,10 @@
 
 import { ARNSClient } from "src/clients/ario/arns/ARNSClient";
 import { BaseClient } from "src/core/ao/BaseClient";
-import { ARNSRecord } from "src/clients/ario/arns/abstract/types";
 import { ClientError } from "src/clients/common/ClientError";
 import { Logger, LogLevel } from "src/utils";
 import { DryRunResult, MessageResult } from "../../../../../src/core/ao/abstract";
+import { ARNSRecord } from "../../../../../src/clients/ario/arns/types";
 
 // Mock BaseClient methods
 jest.spyOn(BaseClient.prototype, 'message').mockResolvedValue("test-message-id");
