@@ -4,7 +4,7 @@ import { RandomClient } from "../../../../../src/clients/randao/random/RandomCli
 import { TokenClient } from "../../../../../src/clients/ao/token/TokenClient";
 import { DryRunResult, MessageResult } from "../../../../../src/core/ao/abstract";
 
-jest.mock("src/services/ario/ARIOService", () => ({
+jest.mock("src/services/ario/ario-service/ARIOService", () => ({
 	ARIOService: {
 		getInstance: () => ({
 			getProcessIdForDomain: jest.fn().mockResolvedValue("test-process-id")

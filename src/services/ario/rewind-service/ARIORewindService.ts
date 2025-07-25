@@ -1,25 +1,15 @@
 import { Observable, merge, EMPTY } from "rxjs";
-import { map, scan, startWith, switchMap, distinctUntilChanged, shareReplay, mergeMap, catchError } from "rxjs/operators";
+import { map, scan, startWith, switchMap, shareReplay, mergeMap, catchError } from "rxjs/operators";
 import { staticImplements, IAutoconfiguration } from "../../../utils";
 import { IANTEventHistoryService, IARIORewindService, IARNameEventHistoryService } from "./abstract";
 import { IARNameEvent, IANTEvent, IARNSEvent, IBuyNameEvent, IReassignNameEvent } from "./events";
-import { ARNSDataService, IARNSDataService } from "../arns-data-service";
 import { FullARNSName } from "../shared/arns/FullARNSName";
-import {
-	BuyNameEventConverter,
-	ExtendLeaseEventConverter,
-	IncreaseUndernameEventConverter,
-	ReassignNameEventConverter,
-	RecordEventConverter,
-	ReturnedNameEventConverter,
-	UpgradeNameEventConverter
-} from "./converters";
-import { ANTDataService, IANTDataService } from "../ant-data-service";
 import { ARNameEventHistoryService } from "./ARNameEventHistoryService";
 import { ANTEventHistoryService } from "./ANTEventHistoryService";
 
 /**
  * @category ARIO
+ * @alpha
  */
 @staticImplements<IAutoconfiguration>()
 export class ARIORewindService implements IARIORewindService {
