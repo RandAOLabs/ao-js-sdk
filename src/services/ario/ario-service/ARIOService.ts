@@ -1,16 +1,16 @@
 import { IARIOService } from './abstract/IARIOService';
-import { ANTClient } from '../../clients/ario/ant';
-import { ARNSClient, } from '../../clients/ario/arns';
-import { ICache, newCache } from '../../utils/cache';
+import { ANTClient } from '../../../clients/ario/ant';
+import { ARNSClient, } from '../../../clients/ario/arns';
+import { ICache, newCache } from '../../../utils/cache';
 import { DOMAIN_SEPARATOR, ARN_ROOT_NAME } from './constants';
 import { DOMAIN, DOMAIN_DEFAULTS } from './domains';
 import { ANTRecordNotFoundError, ARNSRecordNotFoundError } from './ARIOError';
 import { ARIOServiceConfig } from './abstract/ARIOServiceConfig';
-import { DryRunCachingClientConfigBuilder } from '../../core/ao/configuration/builder';
-import { Logger } from '../../utils';
-import { AO_CONFIGURATIONS } from '../../core/ao/ao-client/configurations';
-import { ClientError } from '../../clients/common/ClientError';
-import { InputValidationError } from '../../clients';
+import { DryRunCachingClientConfigBuilder } from '../../../core/ao/configuration/builder';
+import { Logger } from '../../../utils';
+import { AO_CONFIGURATIONS } from '../../../core/ao/ao-client/configurations';
+import { ClientError } from '../../../clients/common/ClientError';
+import { InputValidationError } from '../../../clients';
 
 /**
  * Service for handling ARIO operations, including ANT and ARNS record management.
@@ -46,7 +46,7 @@ export class ARIOService implements IARIOService {
 	 * Gets the process ID for a given domain.
 	 * For domains with underscores (e.g., "nft_randao"), everything after the underscore is the ANT name.
 	 * For domains without underscores (e.g., "randao"), the entire string is the ANT name.
-	 * 
+	 *
 	 * @param domain - The domain to get the process ID for (e.g., "nft_randao" or "randao")
 	 * @returns Promise resolving to the process ID string
 	 * @throws {InvalidDomainError} If the domain format is invalid

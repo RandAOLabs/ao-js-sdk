@@ -1,10 +1,7 @@
 import { ProviderInfo } from "../../clients/randao/provider-profile/abstract/types";
 import { ProviderActivity } from "../../clients/randao/random/abstract/types";
 import { ProviderInfoAggregate } from "./abstract/types";
-import { MessagesService } from "../messages";
 import { ARIOService } from "../ario";
-import { DOMAIN } from "../ario/domains";
-import RANDOM_PROCESS_TAGS from "../../clients/randao/random/tags";
 import { IAutoconfiguration, staticImplements } from "../../utils";
 import { RandAODataService } from "./RandAODataService";
 import { IRandAODataService } from "./abstract/IRandAODataService";
@@ -24,9 +21,9 @@ export class ProviderInfoDataAggregator {
 		this.aggregateMap = new Map<string, ProviderInfoAggregate>();
 		this.processedProviderIds = new Set<string>();
 	}
-	/** 
+	/**
 	 * {@inheritdoc IAutoconfiguration.autoConfiguration}
-	 * @see {@link IAutoconfiguration.autoConfiguration} 
+	 * @see {@link IAutoconfiguration.autoConfiguration}
 	 */
 	public static async autoConfiguration(): Promise<ProviderInfoDataAggregator> {
 		const ario = ARIOService.getInstance()

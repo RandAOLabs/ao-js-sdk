@@ -1,9 +1,9 @@
 import { IARIOService } from "../../../../src/services/ario";
 import { IMessagesService } from "../../../../src/services/messages";
 import { RandAODataService } from "../../../../src/services/randao/RandAODataService";
-import { DOMAIN } from "../../../../src/services/ario/domains";
 import RANDOM_PROCESS_TAGS from "../../../../src/clients/randao/random/tags";
 import { SYSTEM_TAGS } from "../../../../src/core/common/tags";
+import { DOMAIN } from "../../../../src/services/ario/ario-service/domains";
 
 describe('RandAODataService', () => {
 	let mockArioService: jest.Mocked<IARIOService>;

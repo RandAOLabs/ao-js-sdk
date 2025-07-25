@@ -7,7 +7,7 @@ import { ViewPullError } from "./SweepstakesClientError";
 import { SweepstakesProcessError } from "./SweepstakesProcessError";
 import { BaseClient } from "../../../core/ao/BaseClient";
 import { ARIOService } from "../../../services";
-import { DOMAIN } from "../../../services/ario/domains";
+import { DOMAIN } from "../../../services/ario/ario-service/domains";
 import { AO_CONFIGURATIONS } from "../../../core/ao/ao-client/configurations";
 import ResultUtils from "../../../core/common/result-utils/ResultUtils";
 import { ClientBuilder } from "../../common";

@@ -3,3 +3,8 @@ export interface FairLaunchMap {
 	tokenProcessId: string,
 	fairLaunchProcessId: string
 }
+export interface CurrencyMap {
+	name: string,
+	tokenProcessId: string,
+	decimals: number
+}
