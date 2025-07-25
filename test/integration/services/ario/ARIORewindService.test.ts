@@ -1,13 +1,15 @@
 import { ARIORewindService } from "src/services/ario/rewind-service/ARIORewindService";
 import { IARIORewindService } from "src/services/ario/rewind-service/abstract/IARIORewindService";
-import { Logger } from "src/utils/logger";
+import { Logger, LogLevel } from "src/utils/logger";
 import { firstValueFrom, lastValueFrom, timeout } from "rxjs";
 import { ARNSDataService } from "../../../../src";
+import de from "zod/v4/locales/de.cjs";
 
 describe("ARIORewindService Integration Tests", () => {
 	let service: IARIORewindService;
 
 	beforeEach(() => {
+		Logger.setLogLevel(LogLevel.DEBUG)
 		service = ARIORewindService.autoConfiguration()
 	});
 
@@ -30,5 +32,12 @@ describe("ARIORewindService Integration Tests", () => {
 
 	}, 30000);
 
+	describe("getAntDetail()", () => {
+		it("return ant details", async () => {
+			const domain = "randao"
+			const details = await service.getAntDetail(domain)
+			Logger.debug(details)
+		});
+	});
 
 });

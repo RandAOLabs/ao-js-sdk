@@ -36,13 +36,14 @@ export class ARIORewindService implements IARIORewindService {
 	}
 
 	async getAntDetail(fullName: string): Promise<ARNameDetail> {
+		const fullARNSName = new FullARNSName(fullName)
 		const [currentANTState, currentARNSRecord] = await Promise.all([
 			this.arioService.getANTStateForARName(fullName),
 			this.arioService.getARNSRecordForARName(fullName)
 		]);
 
 		const details: ARNameDetail = {
-			name: currentANTState.Name,
+			name: fullARNSName.getARNSName(),
 			startTimestamp: currentARNSRecord?.startTimestamp!,
 			endTimestamp: currentARNSRecord?.endTimestamp!,
 			type: currentARNSRecord?.type!,
