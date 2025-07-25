@@ -3,9 +3,12 @@ import { map, scan, startWith, switchMap, shareReplay, mergeMap, catchError } fr
 import { staticImplements, IAutoconfiguration } from "../../../utils";
 import { IANTEventHistoryService, IARIORewindService, IARNameEventHistoryService } from "./abstract";
 import { IARNameEvent, IANTEvent, IARNSEvent, IBuyNameEvent, IReassignNameEvent } from "./events";
-import { FullARNSName } from "../shared/arns/FullARNSName";
 import { ARNameEventHistoryService } from "./ARNameEventHistoryService";
 import { ANTEventHistoryService } from "./ANTEventHistoryService";
+import { ARNameDetail } from "./abstract/responseTypes";
+import { ARIOService, IARIOService } from "../ario-service";
+import { FullARNSName } from "../../../models";
+import { ANTUtils } from "../../../models/ario/ant/AntUtils";
 
 /**
  * @category ARIO
@@ -15,8 +18,10 @@ import { ANTEventHistoryService } from "./ANTEventHistoryService";
 export class ARIORewindService implements IARIORewindService {
 	constructor(
 		private readonly arnEventHistoryService: IARNameEventHistoryService,
-		private readonly antEventHistoryService: IANTEventHistoryService
+		private readonly antEventHistoryService: IANTEventHistoryService,
+		private readonly arioService: IARIOService
 	) { }
+
 
 	/**
 	 * Creates a pre-configured instance of PiDataService
@@ -25,8 +30,28 @@ export class ARIORewindService implements IARIORewindService {
 	public static autoConfiguration(): IARIORewindService {
 		return new ARIORewindService(
 			ARNameEventHistoryService.autoConfiguration(),
-			ANTEventHistoryService.autoConfiguration()
+			ANTEventHistoryService.autoConfiguration(),
+			ARIOService.getInstance()
 		);
+	}
+
+	async getAntDetail(fullName: string): Promise<ARNameDetail> {
+		const [currentANTState, currentARNSRecord] = await Promise.all([
+			this.arioService.getANTStateForARName(fullName),
+			this.arioService.getARNSRecordForARName(fullName)
+		]);
+
+		const details: ARNameDetail = {
+			name: currentANTState.Name,
+			startTimestamp: currentARNSRecord?.startTimestamp!,
+			endTimestamp: currentARNSRecord?.endTimestamp!,
+			type: currentARNSRecord?.type!,
+			processId: currentARNSRecord?.processId!,
+			controllers: currentANTState.Controllers,
+			owner: currentANTState.Owner,
+			ttlSeconds: ANTUtils.getRecord(currentANTState, "@")?.ttlSeconds!,
+		}
+		return details
 	}
 
 	getEventHistory(fullName: string): Observable<IARNSEvent[]> {
