@@ -4,7 +4,7 @@ import { BaseClient } from "src/core/ao/BaseClient";
 import { DryRunResult, MessageResult } from "../../../../../src/core/ao/abstract";
 
 
-jest.mock("src/services/ario/ARIOService", () => ({
+jest.mock("src/services/ario/ario-service/ARIOService", () => ({
 	getProcessIdForDomain: jest.fn().mockResolvedValue("test-process-id")
 }));
 

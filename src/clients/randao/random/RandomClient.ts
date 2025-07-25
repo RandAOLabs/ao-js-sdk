@@ -7,7 +7,7 @@ import ResultUtils from "../../../core/common/result-utils/ResultUtils";
 import { IAutoconfiguration, IDefaultBuilder, staticImplements } from "../../../utils";
 import { ARIOService } from "../../../services";
 import { TokenInterfacingClientBuilder } from "../../common/TokenInterfacingClientBuilder";
-import { DOMAIN } from "../../../services/ario/domains";
+import { DOMAIN } from "../../../services/ario/ario-service/domains";
 import { AO_CONFIGURATIONS } from "../../../core/ao/ao-client/configurations";
 import { PROCESS_IDS } from "../../../processes/ids";
 import { ClientError } from "../../common/ClientError";
