@@ -17,7 +17,22 @@ export interface IARIORewindService {
 	 * @param fullName The full ARNS name to get event history for
 	 * @returns Observable of ARNS undername name events
 	 */
-	getEventHistory(fullName: string): Observable<IARNSEvent[]>;
+	getEventHistory$(fullName: string): Observable<IARNSEvent[]>;
 
+	/**
+	 * Retrieves the event history for a given ARNS name.
+	 * The fullName parameter can be either:
+	 * - A top-level ARN (e.g., "name")
+	 * - An ARN with an undername (e.g., "undername_name")
+	 *
+	 * @param fullName The full ARNS name to get event history for
+	 * @returns Promise of ARNS undername name events
+	 */
+	getEventHistory(fullName: string): Promise<IARNSEvent[]>;
+
+	/**
+	 * @param fullName The full ARNS name to get event history for
+	 * @returns Promise of ARName Details
+	 */
 	getAntDetail(fullName: string): Promise<ARNameDetail>;
 }
