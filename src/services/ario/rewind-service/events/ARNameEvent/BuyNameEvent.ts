@@ -1,37 +1,21 @@
 import { ArweaveTransaction } from "../../../../../core/arweave/abstract/types";
-import { IArweaveDataService } from "../../../../../core/arweave/abstract/IArweaveDataService";
-import { ArweaveDataService } from "../../../../../core/arweave/ArweaveDataService";
 import { CurrencyAmount } from "../../../../../models/currency/CurrencyAmount";
 import { BuyNameNoticeTransactionData } from "../../../arns-data-service/abstract/transaction-data/BuyNameNoticeTransactionData";
 import { IBuyNameEvent } from "./abstract/IBuyNameEvent";
 import { ARNameEvent } from "./ARNameEvent";
 import { ARIO_TOKEN } from "../../../../../processes/maps/currencies";
+import { ARNameTransactionDataEvent } from "./ARNameTransactionDataEvent";
 
-export class BuyNameEvent extends ARNameEvent implements IBuyNameEvent {
-	private readonly transactionDataPromise: Promise<BuyNameNoticeTransactionData>;
-	private readonly arweaveDataService: IArweaveDataService;
-
+export class BuyNameEvent extends ARNameTransactionDataEvent<BuyNameNoticeTransactionData> implements IBuyNameEvent {
 	constructor(
 		protected readonly arweaveTransaction: ArweaveTransaction
 	) {
 		super(arweaveTransaction);
-		this.arweaveDataService = ArweaveDataService.autoConfiguration();
-
-		if (!this.arweaveTransaction.id) {
-			throw new Error('Transaction ID is required for BuyNameEvent');
-		}
-
-		this.transactionDataPromise = this.arweaveDataService.getTransactionData<BuyNameNoticeTransactionData>(
-			this.arweaveTransaction.id
-		);
 	}
+
 	async getPurchasedProcessId(): Promise<string> {
 		const notice = await this.getNoticeData();
 		return notice.processId
-	}
-
-	async getNoticeData(): Promise<BuyNameNoticeTransactionData> {
-		return await this.transactionDataPromise;
 	}
 
 	async getPurchasePrice(): Promise<CurrencyAmount> {

@@ -1,18 +1,18 @@
-import { Observable, merge, EMPTY } from "rxjs";
-import { map, scan, startWith, switchMap, shareReplay, mergeMap, catchError } from "rxjs/operators";
-import { staticImplements, IAutoconfiguration } from "../../../utils";
+import { Observable, merge, EMPTY, Subject, firstValueFrom } from "rxjs";
+import { map, scan, startWith, shareReplay, mergeMap, catchError, distinct, filter, last } from "rxjs/operators";
+import { staticImplements, IAutoconfiguration, Logger } from "../../../utils";
 import { IANTEventHistoryService, IARIORewindService, IARNameEventHistoryService } from "./abstract";
 import { IARNameEvent, IANTEvent, IARNSEvent, IBuyNameEvent, IReassignNameEvent } from "./events";
 import { ARNameEventHistoryService } from "./ARNameEventHistoryService";
 import { ANTEventHistoryService } from "./ANTEventHistoryService";
-import { ARNameDetail } from "./abstract/responseTypes";
+import { ARNameDetail, AllARNameEventsType } from "./abstract/responseTypes";
 import { ARIOService, IARIOService } from "../ario-service";
 import { FullARNSName } from "../../../models";
 import { ANTUtils } from "../../../models/ario/ant/AntUtils";
 
 /**
- * @category ARIO
  * @alpha
+ * @category ARIO
  */
 @staticImplements<IAutoconfiguration>()
 export class ARIORewindService implements IARIORewindService {
@@ -35,7 +35,7 @@ export class ARIORewindService implements IARIORewindService {
 		);
 	}
 
-	async getAntDetail(fullName: string): Promise<ARNameDetail> {
+	public async getAntDetail(fullName: string): Promise<ARNameDetail> {
 		const fullARNSName = new FullARNSName(fullName)
 		const [currentANTState, currentARNSRecord] = await Promise.all([
 			this.arioService.getANTStateForARName(fullName),
@@ -55,45 +55,41 @@ export class ARIORewindService implements IARIORewindService {
 		return details
 	}
 
-	getEventHistory(fullName: string): Observable<IARNSEvent[]> {
+	public async getEventHistory(fullName: string): Promise<IARNSEvent[]> {
+		return firstValueFrom(this.getEventHistory$(fullName).pipe(last()));
+	}
+
+	public getEventHistory$(fullName: string): Observable<IARNSEvent[]> {
 		const fullARNSName = new FullARNSName(fullName);
 		const arnsName = fullARNSName.getARNSName();
 
-		// Create shared event streams to avoid duplicate queries
-		const sharedEventStreams = this.createSharedEventStreams(arnsName);
-		const arNameEventStream = this.createARNameEventStream(sharedEventStreams);
-		const antEventStream = this.createANTEventStream(sharedEventStreams);
+		// Get shared event streams from the ARNameEventHistoryService
+		const allArnameEvents = this.arnEventHistoryService.getAllEvents(arnsName);
+		const arNameEventStream = this.createARNameEventStream(allArnameEvents);
+
+		// Create a stream of process IDs from multiple sources
+		const processIdStream = merge(
+			// Current ARNS process ID
+			this.arioService.getAntProcessId(arnsName),
+			// Process IDs from buy name events
+			this.extractProcessIdsFromBuyEvents(allArnameEvents.buyNameEvents),
+			// Process IDs from reassign name events
+			this.extractProcessIdsFromReassignEvents(allArnameEvents.reassignNameEvents)
+		).pipe(
+			// Filter out null values and trim
+			map((processId: string | null) => processId?.trim()),
+			filter((processId: string | undefined): processId is string => !!processId)
+		);
+
+		const antEventStream = this.createANTEventStreamFromProcessIds(processIdStream);
 
 		return this.combineEventStreams(arNameEventStream, antEventStream);
 	}
 
 	/**
-	 * Creates shared event streams to avoid duplicate queries
-	 */
-	private createSharedEventStreams(arnsName: string): {
-		buyNameEvents: Observable<IARNameEvent[]>;
-		extendLeaseEvents: Observable<IARNameEvent[]>;
-		increaseUndernameEvents: Observable<IARNameEvent[]>;
-		reassignNameEvents: Observable<IARNameEvent[]>;
-		recordEvents: Observable<IARNameEvent[]>;
-		returnedNameEvents: Observable<IARNameEvent[]>;
-		upgradeNameEvents: Observable<IARNameEvent[]>;
-	} {
-		return {
-			buyNameEvents: this.arnEventHistoryService.getBuyNameEvents(arnsName).pipe(shareReplay(1)),
-			extendLeaseEvents: this.arnEventHistoryService.getExtendLeaseEvents(arnsName).pipe(shareReplay(1)),
-			increaseUndernameEvents: this.arnEventHistoryService.getIncreaseUndernameEvents(arnsName).pipe(shareReplay(1)),
-			reassignNameEvents: this.arnEventHistoryService.getReassignNameEvents(arnsName).pipe(shareReplay(1)),
-			recordEvents: this.arnEventHistoryService.getRecordEvents(arnsName).pipe(shareReplay(1)),
-			returnedNameEvents: this.arnEventHistoryService.getReturnedNameEvents(arnsName).pipe(shareReplay(1)),
-			upgradeNameEvents: this.arnEventHistoryService.getUpgradeNameEvents(arnsName).pipe(shareReplay(1))
-		};
-	}
-
-	/**
 	 * Creates a stream of all ARName events using shared event streams
 	 */
-	private createARNameEventStream(sharedStreams: ReturnType<typeof this.createSharedEventStreams>): Observable<IARNameEvent[]> {
+	private createARNameEventStream(sharedStreams: AllARNameEventsType): Observable<IARNameEvent[]> {
 		return merge(
 			sharedStreams.buyNameEvents,
 			sharedStreams.extendLeaseEvents,
@@ -102,37 +98,6 @@ export class ARIORewindService implements IARIORewindService {
 			sharedStreams.recordEvents,
 			sharedStreams.returnedNameEvents,
 			sharedStreams.upgradeNameEvents
-		);
-	}
-
-	/**
-	 * Creates a stream of ANT events by extracting process IDs from shared buy and reassign events
-	 */
-	private createANTEventStream(sharedStreams: ReturnType<typeof this.createSharedEventStreams>): Observable<IANTEvent[]> {
-		const processedProcessIds = new Set<string>();
-
-		const processIdStream = this.extractProcessIdsFromEvents(
-			sharedStreams.buyNameEvents,
-			sharedStreams.reassignNameEvents
-		);
-
-		return processIdStream.pipe(
-			map((processId: string | null) => this.filterDuplicateProcessIds(processId, processedProcessIds)),
-			switchMap((processId: string | null) => this.fetchANTEventsForProcessId(processId)),
-			shareReplay(1)
-		);
-	}
-
-	/**
-	 * Extracts process IDs from buy and reassign name events
-	 */
-	private extractProcessIdsFromEvents(
-		buyNameEvents: Observable<IARNameEvent[]>,
-		reassignNameEvents: Observable<IARNameEvent[]>
-	): Observable<string | null> {
-		return merge(
-			this.extractProcessIdsFromBuyEvents(buyNameEvents),
-			this.extractProcessIdsFromReassignEvents(reassignNameEvents)
 		);
 	}
 
@@ -171,23 +136,6 @@ export class ARIORewindService implements IARIORewindService {
 	}
 
 	/**
-	 * Filters out null values and duplicate process IDs
-	 */
-	private filterDuplicateProcessIds(processId: string | null, processedProcessIds: Set<string>): string | null {
-		if (!processId) {
-			return null;
-		}
-
-		const trimmedId = processId.trim();
-		if (!trimmedId || processedProcessIds.has(trimmedId)) {
-			return null;
-		}
-
-		processedProcessIds.add(trimmedId);
-		return trimmedId;
-	}
-
-	/**
 	 * Fetches ANT events for a given process ID
 	 */
 	private fetchANTEventsForProcessId(processId: string | null): Observable<IANTEvent[]> {
@@ -195,8 +143,32 @@ export class ARIORewindService implements IARIORewindService {
 			return EMPTY;
 		}
 
-		return this.antEventHistoryService.getANTEvents(processId).pipe(
+		// Combine all ANT event types for the given process ID
+		return merge(
+			this.antEventHistoryService.getStateNoticeEvents(processId),
+			this.antEventHistoryService.getReassignNameNoticeEvents(processId),
+			this.antEventHistoryService.getReleaseNameNoticeEvents(processId),
+			this.antEventHistoryService.getApprovePrimaryNameNoticeEvents(processId),
+			this.antEventHistoryService.getRemovePrimaryNamesNoticeEvents(processId),
+			this.antEventHistoryService.getCreditNoticeEvents(processId),
+			this.antEventHistoryService.getDebitNoticeEvents(processId)
+		).pipe(
 			catchError(() => EMPTY)
+		);
+	}
+
+	/**
+	 * Creates a stream of ANT events from a stream of process IDs
+	 * Filters for uniqueness and merges all ANT event types for each unique process ID
+	 * @param processIdStream - Observable stream of process IDs from multiple sources
+	 * @returns Observable<IANTEvent[]> - Stream of merged ANT events
+	 */
+	public createANTEventStreamFromProcessIds(processIdStream: Observable<string>): Observable<IANTEvent[]> {
+		return processIdStream.pipe(
+			map((processId: string) => processId.trim()),
+			distinct(),
+			mergeMap((processId: string) => this.fetchANTEventsForProcessId(processId)),
+			shareReplay(1)
 		);
 	}
 
@@ -209,11 +181,14 @@ export class ARIORewindService implements IARIORewindService {
 	): Observable<IARNSEvent[]> {
 		return merge(arNameEventStream, antEventStream).pipe(
 			scan((allEvents: IARNSEvent[], newEvents: IARNSEvent[]) => {
+				let updatedEvents: IARNSEvent[];
 				if (Array.isArray(newEvents)) {
-					return [...allEvents, ...newEvents];
+					updatedEvents = [...allEvents, ...newEvents];
 				} else {
-					return [...allEvents, newEvents];
+					updatedEvents = [...allEvents, newEvents];
 				}
+				// Sort events by timestamp
+				return updatedEvents.sort((a, b) => a.getEventTimeStamp() - b.getEventTimeStamp());
 			}, []),
 			startWith([])
 		);

@@ -1,9 +1,8 @@
-import { Observable, from, map, mergeMap, filter, switchMap } from 'rxjs';
+import { Observable, from, map, filter, switchMap } from 'rxjs';
 import { IRNGDataService } from './abstract/IRNGDataService';
-import { IMessagesService, IReactiveMessageService, MessagesService, ReactiveMessageService } from '../../messages';
+import { IReactiveMessageService, ReactiveMessageService } from '../../messages';
 import { IAutoconfiguration } from '../../../utils/class-interfaces/IAutoconfiguration';
 import { staticImplements } from '../../../utils/decorators/staticImplements';
-import { ArweaveDataService, IArweaveDataService } from '../../../core';
 import { Logger } from '../../../utils/logger/logger';
 import { MISCELLANEOUS } from '../../../processes/ids/miscellaneous';
 import { AO } from '../../../processes/ids/ao';
@@ -36,7 +35,6 @@ export class RNGDataService implements IRNGDataService {
 	 * @returns Stream of RNG Beta AO sales data as credit notices
 	 */
 	public getRNGFaucetSales(): Observable<CreditNotice> {
-		Logger.debug('Getting RNG Beta AO sales stream');
 
 		// Define tags to filter credit notices from AO process
 		const tags: Tags = [

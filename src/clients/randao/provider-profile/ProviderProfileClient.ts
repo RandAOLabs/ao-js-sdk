@@ -16,18 +16,18 @@ import { IAutoconfiguration, IDefaultBuilder, Logger, staticImplements } from ".
 @staticImplements<IAutoconfiguration>()
 @staticImplements<IDefaultBuilder>()
 export class ProviderProfileClient extends DryRunCachingClient implements IProviderProfileClient {
-	/** 
+	/**
 	 * {@inheritdoc IAutoconfiguration.autoConfiguration}
-	 * @see {@link IAutoconfiguration.autoConfiguration} 
+	 * @see {@link IAutoconfiguration.autoConfiguration}
 	 */
 	public static autoConfiguration(): ProviderProfileClient {
 		return ProviderProfileClient.defaultBuilder()
 			.build()
 	}
 
-	/** 
+	/**
 	 * {@inheritdoc IDefaultBuilder.defaultBuilder}
-	 * @see {@link IDefaultBuilder.defaultBuilder} 
+	 * @see {@link IDefaultBuilder.defaultBuilder}
 	 */
 	public static defaultBuilder(): ClientBuilder<ProviderProfileClient> {
 		return new ClientBuilder(ProviderProfileClient)
@@ -56,7 +56,7 @@ export class ProviderProfileClient extends DryRunCachingClient implements IProvi
 				{ name: "Action", value: "Get-All-Providers-Details" }
 			];
 			const result = await this.dryrun("", tags);
-			
+
 			try {
 				const dtos = ResultUtils.getFirstMessageDataJson<ProviderInfoDTO[]>(result);
 				// Filter out any invalid entries that might cause issues
@@ -66,7 +66,6 @@ export class ProviderProfileClient extends DryRunCachingClient implements IProvi
 			} catch (parseError: unknown) {
 				const errorMessage = parseError instanceof Error ? parseError.message : String(parseError);
 				Logger.error(`Error parsing provider info: ${errorMessage}`);
-				Logger.debug(`Response data: ${JSON.stringify(result)}`);
 				return []; // Return empty array instead of throwing
 			}
 		} catch (error: any) {
@@ -74,7 +73,7 @@ export class ProviderProfileClient extends DryRunCachingClient implements IProvi
 		}
 	}
 
-	/** 
+	/**
 	 * Known issues with return value on this method TODO fix
 	 */
 	async getProviderInfo(providerId?: string): Promise<ProviderInfo> {
@@ -147,7 +146,7 @@ export class ProviderProfileClient extends DryRunCachingClient implements IProvi
 	 */
 	private _safeJsonParse<T>(jsonString: string | undefined): T | undefined {
 		if (!jsonString) return undefined;
-		
+
 		try {
 			return JSON.parse(jsonString) as T;
 		} catch (error: unknown) {
