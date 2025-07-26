@@ -12,6 +12,7 @@ import { AO_CONFIGURATIONS } from '../../../core/ao/ao-client/configurations';
 import { ClientError } from '../../../clients/common/ClientError';
 import { InputValidationError } from '../../../clients';
 import { ANTState, FullARNSName } from '../../../models';
+import { from, map, Observable } from 'rxjs';
 
 /**
  * Service for handling ARIO operations, including ANT and ARNS record management.
@@ -29,6 +30,7 @@ export class ARIOService implements IARIOService {
 		this.antClientCache = newCache<string, ANTClient>(config.cacheConfig);
 		this.config = config
 	}
+
 
 
 	public static getInstance(config?: ARIOServiceConfig): ARIOService {
@@ -53,6 +55,21 @@ export class ARIOService implements IARIOService {
 	async getARNSRecordForARName(fullName: string): Promise<ARNSRecordResponse | undefined> {
 		const fullARNSName = new FullARNSName(fullName);
 		return this.arnsClient.getRecord(fullARNSName.getARNSName())
+	}
+
+	getAntProcessId(fullName: string): Observable<string> {
+		// Convert the Promise from getARNSRecordForARName into an Observable
+		return from(this.getARNSRecordForARName(fullName)).pipe(
+			map(arnsRecord => {
+				// Check if the record was found
+				if (!arnsRecord) {
+					// If not, throw an error which will be propagated by the Observable
+					throw new Error(`ARNS Record not found for name: ${fullName}`);
+				}
+				// If found, return the processId
+				return arnsRecord.processId;
+			})
+		);
 	}
 
 

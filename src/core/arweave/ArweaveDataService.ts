@@ -52,6 +52,7 @@ export class ArweaveDataService implements IArweaveDataService {
 		}
 
 		const builtQuery = builder.build();
+
 		return this.graphQuery<ArweaveGQLResponse>(builtQuery.query);
 	}
 

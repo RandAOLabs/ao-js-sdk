@@ -1,9 +1,9 @@
 import { CurrencyAmount } from "../../../../../../models/currency";
 import { ExtendLeaseNoticeTransactionData } from "../../../../arns-data-service/abstract/transaction-data/ExtendLeaseNoticeTransactionData";
+import { ITransactionDataEvent } from "../../abstract";
 import { IARNameEvent } from "./IARNameEvent";
 
-export interface IExtendLeaseEvent extends IARNameEvent {
-	getNoticeData(): Promise<ExtendLeaseNoticeTransactionData>;
+export interface IExtendLeaseEvent extends IARNameEvent, ITransactionDataEvent<ExtendLeaseNoticeTransactionData> {
 	getTotalFee(): Promise<CurrencyAmount>;
 	getPayer(): Promise<string>;
 	getType(): Promise<string>;

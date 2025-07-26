@@ -1,9 +1,7 @@
 import { ARIORewindService } from "src/services/ario/rewind-service/ARIORewindService";
 import { IARIORewindService } from "src/services/ario/rewind-service/abstract/IARIORewindService";
 import { Logger, LogLevel } from "src/utils/logger";
-import { firstValueFrom, lastValueFrom, timeout } from "rxjs";
-import { ARNSDataService } from "../../../../src";
-import de from "zod/v4/locales/de.cjs";
+import { lastValueFrom, timeout } from "rxjs";
 
 describe("ARIORewindService Integration Tests", () => {
 	let service: IARIORewindService;
@@ -18,7 +16,7 @@ describe("ARIORewindService Integration Tests", () => {
 
 		Logger.info(`Testing getEventHistory for domain: ${testDomainName}`);
 
-		const eventHistory$ = service.getEventHistory(testDomainName);
+		const eventHistory$ = service.getEventHistory$(testDomainName);
 		const result = await lastValueFrom(eventHistory$.pipe(timeout(30000)));
 
 		Logger.info(`Number of events found: ${result.length}`);
@@ -27,9 +25,6 @@ describe("ARIORewindService Integration Tests", () => {
 		for (let i = 0; i < result.length; i++) {
 			Logger.info(`Event ${i + 1}: ${result[i].toString()}`);
 		}
-
-
-
 	}, 30000);
 
 	describe("getAntDetail()", () => {
@@ -37,6 +32,18 @@ describe("ARIORewindService Integration Tests", () => {
 			const domain = "randao"
 			const details = await service.getAntDetail(domain)
 			Logger.debug(details)
+		});
+	});
+
+
+	describe("getEventHistory()", () => {
+		it("return ant details", async () => {
+			const domain = "randao"
+			const history = await service.getEventHistory(domain)
+			for (let i = 0; i < history.length; i++) {
+				Logger.info(`Event ${i + 1}: ${history[i].toString()}`);
+			}
+			// Logger.debug(history.length)
 		});
 	});
 
