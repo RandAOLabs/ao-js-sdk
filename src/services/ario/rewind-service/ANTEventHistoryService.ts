@@ -1,10 +1,11 @@
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { staticImplements, IAutoconfiguration } from "../../../utils";
-import { IANTEvent } from "./events";
+import { IStateNoticeEvent, IReassignNameNoticeEvent, IReleaseNameNoticeEvent, IApprovePrimaryNameNoticeEvent, IRemovePrimaryNamesNoticeEvent, ICreditNoticeEvent, IDebitNoticeEvent } from "./events";
 import { ANTDataService, IANTDataService } from "../ant-data-service";
 import { IANTEventHistoryService } from "./abstract/IANTEventHistoryService";
-import { ANTEvent } from "./events/ANTEvent/ANTEvent";
+import { StateNoticeEvent, ReassignNameNoticeEvent, ReleaseNameNoticeEvent, ApprovePrimaryNameNoticeEvent, RemovePrimaryNamesNoticeEvent, CreditNoticeEvent, DebitNoticeEvent } from "./events";
+import { AllANTEventsType } from "./abstract/responseTypes";
 
 /**
  * @category ARIO
@@ -16,8 +17,8 @@ export class ANTEventHistoryService implements IANTEventHistoryService {
 	) { }
 
 	/**
-	 * Creates a pre-configured instance of PiDataService
-	 * @returns A pre-configured PiDataService instance
+	 * Creates a pre-configured instance of ANTEventHistoryService
+	 * @returns A pre-configured ANTEventHistoryService instance
 	 */
 	public static autoConfiguration(): IANTEventHistoryService {
 		return new ANTEventHistoryService(
@@ -25,11 +26,58 @@ export class ANTEventHistoryService implements IANTEventHistoryService {
 		);
 	}
 
-
-	public getANTEvents(processId: string): Observable<IANTEvent[]> {
+	public getStateNoticeEvents(processId: string): Observable<IStateNoticeEvent[]> {
 		return this.antDataService.getStateNotices(processId).pipe(
-			map(transactions => transactions.map(transaction => new ANTEvent(transaction)))
+			map(transactions => transactions.map(transaction => new StateNoticeEvent(transaction)))
 		);
 	}
 
+	public getReassignNameNoticeEvents(processId: string): Observable<IReassignNameNoticeEvent[]> {
+		return this.antDataService.getReassignNameNotices(processId).pipe(
+			map(transactions => transactions.map(transaction => new ReassignNameNoticeEvent(transaction)))
+		);
+	}
+
+	public getReleaseNameNoticeEvents(processId: string): Observable<IReleaseNameNoticeEvent[]> {
+		return this.antDataService.getReleaseNameNotices(processId).pipe(
+			map(transactions => transactions.map(transaction => new ReleaseNameNoticeEvent(transaction)))
+		);
+	}
+
+	public getApprovePrimaryNameNoticeEvents(processId: string): Observable<IApprovePrimaryNameNoticeEvent[]> {
+		return this.antDataService.getApprovePrimaryNameNotices(processId).pipe(
+			map(transactions => transactions.map(transaction => new ApprovePrimaryNameNoticeEvent(transaction)))
+		);
+	}
+
+	public getRemovePrimaryNamesNoticeEvents(processId: string): Observable<IRemovePrimaryNamesNoticeEvent[]> {
+		return this.antDataService.getRemovePrimaryNamesNotices(processId).pipe(
+			map(transactions => transactions.map(transaction => new RemovePrimaryNamesNoticeEvent(transaction)))
+		);
+	}
+
+	public getCreditNoticeEvents(processId: string): Observable<ICreditNoticeEvent[]> {
+		return this.antDataService.getCreditNotices(processId).pipe(
+			map(transactions => transactions.map(transaction => new CreditNoticeEvent(transaction)))
+		);
+	}
+
+	public getDebitNoticeEvents(processId: string): Observable<IDebitNoticeEvent[]> {
+		return this.antDataService.getDebitNotices(processId).pipe(
+			map(transactions => transactions.map(transaction => new DebitNoticeEvent(transaction)))
+		);
+	}
+
+
+	public getAllEvents(processId: string): AllANTEventsType {
+		return {
+			stateNoticeEvents: this.getStateNoticeEvents(processId),
+			reassignNameNoticeEvents: this.getReassignNameNoticeEvents(processId),
+			releaseNameNoticeEvents: this.getReleaseNameNoticeEvents(processId),
+			approvePrimaryNameNoticeEvents: this.getApprovePrimaryNameNoticeEvents(processId),
+			removePrimaryNamesNoticeEvents: this.getRemovePrimaryNamesNoticeEvents(processId),
+			creditNoticeEvents: this.getCreditNoticeEvents(processId),
+			debitNoticeEvents: this.getDebitNoticeEvents(processId)
+		};
+	}
 }

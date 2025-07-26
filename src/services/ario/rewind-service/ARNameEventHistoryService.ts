@@ -1,5 +1,5 @@
 import { Observable } from "rxjs";
-import { map } from "rxjs/operators";
+import { map, shareReplay } from "rxjs/operators";
 import { staticImplements, IAutoconfiguration } from "../../../utils";
 import { IARNameEvent, IBuyNameEvent, IExtendLeaseEvent, IIncreaseUndernameEvent, IReassignNameEvent, IRecordEvent, IReturnedNameEvent, IUpgradeNameEvent } from "./events";
 import { ARNSDataService, IARNSDataService } from "../arns-data-service";
@@ -13,6 +13,7 @@ import {
 	UpgradeNameEventConverter
 } from "./converters";
 import { IARNameEventHistoryService } from "./abstract/IARNameEventHistoryService";
+import { AllARNameEventsType } from "./abstract/responseTypes";
 
 /**
  * @category ARIO
@@ -73,6 +74,18 @@ export class ARNameEventHistoryService implements IARNameEventHistoryService {
 		return this.arnsDataService.getUpgradeNameNotices(name).pipe(
 			map(transactions => UpgradeNameEventConverter.convertMany(transactions))
 		);
+	}
+
+	public getAllEvents(name: string): AllARNameEventsType {
+		return {
+			buyNameEvents: this.getBuyNameEvents(name).pipe(shareReplay(1)),
+			extendLeaseEvents: this.getExtendLeaseEvents(name).pipe(shareReplay(1)),
+			increaseUndernameEvents: this.getIncreaseUndernameEvents(name).pipe(shareReplay(1)),
+			reassignNameEvents: this.getReassignNameEvents(name).pipe(shareReplay(1)),
+			recordEvents: this.getRecordEvents(name).pipe(shareReplay(1)),
+			returnedNameEvents: this.getReturnedNameEvents(name).pipe(shareReplay(1)),
+			upgradeNameEvents: this.getUpgradeNameEvents(name).pipe(shareReplay(1))
+		};
 	}
 
 }

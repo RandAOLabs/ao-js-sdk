@@ -6,7 +6,7 @@ import { IANTDataService } from "./abstract";
 import { staticImplements, IAutoconfiguration } from "../../../utils";
 import { IReactiveMessageService, ReactiveMessageService } from "../../messages";
 import { IArweaveDataService, ArweaveDataService } from "../../../core";
-import { ANT_RESPONSE_TAGS } from "../../../models/ario/ant/tags";
+import { ANT_NOTICE_TAGS } from "../../../models/ario/ant/tags";
 import { ANTState } from "../../../models";
 
 /**
@@ -33,8 +33,8 @@ export class ANTDataService implements IANTDataService {
 	getStateNotices(processId: string): Observable<ArweaveTransaction[]> {
 		return this.reactiveMessageService.streamAllMessages({
 			tags: [
-				ANT_RESPONSE_TAGS.ACTION.STATE_NOTICE,
-				ANT_RESPONSE_TAGS.FROM_PROCESS(processId)
+				ANT_NOTICE_TAGS.ACTION.STATE_NOTICE,
+				ANT_NOTICE_TAGS.FROM_PROCESS(processId)
 			]
 		})
 	}
@@ -63,5 +63,59 @@ export class ANTDataService implements IANTDataService {
 				return forkJoin(dataObservables);
 			})
 		);
+	}
+
+	getReassignNameNotices(processId: string): Observable<ArweaveTransaction[]> {
+		return this.reactiveMessageService.streamAllMessages({
+			tags: [
+				ANT_NOTICE_TAGS.ACTION.REASSIGN_NAME,
+				ANT_NOTICE_TAGS.FROM_PROCESS(processId)
+			]
+		})
+	}
+
+	getReleaseNameNotices(processId: string): Observable<ArweaveTransaction[]> {
+		return this.reactiveMessageService.streamAllMessages({
+			tags: [
+				ANT_NOTICE_TAGS.ACTION.RELEASE_NAME,
+				ANT_NOTICE_TAGS.FROM_PROCESS(processId)
+			]
+		})
+	}
+
+	getApprovePrimaryNameNotices(processId: string): Observable<ArweaveTransaction[]> {
+		return this.reactiveMessageService.streamAllMessages({
+			tags: [
+				ANT_NOTICE_TAGS.ACTION.APPROIVE_PRIMARY_NAME,
+				ANT_NOTICE_TAGS.FROM_PROCESS(processId)
+			]
+		})
+	}
+
+	getRemovePrimaryNamesNotices(processId: string): Observable<ArweaveTransaction[]> {
+		return this.reactiveMessageService.streamAllMessages({
+			tags: [
+				ANT_NOTICE_TAGS.ACTION.REMOVE_PRIMARY_NAMES,
+				ANT_NOTICE_TAGS.FROM_PROCESS(processId)
+			]
+		})
+	}
+
+	getCreditNotices(processId: string): Observable<ArweaveTransaction[]> {
+		return this.reactiveMessageService.streamAllMessages({
+			tags: [
+				ANT_NOTICE_TAGS.ACTION.CREDIT_NOTICE,
+				ANT_NOTICE_TAGS.FROM_PROCESS(processId)
+			]
+		})
+	}
+
+	getDebitNotices(processId: string): Observable<ArweaveTransaction[]> {
+		return this.reactiveMessageService.streamAllMessages({
+			tags: [
+				ANT_NOTICE_TAGS.ACTION.DEBIT_NOTICE,
+				ANT_NOTICE_TAGS.FROM_PROCESS(processId)
+			]
+		})
 	}
 }

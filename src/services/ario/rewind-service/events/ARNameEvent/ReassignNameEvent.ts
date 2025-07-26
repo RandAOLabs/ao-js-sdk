@@ -1,37 +1,21 @@
 import { ArweaveTransaction } from "../../../../../core/arweave/abstract/types";
-import { IArweaveDataService } from "../../../../../core/arweave/abstract/IArweaveDataService";
-import { ArweaveDataService } from "../../../../../core/arweave/ArweaveDataService";
 import { CurrencyAmount } from "../../../../../models/currency/CurrencyAmount";
 import { ReassignNameNoticeTransactionData } from "../../../arns-data-service/abstract/transaction-data/ReassignNameNoticeTransactionData";
 import { IReassignNameEvent } from "./abstract/IReassignNameEvent";
 import { ARNameEvent } from "./ARNameEvent";
 import { ARIO_TOKEN } from "../../../../../processes/maps/currencies";
+import { ARNameTransactionDataEvent } from "./ARNameTransactionDataEvent";
 
-export class ReassignNameEvent extends ARNameEvent implements IReassignNameEvent {
-	private readonly transactionDataPromise: Promise<ReassignNameNoticeTransactionData>;
-	private readonly arweaveDataService: IArweaveDataService;
-
+export class ReassignNameEvent extends ARNameTransactionDataEvent<ReassignNameNoticeTransactionData> implements IReassignNameEvent {
 	constructor(
 		protected readonly arweaveTransaction: ArweaveTransaction
 	) {
 		super(arweaveTransaction);
-		this.arweaveDataService = ArweaveDataService.autoConfiguration();
-
-		if (!this.arweaveTransaction.id) {
-			throw new Error('Transaction ID is required for ReassignNameEvent');
-		}
-
-		this.transactionDataPromise = this.arweaveDataService.getTransactionData<ReassignNameNoticeTransactionData>(
-			this.arweaveTransaction.id
-		);
 	}
+
 	async getReassignedProcessId(): Promise<string> {
 		const notice = await this.getNoticeData();
 		return notice.processId;
-	}
-
-	async getNoticeData(): Promise<ReassignNameNoticeTransactionData> {
-		return await this.transactionDataPromise;
 	}
 
 	async getPurchasePrice(): Promise<CurrencyAmount> {

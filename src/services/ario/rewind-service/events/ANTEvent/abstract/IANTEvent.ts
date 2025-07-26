@@ -3,6 +3,5 @@ import { IARNSEvent } from "../../abstract/IARNSEvent";
 
 export interface IANTEvent extends IARNSEvent {
 	getANTProcessId(): string;
-	getANTName(): Promise<string>;
-	getNoticeData(): Promise<ANTState>;
+	getANTName(): string;
 }

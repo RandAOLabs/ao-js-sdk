@@ -18,12 +18,36 @@ export const ANT_QUERY_TAGS = {
 
 
 
-export const ANT_RESPONSE_TAGS = {
+export const ANT_NOTICE_TAGS = {
 	ACTION: {
 		STATE_NOTICE: {
 			name: ACTION_TAG_NAME,
 			value: "State-Notice"
 		},
+		REASSIGN_NAME: {
+			name: ACTION_TAG_NAME,
+			value: "Reassign-Name-Notice"
+		},
+		RELEASE_NAME: {
+			name: ACTION_TAG_NAME,
+			value: "Release-Name-Notice"
+		},
+		APPROIVE_PRIMARY_NAME: {
+			name: ACTION_TAG_NAME,
+			value: "Approve-Primary-Name-Request"
+		},
+		REMOVE_PRIMARY_NAMES: {
+			name: ACTION_TAG_NAME,
+			value: "Remove-Primary-Names"
+		},
+		CREDIT_NOTICE: {
+			name: ACTION_TAG_NAME,
+			value: "Credit-Notice"
+		},
+		DEBIT_NOTICE: {
+			name: ACTION_TAG_NAME,
+			value: "Debit-Notice"
+		}
 	} satisfies TagRecord<Record<string, Tag | ((value: string) => Tag)>>,
 	NAME: (value: string) => {
 		return { name: NAME_TAG_NAME, value: value }

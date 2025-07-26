@@ -1,6 +1,6 @@
 import { Observable } from "rxjs";
 import { IARNameEvent, IANTEvent, IBuyNameEvent, IExtendLeaseEvent, IIncreaseUndernameEvent, IReassignNameEvent, IRecordEvent, IReturnedNameEvent, IUpgradeNameEvent } from "../events";
-
+import { AllARNameEventsType } from "./responseTypes";
 
 export interface IARNameEventHistoryService {
 
@@ -17,4 +17,6 @@ export interface IARNameEventHistoryService {
 	getReturnedNameEvents(name: string): Observable<IReturnedNameEvent[]>;
 
 	getUpgradeNameEvents(name: string): Observable<IUpgradeNameEvent[]>;
+
+	getAllEvents(name: string): AllARNameEventsType;
 }
