@@ -32,7 +32,6 @@ export class RandAODataService implements IRandAODataService {
 
 	async getTotalRandomResponses(): Promise<number> {
 		const randomProcessId = await this.arioservice.getProcessIdForDomain(DOMAIN.RANDAO_API)
-		Logger.debug(randomProcessId)
 		return await this.messagesService.countAllMessages({
 			tags: [
 				RANDOM_PROCESS_TAGS.ACTION.RESPONSE,

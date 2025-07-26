@@ -38,8 +38,6 @@ export class ArweaveDataService implements IArweaveDataService {
 			const response = await this.arweave.api.post('/graphql', {
 				query: query
 			});
-			Logger.debug(`GraphQuery:`, query)
-			Logger.debug(`Qraph Query Response:`, JSON.stringify(response))
 			return response.data as T;
 		} catch (error: any) {
 			Logger.error(`GraphQL query error: ${error.message}`);
@@ -101,7 +99,6 @@ export class ArweaveDataService implements IArweaveDataService {
 
 	public async getTransactionData<T>(id: string): Promise<T> {
 		const dataString = await this.getTransactionDataString(id);
-		Logger.debug("TDATA:", dataString)
 		return JsonUtils.parse<T>(dataString);
 	}
 
