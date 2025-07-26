@@ -181,11 +181,14 @@ export class ARIORewindService implements IARIORewindService {
 	): Observable<IARNSEvent[]> {
 		return merge(arNameEventStream, antEventStream).pipe(
 			scan((allEvents: IARNSEvent[], newEvents: IARNSEvent[]) => {
+				let updatedEvents: IARNSEvent[];
 				if (Array.isArray(newEvents)) {
-					return [...allEvents, ...newEvents];
+					updatedEvents = [...allEvents, ...newEvents];
 				} else {
-					return [...allEvents, newEvents];
+					updatedEvents = [...allEvents, newEvents];
 				}
+				// Sort events by timestamp
+				return updatedEvents.sort((a, b) => a.getEventTimeStamp() - b.getEventTimeStamp());
 			}, []),
 			startWith([])
 		);
