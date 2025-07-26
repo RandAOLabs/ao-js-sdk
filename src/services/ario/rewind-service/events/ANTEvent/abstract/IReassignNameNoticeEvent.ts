@@ -2,6 +2,6 @@ import { ReassignNameNoticeANTTransactionData } from "../../../../ant-data-servi
 import { ITransactionDataEvent } from "../../abstract";
 import { IANTEvent } from "./IANTEvent";
 
-export interface IReassignNameNoticeEvent extends IANTEvent, ITransactionDataEvent<ReassignNameNoticeANTTransactionData> {
+export interface IReassignNameNoticeEvent extends IANTEvent {
 	// TODO: Add specific methods for ReassignNameNotice event
 }
