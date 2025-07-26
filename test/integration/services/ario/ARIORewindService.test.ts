@@ -1,9 +1,7 @@
 import { ARIORewindService } from "src/services/ario/rewind-service/ARIORewindService";
 import { IARIORewindService } from "src/services/ario/rewind-service/abstract/IARIORewindService";
 import { Logger, LogLevel } from "src/utils/logger";
-import { firstValueFrom, lastValueFrom, timeout } from "rxjs";
-import { ARNSDataService } from "../../../../src";
-import de from "zod/v4/locales/de.cjs";
+import { lastValueFrom, timeout } from "rxjs";
 
 describe("ARIORewindService Integration Tests", () => {
 	let service: IARIORewindService;

@@ -1,9 +1,9 @@
 import { CurrencyAmount } from "../../../../../../models/currency";
 import { ReassignNameNoticeTransactionData } from "../../../../arns-data-service/abstract/transaction-data/ReassignNameNoticeTransactionData";
+import { ITransactionDataEvent } from "../../abstract";
 import { IARNameEvent } from "./IARNameEvent";
 
-export interface IReassignNameEvent extends IARNameEvent {
-	getNoticeData(): Promise<ReassignNameNoticeTransactionData>;
+export interface IReassignNameEvent extends IARNameEvent, ITransactionDataEvent<ReassignNameNoticeTransactionData> {
 	getPurchasePrice(): Promise<CurrencyAmount>;
 	getType(): Promise<string>;
 	getStartTime(): Promise<number>;

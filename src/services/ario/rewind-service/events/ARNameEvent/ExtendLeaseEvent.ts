@@ -1,33 +1,16 @@
 import { ArweaveTransaction } from "../../../../../core/arweave/abstract/types";
-import { IArweaveDataService } from "../../../../../core/arweave/abstract/IArweaveDataService";
-import { ArweaveDataService } from "../../../../../core/arweave/ArweaveDataService";
 import { CurrencyAmount } from "../../../../../models/currency/CurrencyAmount";
 import { ExtendLeaseNoticeTransactionData } from "../../../arns-data-service/abstract/transaction-data/ExtendLeaseNoticeTransactionData";
 import { IExtendLeaseEvent } from "./abstract/IExtendLeaseEvent";
 import { ARNameEvent } from "./ARNameEvent";
 import { ARIO_TOKEN } from "../../../../../processes/maps/currencies";
+import { ARNameTransactionDataEvent } from "./ARNameTransactionDataEvent";
 
-export class ExtendLeaseEvent extends ARNameEvent implements IExtendLeaseEvent {
-	private readonly transactionDataPromise: Promise<ExtendLeaseNoticeTransactionData>;
-	private readonly arweaveDataService: IArweaveDataService;
-
+export class ExtendLeaseEvent extends ARNameTransactionDataEvent<ExtendLeaseNoticeTransactionData> implements IExtendLeaseEvent {
 	constructor(
 		protected readonly arweaveTransaction: ArweaveTransaction
 	) {
 		super(arweaveTransaction);
-		this.arweaveDataService = ArweaveDataService.autoConfiguration();
-
-		if (!this.arweaveTransaction.id) {
-			throw new Error('Transaction ID is required for ExtendLeaseEvent');
-		}
-
-		this.transactionDataPromise = this.arweaveDataService.getTransactionData<ExtendLeaseNoticeTransactionData>(
-			this.arweaveTransaction.id
-		);
-	}
-
-	async getNoticeData(): Promise<ExtendLeaseNoticeTransactionData> {
-		return await this.transactionDataPromise;
 	}
 
 	async getTotalFee(): Promise<CurrencyAmount> {

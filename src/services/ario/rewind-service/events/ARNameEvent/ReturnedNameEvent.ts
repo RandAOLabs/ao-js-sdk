@@ -1,31 +1,14 @@
 import { ArweaveTransaction } from "../../../../../core/arweave/abstract/types";
-import { IArweaveDataService } from "../../../../../core/arweave/abstract/IArweaveDataService";
-import { ArweaveDataService } from "../../../../../core/arweave/ArweaveDataService";
 import { ReturnedNameNoticeTransactionData } from "../../../arns-data-service/abstract/transaction-data/ReturnedNameNoticeTransactionData";
 import { IReturnedNameEvent } from "./abstract/IReturnedNameEvent";
 import { ARNameEvent } from "./ARNameEvent";
+import { ARNameTransactionDataEvent } from "./ARNameTransactionDataEvent";
 
-export class ReturnedNameEvent extends ARNameEvent implements IReturnedNameEvent {
-	private readonly transactionDataPromise: Promise<ReturnedNameNoticeTransactionData>;
-	private readonly arweaveDataService: IArweaveDataService;
-
+export class ReturnedNameEvent extends ARNameTransactionDataEvent<ReturnedNameNoticeTransactionData> implements IReturnedNameEvent {
 	constructor(
 		protected readonly arweaveTransaction: ArweaveTransaction
 	) {
 		super(arweaveTransaction);
-		this.arweaveDataService = ArweaveDataService.autoConfiguration();
-
-		if (!this.arweaveTransaction.id) {
-			throw new Error('Transaction ID is required for ReturnedNameEvent');
-		}
-
-		this.transactionDataPromise = this.arweaveDataService.getTransactionData<ReturnedNameNoticeTransactionData>(
-			this.arweaveTransaction.id
-		);
-	}
-
-	async getNoticeData(): Promise<ReturnedNameNoticeTransactionData> {
-		return await this.transactionDataPromise;
 	}
 
 	async getInitiator(): Promise<string> {

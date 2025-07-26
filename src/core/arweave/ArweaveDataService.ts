@@ -98,6 +98,7 @@ export class ArweaveDataService implements IArweaveDataService {
 
 	public async getTransactionData<T>(id: string): Promise<T> {
 		const dataString = await this.getTransactionDataString(id);
+
 		return JsonUtils.parse<T>(dataString);
 	}
 
