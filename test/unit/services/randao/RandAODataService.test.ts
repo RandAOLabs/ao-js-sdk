@@ -14,6 +14,7 @@ describe('RandAODataService', () => {
 		mockArioService = {
 			getProcessIdForDomain: jest.fn(),
 			getANTStateForARName: jest.fn(),
+			getAntProcessId: jest.fn(),
 			getARNSRecordForARName: jest.fn()
 		} as jest.Mocked<IARIOService>;
 
