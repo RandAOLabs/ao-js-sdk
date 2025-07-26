@@ -11,7 +11,6 @@ import { FullARNSName } from "../../../models";
 import { ANTUtils } from "../../../models/ario/ant/AntUtils";
 
 /**
- * @alpha
  * @category ARIO
  */
 @staticImplements<IAutoconfiguration>()
@@ -26,6 +25,7 @@ export class ARIORewindService implements IARIORewindService {
 	/**
 	 * Creates a pre-configured instance of PiDataService
 	 * @returns A pre-configured PiDataService instance
+	 * @constructor
 	 */
 	public static autoConfiguration(): IARIORewindService {
 		return new ARIORewindService(
