@@ -1,6 +1,6 @@
 import { Observable, merge, EMPTY, Subject } from "rxjs";
-import { map, scan, startWith, switchMap, shareReplay, mergeMap, catchError, distinct, filter } from "rxjs/operators";
-import { staticImplements, IAutoconfiguration } from "../../../utils";
+import { map, scan, startWith, shareReplay, mergeMap, catchError, distinct, filter } from "rxjs/operators";
+import { staticImplements, IAutoconfiguration, Logger } from "../../../utils";
 import { IANTEventHistoryService, IARIORewindService, IARNameEventHistoryService } from "./abstract";
 import { IARNameEvent, IANTEvent, IARNSEvent, IBuyNameEvent, IReassignNameEvent } from "./events";
 import { ARNameEventHistoryService } from "./ARNameEventHistoryService";
@@ -98,24 +98,6 @@ export class ARIORewindService implements IARIORewindService {
 	}
 
 	/**
-	 * Creates a stream of ANT events by extracting process IDs from shared buy and reassign events
-	 */
-	private createANTEventStream(sharedStreams: AllARNameEventsType): Observable<IANTEvent[]> {
-		const processedProcessIds = new Set<string>();
-
-		const processIdStream = this.extractProcessIdsFromEvents(
-			sharedStreams.buyNameEvents,
-			sharedStreams.reassignNameEvents
-		);
-
-		return processIdStream.pipe(
-			map((processId: string | null) => this.filterDuplicateProcessIds(processId, processedProcessIds)),
-			switchMap((processId: string | null) => this.fetchANTEventsForProcessId(processId)),
-			shareReplay(1)
-		);
-	}
-
-	/**
 	 * Extracts process IDs from buy and reassign name events
 	 */
 	private extractProcessIdsFromEvents(
@@ -209,9 +191,12 @@ export class ARIORewindService implements IARIORewindService {
 	 */
 	public createANTEventStreamFromProcessIds(processIdStream: Observable<string>): Observable<IANTEvent[]> {
 		return processIdStream.pipe(
-			map((processId: string) => processId.trim()),
+			map((processId: string) => {
+				Logger.debug("ProcessID::", processId)
+				return processId.trim()
+			}),
 			distinct(),
-			switchMap((processId: string) => this.fetchANTEventsForProcessId(processId)),
+			mergeMap((processId: string) => this.fetchANTEventsForProcessId(processId)),
 			shareReplay(1)
 		);
 	}
