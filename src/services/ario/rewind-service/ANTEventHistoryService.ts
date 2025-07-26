@@ -19,6 +19,7 @@ export class ANTEventHistoryService implements IANTEventHistoryService {
 	/**
 	 * Creates a pre-configured instance of ANTEventHistoryService
 	 * @returns A pre-configured ANTEventHistoryService instance
+	 * @constructor
 	 */
 	public static autoConfiguration(): IANTEventHistoryService {
 		return new ANTEventHistoryService(
