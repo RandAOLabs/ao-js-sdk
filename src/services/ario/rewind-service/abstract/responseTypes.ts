@@ -1,5 +1,5 @@
 import { Observable } from "rxjs";
-import { IStateNoticeEvent, IReassignNameNoticeEvent, IReleaseNameNoticeEvent, IApprovePrimaryNameNoticeEvent, IRemovePrimaryNamesNoticeEvent, ICreditNoticeEvent, IDebitNoticeEvent, IBuyNameEvent, IExtendLeaseEvent, IIncreaseUndernameEvent, IReassignNameEvent, IRecordEvent, IReturnedNameEvent, IUpgradeNameEvent } from "../events";
+import { IStateNoticeEvent, IReassignNameNoticeEvent, IReleaseNameNoticeEvent, IApprovePrimaryNameNoticeEvent, IRemovePrimaryNamesNoticeEvent, ICreditNoticeEvent, IDebitNoticeEvent, IBuyNameEvent, IExtendLeaseEvent, IIncreaseUndernameEvent, IReassignNameEvent, IRecordEvent, IReturnedNameEvent, IUpgradeNameEvent, ISetRecordEvent } from "../events";
 
 export interface ARNameDetail {
 	name: string,
@@ -30,4 +30,5 @@ export type AllANTEventsType = {
 	removePrimaryNamesNoticeEvents: Observable<IRemovePrimaryNamesNoticeEvent[]>;
 	creditNoticeEvents: Observable<ICreditNoticeEvent[]>;
 	debitNoticeEvents: Observable<IDebitNoticeEvent[]>;
+	setRecordEvents: Observable<ISetRecordEvent[]>
 };

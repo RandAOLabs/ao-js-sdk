@@ -118,4 +118,13 @@ export class ANTDataService implements IANTDataService {
 			]
 		})
 	}
+
+	getSetRecordNotices(processId: string): Observable<ArweaveTransaction[]> {
+		return this.reactiveMessageService.streamAllMessages({
+			tags: [
+				ANT_NOTICE_TAGS.ACTION.SET_RECORD_NOTICE,
+				ANT_NOTICE_TAGS.FROM_PROCESS(processId)
+			]
+		})
+	}
 }
