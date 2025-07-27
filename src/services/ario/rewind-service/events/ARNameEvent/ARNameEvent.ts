@@ -18,7 +18,9 @@ export class ARNameEvent extends ARNSEvent implements IARNameEvent {
 	}
 
 	public toString(): string {
-		const timestamp = new Date(this.getEventTimeStamp() * 1000).toISOString();
-		return `${this.constructor.name}{messageId: ${this.getEventMessageId()}, timestamp: ${timestamp}, arnsName: ${this.getARNSName()}, processId: ${this.getARNSProcessId()}}`;
+		const baseString = super.toString();
+		// Remove the closing brace and add our additional properties
+		const baseWithoutClosing = baseString.slice(0, -1);
+		return `ARNameEvent:${baseWithoutClosing}, arnsName: ${this.getARNSName()}, processId: ${this.getARNSProcessId()}}`;
 	}
 }

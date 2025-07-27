@@ -32,4 +32,8 @@ export class ARNameTransactionDataEvent<T = any> extends ARNameEvent implements 
 		return await this.transactionDataPromise;
 	}
 
+	toString(): string {
+		return super.toString();
+	}
+
 }

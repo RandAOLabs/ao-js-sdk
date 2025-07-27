@@ -30,7 +30,6 @@ export class ANTTransactionDataEvent<T = any> extends ANTEvent implements IANTEv
 	}
 
 	toString(): string {
-		const timestamp = new Date(this.getEventTimeStamp() * 1000).toISOString();
-		return `${this.constructor.name}{messageId: ${this.getEventMessageId()}, timestamp: ${timestamp}, antProcessId: ${this.getANTProcessId()}, arnsName: ${this.getARNSName()}}`;
+		return super.toString();
 	}
 }

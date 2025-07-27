@@ -19,8 +19,10 @@ export class ANTEvent extends ARNSEvent implements IANTEvent {
 	}
 
 	public toString(): string {
-		const timestamp = new Date(this.getEventTimeStamp() * 1000).toISOString();
-		return `${this.constructor.name}{messageId: ${this.getEventMessageId()}, timestamp: ${timestamp}, antProcessId: ${this.getANTProcessId()}, arnsName: ${this.getARNSName()}}`;
+		const baseString = super.toString();
+		// Remove the closing brace and add our additional properties
+		const baseWithoutClosing = baseString.slice(0, -1);
+		return `ANTEvent:${baseWithoutClosing}, antProcessId: ${this.getANTProcessId()}, arnsName: ${this.getARNSName()}}`;
 	}
 
 }
