@@ -151,7 +151,8 @@ export class ARIORewindService implements IARIORewindService {
 			this.antEventHistoryService.getApprovePrimaryNameNoticeEvents(processId),
 			this.antEventHistoryService.getRemovePrimaryNamesNoticeEvents(processId),
 			this.antEventHistoryService.getCreditNoticeEvents(processId),
-			this.antEventHistoryService.getDebitNoticeEvents(processId)
+			this.antEventHistoryService.getDebitNoticeEvents(processId),
+			this.antEventHistoryService.getSetRecordEvents(processId)
 		).pipe(
 			catchError(() => EMPTY)
 		);

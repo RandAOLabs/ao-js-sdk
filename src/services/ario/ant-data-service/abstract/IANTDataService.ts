@@ -10,4 +10,5 @@ export interface IANTDataService {
 	getRemovePrimaryNamesNotices(processId: string): Observable<ArweaveTransaction[]>;
 	getCreditNotices(processId: string): Observable<ArweaveTransaction[]>;
 	getDebitNotices(processId: string): Observable<ArweaveTransaction[]>;
+	getSetRecordNotices(processId: string): Observable<ArweaveTransaction[]>;
 }
