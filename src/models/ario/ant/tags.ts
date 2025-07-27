@@ -2,7 +2,9 @@ import { Tag } from "../../../core/common/types";
 
 const ACTION_TAG_NAME = "Action"
 const NAME_TAG_NAME = "Name"
+const TRANSACTION_ID_TAG_NAME = "Transaction-Id"
 const FROM_PROCESS_TAG_NAME = "From-Process"
+export const ANT_SUB_DOMAIN_TAG_NAME = "Sub-Domain"
 
 // Type helper to ensure all values are Tags or Tag-generating functions while maintaining IntelliSense
 type TagRecord<T extends Record<string, Tag | ((value: string) => Tag)>> = T;
@@ -13,7 +15,11 @@ export const ANT_QUERY_TAGS = {
 			name: ACTION_TAG_NAME,
 			value: "State"
 		}
-	} satisfies TagRecord<Record<string, Tag | ((value: string) => Tag)>>
+	} satisfies TagRecord<Record<string, Tag | ((value: string) => Tag)>>,
+	TRANSACTION_ID: (value: string) => {
+		return { name: TRANSACTION_ID_TAG_NAME, value: value }
+	},
+
 } as const
 
 
@@ -47,6 +53,10 @@ export const ANT_NOTICE_TAGS = {
 		DEBIT_NOTICE: {
 			name: ACTION_TAG_NAME,
 			value: "Debit-Notice"
+		},
+		SET_RECORD_NOTICE: {
+			name: ACTION_TAG_NAME,
+			value: "Set-Record-Notice"
 		}
 	} satisfies TagRecord<Record<string, Tag | ((value: string) => Tag)>>,
 	NAME: (value: string) => {

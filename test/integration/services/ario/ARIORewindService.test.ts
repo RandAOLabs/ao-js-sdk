@@ -12,7 +12,9 @@ describe("ARIORewindService Integration Tests", () => {
 	});
 
 	it("should get event history for a domain and print results", async () => {
-		const testDomainName = "ownyourownbank";
+		// const testDomainName = "ownyourownbank";
+		const testDomainName = "randao";
+
 
 		Logger.info(`Testing getEventHistory for domain: ${testDomainName}`);
 

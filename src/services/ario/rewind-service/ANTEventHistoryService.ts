@@ -1,11 +1,12 @@
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { staticImplements, IAutoconfiguration } from "../../../utils";
-import { IStateNoticeEvent, IReassignNameNoticeEvent, IReleaseNameNoticeEvent, IApprovePrimaryNameNoticeEvent, IRemovePrimaryNamesNoticeEvent, ICreditNoticeEvent, IDebitNoticeEvent } from "./events";
+import { IStateNoticeEvent, IReassignNameNoticeEvent, IReleaseNameNoticeEvent, IApprovePrimaryNameNoticeEvent, IRemovePrimaryNamesNoticeEvent, ICreditNoticeEvent, IDebitNoticeEvent, ISetRecordEvent } from "./events";
 import { ANTDataService, IANTDataService } from "../ant-data-service";
 import { IANTEventHistoryService } from "./abstract/IANTEventHistoryService";
 import { StateNoticeEvent, ReassignNameNoticeEvent, ReleaseNameNoticeEvent, ApprovePrimaryNameNoticeEvent, RemovePrimaryNamesNoticeEvent, CreditNoticeEvent, DebitNoticeEvent } from "./events";
 import { AllANTEventsType } from "./abstract/responseTypes";
+import { SetRecordEvent } from "./events/ANTEvent/SetRecordEvent";
 
 /**
  * @category ARIO
@@ -69,6 +70,11 @@ export class ANTEventHistoryService implements IANTEventHistoryService {
 		);
 	}
 
+	public getSetRecordEvents(processId: string): Observable<ISetRecordEvent[]> {
+		return this.antDataService.getSetRecordNotices(processId).pipe(
+			map(transactions => transactions.map(transaction => new SetRecordEvent(transaction)))
+		);
+	}
 
 	public getAllEvents(processId: string): AllANTEventsType {
 		return {
@@ -78,7 +84,8 @@ export class ANTEventHistoryService implements IANTEventHistoryService {
 			approvePrimaryNameNoticeEvents: this.getApprovePrimaryNameNoticeEvents(processId),
 			removePrimaryNamesNoticeEvents: this.getRemovePrimaryNamesNoticeEvents(processId),
 			creditNoticeEvents: this.getCreditNoticeEvents(processId),
-			debitNoticeEvents: this.getDebitNoticeEvents(processId)
+			debitNoticeEvents: this.getDebitNoticeEvents(processId),
+			setRecordEvents: this.getSetRecordEvents(processId)
 		};
 	}
 }
