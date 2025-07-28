@@ -1,5 +1,5 @@
 
-import { Tags } from "../../../../core";
+import { Tags, TagUtils } from "../../../../core";
 import { ArweaveTransaction } from "../../../../core/arweave/abstract/types";
 import { IARNSEvent } from "./abstract";
 
@@ -9,6 +9,13 @@ export class ARNSEvent implements IARNSEvent {
 		protected readonly arweaveTransaction: ArweaveTransaction
 	) {
 
+	}
+	public getInitiator(): string {
+		return this.getNotified()
+	}
+
+	public getNotified(): string {
+		return this.arweaveTransaction.recipient!
 	}
 
 	public getEventMessageId(): string {
@@ -21,7 +28,7 @@ export class ARNSEvent implements IARNSEvent {
 
 	public toString(): string {
 		const timestamp = new Date(this.getEventTimeStamp() * 1000).toISOString();
-		return `${this.constructor.name}{messageId: ${this.getEventMessageId()}, timestamp: ${timestamp}}`;
+		return `${this.constructor.name}{messageId: ${this.getEventMessageId()}, timestamp: ${timestamp}, initiator: ${this.getInitiator()}}`;
 	}
 
 
