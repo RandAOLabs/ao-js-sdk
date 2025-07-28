@@ -3,7 +3,6 @@ import { ITransactionDataEvent } from "../../abstract";
 import { IARNameEvent } from "./IARNameEvent";
 
 export interface IReturnedNameEvent extends IARNameEvent, ITransactionDataEvent<ReturnedNameNoticeTransactionData> {
-	getInitiator(): Promise<string>;
 	getStartTime(): Promise<number>;
 	getEndTime(): Promise<number>;
 	getName(): Promise<string>;
