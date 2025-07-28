@@ -76,7 +76,7 @@ export class ReadOnlyAOClient implements IReadOnlyAOClient {
 
 
 	public setConfig(aoConnectConfig: ConnectArgsLegacy): void {
-		Logger.debug(`Connecting to AO with:`, aoConnectConfig)
+		Logger.debug(`Connecting to AO with:`, aoConnectConfig)// Leave
 		const { message, result, results, dryrun } = connect(aoConnectConfig);
 		this._message = message;
 		this._result = result;

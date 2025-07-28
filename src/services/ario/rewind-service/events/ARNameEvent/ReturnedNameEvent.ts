@@ -11,10 +11,10 @@ export class ReturnedNameEvent extends ARNameTransactionDataEvent<ReturnedNameNo
 		super(arweaveTransaction);
 	}
 
-	async getInitiator(): Promise<string> {
-		const notice = await this.getNoticeData();
-		return notice.initiator;
-	}
+	// async getInitiator(): Promise<string> {
+	// 	const notice = await this.getNoticeData();
+	// 	return notice.initiator;
+	// }
 
 	async getStartTime(): Promise<number> {
 		const notice = await this.getNoticeData();
