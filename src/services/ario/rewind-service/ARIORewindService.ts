@@ -51,6 +51,12 @@ export class ARIORewindService implements IARIORewindService {
 			controllers: currentANTState.Controllers,
 			owner: currentANTState.Owner,
 			ttlSeconds: ANTUtils.getRecord(currentANTState, "@")?.ttlSeconds!,
+			logoTxId: currentANTState.Logo,
+			records: currentANTState.Records,
+			targetId: ANTUtils.getRecord(currentANTState, "@")?.transactionId!,
+			undernameLimit: currentARNSRecord?.undernameLimit!,
+			expiryDate: new Date(currentARNSRecord?.endTimestamp!),
+			leaseDuration: this.calculateLeaseDuration(currentARNSRecord?.startTimestamp!, currentARNSRecord?.endTimestamp!)
 		}
 		return details
 	}
@@ -193,6 +199,31 @@ export class ARIORewindService implements IARIORewindService {
 			}, []),
 			startWith([])
 		);
+	}
+
+	/**
+	 * Calculates the lease duration in years between start and end timestamps
+	 * @param startTimestamp - Start timestamp in milliseconds
+	 * @param endTimestamp - End timestamp in milliseconds
+	 * @returns Formatted string like "2 years"
+	 */
+	private calculateLeaseDuration(startTimestamp: number, endTimestamp: number): string {
+		const startDate = new Date(startTimestamp);
+		const endDate = new Date(endTimestamp);
+
+		// Calculate the difference in years
+		let years = endDate.getFullYear() - startDate.getFullYear();
+
+		// Adjust for partial years by checking if the end date hasn't reached the anniversary
+		const monthDiff = endDate.getMonth() - startDate.getMonth();
+		const dayDiff = endDate.getDate() - startDate.getDate();
+
+		if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+			years--;
+		}
+
+		// Handle singular vs plural
+		return years === 1 ? "1 year" : `${years} years`;
 	}
 
 
