@@ -29,7 +29,7 @@ export class ArweaveDataService implements IArweaveDataService {
 
 
 	public static autoConfiguration(): IArweaveDataService {
-		const _arweave = ArweaveNodeFactory.getInstance().getNodeClient(ArweaveNodeType.DOT_NET)
+		const _arweave = ArweaveNodeFactory.getInstance().getNodeClient(ArweaveNodeType.GOLDSKY)
 		const _httpClient = getArweaveDotNetHttpClient()
 		return new ArweaveDataService(_arweave, _httpClient);
 	}
