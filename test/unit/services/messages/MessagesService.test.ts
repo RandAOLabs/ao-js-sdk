@@ -1,31 +1,39 @@
-import { IMessagesService, MessagesService } from "src";
 
-
-// Mock ArweaveInstance.getInstance()
-jest.mock("../../../../src/core/arweave/arweave", () => {
-	const mockArweave = {
-		api: {
-			post: jest.fn().mockResolvedValue({
-				data: {
-					data: {
-						transactions: {
-							edges: [
-								{
-									cursor: "cursor1",
-									node: { id: "tx1" }
-								}
-							]
-						}
+// Create a proper mock response object
+const mockApiPost = jest.fn().mockResolvedValue({
+	data: {
+		data: {
+			transactions: {
+				edges: [
+					{
+						cursor: "cursor1",
+						node: { id: "tx1" }
 					}
-				}
-			})
+				]
+			}
 		}
-	};
-
-	return {
-		getArweave: jest.fn().mockReturnValue(mockArweave)
-	};
+	}
 });
+
+// Mock the ArweaveNodeFactory
+jest.mock("../../../../src/core/arweave/graphql-nodes/ArweaveNodeFactory", () => ({
+	ArweaveNodeFactory: {
+		getInstance: jest.fn(() => ({
+			getNodeClient: jest.fn(() => ({
+				api: {
+					post: mockApiPost
+				}
+			}))
+		}))
+	}
+}));
+
+// Mock the HTTP client
+jest.mock("../../../../src/core/arweave/http-nodes/arweave-dot-net-http-client", () => ({
+	getArweaveDotNetHttpClient: jest.fn(() => ({}))
+}));
+
+import { IMessagesService, MessagesService } from "src";
 
 describe("MessagesService", () => {
 	let client: IMessagesService;
@@ -46,13 +54,10 @@ describe("MessagesService", () => {
 
 		it("should include Data-Protocol:ao tag", async () => {
 			await client.getLatestMessages();
-			// Get the mock instance and verify the GraphQL query
-			const { getArweave } = require("../../../../src/core/arweave/arweave");
-			const mockArweave = getArweave();
-			const postCall = mockArweave.api.post.mock.calls[0];
-			expect(postCall[0]).toBe('/graphql');
-			expect(postCall[1].query).toContain('Data-Protocol');
-			expect(postCall[1].query).toContain('ao');
+			// Verify the GraphQL query was called with correct parameters
+			expect(mockApiPost).toHaveBeenCalledWith('/graphql', expect.objectContaining({
+				query: expect.stringMatching(/Data-Protocol.*ao/)
+			}));
 		});
 	});
 
@@ -61,12 +66,10 @@ describe("MessagesService", () => {
 			const result = await client.getLatestMessagesSentBy({ id: "sender" });
 			expect(result).toBeDefined();
 			expect(result.messages).toBeDefined();
-			// Get the mock instance and verify the GraphQL query
-			const { getArweave } = require("../../../../src/core/arweave/arweave");
-			const mockArweave = getArweave();
-			const postCall = mockArweave.api.post.mock.calls[0];
-			expect(postCall[0]).toBe('/graphql');
-			expect(postCall[1].query).toContain('owners: ["sender"]');
+			// Verify the GraphQL query was called with correct parameters
+			expect(mockApiPost).toHaveBeenCalledWith('/graphql', expect.objectContaining({
+				query: expect.stringContaining('owners: ["sender"]')
+			}));
 		});
 	});
 
@@ -75,12 +78,10 @@ describe("MessagesService", () => {
 			const result = await client.getLatestMessagesReceivedBy({ recipientId: "recipient" });
 			expect(result).toBeDefined();
 			expect(result.messages).toBeDefined();
-			// Get the mock instance and verify the GraphQL query
-			const { getArweave } = require("../../../../src/core/arweave/arweave");
-			const mockArweave = getArweave();
-			const postCall = mockArweave.api.post.mock.calls[0];
-			expect(postCall[0]).toBe('/graphql');
-			expect(postCall[1].query).toContain('recipients');
+			// Verify the GraphQL query was called with correct parameters
+			expect(mockApiPost).toHaveBeenCalledWith('/graphql', expect.objectContaining({
+				query: expect.stringContaining('recipients')
+			}));
 		});
 	});
 
@@ -97,12 +98,10 @@ describe("MessagesService", () => {
 			const result = await client.getAllMessagesSentBy({ id: "sender" });
 			expect(result).toBeDefined();
 			expect(Array.isArray(result)).toBe(true);
-			// Get the mock instance and verify the GraphQL query
-			const { getArweave } = require("../../../../src/core/arweave/arweave");
-			const mockArweave = getArweave();
-			const postCall = mockArweave.api.post.mock.calls[0];
-			expect(postCall[0]).toBe('/graphql');
-			expect(postCall[1].query).toContain('owners: ["sender"]');
+			// Verify the GraphQL query was called with correct parameters
+			expect(mockApiPost).toHaveBeenCalledWith('/graphql', expect.objectContaining({
+				query: expect.stringContaining('owners: ["sender"]')
+			}));
 		});
 	});
 
@@ -111,12 +110,10 @@ describe("MessagesService", () => {
 			const result = await client.getAllMessagesReceivedBy({ recipientId: "recipient" });
 			expect(result).toBeDefined();
 			expect(Array.isArray(result)).toBe(true);
-			// Get the mock instance and verify the GraphQL query
-			const { getArweave } = require("../../../../src/core/arweave/arweave");
-			const mockArweave = getArweave();
-			const postCall = mockArweave.api.post.mock.calls[0];
-			expect(postCall[0]).toBe('/graphql');
-			expect(postCall[1].query).toContain('recipients');
+			// Verify the GraphQL query was called with correct parameters
+			expect(mockApiPost).toHaveBeenCalledWith('/graphql', expect.objectContaining({
+				query: expect.stringContaining('recipients')
+			}));
 		});
 	});
 });
