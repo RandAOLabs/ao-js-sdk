@@ -2,7 +2,6 @@ import { ArweaveTransaction } from "../../../../../core/arweave/abstract/types";
 import { CurrencyAmount } from "../../../../../models/currency/CurrencyAmount";
 import { RecordNoticeTransactionData } from "../../../arns-data-service/abstract/transaction-data/RecordNoticeTransactionData";
 import { IRecordEvent } from "./abstract/IRecordEvent";
-import { ARNameEvent } from "./ARNameEvent";
 import { ARIO_TOKEN } from "../../../../../processes/maps/currencies";
 import { ARNameTransactionDataEvent } from "./ARNameTransactionDataEvent";
 
@@ -31,5 +30,10 @@ export class RecordEvent extends ARNameTransactionDataEvent<RecordNoticeTransact
 	async getUndernameLimit(): Promise<number> {
 		const notice = await this.getNoticeData();
 		return notice.undernameLimit;
+	}
+	
+	async getProcessId(): Promise<string> {
+		const notice = await this.getNoticeData();
+		return notice.processId;
 	}
 }

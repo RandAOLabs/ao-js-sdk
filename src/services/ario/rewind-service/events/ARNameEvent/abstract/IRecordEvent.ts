@@ -8,4 +8,5 @@ export interface IRecordEvent extends IARNameEvent, ITransactionDataEvent<Record
 	getType(): Promise<string>;
 	getStartTime(): Promise<number>;
 	getUndernameLimit(): Promise<number>;
+	getProcessId(): Promise<string>
 }

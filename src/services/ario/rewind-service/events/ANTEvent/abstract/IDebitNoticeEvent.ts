@@ -3,5 +3,7 @@ import { ITransactionDataEvent } from "../../abstract";
 import { IANTEvent } from "./IANTEvent";
 
 export interface IDebitNoticeEvent extends IANTEvent, ITransactionDataEvent<DebitNoticeTransactionData> {
-	// TODO: Add specific methods for DebitNotice event
+	getRecipient(): string;
+	getQuantity(): string;
+	getSender(): string;
 }

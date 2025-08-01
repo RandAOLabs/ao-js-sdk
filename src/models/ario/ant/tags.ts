@@ -4,6 +4,10 @@ const ACTION_TAG_NAME = "Action"
 const NAME_TAG_NAME = "Name"
 const TRANSACTION_ID_TAG_NAME = "Transaction-Id"
 const FROM_PROCESS_TAG_NAME = "From-Process"
+export const ANT_RECIPIENT_TAG_NAME = "Recipient"
+export const ANT_QUANTITY_TAG_NAME = "Recipient"
+export const ANT_SENDER_TAG_NAME = "Sender"
+export const ANT_INITIATOR_TAG_NAME = "Initiator"
 export const ANT_SUB_DOMAIN_TAG_NAME = "Sub-Domain"
 
 // Type helper to ensure all values are Tags or Tag-generating functions while maintaining IntelliSense
@@ -30,19 +34,19 @@ export const ANT_NOTICE_TAGS = {
 			name: ACTION_TAG_NAME,
 			value: "State-Notice"
 		},
-		REASSIGN_NAME: {
+		REASSIGN_NAME: {//
 			name: ACTION_TAG_NAME,
 			value: "Reassign-Name-Notice"
 		},
-		RELEASE_NAME: {
+		RELEASE_NAME: {//
 			name: ACTION_TAG_NAME,
 			value: "Release-Name-Notice"
 		},
-		APPROIVE_PRIMARY_NAME: {
+		APPROVE_PRIMARY_NAME: {//
 			name: ACTION_TAG_NAME,
 			value: "Approve-Primary-Name-Request"
 		},
-		REMOVE_PRIMARY_NAMES: {
+		REMOVE_PRIMARY_NAMES: {//
 			name: ACTION_TAG_NAME,
 			value: "Remove-Primary-Names"
 		},
