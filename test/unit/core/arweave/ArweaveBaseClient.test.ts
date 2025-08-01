@@ -6,13 +6,22 @@ import { ArweaveGQLBuilder } from '../../../../src/core/arweave/gql/ArweaveGQLBu
 // Create a proper mock response object
 const mockApiPost = jest.fn();
 
-// Mock the arweave module with a proper API structure
-jest.mock('../../../../src/core/arweave/arweave', () => ({
-	getArweave: jest.fn(() => ({
-		api: {
-			post: mockApiPost
-		}
-	}))
+// Mock the ArweaveNodeFactory
+jest.mock('../../../../src/core/arweave/graphql-nodes/ArweaveNodeFactory', () => ({
+	ArweaveNodeFactory: {
+		getInstance: jest.fn(() => ({
+			getNodeClient: jest.fn(() => ({
+				api: {
+					post: mockApiPost
+				}
+			}))
+		}))
+	}
+}));
+
+// Mock the HTTP client
+jest.mock('../../../../src/core/arweave/http-nodes/arweave-dot-net-http-client', () => ({
+	getArweaveDotNetHttpClient: jest.fn(() => ({}))
 }));
 
 // Mock the logger
