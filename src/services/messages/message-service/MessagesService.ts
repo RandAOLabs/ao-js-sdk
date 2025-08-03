@@ -1,8 +1,8 @@
 import { IArweaveDataService, ArweaveDataService, ArweaveGQLBuilder, ArweaveGQLSortOrder } from "../../../core";
-import { ArweaveTransaction } from "../../../core/arweave/abstract/types";
+import { ArweaveTransaction, FullArweaveTransaction } from "../../../core/arweave/abstract/types";
 import { staticImplements, IAutoconfiguration, Logger } from "../../../utils";
 import { IMessagesService, GetLatestMessagesParams, GetLatestMessagesResponse, GetLatestMessagesBySenderParams, GetLatestMessagesByRecipientParams, GetAllMessagesParams, GetAllMessagesBySenderParams, GetAllMessagesByRecipientParams } from "./abstract";
-import { DEFAULT_AO_TAGS } from "./constants";
+import { AO_MIN_INGESTED_AT, DEFAULT_AO_TAGS } from "./constants";
 import { GetLatestMessagesError } from "./MessagesServiceError";
 
 /**
@@ -14,11 +14,12 @@ export class MessagesService implements IMessagesService {
 		private readonly arweaveDataService: IArweaveDataService
 	) { }
 
-	/** 
+
+	/**
 	 * {@inheritdoc IAutoconfiguration.autoConfiguration}
-	 * @see {@link IAutoconfiguration.autoConfiguration} 
+	 * @see {@link IAutoconfiguration.autoConfiguration}
 	 */
-	public static autoConfiguration(): MessagesService {
+	public static autoConfiguration(): IMessagesService {
 		return new MessagesService(
 			ArweaveDataService.autoConfiguration()
 		)
@@ -70,7 +71,7 @@ export class MessagesService implements IMessagesService {
 			}
 
 			const response = await this.arweaveDataService.query(builder);
-			if (!response.data){
+			if (!response.data) {
 				Logger.info(response)
 			}
 			const edges = response.data.transactions.edges;
@@ -81,7 +82,7 @@ export class MessagesService implements IMessagesService {
 				hasNextPage: edges.length === (params.limit || 100)
 			};
 		} catch (error: any) {
-			
+
 			Logger.error(`Error retrieving latest messages: ${error.message}`);
 			throw new GetLatestMessagesError(error);
 		}
@@ -144,6 +145,21 @@ export class MessagesService implements IMessagesService {
 		} catch (error: any) {
 			Logger.error(`Error retrieving latest messages: ${error.message}`);
 			throw new GetLatestMessagesError(error);
+		}
+	}
+
+	public async getMessageById(id: string): Promise<ArweaveTransaction | undefined> {
+		try {
+			const builder = new ArweaveGQLBuilder()
+				.id(id)
+				.tags(DEFAULT_AO_TAGS)
+				.minIngestedAt(AO_MIN_INGESTED_AT)
+				.withAllFields()
+			const transaction = await this.arweaveDataService.query(builder)
+			return transaction.data.transactions.edges[0].node
+		} catch (error: any) {
+			Logger.error(`Error retrieving message ${id}: ${error.message}`);
+			return undefined
 		}
 	}
 }
