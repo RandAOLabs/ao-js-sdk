@@ -1,8 +1,7 @@
-import { DebitNoticeTransactionData } from "../../../../ant-data-service";
-import { ITransactionDataEvent } from "../../abstract";
+
 import { IANTEvent } from "./IANTEvent";
 
-export interface IDebitNoticeEvent extends IANTEvent, ITransactionDataEvent<DebitNoticeTransactionData> {
+export interface IDebitNoticeEvent extends IANTEvent {
 	getRecipient(): string;
 	getQuantity(): string;
 	getSender(): string;

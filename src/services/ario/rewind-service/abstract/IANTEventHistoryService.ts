@@ -4,6 +4,7 @@ import { AllANTEventsType } from "./responseTypes";
 
 export interface IANTEventHistoryService {
 	getStateNoticeEvents(processId: string): Observable<IStateNoticeEvent[]>;
+	getFilteredStateNoticeEvents(processId: string): Observable<IStateNoticeEvent[]>;
 	getReassignNameNoticeEvents(processId: string): Observable<IReassignNameNoticeEvent[]>;
 	getReleaseNameNoticeEvents(processId: string): Observable<IReleaseNameNoticeEvent[]>;
 	getApprovePrimaryNameNoticeEvents(processId: string): Observable<IApprovePrimaryNameNoticeEvent[]>;
