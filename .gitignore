@@ -26,3 +26,4 @@ pnpm-debug.log*
 # Wallet
 wallet.json
 /test-wallets
+deleteme.json

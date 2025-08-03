@@ -3,5 +3,16 @@ import { ITransactionDataEvent } from "../../abstract";
 import { IANTEvent } from "./IANTEvent";
 
 export interface IStateNoticeEvent extends IANTEvent, ITransactionDataEvent<StateNoticeTransactionData> {
-	// TODO: Add specific methods for StateNotice event
+	getOwner(): Promise<string>;
+	getTotalSupply(): Promise<number>;
+	getBalances(): Promise<Record<string, number>>;
+	getRecords(): Promise<Record<string, { transactionId: string; ttlSeconds: number }>>;
+	getKeywords(): Promise<string[]>;
+	getDenomination(): Promise<number>;
+	getControllers(): Promise<string[]>;
+	getLogo(): Promise<string>;
+	getInitialized(): Promise<boolean>;
+	getDescription(): Promise<string>;
+	getName(): Promise<string>;
+	getTicker(): Promise<string>;
 }

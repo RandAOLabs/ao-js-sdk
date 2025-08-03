@@ -88,8 +88,8 @@ export class ARIORewindService implements IARIORewindService {
 		);
 
 		const antEventStream = this.createANTEventStreamFromProcessIds(processIdStream);
-
-		return this.combineEventStreams(arNameEventStream, antEventStream);
+		const allEvents = this.combineEventStreams(arNameEventStream, antEventStream);
+		return allEvents;
 	}
 
 	/**
@@ -151,8 +151,8 @@ export class ARIORewindService implements IARIORewindService {
 
 		// Combine all ANT event types for the given process ID
 		return merge(
-			this.antEventHistoryService.getStateNoticeEvents(processId),
-			this.antEventHistoryService.getReassignNameNoticeEvents(processId),
+			this.antEventHistoryService.getFilteredStateNoticeEvents(processId),//Filtered
+			// this.antEventHistoryService.getReassignNameNoticeEvents(processId), // Removed in favor of reassign events from the registry
 			this.antEventHistoryService.getReleaseNameNoticeEvents(processId),
 			this.antEventHistoryService.getApprovePrimaryNameNoticeEvents(processId),
 			this.antEventHistoryService.getRemovePrimaryNamesNoticeEvents(processId),
@@ -225,6 +225,4 @@ export class ARIORewindService implements IARIORewindService {
 		// Handle singular vs plural
 		return years === 1 ? "1 year" : `${years} years`;
 	}
-
-
 }

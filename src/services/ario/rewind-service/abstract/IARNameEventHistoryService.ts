@@ -12,6 +12,8 @@ export interface IARNameEventHistoryService {
 
 	getReassignNameEvents(name: string): Observable<IReassignNameEvent[]>;
 
+	getFilteredReassignNameEvents(name: string): Observable<IReassignNameEvent[]>
+
 	getRecordEvents(name: string): Observable<IRecordEvent[]>;
 
 	getReturnedNameEvents(name: string): Observable<IReturnedNameEvent[]>;
