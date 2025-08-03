@@ -2,18 +2,17 @@ import Arweave from 'arweave';
 import { IArweaveDataService } from './abstract/IArweaveDataService';
 import { ArweaveGraphQLError } from './ArweaveDataServiceError';
 import { Logger } from '../../utils/logger/logger';
-import { getArweave } from './arweave';
 import { ArweaveGQLBuilder } from './gql/ArweaveGQLBuilder';
 import { ArweaveGQLResponse, ArweaveTransaction } from './abstract/types';
 import { IAutoconfiguration, JsonUtils } from '../../utils';
 import { staticImplements } from '../../utils/decorators';
-import { ARWEAVE_DOT_NET_HTTP_CONFIG } from './constants';
 import {
-	AxiosHttpClient,
 	HttpRequestConfig,
 	IHttpClient,
 	ResponseType
 } from '../../utils/http';
+import { ArweaveNodeFactory, ArweaveNodeType } from './graphql-nodes';
+import { getArweaveDotNetHttpClient } from './http-nodes/arweave-dot-net-http-client';
 
 /**
  * @category Core
@@ -23,13 +22,16 @@ export class ArweaveDataService implements IArweaveDataService {
 	private readonly arweave: Arweave;
 	private readonly httpClient: IHttpClient;
 
-	protected constructor() {
-		this.arweave = getArweave();
-		this.httpClient = new AxiosHttpClient(ARWEAVE_DOT_NET_HTTP_CONFIG);
+	protected constructor(_arweave:Arweave, _httpClient:IHttpClient ) {
+		this.arweave = _arweave;
+		this.httpClient = _httpClient;
 	}
 
+
 	public static autoConfiguration(): IArweaveDataService {
-		return new ArweaveDataService();
+		const _arweave = ArweaveNodeFactory.getInstance().getNodeClient(ArweaveNodeType.GOLDSKY)
+		const _httpClient = getArweaveDotNetHttpClient()
+		return new ArweaveDataService(_arweave, _httpClient);
 	}
 
 	/** @protected */

@@ -1,9 +1,8 @@
 import { ArweaveTransaction } from "../../../../../core/arweave/abstract/types";
-import { RemovePrimaryNamesNoticeTransactionData } from "../../../ant-data-service/abstract/transaction-data/RemovePrimaryNamesNoticeTransactionData";
 import { IRemovePrimaryNamesNoticeEvent } from "./abstract/IRemovePrimaryNamesNoticeEvent";
-import { ANTTransactionDataEvent } from "./ANTTransactionDataEvent";
+import { ANTEvent } from "./ANTEvent";
 
-export class RemovePrimaryNamesNoticeEvent extends ANTTransactionDataEvent<RemovePrimaryNamesNoticeTransactionData> implements IRemovePrimaryNamesNoticeEvent {
+export class RemovePrimaryNamesNoticeEvent extends ANTEvent implements IRemovePrimaryNamesNoticeEvent {
 	constructor(
 		protected readonly arweaveTransaction: ArweaveTransaction
 	) {

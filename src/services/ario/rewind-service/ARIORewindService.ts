@@ -9,6 +9,9 @@ import { ARNameDetail, AllARNameEventsType } from "./abstract/responseTypes";
 import { ARIOService, IARIOService } from "../ario-service";
 import { FullARNSName } from "../../../models";
 import { ANTUtils } from "../../../models/ario/ant/AntUtils";
+import { EntityType } from "../../../models/entity/abstract/EntityType";
+import { EntityService } from "../../entity/EntityDataService";
+import { IEntityService } from "../../entity/abstract/IEntityService";
 
 /**
  * @category ARIO
@@ -18,7 +21,7 @@ export class ARIORewindService implements IARIORewindService {
 	constructor(
 		private readonly arnEventHistoryService: IARNameEventHistoryService,
 		private readonly antEventHistoryService: IANTEventHistoryService,
-		private readonly arioService: IARIOService
+		private readonly arioService: IARIOService,
 	) { }
 
 
@@ -88,8 +91,9 @@ export class ARIORewindService implements IARIORewindService {
 		);
 
 		const antEventStream = this.createANTEventStreamFromProcessIds(processIdStream);
-
-		return this.combineEventStreams(arNameEventStream, antEventStream);
+		const allEvents = this.combineEventStreams(arNameEventStream, antEventStream);
+		const filteredEvents = this.filterEvents(allEvents, processIdStream);
+		return filteredEvents;
 	}
 
 	/**
@@ -151,8 +155,8 @@ export class ARIORewindService implements IARIORewindService {
 
 		// Combine all ANT event types for the given process ID
 		return merge(
-			this.antEventHistoryService.getStateNoticeEvents(processId),
-			this.antEventHistoryService.getReassignNameNoticeEvents(processId),
+			this.antEventHistoryService.getFilteredStateNoticeEvents(processId),//Filtered
+			// this.antEventHistoryService.getReassignNameNoticeEvents(processId), // Removed in favor of reassign events from the registry
 			this.antEventHistoryService.getReleaseNameNoticeEvents(processId),
 			this.antEventHistoryService.getApprovePrimaryNameNoticeEvents(processId),
 			this.antEventHistoryService.getRemovePrimaryNamesNoticeEvents(processId),
@@ -202,6 +206,53 @@ export class ARIORewindService implements IARIORewindService {
 	}
 
 	/**
+	 * Filters out ReassignNameEvent events that have a getNotified() value matching
+	 * one of the process IDs in the provided stream
+	 * @param allEvents - Observable stream of all events
+	 * @param processIdStream - Observable stream of process IDs to filter against
+	 * @returns Observable<IARNSEvent[]> - Filtered events stream
+	 */
+	private filterEvents(
+		allEvents: Observable<IARNSEvent[]>,
+		processIdStream: Observable<string>
+	): Observable<IARNSEvent[]> {
+		return processIdStream.pipe(
+			// Collect all process IDs into a Set for efficient lookup
+			scan((processIds: Set<string>, newProcessId: string) => {
+				processIds.add(newProcessId.trim());
+				return processIds;
+			}, new Set<string>()),
+			// Switch to the latest set of process IDs and filter events
+			mergeMap((processIds: Set<string>) =>
+				allEvents.pipe(
+					map((events: IARNSEvent[]) =>
+						events.filter((event: IARNSEvent) => {
+							// Check if this is a ReassignNameEvent
+							if (this.isReassignNameEvent(event)) {
+								const reassignEvent = event as IReassignNameEvent;
+								// Filter out if the notified process ID is in our process ID set
+								return !processIds.has(reassignEvent.getNotified());
+							}
+							// Keep all other events
+							return true;
+						})
+					)
+				)
+			)
+		);
+	}
+
+	/**
+	 * Type guard to check if an event is a ReassignNameEvent
+	 * @param event - The event to check
+	 * @returns boolean - True if the event is a ReassignNameEvent
+	 */
+	private isReassignNameEvent(event: IARNSEvent): event is IReassignNameEvent {
+		// Check if the event has the getReassignedProcessId method which is unique to IReassignNameEvent
+		return 'getReassignedProcessId' in event && typeof (event as any).getReassignedProcessId === 'function';
+	}
+
+	/**
 	 * Calculates the lease duration in years between start and end timestamps
 	 * @param startTimestamp - Start timestamp in milliseconds
 	 * @param endTimestamp - End timestamp in milliseconds
@@ -225,6 +276,4 @@ export class ARIORewindService implements IARIORewindService {
 		// Handle singular vs plural
 		return years === 1 ? "1 year" : `${years} years`;
 	}
-
-
 }

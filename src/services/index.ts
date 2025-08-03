@@ -13,4 +13,5 @@ export * from "./autonomous-finance"
 export * from "./pi"
 export * from "./token-service"
 export * from "./currency"
+export * from "./entity"
 // export * from "./randao" // Not needed yet

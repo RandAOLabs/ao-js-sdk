@@ -1,5 +1,5 @@
 import { Observable } from "rxjs";
-import { map } from "rxjs/operators";
+import { map, filter } from "rxjs/operators";
 import { staticImplements, IAutoconfiguration } from "../../../utils";
 import { IStateNoticeEvent, IReassignNameNoticeEvent, IReleaseNameNoticeEvent, IApprovePrimaryNameNoticeEvent, IRemovePrimaryNamesNoticeEvent, ICreditNoticeEvent, IDebitNoticeEvent, ISetRecordEvent } from "./events";
 import { ANTDataService, IANTDataService } from "../ant-data-service";
@@ -31,6 +31,12 @@ export class ANTEventHistoryService implements IANTEventHistoryService {
 	public getStateNoticeEvents(processId: string): Observable<IStateNoticeEvent[]> {
 		return this.antDataService.getStateNotices(processId).pipe(
 			map(transactions => transactions.map(transaction => new StateNoticeEvent(transaction)))
+		);
+	}
+
+	public getFilteredStateNoticeEvents(processId: string): Observable<IStateNoticeEvent[]> {
+		return this.getStateNoticeEvents(processId).pipe(
+			map(events => events.filter(event => event.getNotified() !== event.getANTProcessId()))
 		);
 	}
 
