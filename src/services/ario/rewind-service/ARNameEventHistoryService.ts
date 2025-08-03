@@ -58,13 +58,6 @@ export class ARNameEventHistoryService implements IARNameEventHistoryService {
 		);
 	}
 
-	public getFilteredReassignNameEvents(name: string): Observable<IReassignNameEvent[]> {
-		return this.getReassignNameEvents(name).pipe(
-			map(events => events.filter(event => event.getNotified() !== event.getANTProcessId()))
-
-		)
-	}
-
 	public getRecordEvents(name: string): Observable<IRecordEvent[]> {
 		return this.arnsDataService.getRecordNotices(name).pipe(
 			map(transactions => RecordEventConverter.convertMany(transactions))
