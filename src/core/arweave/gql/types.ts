@@ -1,72 +1,75 @@
 export interface ArweaveGQLFilter {
-    ids?: string[];
-    recipients?: string[];
-    owner?: {
-        address: string;
-    };
-    tags?: {
-        name: string;
-        value: string;
-    }[];
+	ids?: string[];
+	recipients?: string[];
+	owner?: {
+		address: string;
+	};
+	tags?: {
+		name: string;
+		value: string;
+	}[];
+	ingested_at?: {
+		min: number;
+	};
 }
 
 export interface ArweaveGQLOptions {
-    first?: number;
-    after?: string;
-    sort?: ArweaveGQLSortOrder;
+	first?: number;
+	after?: string;
+	sort?: ArweaveGQLSortOrder;
 }
 
 export interface ArweaveGQLQuery {
-    query: string;
+	query: string;
 }
 
 export interface NodeFields {
-    id?: boolean;
-    anchor?: boolean;
-    signature?: boolean;
-    recipient?: boolean;
-    ingested_at?: boolean;
-    owner?: OwnerFields;
-    fee?: AmountFields;
-    quantity?: AmountFields;
-    data?: DataFields;
-    tags?: TagFields;
-    block?: BlockFields;
-    parent?: ParentFields;
+	id?: boolean;
+	anchor?: boolean;
+	signature?: boolean;
+	recipient?: boolean;
+	ingested_at?: boolean;
+	owner?: OwnerFields;
+	fee?: AmountFields;
+	quantity?: AmountFields;
+	data?: DataFields;
+	tags?: TagFields;
+	block?: BlockFields;
+	parent?: ParentFields;
 }
 
 export interface OwnerFields {
-    address?: boolean;
-    key?: boolean;
+	address?: boolean;
+	key?: boolean;
 }
 
 export interface AmountFields {
-    winston?: boolean;
-    ar?: boolean;
+	winston?: boolean;
+	ar?: boolean;
 }
 
 export interface DataFields {
-    size?: boolean;
-    type?: boolean;
+	size?: boolean;
+	type?: boolean;
 }
 
 export interface TagFields {
-    name?: boolean;
-    value?: boolean;
+	name?: boolean;
+	value?: boolean;
 }
 
 export interface BlockFields {
-    id?: boolean;
-    timestamp?: boolean;
-    height?: boolean;
-    previous?: boolean;
+	id?: boolean;
+	timestamp?: boolean;
+	height?: boolean;
+	previous?: boolean;
 }
 
 export interface ParentFields {
-    id?: boolean;
+	id?: boolean;
 }
 
 export enum ArweaveGQLSortOrder {
-    HEIGHT_ASC = "HEIGHT_ASC",
-    HEIGHT_DESC = "HEIGHT_DESC"
+	HEIGHT_ASC = "HEIGHT_ASC",
+	HEIGHT_DESC = "HEIGHT_DESC"
 }

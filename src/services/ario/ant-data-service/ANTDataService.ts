@@ -86,7 +86,7 @@ export class ANTDataService implements IANTDataService {
 	getApprovePrimaryNameNotices(processId: string): Observable<ArweaveTransaction[]> {
 		return this.reactiveMessageService.streamAllMessages({
 			tags: [
-				ANT_NOTICE_TAGS.ACTION.APPROIVE_PRIMARY_NAME,
+				ANT_NOTICE_TAGS.ACTION.APPROVE_PRIMARY_NAME,
 				ANT_NOTICE_TAGS.FROM_PROCESS(processId)
 			]
 		})

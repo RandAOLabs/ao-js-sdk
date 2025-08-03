@@ -1,13 +1,20 @@
+import { TagUtils } from "../../../../../core";
 import { ArweaveTransaction } from "../../../../../core/arweave/abstract/types";
-import { ReleaseNameNoticeTransactionData } from "../../../ant-data-service/abstract/transaction-data/ReleaseNameNoticeTransactionData";
+import { ANT_INITIATOR_TAG_NAME } from "../../../../../models";
 import { IReleaseNameNoticeEvent } from "./abstract/IReleaseNameNoticeEvent";
 import { ANTEvent } from "./ANTEvent";
-import { ANTTransactionDataEvent } from "./ANTTransactionDataEvent";
 
-export class ReleaseNameNoticeEvent extends ANTTransactionDataEvent<ReleaseNameNoticeTransactionData> implements IReleaseNameNoticeEvent {
+export class ReleaseNameNoticeEvent extends ANTEvent implements IReleaseNameNoticeEvent {
 	constructor(
 		protected readonly arweaveTransaction: ArweaveTransaction
 	) {
 		super(arweaveTransaction);
+	}
+
+	/**
+	 * @override
+	 */
+	public getInitiator(): string {
+		return TagUtils.getTagValue(this.arweaveTransaction.tags!, ANT_INITIATOR_TAG_NAME)!
 	}
 }

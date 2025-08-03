@@ -9,17 +9,20 @@ describe("ARIORewindService Integration Tests", () => {
 	beforeEach(() => {
 		Logger.setLogLevel(LogLevel.DEBUG)
 		service = ARIORewindService.autoConfiguration()
+		Logger.debug("0-20f2-f9j09jf9023jf0293jf2039fj2390fj3290jf")
 	});
 
 	it("should get event history for a domain and print results", async () => {
 		// const testDomainName = "ownyourownbank";
-		const testDomainName = "randao";
+		// const testDomainName = "randao";
+		const testDomainName = "game";
+		// const testDomainName = "hoodrats";
 
 
 		Logger.info(`Testing getEventHistory for domain: ${testDomainName}`);
 
 		const eventHistory$ = service.getEventHistory$(testDomainName);
-		const result = await lastValueFrom(eventHistory$.pipe(timeout(30000)));
+		const result = await lastValueFrom(eventHistory$.pipe(timeout(300000)));
 
 		Logger.info(`Number of events found: ${result.length}`);
 
@@ -27,7 +30,7 @@ describe("ARIORewindService Integration Tests", () => {
 		for (let i = 0; i < result.length; i++) {
 			Logger.info(`Event ${i + 1}: ${result[i].toString()}`);
 		}
-	}, 30000);
+	}, 500000);
 
 	describe("getAntDetail()", () => {
 		it("return ant details", async () => {

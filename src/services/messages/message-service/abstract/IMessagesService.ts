@@ -65,4 +65,13 @@ export interface IMessagesService {
 	 * @throws MessagesServiceError if the query fails
 	 */
 	countAllMessages(params: GetAllMessagesParams): Promise<number>
+
+
+	/**
+	 * Counts all messages for given criteria
+	 * @param params Parameters for filtering messages
+	 * @returns number of messages which match the criteria
+	 * @throws MessagesServiceError if the query fails
+	 */
+	getMessageById(id: string): Promise<ArweaveTransaction | undefined>;
 }

@@ -3,8 +3,11 @@ import { ArweaveDataService } from "./ArweaveDataService";
 import { ICache, newCache } from "../../utils/cache";
 import { ICacheConfig } from "../../utils/cache/abstract";
 import { IAutoconfiguration, staticImplements } from "../../utils";
-import { IArweaveDataService } from "./abstract";
 import { IArweaveDataCachingService } from "./abstract/IArweaveDataCachingService";
+import { IHttpClient } from "../../utils/http";
+import Arweave from "arweave";
+import { ArweaveNodeFactory, ArweaveNodeType } from "./graphql-nodes";
+import { getArweaveDotNetHttpClient } from "./http-nodes/arweave-dot-net-http-client";
 
 /**
  * @category Core
@@ -13,13 +16,15 @@ import { IArweaveDataCachingService } from "./abstract/IArweaveDataCachingServic
 export class ArweaveDataCachingService extends ArweaveDataService implements IArweaveDataCachingService {
 	private cache: ICache<string, ArweaveGQLResponse>;
 
-	private constructor(cacheConfig?: ICacheConfig) {
-		super();
+	private constructor(_arweave:Arweave, _httpClient:IHttpClient, cacheConfig?: ICacheConfig) {
+		super(_arweave, _httpClient);
 		this.cache = newCache<string, ArweaveGQLResponse>(cacheConfig);
 	}
 
 	public static autoConfiguration(): IArweaveDataCachingService {
-		return new ArweaveDataCachingService()
+		const _arweave = ArweaveNodeFactory.getInstance().getNodeClient(ArweaveNodeType.GOLDSKY)
+		const _httpClient = getArweaveDotNetHttpClient()
+		return new ArweaveDataCachingService(_arweave, _httpClient);
 	}
 
 	public clearCache(): void {
