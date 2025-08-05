@@ -8,6 +8,11 @@ export class CurrencyAmount implements ICurrencyAmount {
 	private readonly _decimals: number;
 
 	/**
+	 * Static field representing a zero currency amount with 0 decimals.
+	 */
+	static readonly None = new CurrencyAmount(BigInt(0), 0);
+
+	/**
 	 * Creates a new CurrencyAmount instance.
 	 * @param amount The raw amount as a bigint (in smallest units)
 	 * @param decimals The number of decimal places for this currency
