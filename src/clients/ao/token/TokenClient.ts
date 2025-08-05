@@ -56,7 +56,8 @@ export class TokenClient extends BaseClient implements ITokenClient, IGrantToken
 				{ name: "Action", value: "Balance" },
 				{ name: "Target", value: identifier }
 			]);
-			return response.Messages[0].Tags.find((tag: Tag) => tag.name === "Balance").value;
+			const balance = TagUtils.getTagValue(response.Messages[0].Tags, "Balance");
+			return balance!;
 		} catch (error: any) {
 			throw new ClientError(this, this.balance, identifier, error);
 		}

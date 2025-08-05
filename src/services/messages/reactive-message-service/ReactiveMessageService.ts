@@ -1,4 +1,4 @@
-import { Observable, map, take } from 'rxjs';
+import { Observable, map, take, firstValueFrom } from 'rxjs';
 import { IMessagesService, MessagesService } from '../message-service';
 import { ArweaveTransaction } from '../../../core/arweave/abstract/types';
 import { IAutoconfiguration } from '../../../utils/class-interfaces/IAutoconfiguration';
@@ -68,6 +68,40 @@ export class ReactiveMessageService implements IReactiveMessageService {
 		});
 	}
 
+	getMessages$(params: GetLatestMessagesParams): Observable<GetLatestMessagesResponse> {
+		return this.getMessagesPage({
+			...params,
+		});
+	}
+
+	/**
+	 * Fetches a single page of messages with the given parameters
+	 * @param params Parameters for filtering messages including cursor and limit
+	 * @returns Observable that emits a single GetLatestMessagesResponse
+	 * @private
+	 */
+	private getMessagesPage(params: GetLatestMessagesParams): Observable<GetLatestMessagesResponse> {
+		return new Observable<GetLatestMessagesResponse>(subscriber => {
+			(async () => {
+				try {
+					const response = await this.messagesService.getLatestMessages({
+						...params,
+						cursor: params.cursor,
+						limit: params.limit || 100
+					});
+
+					subscriber.next(response);
+					subscriber.complete();
+				} catch (error: any) {
+					Logger.error(`Error fetching messages: ${error.message}`);
+					subscriber.error(error);
+				}
+			})();
+
+			return () => { };
+		});
+	}
+
 	/**
 	 * Streams messages using pagination, continuously fetching next pages while available.
 	 * Uses a while loop to handle pagination with cursor, emitting messages as they arrive.
@@ -83,18 +117,22 @@ export class ReactiveMessageService implements IReactiveMessageService {
 					let hasMore = true;
 
 					while (hasMore) {
-						const response = await this.messagesService.getLatestMessages({
+						const response = await firstValueFrom(this.getMessagesPage({
 							...params,
 							cursor: currentCursor,
 							limit: 100
-						});
+						}));
 
-						// Always emit messages array (empty if none found)
-						subscriber.next(response.messages);
+						if (response) {
+							// Always emit messages array (empty if none found)
+							subscriber.next(response.messages);
 
-						// Update pagination state
-						hasMore = response.hasNextPage;
-						currentCursor = response.cursor;
+							// Update pagination state
+							hasMore = response.hasNextPage;
+							currentCursor = response.cursor;
+						} else {
+							hasMore = false;
+						}
 					}
 
 					subscriber.complete();
