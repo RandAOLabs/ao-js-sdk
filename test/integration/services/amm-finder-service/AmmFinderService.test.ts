@@ -1,4 +1,4 @@
-import { Logger, LogLevel } from "src/utils/logger";
+import { Logger } from "src/utils/logger";
 import { IAmmFinderService, AmmFinderService } from "../../../../src/services";
 
 describe("IAmmFinderService Integration Tests", () => {

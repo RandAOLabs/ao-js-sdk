@@ -23,6 +23,7 @@ export class ArweaveGQLBuilder {
 		id: true // Always include id by default
 	};
 	private countMode: boolean = false;
+	private tagNamesFilter: string[] = [];
 
 	// Filter methods
 	public ids(ids: string[]): this {
@@ -60,6 +61,12 @@ export class ArweaveGQLBuilder {
 		}
 		// Combine all tags into a single array for proper filtering
 		this.filters.tags = tags;
+		return this;
+	}
+
+	public containsTagName(tagName: string): this {
+		if (!tagName) throw ArweaveGQLBuilderError.invalidTags();
+		this.tagNamesFilter.push(tagName);
 		return this;
 	}
 
@@ -162,6 +169,14 @@ export class ArweaveGQLBuilder {
 		return this;
 	}
 
+	/**
+	 * Gets the current limit set on the builder
+	 * @returns The current limit or undefined if not set
+	 */
+	public getLimit(): number | undefined {
+		return this.options.first;
+	}
+
 	private isNestedField(value: any): value is Record<string, boolean> {
 		return value && typeof value === 'object';
 	}
@@ -201,13 +216,21 @@ export class ArweaveGQLBuilder {
 			if (!value) return; // Skip null/undefined values
 
 			if (key === 'tags') {
-				// Handle tags
+				// Handle exact tag name/value pairs
 				const tags = value as { name: string; value: string }[];
 				const tagConditions = tags.map(tag =>
 					`{name: "${tag.name}", values: ["${tag.value}"]}`
 				);
-				if (tagConditions.length > 0) {
-					filterConditions.push(`tags: [${tagConditions.join(', ')}]`);
+
+				// Add tag name only filters (containsTagName)
+				const tagNameConditions = this.tagNamesFilter.map(tagName =>
+					`{name: "${tagName}"}`
+				);
+
+				// Combine both types of tag conditions
+				const allTagConditions = [...tagConditions, ...tagNameConditions];
+				if (allTagConditions.length > 0) {
+					filterConditions.push(`tags: [${allTagConditions.join(', ')}]`);
 				}
 			} else if (key === 'owner' && typeof value === 'object' && value.address) {
 				// Handle owner
@@ -220,6 +243,14 @@ export class ArweaveGQLBuilder {
 				filterConditions.push(`${key}: ["${value.join('", "')}"]`);
 			}
 		});
+
+		// Handle containsTagName filters when no exact tags are specified
+		if (!this.filters.tags && this.tagNamesFilter.length > 0) {
+			const tagNameConditions = this.tagNamesFilter.map(tagName =>
+				`{name: "${tagName}"}`
+			);
+			filterConditions.push(`tags: [${tagNameConditions.join(', ')}]`);
+		}
 
 		// Build options
 		const optionsArray: string[] = [];
