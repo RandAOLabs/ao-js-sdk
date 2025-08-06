@@ -1,4 +1,4 @@
-import { PROCESS_IDS } from "../ids";
+import { PROCESS_IDS } from "../processIds";
 import { FairLaunchMap } from "./types";
 
 export const GAME_FAIR_LAUNCH: FairLaunchMap = {

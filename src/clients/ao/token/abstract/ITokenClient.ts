@@ -1,6 +1,6 @@
 // src/ITokenClient.ts
 import { Tags } from "../../../../core";
-import { DryRunResult } from "../../../../core/ao/abstract";
+import { DryRunResult, IProcessClient } from "../../../../core/ao/abstract";
 import { TokenInfo } from "./types";
 
 /**
@@ -8,7 +8,7 @@ import { TokenInfo } from "./types";
  * Implements the standard token interface specification for managing transferable assets.
  * @see {@link https://cookbook_ao.g8way.io/references/token.html | specification}
  */
-export interface ITokenClient {
+export interface ITokenClient extends IProcessClient {
 	/**
 	 * Gets the balance of a specific identifier (address) in the token ledger.
 	 * This is a read-only operation that queries the current state of the ledger.

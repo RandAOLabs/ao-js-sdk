@@ -1,4 +1,14 @@
-export interface IAmm {
+import { IProcessClient } from "../../../../../core/ao/abstract";
+import { ITokenClient } from "../../../../ao";
+import { LPInfo } from "./types";
+
+export interface IBotegaAmmClient extends IProcessClient {
+	/**
+	 * Get information about the liquidity pool including token details and pool data
+	 * @returns Pool information including token details and pool data
+	 */
+	getLPInfo(): Promise<LPInfo>;
+
 	/**
 	 * Get price for a given quantity and token
 	 * @param quantity The quantity to get price for (number or string)
@@ -6,7 +16,6 @@ export interface IAmm {
 	 * @returns Price as a number
 	 */
 	getPrice(quantity: number | string, tokenId: string): Promise<number>;
-
 	/**
 	 * Get price of token A in terms of token B
 	 * @param quantity The quantity of token A
@@ -21,4 +30,15 @@ export interface IAmm {
 	 */
 	getPriceOfTokenBInTokenA(quantity: number | string): Promise<number>;
 
+	/**
+ * Get token A client instance
+ * @returns Token A client
+ */
+	getTokenA(): Promise<ITokenClient>;
+
+	/**
+	 * Get token B client instance
+	 * @returns Token B client
+	 */
+	getTokenB(): Promise<ITokenClient>;
 }

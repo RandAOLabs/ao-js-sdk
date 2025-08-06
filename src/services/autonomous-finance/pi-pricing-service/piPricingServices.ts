@@ -1,5 +1,5 @@
 import { PiPricingService } from './PiPricingService';
-import { PROCESS_IDS } from '../../../processes';
+import { PROCESS_IDS } from '../../../constants';
 import { IPiPricingService } from './abstract';
 
 /**

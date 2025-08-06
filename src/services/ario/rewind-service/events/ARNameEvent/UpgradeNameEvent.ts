@@ -2,7 +2,7 @@ import { ArweaveTransaction } from "../../../../../core/arweave/abstract/types";
 import { CurrencyAmount } from "../../../../../models/currency/CurrencyAmount";
 import { UpgradeNameNoticeTransactionData } from "../../../arns-data-service/abstract/transaction-data/UpgradeNameNoticeTransactionData";
 import { IUpgradeNameEvent } from "./abstract/IUpgradeNameEvent";
-import { ARIO_TOKEN } from "../../../../../processes/maps/currencies";
+import { ARIO_TOKEN } from "../../../../../constants/maps/currencies";
 import { ARNameTransactionDataEvent } from "./ARNameTransactionDataEvent";
 
 export class UpgradeNameEvent extends ARNameTransactionDataEvent<UpgradeNameNoticeTransactionData> implements IUpgradeNameEvent {

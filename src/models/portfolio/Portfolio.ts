@@ -2,13 +2,14 @@ import { IPortfolio } from './abstract/IPortfolio';
 import { CurrencyAmount } from '../currency/CurrencyAmount';
 import { Process } from '../entity/process/Process';
 import { IEntity } from '../entity/abstract/IEntity';
+import { TokenBalance } from '../token-balance';
 
 /**
  * Constructor parameters for Portfolio class.
  */
 export interface PortfolioConstructorParams {
 	entityId: string;
-	tokens: CurrencyAmount[];
+	tokens: TokenBalance[];
 }
 
 /**
@@ -17,7 +18,7 @@ export interface PortfolioConstructorParams {
  */
 export class Portfolio implements IPortfolio {
 	private readonly entity: IEntity;
-	private readonly tokens: CurrencyAmount[];
+	private readonly tokens: TokenBalance[];
 
 	/**
 	 * Creates a new Portfolio instance.
@@ -32,7 +33,7 @@ export class Portfolio implements IPortfolio {
 	 * Gets all tokens in the portfolio.
 	 * @returns Array of CurrencyAmount representing the tokens in the portfolio
 	 */
-	getTokens(): CurrencyAmount[] {
+	getTokens(): TokenBalance[] {
 		// TODO: Implement token retrieval logic
 		return this.tokens;
 	}

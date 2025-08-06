@@ -1,5 +1,7 @@
 import { Observable } from "rxjs";
 import { TokenBalance } from "../../../models/token-balance";
+import { Portfolio } from "../../../models/portfolio";
+import { ICurrencyAmount } from "../../../models";
 
 /**
  * Service for managing and retrieving portfolio data.
@@ -12,11 +14,7 @@ export interface IPortfolioService {
 	 */
 	getTokens$(entityId: string): Observable<TokenBalance[]>;
 
-	/**
-	 * Gets total portfolio value in specified currency
-	 * @param entityId The entity ID (user/wallet address)
-	 * @param baseCurrency Base currency for value calculation
-	 * @returns Observable resolving to total portfolio value
-	 */
-	getTotalValue$(entityId: string, baseCurrency?: string): Observable<string>;
+	getPortfolio$(entityId: string): Observable<Portfolio>;
+
+	calculatePortfolioWorthUSD$(portfolio: Observable<Portfolio>): Observable<ICurrencyAmount>;
 }

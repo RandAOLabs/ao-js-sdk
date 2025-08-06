@@ -1,21 +1,25 @@
 import { Observable, from, mergeMap, map, distinct, switchMap, toArray, of, merge, scan } from 'rxjs';
 import { IPortfolioService } from './abstract/IPortfolioService';
-import { CurrencyAmount } from '../../models';
+import { CurrencyAmount, ICurrencyAmount } from '../../models';
 import { Logger } from '../../utils/logger/logger';
 import { ReactiveCreditNoticeService, CreditNotice } from '../credit-notices';
 import { TokenClient, TokenInfo } from '../../clients/ao';
 import { ClientBuilder } from '../../clients/common';
 import { IReactiveCreditNoticeService } from '../credit-notices/reactive-credit-notice-service/abstract';
 import { TokenBalance } from '../../models/token-balance';
+import { Portfolio } from '../../models/portfolio';
+import { IAutoconfiguration, staticImplements } from '../../utils';
 
 /**
  * @category Portfolio
  * @inheritdoc
  */
+@staticImplements<IAutoconfiguration>()
 export class PortfolioService implements IPortfolioService {
 	constructor(
 		private readonly reactiveCreditNoticeService: IReactiveCreditNoticeService
 	) { }
+
 
 	/**
 	 * Creates a pre-configured instance of PortfolioService
@@ -25,6 +29,19 @@ export class PortfolioService implements IPortfolioService {
 		return new PortfolioService(
 			ReactiveCreditNoticeService.autoConfiguration()
 		);
+	}
+	public calculatePortfolioWorthUSD$(portfolio: Observable<Portfolio>): Observable<ICurrencyAmount> {
+		portfolio.pipe(
+			map(portfolio => portfolio.getTokens()),
+		)
+		throw new Error('Method not implemented.');
+	}
+
+
+	public getPortfolio$(entityId: string): Observable<Portfolio> {
+		return this.getTokens$(entityId).pipe(
+			map(tokens => new Portfolio({ entityId, tokens }))
+		)
 	}
 
 	public getTokens$(entityId: string): Observable<TokenBalance[]> {
