@@ -1,4 +1,4 @@
-import { PROCESS_IDS } from "../ids";
+import { PROCESS_IDS } from "../processIds";
 import { CurrencyMap } from "./types";
 
 /**

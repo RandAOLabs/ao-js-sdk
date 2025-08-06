@@ -1,11 +1,11 @@
 import { IFLPDataSercvice } from './abstract/IFLPDataService';
-import { ArweaveTransaction } from '../../../core/arweave/abstract/types';
 import { Logger } from '../../../utils/logger/logger';
 import { ArweaveDataService, IArweaveDataService } from '../../../core';
 import { IMessagesService } from '../../messages/message-service/abstract/IMessagesService';
 import { MessagesService } from '../../messages/message-service/MessagesService';
 import { Distribution } from './abstract/responses';
 import { FLP_TAGS } from './tags';
+
 
 /**
  * @category Autonomous Finance

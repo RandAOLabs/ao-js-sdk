@@ -1,5 +1,6 @@
 import { IEntity } from '../../entity/abstract/IEntity';
 import { CurrencyAmount } from '../../currency/CurrencyAmount';
+import { TokenBalance } from '../../token-balance';
 
 /**
  * Interface for portfolio that manages collections of tokens.
@@ -10,7 +11,7 @@ export interface IPortfolio {
 	 * Gets all tokens in the portfolio.
 	 * @returns Array of CurrencyAmount representing the tokens in the portfolio
 	 */
-	getTokens(): CurrencyAmount[];
+	getTokens(): TokenBalance[];
 
 	/**
 	 * Gets the entity ID of the portfolio.

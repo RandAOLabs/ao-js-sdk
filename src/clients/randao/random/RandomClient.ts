@@ -9,7 +9,7 @@ import { ARIOService } from "../../../services";
 import { TokenInterfacingClientBuilder } from "../../common/TokenInterfacingClientBuilder";
 import { DOMAIN } from "../../../services/ario/ario-service/domains";
 import { AO_CONFIGURATIONS } from "../../../core/ao/ao-client/configurations";
-import { PROCESS_IDS } from "../../../processes/ids";
+import { PROCESS_IDS } from "../../../constants/processIds";
 import { ClientError } from "../../common/ClientError";
 import TAGS from "./tags";
 import { RandomProcessError } from "./RandomProcessError";

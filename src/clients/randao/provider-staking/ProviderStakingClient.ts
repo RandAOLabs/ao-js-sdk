@@ -9,7 +9,7 @@ import { PROVIDER_MINIMUM_STAKE } from "./constants";
 import { Tags } from "../../../core";
 import { AO_CONFIGURATIONS } from "../../../core/ao/ao-client/configurations";
 import ResultUtils from "../../../core/common/result-utils/ResultUtils";
-import { PROCESS_IDS } from "../../../processes/ids";
+import { PROCESS_IDS } from "../../../constants/processIds";
 import { IAutoconfiguration, IDefaultBuilder, staticImplements } from "../../../utils";
 
 /**
@@ -18,18 +18,18 @@ import { IAutoconfiguration, IDefaultBuilder, staticImplements } from "../../../
 @staticImplements<IAutoconfiguration>()
 @staticImplements<IDefaultBuilder>()
 export class ProviderStakingClient extends StakingClient implements IProviderStakingClient {
-	/** 
+	/**
 	 * {@inheritdoc IAutoconfiguration.autoConfiguration}
-	 * @see {@link IAutoconfiguration.autoConfiguration} 
+	 * @see {@link IAutoconfiguration.autoConfiguration}
 	 */
 	public static autoConfiguration(): ProviderStakingClient {
 		return ProviderStakingClient.defaultBuilder()
 			.build()
 	}
 
-	/** 
+	/**
 	 * {@inheritdoc IDefaultBuilder.defaultBuilder}
-	 * @see {@link IDefaultBuilder.defaultBuilder} 
+	 * @see {@link IDefaultBuilder.defaultBuilder}
 	 */
 	public static defaultBuilder(): TokenInterfacingClientBuilder<ProviderStakingClient> {
 		return new TokenInterfacingClientBuilder(ProviderStakingClient)

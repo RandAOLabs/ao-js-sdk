@@ -3,7 +3,7 @@ import { CurrencyAmount } from "../../../../../models/currency/CurrencyAmount";
 import { ExtendLeaseNoticeTransactionData } from "../../../arns-data-service/abstract/transaction-data/ExtendLeaseNoticeTransactionData";
 import { IExtendLeaseEvent } from "./abstract/IExtendLeaseEvent";
 import { ARNameEvent } from "./ARNameEvent";
-import { ARIO_TOKEN } from "../../../../../processes/maps/currencies";
+import { ARIO_TOKEN } from "../../../../../constants/maps/currencies";
 import { ARNameTransactionDataEvent } from "./ARNameTransactionDataEvent";
 
 export class ExtendLeaseEvent extends ARNameTransactionDataEvent<ExtendLeaseNoticeTransactionData> implements IExtendLeaseEvent {

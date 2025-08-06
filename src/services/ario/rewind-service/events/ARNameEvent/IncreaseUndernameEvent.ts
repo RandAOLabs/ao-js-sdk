@@ -3,7 +3,7 @@ import { CurrencyAmount } from "../../../../../models/currency/CurrencyAmount";
 import { IncreaseUndernameNoticeTransactionData } from "../../../arns-data-service/abstract/transaction-data/IncreaseUndernameNoticeTransactionData";
 import { IIncreaseUndernameEvent } from "./abstract/IIncreaseUndernameEvent";
 import { ARNameEvent } from "./ARNameEvent";
-import { ARIO_TOKEN } from "../../../../../processes/maps/currencies";
+import { ARIO_TOKEN } from "../../../../../constants/maps/currencies";
 import { ARNameTransactionDataEvent } from "./ARNameTransactionDataEvent";
 
 export class IncreaseUndernameEvent extends ARNameTransactionDataEvent<IncreaseUndernameNoticeTransactionData> implements IIncreaseUndernameEvent {

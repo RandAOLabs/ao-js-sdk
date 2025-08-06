@@ -1,5 +1,5 @@
 import { FLPDataService } from './FLPDataService';
-import { PROCESS_IDS } from '../../../processes';
+import { PROCESS_IDS } from '../../../constants';
 import { IFLPDataSercvice } from './abstract';
 
 /**

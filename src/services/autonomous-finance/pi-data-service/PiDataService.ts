@@ -3,7 +3,7 @@ import { IPiDataService } from './abstract/IPiDataService';
 import { IReactiveMessageService, ReactiveMessageService } from '../../messages';
 import { IAutoconfiguration } from '../../../utils/class-interfaces/IAutoconfiguration';
 import { staticImplements } from '../../../utils/decorators/staticImplements';
-import { AUTONOMOUS_FINANCE, PI_DELEGATE_PROCESS_ID } from '../../../processes/ids/autonomous-finance';
+import { AUTONOMOUS_FINANCE, PI_DELEGATE_PROCESS_ID } from '../../../constants/processIds/autonomous-finance';
 import { ACTION_SET_DELEGATION } from '../../../clients/pi/constants';
 import { ArweaveTransaction } from '../../../core/arweave/abstract/types';
 import { Logger } from '../../../utils/logger/logger';
@@ -63,16 +63,16 @@ export class PiDataService implements IPiDataService {
 	 */
 	public getCurrentDelegationsForAddress(delegatedTo: string): Observable<SimplifiedDelegationResponse[]> {
 		return this.getAllPiDelegationPreferencesWithBalances().pipe(
-			map(responses => responses.filter(response => 
+			map(responses => responses.filter(response =>
 				response.delegationPrefs.some(pref => pref.walletTo === delegatedTo)
 			)),
 			map(responses => responses.map(response => {
 				// Find the matching delegation preference
 				const matchingPref = response.delegationPrefs.find(pref => pref.walletTo === delegatedTo)!;
-				
+
 				// Calculate percentage based on factor relative to total factor
 				const percentDelegated = (matchingPref.factor / response.totalFactor) * 100;
-				
+
 				// Calculate delegated amount based on percentage of total balance
 				const arweaveAmountDelegated = Math.floor(response.balance * (percentDelegated / 100));
 
@@ -219,7 +219,7 @@ export class PiDataService implements IPiDataService {
 			tags: [
 				{ name: 'From-Process', value: AUTONOMOUS_FINANCE.PI_DELEGATE_PROCESS_ID },
 			],
-			recipient : responseRecipient
+			recipient: responseRecipient
 		});
 	}
 
