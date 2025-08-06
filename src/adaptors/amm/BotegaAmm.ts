@@ -6,15 +6,14 @@ import { TokenBalance, TokenConfig } from "../../models/token-balance";
 import { IAmm } from "./abstract";
 
 export class BotegaAmm implements IAmm {
-	public readonly process: IProcess;
 	constructor(
-		private readonly botegaAmmClient: IBotegaAmmClient
+		private readonly botegaAmmClient: IBotegaAmmClient,
+		private readonly process: IProcess
 	) {
-		this.process = new Process(botegaAmmClient.getProcessId())
 	}
 
 	public static from(transaction: ArweaveTransaction): IAmm {
-		return new BotegaAmm(BotegaAmmClient.from(transaction))
+		return new BotegaAmm(BotegaAmmClient.from(transaction), Process.from(transaction))
 	}
 
 	async getPrice(quantity: number | string, tokenId: string): Promise<TokenBalance> {

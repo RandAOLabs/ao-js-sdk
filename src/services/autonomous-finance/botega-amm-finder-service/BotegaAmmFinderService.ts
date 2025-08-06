@@ -1,4 +1,4 @@
-import SYSTEM_TAGS from "../../../core/common/tags";
+import SYSTEM_TAGS, { SYSTEM_SCHEDULER_TAG_NAME } from "../../../core/common/tags";
 import { BOTEGA_AMM_FACTORT } from "../../../constants/processIds/autonomous-finance";
 import { IAutoconfiguration, staticImplements } from "../../../utils";
 import { IAmmFinderService } from "../../amm-finder-service";
@@ -7,6 +7,7 @@ import { BOTEGA_TAGS } from "../../../constants/tags/botega";
 import { BotegaAmmClient } from "../../../clients/autonomous-finance/botega/liquidity-pool/BotegaLiquidityPoolClient";
 import { BotegaAmm } from "../../../adaptors/amm/BotegaAmm";
 import { IAmm } from "../../../adaptors";
+import { ArweaveGQLBuilder, ArweaveGQLSortOrder } from "../../../core";
 
 
 /**
@@ -29,25 +30,32 @@ export class BotegaAmmFinderService implements IAmmFinderService {
 	}
 
 	async findAmms(tokenProcessIdA: string, tokenProcessIdB: string): Promise<IAmm[]> {
-		const queryParamsAB: GetAllMessagesParams = {
-			tags: [
+		const gqlBuilder1 = new ArweaveGQLBuilder()
+			.withAllFields()
+			.sortBy(ArweaveGQLSortOrder.HEIGHT_DESC)
+			.limit(100)
+			.tags([
 				SYSTEM_TAGS.FROM_PROCESS(BOTEGA_AMM_FACTORT),
 				BOTEGA_TAGS.TOKEN_A(tokenProcessIdA),
 				BOTEGA_TAGS.TOKEN_B(tokenProcessIdB)
-			]
-		}
-		const queryParamsBA: GetAllMessagesParams = {
-			tags: [
+			])
+			.containsTagName(SYSTEM_SCHEDULER_TAG_NAME);
+
+		const gqlBuilder2 = new ArweaveGQLBuilder()
+			.withAllFields()
+			.sortBy(ArweaveGQLSortOrder.HEIGHT_DESC)
+			.limit(100)
+			.tags([
 				SYSTEM_TAGS.FROM_PROCESS(BOTEGA_AMM_FACTORT),
 				BOTEGA_TAGS.TOKEN_A(tokenProcessIdB),
 				BOTEGA_TAGS.TOKEN_B(tokenProcessIdA)
-			]
-		}
+			])
+			.containsTagName(SYSTEM_SCHEDULER_TAG_NAME);
 
 		// Await both transactions concurrently
 		const [transactionsAB, transactionsBA] = await Promise.all([
-			this.messageService.getAllMessages(queryParamsAB),
-			this.messageService.getAllMessages(queryParamsBA)
+			this.messageService.getAllMessagesWithBuilder(gqlBuilder1),
+			this.messageService.getAllMessagesWithBuilder(gqlBuilder2)
 		]);
 
 		// Combine all transactions and create a set of unique transactions
