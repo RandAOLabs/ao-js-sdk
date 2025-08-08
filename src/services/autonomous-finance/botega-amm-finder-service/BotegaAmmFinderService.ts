@@ -1,6 +1,6 @@
 import SYSTEM_TAGS, { SYSTEM_SCHEDULER_TAG_NAME } from "../../../core/common/tags";
 import { BOTEGA_AMM_FACTORT } from "../../../constants/processIds/autonomous-finance";
-import { IAutoconfiguration, staticImplements } from "../../../utils";
+import { IAutoconfiguration, Logger, staticImplements } from "../../../utils";
 import { IAmmFinderService } from "../../amm-finder-service";
 import { GetAllMessagesParams, IMessagesService, MessagesService } from "../../messages";
 import { BOTEGA_TAGS } from "../../../constants/tags/botega";
@@ -75,5 +75,20 @@ export class BotegaAmmFinderService implements IAmmFinderService {
 		);
 
 		return amms;
+	}
+
+
+	async findBestAmm(tokenProcessIdA: string, tokenProcessIdB: string): Promise<IAmm> {
+		const amms = await this.findAmms(tokenProcessIdA, tokenProcessIdB)
+		if (amms.length == 1) {
+			return amms[0]
+		} else {
+			return this.chooseBestAmm(amms)
+		}
+	}
+
+	private async chooseBestAmm(amms: IAmm[]): Promise<IAmm> {
+		Logger.warn("AMM CHOICE UNIMPLEMENTED DEFAULTING UNKNONW")
+		return amms[0] //TODO find the best AMM
 	}
 }

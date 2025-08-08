@@ -17,4 +17,6 @@ export interface IPortfolioService {
 	getPortfolio$(entityId: string): Observable<Portfolio>;
 
 	calculatePortfolioWorthUSD$(portfolio: Observable<Portfolio>): Observable<ICurrencyAmount>;
+
+	calculatePortfolioWorthAO$(portfolio: Observable<Portfolio>): Observable<ICurrencyAmount>;
 }
