@@ -143,4 +143,5 @@ export class BotegaAmmClient extends DryRunCachingClient implements IBotegaAmmCl
 		this.processInfo = await super.getProcessInfo()
 		return this.processInfo
 	}
+
 }

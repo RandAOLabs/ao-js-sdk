@@ -12,6 +12,7 @@ export class AmmFinderService implements IAmmFinderService {
 		private readonly botegaAmmFinderService: IAmmFinderService,
 	) { }
 
+
 	/**
 	 * Creates a pre-configured instance of AmmFinderService
 	 * @returns A pre-configured AmmFinderService instance
@@ -24,5 +25,9 @@ export class AmmFinderService implements IAmmFinderService {
 
 	async findAmms(tokenProcessIdA: string, tokenProcessIdB: string): Promise<IAmm[]> {
 		return this.botegaAmmFinderService.findAmms(tokenProcessIdA, tokenProcessIdB);
+	}
+
+	findBestAmm(tokenProcessIdA: string, tokenProcessIdB: string): Promise<IAmm> {
+		return this.botegaAmmFinderService.findBestAmm(tokenProcessIdA, tokenProcessIdB);
 	}
 }

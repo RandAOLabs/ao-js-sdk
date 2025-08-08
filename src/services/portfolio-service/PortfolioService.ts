@@ -37,6 +37,13 @@ export class PortfolioService implements IPortfolioService {
 		throw new Error('Method not implemented.');
 	}
 
+	public calculatePortfolioWorthAO$(portfolio: Observable<Portfolio>): Observable<ICurrencyAmount> {
+		portfolio.pipe(
+			map(portfolio => portfolio.getTokens()),
+		)
+		throw new Error('Method not implemented.');
+	}
+
 
 	public getPortfolio$(entityId: string): Observable<Portfolio> {
 		return this.getTokens$(entityId).pipe(

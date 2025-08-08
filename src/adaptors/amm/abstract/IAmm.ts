@@ -1,4 +1,4 @@
-import { TokenBalance } from "../../../models/token-balance";
+import { ITokenBalance, TokenBalance } from "../../../models/token-balance";
 import { ITokenClient } from "../../../clients/ao";
 import { IProcess } from "../../../models";
 
@@ -9,7 +9,14 @@ export interface IAmm {
 	 * @param tokenId The token ID
 	 * @returns Price as a number
 	 */
-	getPrice(quantity: number | string, tokenId: string): Promise<TokenBalance>;
+	getPrice(quantity: number | string, tokenId: string): Promise<ITokenBalance>;
+
+	/**
+	 * Get price for a given quantity and token
+	 * @param tokenBalance The quantity to get price for (number or string)
+	 * @returns TokenBalance in converted currency
+	 */
+	getQuote(tokenBalance: ITokenBalance): Promise<ITokenBalance>;
 
 	getProcess(): IProcess;
 
