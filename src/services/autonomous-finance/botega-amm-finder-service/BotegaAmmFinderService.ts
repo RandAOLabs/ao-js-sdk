@@ -2,22 +2,24 @@ import SYSTEM_TAGS, { SYSTEM_SCHEDULER_TAG_NAME } from "../../../core/common/tag
 import { BOTEGA_AMM_FACTORT } from "../../../constants/processIds/autonomous-finance";
 import { IAutoconfiguration, Logger, staticImplements } from "../../../utils";
 import { IAmmFinderService } from "../../amm-finder-service";
-import { GetAllMessagesParams, IMessagesService, MessagesService } from "../../messages";
+import { IMessagesService, MessagesService } from "../../messages";
 import { BOTEGA_TAGS } from "../../../constants/tags/botega";
-import { BotegaAmmClient } from "../../../clients/autonomous-finance/botega/liquidity-pool/BotegaLiquidityPoolClient";
 import { BotegaAmm } from "../../../adaptors/amm/BotegaAmm";
 import { IAmm } from "../../../adaptors";
 import { ArweaveGQLBuilder, ArweaveGQLSortOrder } from "../../../core";
+import { Service } from "../../common";
 
 
 /**
  * Implementation of AMM finder service that locates AMM pools for token pairs.
  */
 @staticImplements<IAutoconfiguration>()
-export class BotegaAmmFinderService implements IAmmFinderService {
+export class BotegaAmmFinderService extends Service implements IAmmFinderService {
 	constructor(
 		private readonly messageService: IMessagesService,
-	) { }
+	) {
+		super()
+	}
 
 	/**
 	 * Creates a pre-configured instance of BotegaAmmFinderService
@@ -80,7 +82,9 @@ export class BotegaAmmFinderService implements IAmmFinderService {
 
 	async findBestAmm(tokenProcessIdA: string, tokenProcessIdB: string): Promise<IAmm> {
 		const amms = await this.findAmms(tokenProcessIdA, tokenProcessIdB)
-		if (amms.length == 1) {
+		if (amms.length == 0) {
+			throw new Error("AMMNotFound")
+		} else if (amms.length == 1) {
 			return amms[0]
 		} else {
 			return this.chooseBestAmm(amms)
@@ -88,7 +92,20 @@ export class BotegaAmmFinderService implements IAmmFinderService {
 	}
 
 	private async chooseBestAmm(amms: IAmm[]): Promise<IAmm> {
-		Logger.warn("AMM CHOICE UNIMPLEMENTED DEFAULTING UNKNONW")
-		return amms[0] //TODO find the best AMM
+		Logger.warn("AMM CHOICE UNIMPLEMENTED DEFAULTING UNKNOWN")
+
+		// Get total supply for all AMMs concurrently
+		const ammSupplies = await Promise.all(
+			amms.map(async (amm) => ({
+				amm,
+				totalSupply: await amm.totalSupply()
+			}))
+		);
+
+		// Sort by total supply in descending order (highest first)
+		ammSupplies.sort((a, b) => Number(b.totalSupply - a.totalSupply));
+
+		// Return the AMM with the highest total supply
+		return ammSupplies[0].amm;
 	}
 }

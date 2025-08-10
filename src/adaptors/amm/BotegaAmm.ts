@@ -1,28 +1,48 @@
 import { bigint } from "zod";
-import { BotegaAmmClient, IBotegaAmmClient, ITokenClient, TokenInfo } from "../../clients";
+import { BotegaAmmClient, IBotegaAmmClient, ITokenClient, TokenClient, TokenInfo } from "../../clients";
 import { ArweaveTransaction } from "../../core/arweave/abstract/types";
 import { CurrencyAmount, IProcess, Process } from "../../models";
 import { ITokenBalance, TokenBalance, TokenConfig } from "../../models/token-balance";
 import { IAmm } from "./abstract";
+import { Logger } from "../../utils";
+import { Token } from "../token/Token";
+import { TokenFactory } from "../token";
 
 export class BotegaAmm implements IAmm {
 	constructor(
 		private readonly botegaAmmClient: IBotegaAmmClient,
+		private readonly lpToken: ITokenClient,
 		private readonly process: IProcess
 	) {
 	}
 
 
+
 	public static from(transaction: ArweaveTransaction): IAmm {
-		return new BotegaAmm(BotegaAmmClient.from(transaction), Process.from(transaction))
+		const lpToken = TokenClient.defaultBuilder()
+			.withProcessId(transaction.id!)
+			.build()
+		return new BotegaAmm(BotegaAmmClient.from(transaction), lpToken, Process.from(transaction))
 	}
 	//Constuctors
 
+
+	async totalSupply(): Promise<bigint> {
+		const info = await this.lpToken.getInfo()
+		return BigInt(info.totalSupply!)
+	}
+
 	async getQuote(tokenBalance: ITokenBalance): Promise<ITokenBalance> {
 		if (await this.isTokenAProcessId(tokenBalance)) {
-			return this.getQuoteOfTokenAInTokenB(tokenBalance)
+			Logger.debug("Getting Quotes")
+			const quote = await this.getQuoteOfTokenAInTokenB(tokenBalance)
+			Logger.debug(quote)
+			return quote
 		} else if (await this.isTokenBProcessId(tokenBalance)) {
-			return this.getQuoteOfTokenBInTokenA(tokenBalance)
+			Logger.debug("Getting Quotes")
+			const quote = await this.getQuoteOfTokenBInTokenA(tokenBalance)
+			Logger.debug(quote)
+			return quote
 		} else {
 			throw new Error(`Token: ${tokenBalance} cannot be used with AMM ${this}`);
 		}
@@ -79,15 +99,11 @@ export class BotegaAmm implements IAmm {
 	private async getQuoteOfTokenAInTokenB(tokenBalance: ITokenBalance): Promise<TokenBalance> {
 		const quote = await this.botegaAmmClient.getPriceOfTokenAInTokenB(tokenBalance.getCurrencyAmount().amount().toString())
 
-		const tokenBClient = await this.botegaAmmClient.getTokenB()
-		const tokenBInfo = await tokenBClient.getInfo()
+		const tokenBProcessId = this.botegaAmmClient.getTokenBProcessId()
+		const tokenB = TokenFactory.from(tokenBProcessId)
 
-		const currencyAmount = new CurrencyAmount(BigInt(quote), Number(tokenBInfo.denomination!))
-		const tokenConfig: TokenConfig = {
-			logoTxId: tokenBInfo.logo!,
-			name: tokenBInfo.name,
-			tokenProcessId: tokenBClient.getProcessId(),
-		}
+		const currencyAmount = new CurrencyAmount(BigInt(quote), await tokenB.getDecimals())
+		const tokenConfig: TokenConfig = await tokenB.getTokenConfig()
 
 		return new TokenBalance({ currencyAmount, tokenConfig })
 	}
@@ -95,15 +111,11 @@ export class BotegaAmm implements IAmm {
 	private async getQuoteOfTokenBInTokenA(tokenBalance: ITokenBalance): Promise<TokenBalance> {
 		const quote = await this.botegaAmmClient.getPriceOfTokenBInTokenA(tokenBalance.getCurrencyAmount().amount().toString())
 
-		const tokenAClient = await this.botegaAmmClient.getTokenA()
-		const tokenAInfo = await tokenAClient.getInfo()
+		const tokenAProcessId = this.botegaAmmClient.getTokenAProcessId()
+		const tokenA = TokenFactory.from(tokenAProcessId)
 
-		const currencyAmount = new CurrencyAmount(BigInt(quote), Number(tokenAInfo.denomination!))
-		const tokenConfig: TokenConfig = {
-			logoTxId: tokenAInfo.logo!,
-			name: tokenAInfo.name,
-			tokenProcessId: tokenAClient.getProcessId(),
-		}
+		const currencyAmount = new CurrencyAmount(BigInt(quote), await tokenA.getDecimals())
+		const tokenConfig: TokenConfig = await tokenA.getTokenConfig()
 
 		return new TokenBalance({ currencyAmount, tokenConfig })
 	}

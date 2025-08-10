@@ -20,4 +20,9 @@ export interface IAmm {
 
 	getProcess(): IProcess;
 
+	/**
+	 * @deprecated
+	 */
+	totalSupply(): Promise<bigint>;
+
 }

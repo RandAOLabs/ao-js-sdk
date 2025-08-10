@@ -16,4 +16,9 @@ export interface TokenConfig {
 	 * Process ID of the token.
 	 */
 	tokenProcessId?: string;
+
+	/**
+	 * Process ID of the token.
+	 */
+	denomination?: number;
 }
