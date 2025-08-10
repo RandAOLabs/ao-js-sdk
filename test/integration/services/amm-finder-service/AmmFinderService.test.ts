@@ -10,8 +10,8 @@ describe("IAmmFinderService Integration Tests", () => {
 
 	it("should find AMMs for token pairs and print results", async () => {
 		// Test token process IDs - you can replace these with real token process IDs
-		const tokenProcessIdA = "Va_tHWVZFjk-TOlxRmFGeNmhn_lqv1bzlm6rnAp9Fsw";
-		const tokenProcessIdB = "lgE3_BQw3ZJwsYUrt_pTMGVcnrCwuvNh8kSHa6E8sl8";
+		const tokenProcessIdA = "4hXj_E-5fAKmo4E8KjgQvuDJKAFk9P2grhycVmISDLs";
+		const tokenProcessIdB = "0syT13r0s0tgPmIed95bJnuSqaD29HQNN8D3ElLSrsc";
 
 		Logger.info(`Testing findAmm for token pair: ${tokenProcessIdA} <-> ${tokenProcessIdB}`);
 

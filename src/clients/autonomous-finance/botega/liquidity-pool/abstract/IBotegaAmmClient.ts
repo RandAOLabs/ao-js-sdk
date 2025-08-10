@@ -31,9 +31,9 @@ export interface IBotegaAmmClient extends IProcessClient {
 	getPriceOfTokenBInTokenA(quantity: number | string): Promise<number>;
 
 	/**
- * Get token A client instance
- * @returns Token A client
- */
+	 * Get token A client instance
+	 * @returns Token A client
+	 */
 	getTokenA(): Promise<ITokenClient>;
 
 	/**
@@ -41,4 +41,8 @@ export interface IBotegaAmmClient extends IProcessClient {
 	 * @returns Token B client
 	 */
 	getTokenB(): Promise<ITokenClient>;
+
+	getTokenAProcessId(): string;
+
+	getTokenBProcessId(): string;
 }

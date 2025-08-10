@@ -3,7 +3,6 @@ import { ITokenConversionsService } from "src/services/token-conversions-service
 import { Logger, LogLevel } from "src/utils/logger";
 import { TokenBalance } from "src/models/token-balance/TokenBalance";
 import { CurrencyAmount } from "src/models/currency/CurrencyAmount";
-import { COMMUNITY_TOKENS } from "src/constants/processIds/community_tokens";
 
 describe("TokenConversionsService Integration Tests", () => {
 	let service: ITokenConversionsService;
@@ -15,20 +14,20 @@ describe("TokenConversionsService Integration Tests", () => {
 	});
 
 	it("should convert token balance from one token to another and print results", async () => {
-		// Create a test token balance for TRUNK token
+
+		const tokenProcessIdA = "4hXj_E-5fAKmo4E8KjgQvuDJKAFk9P2grhycVmISDLs";
+		const tokenProcessIdB = "0syT13r0s0tgPmIed95bJnuSqaD29HQNN8D3ElLSrsc";
+
 		const sourceTokenBalance = new TokenBalance({
-			currencyAmount: CurrencyAmount.fromDecimal("100", 12), // 100 TRUNK tokens with 12 decimals
+			currencyAmount: CurrencyAmount.fromDecimal("100", 12),
 			tokenConfig: {
-				name: "TRUNK",
-				tokenProcessId: COMMUNITY_TOKENS.TRUNK,
+				name: "PI",
+				tokenProcessId: tokenProcessIdA,
 				logoTxId: "test-logo-tx-id"
 			}
 		});
 
-		// Target token to convert to (LLAMA)
-		const targetTokenProcessId = COMMUNITY_TOKENS.LLAMA;
-
-		Logger.info(`Testing convert from TRUNK to LLAMA`);
+		const targetTokenProcessId = tokenProcessIdB
 		Logger.info(`Source token balance: ${sourceTokenBalance.toString()}`);
 		Logger.info(`Target token process ID: ${targetTokenProcessId}`);
 

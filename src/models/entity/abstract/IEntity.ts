@@ -1,6 +1,6 @@
-import { EntityType } from "./EntityType";
+import { EntityId, EntityType } from "./EntityType";
 
 export interface IEntity {
-	getId(): string;
+	getId(): EntityId;
 	getType(): EntityType;
 }

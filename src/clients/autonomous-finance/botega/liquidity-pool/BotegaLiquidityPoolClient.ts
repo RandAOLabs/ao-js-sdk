@@ -9,6 +9,7 @@ import { Tags } from "../../../../core/common/types";
 
 import { BaseClientConfigBuilder, DryRunCachingClientConfigBuilder } from "../../../../core/ao/configuration/builder";
 import { ClientError } from "../../../common/ClientError";
+import { FORWARD_RESEARCH_AO_CONFIG } from "../../../../core/ao/ao-client/configurations";
 
 
 /**
@@ -23,8 +24,16 @@ export class BotegaAmmClient extends DryRunCachingClient implements IBotegaAmmCl
 		const builder = new DryRunCachingClientConfigBuilder()
 		const config = builder
 			.withProcessId(processId)
+			.withAOConfig(FORWARD_RESEARCH_AO_CONFIG)
 			.build()
 		super(config);
+	}
+
+	getTokenAProcessId(): string {
+		return this.tokenAClient?.getProcessId()!
+	}
+	getTokenBProcessId(): string {
+		return this.tokenBClient?.getProcessId()!
 	}
 
 	public static from(transaction: ArweaveTransaction): IBotegaAmmClient {
