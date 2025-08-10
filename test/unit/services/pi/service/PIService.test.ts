@@ -1,5 +1,4 @@
 import { jest } from '@jest/globals';
-import { PIService } from 'src/services/pi/PIService';
 import { PIOracleClient } from 'src/clients/pi/oracle/PIOracleClient';
 import { PIDelegateClient } from 'src/clients/pi/delegate/PIDelegateClient';
 import { DelegationHistorianClient } from 'src/clients/pi/historian/DelegationHistorianClient';
@@ -7,6 +6,7 @@ import { PIToken } from 'src/clients/pi/oracle/abstract/IPIOracleClient';
 import { DelegationInfo, SetDelegationOptions } from 'src/clients/pi/delegate/abstract/IPIDelegateClient';
 import { DelegationRecord, ProjectDelegationTotal } from 'src/clients/pi/historian/IDelegationHistorianClient';
 import { DryRunResult } from '../../../../../src/core/ao/abstract';
+import { PIService } from '../../../../../src';
 
 
 // Mock the client classes
