@@ -1,5 +1,4 @@
 import { ServiceError } from "../../services/common/ServiceError";
-import { Service } from "../../services/common/Service";
 import { IService } from "../../services/common";
 
 /**

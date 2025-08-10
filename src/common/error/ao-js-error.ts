@@ -1,4 +1,5 @@
-import { Logger, StringFormatting } from "../../utils";
+import { Logger } from "../../utils/logger";
+import { StringFormatting } from "../../utils/string-formatting";
 import { AoJsErrorParams } from "./params";
 
 export class AOJsError extends Error {
