@@ -1,5 +1,5 @@
 import { IEntity } from "./abstract";
-import { EntityType } from "./abstract/EntityType";
+import { EntityId, EntityType } from "./abstract/EntityType";
 
 export abstract class Entity implements IEntity {
 
@@ -8,7 +8,7 @@ export abstract class Entity implements IEntity {
 	) { }
 
 
-	getId(): string {
+	getId(): EntityId {
 		return this.id
 	}
 

@@ -1,17 +1,17 @@
-import { BotegaLiquidityPoolClient } from "src/clients/autonomous-finance/botega/liquidity-pool/BotegaLiquidityPoolClient";
 import { MockBaseClient } from "test/unit/clients/MockBaseClient";
 import { ArweaveTransaction } from "src/core/arweave/abstract/types";
 import { Logger, LogLevel } from "src/utils";
 import { ClientError } from "src/clients/common/ClientError";
 import { DryRunResult } from "../../../../../../src/core/ao/abstract";
+import { BotegaAmmClient } from "../../../../../../src";
 
 describe("BotegaLiquidityPoolClient Unit Tests", () => {
-	let client: BotegaLiquidityPoolClient;
+	let client: BotegaAmmClient;
 	let mockBaseClient: MockBaseClient;
 
 	beforeEach(() => {
 		Logger.setLogLevel(LogLevel.NONE)
-		client = new BotegaLiquidityPoolClient("test-process-id");
+		client = new BotegaAmmClient("test-process-id");
 		mockBaseClient = new MockBaseClient();
 		mockBaseClient.bindToClient(client);
 	});

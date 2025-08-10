@@ -15,7 +15,7 @@ export class ArweaveNodeFactory implements IArweaveNodeFactory {
 	 * Each configuration type gets its own singleton instance.
 	 */
 	private static instances: Map<ArweaveNodeType, Arweave> = new Map();
-	
+
 	/**
 	 * Configuration mapping for different node types
 	 */
@@ -33,7 +33,7 @@ export class ArweaveNodeFactory implements IArweaveNodeFactory {
 	/**
 	 * Private constructor to prevent direct instantiation
 	 */
-	private constructor() {}
+	private constructor() { }
 
 	/**
 	 * Singleton factory instance
@@ -54,7 +54,7 @@ export class ArweaveNodeFactory implements IArweaveNodeFactory {
 	 * Creates or returns existing Arweave instance for the specified node type.
 	 * If an instance already exists for the given node type, returns the existing instance.
 	 * Otherwise, creates a new instance and caches it.
-	 * 
+	 *
 	 * @param nodeType The type of Arweave node configuration to use
 	 * @returns Arweave instance configured for the specified node type
 	 * @throws ArweaveNodeInitializationError if initialization fails
@@ -63,7 +63,6 @@ export class ArweaveNodeFactory implements IArweaveNodeFactory {
 	public getNodeClient(nodeType: ArweaveNodeType): Arweave {
 		// Return existing instance if it exists
 		if (ArweaveNodeFactory.instances.has(nodeType)) {
-			Logger.debug(`Returning existing Arweave instance for node type: ${nodeType}`);
 			return ArweaveNodeFactory.instances.get(nodeType)!;
 		}
 
@@ -90,10 +89,10 @@ export class ArweaveNodeFactory implements IArweaveNodeFactory {
 
 			Logger.debug(`Creating new Arweave instance for node type: ${nodeType} in ${environment} environment`);
 			const instance = Arweave.init(arweaveConfig);
-			
+
 			// Cache the instance
 			ArweaveNodeFactory.instances.set(nodeType, instance);
-			
+
 			return instance;
 		} catch (error: any) {
 			Logger.error(`Error initializing Arweave for node type ${nodeType}: ${error.message}`);
@@ -103,7 +102,7 @@ export class ArweaveNodeFactory implements IArweaveNodeFactory {
 
 	/**
 	 * Checks if a node instance exists for the given type
-	 * 
+	 *
 	 * @param nodeType The type of Arweave node configuration to check
 	 * @returns True if instance exists, false otherwise
 	 */
@@ -122,7 +121,7 @@ export class ArweaveNodeFactory implements IArweaveNodeFactory {
 
 	/**
 	 * Gets all currently cached node types
-	 * 
+	 *
 	 * @returns Array of node types that have cached instances
 	 */
 	public getCachedNodeTypes(): ArweaveNodeType[] {
@@ -132,7 +131,7 @@ export class ArweaveNodeFactory implements IArweaveNodeFactory {
 
 /**
  * Convenience function to get an Arweave instance for a specific node type
- * 
+ *
  * @param nodeType The type of Arweave node configuration to use
  * @returns Arweave instance configured for the specified node type
  */
@@ -142,7 +141,7 @@ export const getArweaveNode = (nodeType: ArweaveNodeType): Arweave => {
 
 /**
  * Convenience function to get a GoldSky Arweave instance
- * 
+ *
  * @returns Arweave instance configured for GoldSky
  */
 export const getGoldSkyArweave = (): Arweave => {
@@ -151,7 +150,7 @@ export const getGoldSkyArweave = (): Arweave => {
 
 /**
  * Convenience function to get an Arweave.net instance
- * 
+ *
  * @returns Arweave instance configured for Arweave.net
  */
 export const getDotNetArweave = (): Arweave => {

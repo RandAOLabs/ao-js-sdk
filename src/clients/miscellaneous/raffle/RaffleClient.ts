@@ -8,7 +8,7 @@ import { RaffleProcessError } from "./RaffleProcessError";
 import { BaseClient } from "../../../core/ao/BaseClient";
 import ResultUtils from "../../../core/common/result-utils/ResultUtils";
 import { ClientBuilder } from "../../common";
-import { PROCESS_IDS } from "../../../processes/ids";
+import { PROCESS_IDS } from "../../../constants/processIds";
 import { ClientError } from "../../common/ClientError";
 import { DryRunResult, MessageResult } from "../../../core/ao/abstract";
 

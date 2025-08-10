@@ -8,6 +8,11 @@ export class CurrencyAmount implements ICurrencyAmount {
 	private readonly _decimals: number;
 
 	/**
+	 * Static field representing a zero currency amount with 0 decimals.
+	 */
+	static readonly None = new CurrencyAmount(BigInt(0), 0);
+
+	/**
 	 * Creates a new CurrencyAmount instance.
 	 * @param amount The raw amount as a bigint (in smallest units)
 	 * @param decimals The number of decimal places for this currency
@@ -23,7 +28,8 @@ export class CurrencyAmount implements ICurrencyAmount {
 	 * @param decimals The number of decimal places for this currency
 	 * @returns A new CurrencyAmount instance
 	 */
-	static fromDecimal(value: string | number, decimals: number): CurrencyAmount {
+	static fromDecimal(value: string | number, _decimals: string | number): CurrencyAmount {
+		const decimals = typeof _decimals === 'number' ? _decimals : Number(_decimals);
 		const stringValue = typeof value === 'number' ? value.toString() : value;
 		const [integerPart, fractionalPart = ''] = stringValue.split('.');
 
@@ -36,6 +42,10 @@ export class CurrencyAmount implements ICurrencyAmount {
 
 	amount(): bigint {
 		return this._amount;
+	}
+
+	amountString(): string {
+		return this._amount.toString();
 	}
 
 	decimals(): number {

@@ -162,4 +162,57 @@ export class MessagesService implements IMessagesService {
 			return undefined
 		}
 	}
+
+	public async getAllMessagesWithBuilder(builder: ArweaveGQLBuilder): Promise<ArweaveTransaction[]> {
+		try {
+			return await this.getAllMessagesWithBuilderPaginated(builder);
+		} catch (error: any) {
+			Logger.error(`Error retrieving messages with builder: ${error.message}`);
+			throw new GetLatestMessagesError(error);
+		}
+	}
+
+	private async getAllMessagesWithBuilderPaginated(builder: ArweaveGQLBuilder): Promise<ArweaveTransaction[]> {
+		const allMessages: ArweaveTransaction[] = [];
+		let currentCursor: string | undefined;
+		let hasMore = true;
+
+		// Get the limit from the builder using the getter method
+		// If no limit is set, default to 100 for reasonable pagination
+		const pageSize = builder.getLimit() || 100;
+
+		// Ensure the builder has a limit set for pagination
+		if (!builder.getLimit()) {
+			builder.limit(pageSize);
+		}
+
+		while (hasMore) {
+			// Use the provided builder and update cursor if needed
+			if (currentCursor) {
+				builder.after(currentCursor);
+			}
+
+			// Execute the query
+			const response = await this.arweaveDataService.query(builder);
+
+			if (!response.data || !response.data.transactions.edges) {
+				break;
+			}
+
+			const edges = response.data.transactions.edges;
+			allMessages.push(...edges.map(edge => edge.node));
+
+			// Check if we have more pages - if we got a full page, there might be more
+			hasMore = edges.length === pageSize;
+			currentCursor = edges[edges.length - 1]?.cursor;
+
+			// Safety check to prevent infinite loops
+			if (!currentCursor) {
+				hasMore = false;
+			}
+		}
+
+		return allMessages;
+	}
+
 }

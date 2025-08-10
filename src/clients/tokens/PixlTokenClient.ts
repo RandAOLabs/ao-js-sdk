@@ -1,6 +1,6 @@
 import { TokenClient } from "../ao";
 import { ClientBuilder } from "../common";
-import { BAZAR } from "../../processes/ids/bazar";
+import { BAZAR } from "../../constants/processIds/bazar";
 import { staticImplements, IAutoconfiguration, IDefaultBuilder } from "../../utils";
 /**
  * @category Tokens
@@ -8,17 +8,17 @@ import { staticImplements, IAutoconfiguration, IDefaultBuilder } from "../../uti
 @staticImplements<IAutoconfiguration>()
 @staticImplements<IDefaultBuilder>()
 export class PixlToken extends TokenClient {
-	/** 
+	/**
 	 * {@inheritdoc IAutoconfiguration.autoConfiguration}
-	 * @see {@link IAutoconfiguration.autoConfiguration} 
+	 * @see {@link IAutoconfiguration.autoConfiguration}
 	 */
 	public static autoConfiguration(): PixlToken {
 		return PixlToken.defaultBuilder()
 			.build()
 	}
-	/** 
+	/**
 	 * {@inheritdoc IDefaultBuilder.defaultBuilder}
-	 * @see {@link IDefaultBuilder.defaultBuilder} 
+	 * @see {@link IDefaultBuilder.defaultBuilder}
 	 */
 	public static defaultBuilder(): ClientBuilder<PixlToken> {
 		return new ClientBuilder(PixlToken)

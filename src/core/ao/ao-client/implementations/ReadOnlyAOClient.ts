@@ -63,7 +63,10 @@ export class ReadOnlyAOClient implements IReadOnlyAOClient {
 
 	public async dryrun(params: DryRunParams): Promise<DryRunResult> {
 		try {
+			Logger.debug(params)
 			const result = await this._dryrun(params);
+			Logger.debug("---------------------")
+			Logger.debug(result)
 			return result
 		} catch (error: any) {
 			if (error.message = RATELIMIT_ERROR_TEXT) {
@@ -76,7 +79,7 @@ export class ReadOnlyAOClient implements IReadOnlyAOClient {
 
 
 	public setConfig(aoConnectConfig: ConnectArgsLegacy): void {
-		Logger.debug(`Connecting to AO with:`, aoConnectConfig)// Leave
+		// Logger.debug(`Connecting to AO with:`, aoConnectConfig)// Leave
 		const { message, result, results, dryrun } = connect(aoConnectConfig);
 		this._message = message;
 		this._result = result;

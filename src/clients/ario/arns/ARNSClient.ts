@@ -6,7 +6,7 @@ import { IAutoconfiguration, IDefaultBuilder } from "../../../utils/class-interf
 import { AO_CONFIGURATIONS } from "../../../core/ao/ao-client/configurations";
 import { ClientBuilder } from "../../common";
 import { staticImplements } from "../../../utils";
-import { PROCESS_IDS } from "../../../processes/ids";
+import { PROCESS_IDS } from "../../../constants/processIds";
 import { ClientError } from "../../common/ClientError";
 import { InputValidationError } from "../../bazar";
 import { ARNS_QUERY_TAGS } from "../../../models";

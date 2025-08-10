@@ -1,4 +1,4 @@
-import { PROCESS_IDS } from "../../../processes/ids";
+import { PROCESS_IDS } from "../../../constants/processIds";
 
 /**
  * Common domains for querying using the ARIOService.
