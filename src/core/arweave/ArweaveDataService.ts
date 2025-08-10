@@ -22,7 +22,7 @@ export class ArweaveDataService implements IArweaveDataService {
 	private readonly arweave: Arweave;
 	private readonly httpClient: IHttpClient;
 
-	protected constructor(_arweave:Arweave, _httpClient:IHttpClient ) {
+	protected constructor(_arweave: Arweave, _httpClient: IHttpClient) {
 		this.arweave = _arweave;
 		this.httpClient = _httpClient;
 	}
@@ -40,6 +40,8 @@ export class ArweaveDataService implements IArweaveDataService {
 			const response = await this.arweave.api.post('/graphql', {
 				query: query
 			});
+			// Logger.debug(query)
+			// Logger.debug(response)
 			return response.data as T;
 		} catch (error: any) {
 			Logger.error(`GraphQL query error: ${error.message}`);

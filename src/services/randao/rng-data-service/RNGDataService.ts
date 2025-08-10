@@ -4,8 +4,8 @@ import { IReactiveMessageService, ReactiveMessageService } from '../../messages'
 import { IAutoconfiguration } from '../../../utils/class-interfaces/IAutoconfiguration';
 import { staticImplements } from '../../../utils/decorators/staticImplements';
 import { Logger } from '../../../utils/logger/logger';
-import { MISCELLANEOUS } from '../../../processes/ids/miscellaneous';
-import { AO } from '../../../processes/ids/ao';
+import { MISCELLANEOUS } from '../../../constants/processIds/miscellaneous';
+import { AO } from '../../../constants/processIds/ao';
 import { CREDIT_NOTICE_ACTION_TAG, FROM_PROCESS_TAG_NAME } from '../../credit-notices/constants';
 import { Tags } from '../../../core/common/types';
 import CreditNoticeConverter from '../../credit-notices/CreditNoticeConverter';

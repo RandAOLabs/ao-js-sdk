@@ -1,2 +1,2 @@
-export * from "./IBotegaLiquidityPoolClient"
-// export * from "./types"
+export * from "./IBotegaAmmClient"
+export * from "./types"

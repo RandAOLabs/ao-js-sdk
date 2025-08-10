@@ -2,7 +2,7 @@ import { ArweaveTransaction } from "../../../../../core/arweave/abstract/types";
 import { CurrencyAmount } from "../../../../../models/currency/CurrencyAmount";
 import { RecordNoticeTransactionData } from "../../../arns-data-service/abstract/transaction-data/RecordNoticeTransactionData";
 import { IRecordEvent } from "./abstract/IRecordEvent";
-import { ARIO_TOKEN } from "../../../../../processes/maps/currencies";
+import { ARIO_TOKEN } from "../../../../../constants/maps/currencies";
 import { ARNameTransactionDataEvent } from "./ARNameTransactionDataEvent";
 
 export class RecordEvent extends ARNameTransactionDataEvent<RecordNoticeTransactionData> implements IRecordEvent {
@@ -31,7 +31,7 @@ export class RecordEvent extends ARNameTransactionDataEvent<RecordNoticeTransact
 		const notice = await this.getNoticeData();
 		return notice.undernameLimit;
 	}
-	
+
 	async getProcessId(): Promise<string> {
 		const notice = await this.getNoticeData();
 		return notice.processId;

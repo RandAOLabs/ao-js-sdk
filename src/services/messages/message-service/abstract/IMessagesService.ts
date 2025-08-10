@@ -66,12 +66,19 @@ export interface IMessagesService {
 	 */
 	countAllMessages(params: GetAllMessagesParams): Promise<number>
 
-
 	/**
-	 * Counts all messages for given criteria
-	 * @param params Parameters for filtering messages
-	 * @returns number of messages which match the criteria
+	 * Retrieves a message by its ID
+	 * @param id The message ID to retrieve
+	 * @returns Promise resolving to the message or undefined if not found
 	 * @throws MessagesServiceError if the query fails
 	 */
 	getMessageById(id: string): Promise<ArweaveTransaction | undefined>;
+
+	/**
+	 * Retrieves all messages using a custom GQL builder with automatic pagination
+	 * @param builder The ArweaveGQLBuilder instance to use for querying
+	 * @returns Promise resolving to all matching messages
+	 * @throws MessagesServiceError if the query fails
+	 */
+	getAllMessagesWithBuilder(builder: any): Promise<ArweaveTransaction[]>;
 }
