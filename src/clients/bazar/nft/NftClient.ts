@@ -2,7 +2,7 @@
 import { TokenClient, TokenClientConfig } from "../../ao";
 import { INftClient } from "./abstract/INftClient";
 import { NFT_QUANTITY } from "./constants";
-import { ClientError } from "../../common/ClientError";
+import { ProcessClientError } from "../../common/ProcessClientError";
 import { Tags } from "../../../core";
 
 import { Logger } from "../../../utils/index";
@@ -11,21 +11,21 @@ import { Logger } from "../../../utils/index";
  * @category Bazar
  */
 export class NftClient extends TokenClient implements INftClient {
-    /* Constructors */
-    public constructor(configOrProcessId: TokenClientConfig) {
-        super(configOrProcessId);
-    }
+	/* Constructors */
+	public constructor(configOrProcessId: TokenClientConfig) {
+		super(configOrProcessId);
+	}
 
-    /* Constructors */
+	/* Constructors */
 
-    /* Core NFT Functions */
-    public async transfer(recipient: string, quantity: string = NFT_QUANTITY, forwardedTags?: Tags): Promise<boolean> {
-        try {
-            return await super.transfer(recipient, quantity, forwardedTags);
-        } catch (error: any) {
-            Logger.error(`Error transferring NFT to ${recipient}: ${error.message}`);
-            throw new ClientError(this, this.transfer, { recipient, quantity, forwardedTags }, error);
-        }
-    }
-    /* Core NFT Functions */
+	/* Core NFT Functions */
+	public async transfer(recipient: string, quantity: string = NFT_QUANTITY, forwardedTags?: Tags): Promise<boolean> {
+		try {
+			return await super.transfer(recipient, quantity, forwardedTags);
+		} catch (error: any) {
+			Logger.error(`Error transferring NFT to ${recipient}: ${error.message}`);
+			throw new ProcessClientError(this, this.transfer, { recipient, quantity, forwardedTags }, error);
+		}
+	}
+	/* Core NFT Functions */
 }

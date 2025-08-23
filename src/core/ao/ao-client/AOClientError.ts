@@ -1,30 +1,21 @@
-import { Logger, StringFormatting } from "../../../utils";
+import { ClientError } from "../../../common/error/client-error";
 import { IReadOnlyAOClient } from "./interfaces/IReadOnlyAOClient";
 
 
-export class AOClientError<T extends IReadOnlyAOClient, P = any> extends Error {
-	private static readonly MAX_LINE_LENGTH = 80;
+export class AOClientError<T extends IReadOnlyAOClient, P = any> extends ClientError<T, P> {
 	public constructor(
 		public readonly client: T,
 		public readonly func: Function,
-		public readonly params: P,
+		public readonly clientFunctionParams: P,
 		public readonly walletAddress?: string,
 		public readonly originalError?: Error,
 		public readonly explanation?: string,
 		public readonly _name?: string
 	) {
-		const functionName = func.name;
-		const paramsString = JSON.stringify(params, null, 2);
-
-		const message: string = `Error in ${client.constructor.name}\nThis error can be explained by: ${explanation ? explanation : "No known cause."}\nOccured During ${functionName}\nWith parameters: ${paramsString}\nWallet Address: ${walletAddress ? walletAddress : "No wallet associated with this client"}\nActive AO Configuration:${JSON.stringify(client.getActiveConfig())}\n${originalError ? `Error was caused by: ${originalError.message}` : `Cause not specified`}`
-		const formattedMessage = StringFormatting.wrapMessageInBox(message, AOClientError.MAX_LINE_LENGTH)
-		super(formattedMessage);
-		this.client = client
+		const additionalInfo: string = `This error can be explained by: ${explanation ? explanation : "No known cause."}\nWallet Address: ${walletAddress ? walletAddress : "No wallet associated with this client"}\nActive AO Configuration:${JSON.stringify(client.getActiveConfig())}`
+		super(client, func, clientFunctionParams, originalError, additionalInfo)
+		//super(formattedMessage);
 		this.name = _name ? _name : `${client.constructor.name} Error`;
-		if (originalError) {
-			this.stack += '\nCaused by: ' + originalError.stack;
-		}
-		Logger.error(formattedMessage)
 	}
 }
 

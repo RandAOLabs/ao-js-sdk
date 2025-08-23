@@ -1,9 +1,9 @@
 import { MockBaseClient } from "test/unit/clients/MockBaseClient";
 import { ArweaveTransaction } from "src/core/arweave/abstract/types";
 import { Logger, LogLevel } from "src/utils";
-import { ClientError } from "src/clients/common/ClientError";
 import { DryRunResult } from "../../../../../../src/core/ao/abstract";
 import { BotegaAmmClient } from "../../../../../../src";
+import { ProcessClientError } from "../../../../../../src/clients/common/ProcessClientError";
 
 describe("BotegaLiquidityPoolClient Unit Tests", () => {
 	let client: BotegaAmmClient;
@@ -48,7 +48,7 @@ describe("BotegaLiquidityPoolClient Unit Tests", () => {
 
 		it("should throw GetLPInfoError on failure", async () => {
 			jest.spyOn(client, "getProcessInfo").mockRejectedValue(new Error("Test error"));
-			await expect(client.getLPInfo()).rejects.toThrow(ClientError);
+			await expect(client.getLPInfo()).rejects.toThrow(ProcessClientError);
 		});
 	});
 
@@ -80,7 +80,7 @@ describe("BotegaLiquidityPoolClient Unit Tests", () => {
 			mockBaseClient.setMockDryrun(mockDryrun);
 
 			await expect(client.getPrice(100, "test-token"))
-				.rejects.toThrow(ClientError);
+				.rejects.toThrow(ProcessClientError);
 		});
 	});
 

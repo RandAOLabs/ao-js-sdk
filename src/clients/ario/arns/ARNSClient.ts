@@ -7,7 +7,7 @@ import { AO_CONFIGURATIONS } from "../../../core/ao/ao-client/configurations";
 import { ClientBuilder } from "../../common";
 import { staticImplements } from "../../../utils";
 import { PROCESS_IDS } from "../../../constants/processIds";
-import { ClientError } from "../../common/ClientError";
+import { ProcessClientError } from "../../common/ProcessClientError";
 import { InputValidationError } from "../../bazar";
 import { ARNS_QUERY_TAGS } from "../../../models";
 import { ARNSRecordResponse } from "./abstract";
@@ -54,7 +54,7 @@ export class ARNSClient extends DryRunCachingClient implements IARNSClient {
 			]);
 			return ResultUtils.getFirstMessageDataJson<ARNSRecordResponse>(result);
 		} catch (error: any) {
-			throw new ClientError(this, this.getRecord, { name }, error);
+			throw new ProcessClientError(this, this.getRecord, { name }, error);
 		}
 	}
 
