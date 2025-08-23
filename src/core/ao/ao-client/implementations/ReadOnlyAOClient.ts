@@ -63,10 +63,9 @@ export class ReadOnlyAOClient implements IReadOnlyAOClient {
 
 	public async dryrun(params: DryRunParams): Promise<DryRunResult> {
 		try {
-			Logger.debug(params)
+			// Logger.debug(params)
 			const result = await this._dryrun(params);
-			Logger.debug("---------------------")
-			Logger.debug(result)
+			// Logger.debug(result)
 			return result
 		} catch (error: any) {
 			if (error.message = RATELIMIT_ERROR_TEXT) {

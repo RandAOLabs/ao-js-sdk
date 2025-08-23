@@ -2,8 +2,9 @@ import Arweave from 'arweave';
 import { getEnvironment, Environment, UnknownEnvironmentError, Logger } from '../../../utils';
 import { ArweaveInitializationError as ArweaveNodeInitializationError } from '../ArweaveDataServiceError';
 import { ApiConfig } from 'arweave/node/lib/api';
-import { ARWEAVE_GOLDSKY_NODE_CONFIG, ARWEAVE_DOT_NET_NODE_CONFIG } from './constants';
-import { ArweaveNodeType, ArweaveNodeConfig, IArweaveNodeFactory } from './abstract';
+import { ARWEAVE_GOLDSKY_NODE_CONFIG, ARWEAVE_DOT_NET_NODE_CONFIG, ARIO_DEV_NODE_CONFIG } from './constants';
+import { ArweaveNodeType, ArweaveNodeConfig, IArweaveNodeFactory, IArweaveNodeClient } from './abstract';
+import { ArweaveNodeClient } from './ArweaveNodeClient';
 
 /**
  * ArweaveNodeFactory manages singleton Arweave instances for different node configurations.
@@ -27,6 +28,10 @@ export class ArweaveNodeFactory implements IArweaveNodeFactory {
 		[ArweaveNodeType.DOT_NET]: {
 			browserConfig: ARWEAVE_DOT_NET_NODE_CONFIG,
 			nodeConfig: ARWEAVE_DOT_NET_NODE_CONFIG
+		},
+		[ArweaveNodeType.ARIO_DEV]: {
+			browserConfig: ARIO_DEV_NODE_CONFIG,
+			nodeConfig: ARIO_DEV_NODE_CONFIG
 		}
 	};
 
@@ -51,16 +56,29 @@ export class ArweaveNodeFactory implements IArweaveNodeFactory {
 	}
 
 	/**
+	 * Creates or returns wrapped ArweaveNode instance for the specified node type.
+	 * This is the main method for getting Arweave functionality.
+	 *
+	 * @param nodeType The type of Arweave node configuration to use
+	 * @returns ArweaveNode wrapper instance configured for the specified node type
+	 * @throws ArweaveNodeInitializationError if initialization fails
+	 * @throws Error if unsupported node type is provided
+	 */
+	public getNode(nodeType: ArweaveNodeType): IArweaveNodeClient {
+		const arweaveInstance = this.createArweaveInstance(nodeType);
+		return new ArweaveNodeClient(arweaveInstance, nodeType);
+	}
+
+	/**
 	 * Creates or returns existing Arweave instance for the specified node type.
-	 * If an instance already exists for the given node type, returns the existing instance.
-	 * Otherwise, creates a new instance and caches it.
+	 * This is a private method used internally by getNode().
 	 *
 	 * @param nodeType The type of Arweave node configuration to use
 	 * @returns Arweave instance configured for the specified node type
 	 * @throws ArweaveNodeInitializationError if initialization fails
 	 * @throws Error if unsupported node type is provided
 	 */
-	public getNodeClient(nodeType: ArweaveNodeType): Arweave {
+	private createArweaveInstance(nodeType: ArweaveNodeType): Arweave {
 		// Return existing instance if it exists
 		if (ArweaveNodeFactory.instances.has(nodeType)) {
 			return ArweaveNodeFactory.instances.get(nodeType)!;
@@ -130,29 +148,29 @@ export class ArweaveNodeFactory implements IArweaveNodeFactory {
 }
 
 /**
- * Convenience function to get an Arweave instance for a specific node type
+ * Convenience function to get an ArweaveNode wrapper for a specific node type
  *
  * @param nodeType The type of Arweave node configuration to use
- * @returns Arweave instance configured for the specified node type
+ * @returns ArweaveNode wrapper instance configured for the specified node type
  */
-export const getArweaveNode = (nodeType: ArweaveNodeType): Arweave => {
-	return ArweaveNodeFactory.getInstance().getNodeClient(nodeType);
+export const getArweaveNode = (nodeType: ArweaveNodeType): IArweaveNodeClient => {
+	return ArweaveNodeFactory.getInstance().getNode(nodeType);
 };
 
 /**
- * Convenience function to get a GoldSky Arweave instance
+ * Convenience function to get a GoldSky ArweaveNode wrapper
  *
- * @returns Arweave instance configured for GoldSky
+ * @returns ArweaveNode wrapper instance configured for GoldSky
  */
-export const getGoldSkyArweave = (): Arweave => {
+export const getGoldSkyArweave = (): IArweaveNodeClient => {
 	return getArweaveNode(ArweaveNodeType.GOLDSKY);
 };
 
 /**
- * Convenience function to get an Arweave.net instance
+ * Convenience function to get an Arweave.net ArweaveNode wrapper
  *
- * @returns Arweave instance configured for Arweave.net
+ * @returns ArweaveNode wrapper instance configured for Arweave.net
  */
-export const getDotNetArweave = (): Arweave => {
+export const getDotNetArweave = (): IArweaveNodeClient => {
 	return getArweaveNode(ArweaveNodeType.DOT_NET);
 };

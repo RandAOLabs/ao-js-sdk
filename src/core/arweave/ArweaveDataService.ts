@@ -1,4 +1,3 @@
-import Arweave from 'arweave';
 import { IArweaveDataService } from './abstract/IArweaveDataService';
 import { ArweaveGraphQLError } from './ArweaveDataServiceError';
 import { Logger } from '../../utils/logger/logger';
@@ -11,7 +10,7 @@ import {
 	IHttpClient,
 	ResponseType
 } from '../../utils/http';
-import { ArweaveNodeFactory, ArweaveNodeType } from './graphql-nodes';
+import { ArweaveNodeFactory, ArweaveNodeType, IArweaveNodeClient } from './graphql-nodes';
 import { getArweaveDotNetHttpClient } from './http-nodes/arweave-dot-net-http-client';
 
 /**
@@ -19,34 +18,24 @@ import { getArweaveDotNetHttpClient } from './http-nodes/arweave-dot-net-http-cl
  */
 @staticImplements<IAutoconfiguration>()
 export class ArweaveDataService implements IArweaveDataService {
-	private readonly arweave: Arweave;
+	private readonly arweaveNode: IArweaveNodeClient;
 	private readonly httpClient: IHttpClient;
 
-	protected constructor(_arweave: Arweave, _httpClient: IHttpClient) {
-		this.arweave = _arweave;
+	protected constructor(_arweaveNode: IArweaveNodeClient, _httpClient: IHttpClient) {
+		this.arweaveNode = _arweaveNode;
 		this.httpClient = _httpClient;
 	}
 
 
 	public static autoConfiguration(): IArweaveDataService {
-		const _arweave = ArweaveNodeFactory.getInstance().getNodeClient(ArweaveNodeType.GOLDSKY)
+		const _arweaveNode = ArweaveNodeFactory.getInstance().getNode(ArweaveNodeType.ARIO_DEV)
 		const _httpClient = getArweaveDotNetHttpClient()
-		return new ArweaveDataService(_arweave, _httpClient);
+		return new ArweaveDataService(_arweaveNode, _httpClient);
 	}
 
 	/** @protected */
-	public async graphQuery<T = any>(query: string): Promise<T> {
-		try {
-			const response = await this.arweave.api.post('/graphql', {
-				query: query
-			});
-			// Logger.debug(query)
-			// Logger.debug(response)
-			return response.data as T;
-		} catch (error: any) {
-			Logger.error(`GraphQL query error: ${error.message}`);
-			throw new ArweaveGraphQLError(query, error);
-		}
+	public async graphQuery(query: string): Promise<ArweaveGQLResponse> {
+		return await this.arweaveNode.graphqlQuery(query);
 	}
 
 	/** @protected */
@@ -55,9 +44,13 @@ export class ArweaveDataService implements IArweaveDataService {
 			throw new ArweaveGraphQLError('No GQL builder provided');
 		}
 
-		const builtQuery = builder.build();
-
-		return this.graphQuery<ArweaveGQLResponse>(builtQuery.query);
+		const builtQuery = builder.build(this.arweaveNode.getNodeType());
+		Logger.debug(`Executing GQL query: ${builtQuery.query}`);
+		const response = await this.graphQuery(builtQuery.query);
+		if (!response.data) {
+			Logger.warn(response)
+		}
+		return response
 	}
 
 	/** @protected */
