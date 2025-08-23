@@ -9,10 +9,7 @@ export class ProcessClientError<T extends IProcessClient, P = any> extends Clien
 		public readonly originalError?: Error,
 	) {
 		const additionalInfo = `Process Id: ${client.getProcessId()}\nReadOnly: ${client.isReadOnly()}`;
-
-
 		super(client, func, clientFunctionParams, originalError, additionalInfo);
-		this.client = client
 		this.name = `${client.constructor.name} Error`;
 	}
 }
