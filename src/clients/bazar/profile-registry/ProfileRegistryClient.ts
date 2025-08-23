@@ -1,6 +1,6 @@
 import { IProfileRegistryClient, ProfileRegistryEntry } from "./abstract";
 import { ClientBuilder } from "../../common";
-import { ClientError } from "../../common/ClientError";
+import { ProcessClientError } from "../../common/ProcessClientError";
 import { DryRunCachingClient } from "../../../core/ao/client-variants";
 import ResultUtils from "../../../core/common/result-utils/ResultUtils";
 import { PROCESS_IDS } from "../../../constants/processIds";
@@ -47,7 +47,7 @@ export class ProfileRegistryClient extends DryRunCachingClient implements IProfi
 			const data = ResultUtils.getFirstMessageDataJson<ProfileRegistryEntry[]>(response);
 			return data
 		} catch (error: any) {
-			throw new ClientError(this, this.getProfileByWalletAddress, { walletAddress }, error);
+			throw new ProcessClientError(this, this.getProfileByWalletAddress, { walletAddress }, error);
 		}
 	}
 	/* Core Profile Registry Functions */

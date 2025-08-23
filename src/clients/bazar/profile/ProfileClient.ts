@@ -7,7 +7,7 @@ import { IAutoconfiguration, IDefaultBuilder, Logger, staticImplements } from ".
 import { ProfileRegistryClient } from "../profile-registry";
 import { ClientBuilder } from "../../common";
 import { NoProfileFoundError } from "./ProfileClientError";
-import { ClientError } from "../../common/ClientError";
+import { ProcessClientError } from "../../common/ProcessClientError";
 
 /**
  * @category Bazar
@@ -17,9 +17,9 @@ import { ClientError } from "../../common/ClientError";
 @staticImplements<IDefaultBuilder>()
 export class ProfileClient extends DryRunCachingClient implements IProfileClient {
 	/* Constructors */
-	/** 
+	/**
 	 * {@inheritdoc IAutoconfiguration.autoConfiguration}
-	 * @see {@link IAutoconfiguration.autoConfiguration} 
+	 * @see {@link IAutoconfiguration.autoConfiguration}
 	 */
 	public static async autoConfiguration(): Promise<ProfileClient> {
 		const builder = await ProfileClient.defaultBuilder()
@@ -27,9 +27,9 @@ export class ProfileClient extends DryRunCachingClient implements IProfileClient
 			.build()
 	}
 
-	/** 
+	/**
 	 * {@inheritdoc IDefaultBuilder.defaultBuilder}
-	 * @see {@link IDefaultBuilder.defaultBuilder} 
+	 * @see {@link IDefaultBuilder.defaultBuilder}
 	 */
 	public static async defaultBuilder(): Promise<ClientBuilder<ProfileClient>> {
 		const registryClient = ProfileRegistryClient.autoConfiguration();
@@ -55,7 +55,7 @@ export class ProfileClient extends DryRunCachingClient implements IProfileClient
 			]);
 			return ResultUtils.getFirstMessageDataJson<ProfileInfo>(response);
 		} catch (error: any) {
-			throw new ClientError(this, this.getProfileInfo, null, error);
+			throw new ProcessClientError(this, this.getProfileInfo, null, error);
 		}
 	}
 
@@ -74,7 +74,7 @@ export class ProfileClient extends DryRunCachingClient implements IProfileClient
 			const actionValue = TagUtils.getTagValue(result.Messages[0].Tags, "Action");
 			return actionValue !== "Transfer-Failed";
 		} catch (error: any) {
-			throw new ClientError(this, this.transferAsset, { assetToTransfer, recipient, quantity, tags }, error);
+			throw new ProcessClientError(this, this.transferAsset, { assetToTransfer, recipient, quantity, tags }, error);
 		}
 	}
 	/* Core Profile Functions */

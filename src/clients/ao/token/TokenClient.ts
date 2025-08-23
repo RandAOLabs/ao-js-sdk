@@ -1,6 +1,6 @@
 import { ITokenClient, IGrantToken, TokenInfo } from "./abstract";
 import { TRANSFER_SUCCESS_MESSAGE } from "./constants";
-import { ClientError } from "../../common/ClientError";
+import { ProcessClientError } from "../../common/ProcessClientError";
 import { Tag, Tags, TagUtils } from "../../../core";
 import { BaseClient } from "../../../core/ao/BaseClient";
 import ResultUtils from "../../../core/common/result-utils/ResultUtils";
@@ -59,7 +59,7 @@ export class TokenClient extends BaseClient implements ITokenClient, IGrantToken
 			const balance = TagUtils.getTagValue(response.Messages[0].Tags, "Balance");
 			return balance!;
 		} catch (error: any) {
-			throw new ClientError(this, this.balance, identifier, error);
+			throw new ProcessClientError(this, this.balance, identifier, error);
 		}
 	}
 
@@ -74,7 +74,7 @@ export class TokenClient extends BaseClient implements ITokenClient, IGrantToken
 			}
 			return await this.dryrun('', tags); // If ever used should refactor to return the balances in a list format
 		} catch (error: any) {
-			throw new ClientError(this, this.balances, { limit, cursor }, error);
+			throw new ProcessClientError(this, this.balances, { limit, cursor }, error);
 		}
 	}
 
@@ -92,7 +92,7 @@ export class TokenClient extends BaseClient implements ITokenClient, IGrantToken
 			const messageData: string = ResultUtils.getFirstMessageDataString(result)
 			return messageData.includes(TRANSFER_SUCCESS_MESSAGE);
 		} catch (error: any) {
-			throw new ClientError(this, this.transfer, { recipient, quantity, forwardedTags }, error);
+			throw new ProcessClientError(this, this.transfer, { recipient, quantity, forwardedTags }, error);
 		}
 	}
 
@@ -109,7 +109,7 @@ export class TokenClient extends BaseClient implements ITokenClient, IGrantToken
 
 			return this.extractTokenInfoFromTags(response);
 		} catch (error: any) {
-			throw new ClientError(this, this.getInfo, { token }, error);
+			throw new ProcessClientError(this, this.getInfo, { token }, error);
 		}
 	}
 
@@ -150,7 +150,7 @@ export class TokenClient extends BaseClient implements ITokenClient, IGrantToken
 			const actionValue = TagUtils.getTagValue(result.Messages[0].Tags, "Action");
 			return actionValue !== "Mint-Error";
 		} catch (error: any) {
-			throw new ClientError(this, this.mint, { quantity }, error);
+			throw new ProcessClientError(this, this.mint, { quantity }, error);
 		}
 	}
 
@@ -165,7 +165,7 @@ export class TokenClient extends BaseClient implements ITokenClient, IGrantToken
 			const actionValue = TagUtils.getTagValue(result.Messages[0].Tags, "Action");
 			return actionValue !== "Grant-Error";
 		} catch (error: any) {
-			throw new ClientError(this, this.grant, { quantity, recipient }, error);
+			throw new ProcessClientError(this, this.grant, { quantity, recipient }, error);
 		}
 	}
 	/* Core Token Functions */

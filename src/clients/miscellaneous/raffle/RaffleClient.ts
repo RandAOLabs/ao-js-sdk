@@ -9,7 +9,7 @@ import { BaseClient } from "../../../core/ao/BaseClient";
 import ResultUtils from "../../../core/common/result-utils/ResultUtils";
 import { ClientBuilder } from "../../common";
 import { PROCESS_IDS } from "../../../constants/processIds";
-import { ClientError } from "../../common/ClientError";
+import { ProcessClientError } from "../../common/ProcessClientError";
 import { DryRunResult, MessageResult } from "../../../core/ao/abstract";
 
 /**
@@ -48,7 +48,7 @@ export class RaffleClient extends BaseClient implements IRaffleClient {
 			this.checkResultForErrors(result)
 			return true
 		} catch (error: any) {
-			throw new ClientError(this, this.setRaffleEntrants, { entrants }, error);
+			throw new ProcessClientError(this, this.setRaffleEntrants, { entrants }, error);
 		}
 	}
 
@@ -60,7 +60,7 @@ export class RaffleClient extends BaseClient implements IRaffleClient {
 			const result = await this.messageResult(undefined, tags);
 			return true
 		} catch (error: any) {
-			throw new ClientError(this, this.pullRaffle, null, error);
+			throw new ProcessClientError(this, this.pullRaffle, null, error);
 		}
 	}
 
@@ -74,7 +74,7 @@ export class RaffleClient extends BaseClient implements IRaffleClient {
 			this.checkResultForErrors(result);
 			return ResultUtils.getFirstMessageDataJson(result);
 		} catch (error: any) {
-			throw new ClientError(this, this.viewEntrants, { userId }, error);
+			throw new ProcessClientError(this, this.viewEntrants, { userId }, error);
 		}
 	}
 
@@ -89,7 +89,7 @@ export class RaffleClient extends BaseClient implements IRaffleClient {
 			this.checkResultForErrors(result);
 			return ResultUtils.getFirstMessageDataJson(result);
 		} catch (error: any) {
-			throw new ClientError(this, this.viewUserPull, { userId, pullId }, error);
+			throw new ProcessClientError(this, this.viewUserPull, { userId, pullId }, error);
 		}
 	}
 
@@ -106,7 +106,7 @@ export class RaffleClient extends BaseClient implements IRaffleClient {
 			const pulls = ResultUtils.getFirstMessageDataJson(result) as RafflePull[];
 			return { pulls };
 		} catch (error: any) {
-			throw new ClientError(this, this.viewUserPulls, { _userId, userId }, error);
+			throw new ProcessClientError(this, this.viewUserPulls, { _userId, userId }, error);
 		}
 	}
 
@@ -119,7 +119,7 @@ export class RaffleClient extends BaseClient implements IRaffleClient {
 			this.checkResultForErrors(result);
 			return ResultUtils.getFirstMessageDataJson(result);
 		} catch (error: any) {
-			throw new ClientError(this, this.viewRaffleOwners, null, error);
+			throw new ProcessClientError(this, this.viewRaffleOwners, null, error);
 		}
 	}
 
@@ -138,7 +138,7 @@ export class RaffleClient extends BaseClient implements IRaffleClient {
 			);
 			return mostRecent;
 		} catch (error: any) {
-			throw new ClientError(this, this.viewMostRecentPull, null, error);
+			throw new ProcessClientError(this, this.viewMostRecentPull, null, error);
 		}
 	}
 	/* Utilities */

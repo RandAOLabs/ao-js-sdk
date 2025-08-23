@@ -9,7 +9,7 @@ import { ARIOServiceConfig } from './abstract/ARIOServiceConfig';
 import { DryRunCachingClientConfigBuilder } from '../../../core/ao/configuration/builder';
 import { Logger } from '../../../utils';
 import { AO_CONFIGURATIONS } from '../../../core/ao/ao-client/configurations';
-import { ClientError } from '../../../clients/common/ClientError';
+import { ProcessClientError } from '../../../clients/common/ProcessClientError';
 import { InputValidationError } from '../../../clients';
 import { ANTState, FullARNSName } from '../../../models';
 import { from, map, Observable } from 'rxjs';
@@ -92,7 +92,7 @@ export class ARIOService implements IARIOService {
 			return processId
 		} catch (error: unknown) {
 			// Check for rate limiting and fall back to default process ID if available
-			if (error instanceof ClientError) {
+			if (error instanceof ProcessClientError) {
 				const defaultProcessId = DOMAIN_DEFAULTS[domain as DOMAIN];
 				if (defaultProcessId) {
 					Logger.warn(`Unable to obtain process id from ARNS domain ${domain} | Using backup process ID: ${defaultProcessId}`);

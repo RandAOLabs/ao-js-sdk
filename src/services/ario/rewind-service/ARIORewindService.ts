@@ -1,6 +1,6 @@
-import { Observable, merge, EMPTY, Subject, firstValueFrom } from "rxjs";
+import { Observable, merge, EMPTY, firstValueFrom, from } from "rxjs";
 import { map, scan, startWith, shareReplay, mergeMap, catchError, distinct, filter, last } from "rxjs/operators";
-import { staticImplements, IAutoconfiguration, Logger } from "../../../utils";
+import { staticImplements, IAutoconfiguration } from "../../../utils";
 import { IANTEventHistoryService, IARIORewindService, IARNameEventHistoryService } from "./abstract";
 import { IARNameEvent, IANTEvent, IARNSEvent, IBuyNameEvent, IReassignNameEvent } from "./events";
 import { ARNameEventHistoryService } from "./ARNameEventHistoryService";
@@ -22,6 +22,7 @@ export class ARIORewindService implements IARIORewindService {
 		private readonly arnEventHistoryService: IARNameEventHistoryService,
 		private readonly antEventHistoryService: IANTEventHistoryService,
 		private readonly arioService: IARIOService,
+		private readonly entityService: IEntityService,
 	) { }
 
 
@@ -34,7 +35,8 @@ export class ARIORewindService implements IARIORewindService {
 		return new ARIORewindService(
 			ARNameEventHistoryService.autoConfiguration(),
 			ANTEventHistoryService.autoConfiguration(),
-			ARIOService.getInstance()
+			ARIOService.getInstance(),
+			EntityService.autoConfiguration()
 		);
 	}
 
@@ -92,8 +94,11 @@ export class ARIORewindService implements IARIORewindService {
 
 		const antEventStream = this.createANTEventStreamFromProcessIds(processIdStream);
 		const allEvents = this.combineEventStreams(arNameEventStream, antEventStream);
-		const filteredEvents = this.filterEvents(allEvents, processIdStream);
-		return filteredEvents;
+		const filteredEvents = this.filterEvents(allEvents);
+		const sortedEvents = filteredEvents.pipe(
+			map(events => this.sortEventsByTimestamp(events))
+		);
+		return sortedEvents;
 	}
 
 	/**
@@ -206,40 +211,61 @@ export class ARIORewindService implements IARIORewindService {
 	}
 
 	/**
-	 * Filters out ReassignNameEvent events that have a getNotified() value matching
-	 * one of the process IDs in the provided stream
+	 * Filters ReassignNameEvent events based on entity type:
+	 * - Keep events where getNotified() returns a User entity
+	 * - Filter out events where getNotified() returns a Process entity
 	 * @param allEvents - Observable stream of all events
-	 * @param processIdStream - Observable stream of process IDs to filter against
 	 * @returns Observable<IARNSEvent[]> - Filtered events stream
 	 */
-	private filterEvents(
-		allEvents: Observable<IARNSEvent[]>,
-		processIdStream: Observable<string>
-	): Observable<IARNSEvent[]> {
-		return processIdStream.pipe(
-			// Collect all process IDs into a Set for efficient lookup
-			scan((processIds: Set<string>, newProcessId: string) => {
-				processIds.add(newProcessId.trim());
-				return processIds;
-			}, new Set<string>()),
-			// Switch to the latest set of process IDs and filter events
-			mergeMap((processIds: Set<string>) =>
-				allEvents.pipe(
-					map((events: IARNSEvent[]) =>
-						events.filter((event: IARNSEvent) => {
-							// Check if this is a ReassignNameEvent
-							if (this.isReassignNameEvent(event)) {
-								const reassignEvent = event as IReassignNameEvent;
-								// Filter out if the notified process ID is in our process ID set
-								return !processIds.has(reassignEvent.getNotified());
+	private filterEvents(allEvents: Observable<IARNSEvent[]>): Observable<IARNSEvent[]> {
+		return allEvents.pipe(
+			mergeMap(async (events: IARNSEvent[]) => {
+				const filteredEvents: IARNSEvent[] = [];
+
+				// Process events sequentially to avoid overwhelming the EntityService
+				for (const event of events) {
+					if (this.isReassignNameEvent(event)) {
+						const reassignEvent = event as IReassignNameEvent;
+						try {
+							const entity = await this.entityService.getEntity(reassignEvent.getNotified());
+							// Keep event if it's a User, filter out if it's a Process
+							if (entity.getType() === EntityType.USER) {
+								filteredEvents.push(event);
 							}
-							// Keep all other events
-							return true;
-						})
-					)
-				)
-			)
+						} catch (error) {
+							// If there's an error getting the entity, keep the event to be safe
+							filteredEvents.push(event);
+						}
+					} else {
+						// Keep all other events
+						filteredEvents.push(event);
+					}
+				}
+
+				return filteredEvents;
+			})
 		);
+	}
+
+	/**
+	 * Sorts events by their timestamp in ascending order, with special handling for ReassignNameEvent
+	 * @param events - Array of events to sort
+	 * @returns Sorted array of events
+	 */
+	private sortEventsByTimestamp(events: IARNSEvent[]): IARNSEvent[] {
+		return events.sort((a, b) => {
+			// Primary sort by timestamp
+			const timestampDiff = a.getEventTimeStamp() - b.getEventTimeStamp();
+
+			// If timestamps are equal and both are ReassignNameEvents, sort by getNotified()
+			if (timestampDiff === 0 && this.isReassignNameEvent(a) && this.isReassignNameEvent(b)) {
+				const reassignA = a as IReassignNameEvent;
+				const reassignB = b as IReassignNameEvent;
+				return reassignA.getNotified().localeCompare(reassignB.getNotified());
+			}
+
+			return timestampDiff;
+		});
 	}
 
 	/**

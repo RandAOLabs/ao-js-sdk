@@ -1,5 +1,5 @@
 import { ClientBuilder } from "../../common";
-import { ClientError } from "../../common/ClientError";
+import { ProcessClientError } from "../../common/ProcessClientError";
 import { IProviderProfileClient } from "./abstract/IProviderProfileClient";
 import { ProviderDetails, ProviderInfo, ProviderInfoDTO } from "./abstract/types";
 import { ProviderStakeInfo } from "../provider-staking/abstract/types";
@@ -46,7 +46,7 @@ export class ProviderProfileClient extends DryRunCachingClient implements IProvi
 			this.clearCache()
 			return ResultUtils.getFirstMessageDataString(result);
 		} catch (error: any) {
-			throw new ClientError(this, this.updateDetails, { providerDetails }, error);
+			throw new ProcessClientError(this, this.updateDetails, { providerDetails }, error);
 		}
 	}
 
@@ -69,7 +69,7 @@ export class ProviderProfileClient extends DryRunCachingClient implements IProvi
 				return []; // Return empty array instead of throwing
 			}
 		} catch (error: any) {
-			throw new ClientError(this, this.getAllProvidersInfo, null, error);
+			throw new ProcessClientError(this, this.getAllProvidersInfo, null, error);
 		}
 	}
 
@@ -89,7 +89,7 @@ export class ProviderProfileClient extends DryRunCachingClient implements IProvi
 			const info = this._parseProviderInfoDTO(dto);
 			return info;
 		} catch (error: any) {
-			throw new ClientError(this, this.getProviderInfo, { providerId }, error);
+			throw new ProcessClientError(this, this.getProviderInfo, { providerId }, error);
 		}
 	}
 	/* Interface Provider Profile Functions */

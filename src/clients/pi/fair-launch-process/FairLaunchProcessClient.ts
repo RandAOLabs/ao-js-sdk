@@ -4,7 +4,7 @@ import { IFairLaunchProcessClient } from "./abstract/IFairLaunchProcessClient";
 
 import { AO_CONFIGURATIONS } from "../../../core/ao/ao-client/configurations";
 import { FairLaunchInfo } from "./types";
-import { ClientError } from "../../common/ClientError";
+import { ProcessClientError } from "../../common/ProcessClientError";
 import TagUtils from "../../../core/common/TagUtils";
 import { DryRunResult } from "../../../core/ao/abstract";
 
@@ -37,7 +37,7 @@ export class FairLaunchProcessClient extends BaseClient implements IFairLaunchPr
 			return this.extractFairLaunchInfoFromTags(result);
 
 		} catch (error: any) {
-			throw new ClientError(this, this.getInfo, {}, error);
+			throw new ProcessClientError(this, this.getInfo, {}, error);
 		}
 	}
 	/**

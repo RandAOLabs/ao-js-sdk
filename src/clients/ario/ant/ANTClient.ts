@@ -1,5 +1,5 @@
 import { IANTClient } from "./abstract/IANTClient";
-import { ClientError } from "../../common/ClientError";
+import { ProcessClientError } from "../../common/ProcessClientError";
 import { DryRunCachingClient } from "../../../core/ao/client-variants";
 import ResultUtils from "../../../core/common/result-utils/ResultUtils";
 import { AntRecord, ANTState } from "../../../models";
@@ -21,7 +21,7 @@ export class ANTClient extends DryRunCachingClient implements IANTClient {
 			]);
 			return ResultUtils.getFirstMessageDataJson<AntRecord>(result);
 		} catch (error: any) {
-			throw new ClientError(this, this.getRecords, null, error);
+			throw new ProcessClientError(this, this.getRecords, null, error);
 		}
 	}
 
@@ -38,7 +38,7 @@ export class ANTClient extends DryRunCachingClient implements IANTClient {
 			]);
 			return ResultUtils.getFirstMessageDataJson<AntRecord>(result);
 		} catch (error: any) {
-			throw new ClientError(this, this.getRecord, { undername }, error);
+			throw new ProcessClientError(this, this.getRecord, { undername }, error);
 		}
 	}
 
@@ -53,7 +53,7 @@ export class ANTClient extends DryRunCachingClient implements IANTClient {
 			]);
 			return ResultUtils.getFirstMessageDataJson<ANTState>(result);
 		} catch (error: any) {
-			throw new ClientError(this, this.getState, null, error);
+			throw new ProcessClientError(this, this.getState, null, error);
 		}
 	}
 
