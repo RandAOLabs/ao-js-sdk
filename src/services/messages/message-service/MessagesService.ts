@@ -158,7 +158,7 @@ export class MessagesService implements IMessagesService {
 			const transaction = await this.arweaveDataService.query(builder)
 			return transaction.data.transactions.edges[0].node
 		} catch (error: any) {
-			Logger.error(`Error retrieving message ${id}: ${error.message}`);
+			Logger.warn(`Error retrieving message ${id}: ${error.message}`);
 			return undefined
 		}
 	}
