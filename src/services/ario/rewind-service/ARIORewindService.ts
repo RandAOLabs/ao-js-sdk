@@ -94,6 +94,7 @@ export class ARIORewindService implements IARIORewindService {
 		const antEventStream = this.createANTEventStreamFromProcessIds(processIdStream);
 		const allEvents = this.combineEventStreams(arNameEventStream, antEventStream);
 		const filteredEvents = this.filterEvents(allEvents);
+		const sortedEvents = this.sortEvents(filteredEvents);
 		return filteredEvents;
 	}
 
@@ -203,6 +204,15 @@ export class ARIORewindService implements IARIORewindService {
 				return updatedEvents.sort((a, b) => a.getEventTimeStamp() - b.getEventTimeStamp());
 			}, []),
 			startWith([])
+		);
+	}
+
+
+	private sortEvents(allEvents: Observable<IARNSEvent[]>): Observable<IARNSEvent[]> {
+	return allEvents.pipe(
+			map(events =>
+			[...events].sort((a, b) => a.getEventTimeStamp() - b.getEventTimeStamp())
+			)
 		);
 	}
 
