@@ -5,8 +5,7 @@ import { ICacheConfig } from "../../utils/cache/abstract";
 import { IAutoconfiguration, staticImplements } from "../../utils";
 import { IArweaveDataCachingService } from "./abstract/IArweaveDataCachingService";
 import { IHttpClient } from "../../utils/http";
-import Arweave from "arweave";
-import { ArweaveNodeFactory, ArweaveNodeType } from "./graphql-nodes";
+import { ArweaveNodeFactory, ArweaveNodeType, IArweaveNodeClient } from "./graphql-nodes";
 import { getArweaveDotNetHttpClient } from "./http-nodes/arweave-dot-net-http-client";
 
 /**
@@ -16,15 +15,15 @@ import { getArweaveDotNetHttpClient } from "./http-nodes/arweave-dot-net-http-cl
 export class ArweaveDataCachingService extends ArweaveDataService implements IArweaveDataCachingService {
 	private cache: ICache<string, ArweaveGQLResponse>;
 
-	private constructor(_arweave:Arweave, _httpClient:IHttpClient, cacheConfig?: ICacheConfig) {
-		super(_arweave, _httpClient);
+	private constructor(_arweaveNode: IArweaveNodeClient, _httpClient: IHttpClient, cacheConfig?: ICacheConfig) {
+		super(_arweaveNode, _httpClient);
 		this.cache = newCache<string, ArweaveGQLResponse>(cacheConfig);
 	}
 
 	public static autoConfiguration(): IArweaveDataCachingService {
-		const _arweave = ArweaveNodeFactory.getInstance().getNodeClient(ArweaveNodeType.GOLDSKY)
+		const _arweaveNode = ArweaveNodeFactory.getInstance().getNode(ArweaveNodeType.GOLDSKY)
 		const _httpClient = getArweaveDotNetHttpClient()
-		return new ArweaveDataCachingService(_arweave, _httpClient);
+		return new ArweaveDataCachingService(_arweaveNode, _httpClient);
 	}
 
 	public clearCache(): void {
@@ -32,15 +31,15 @@ export class ArweaveDataCachingService extends ArweaveDataService implements IAr
 	}
 
 	/** @override */
-	public async graphQuery<T = any>(query: string): Promise<T> {
+	public async graphQuery(query: string): Promise<ArweaveGQLResponse> {
 		const cacheKey = this.createCacheKey(query);
 		const cachedResult = this.cache.get(cacheKey);
 
 		if (cachedResult) {
-			return cachedResult as T;
+			return cachedResult as ArweaveGQLResponse;
 		}
 
-		const result = await super.graphQuery<T>(query);
+		const result = await super.graphQuery(query);
 		this.cache.set(cacheKey, result as ArweaveGQLResponse);
 		return result;
 	}

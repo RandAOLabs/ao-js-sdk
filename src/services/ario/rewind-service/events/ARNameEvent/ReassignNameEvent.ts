@@ -2,7 +2,6 @@ import { ArweaveTransaction } from "../../../../../core/arweave/abstract/types";
 import { CurrencyAmount } from "../../../../../models/currency/CurrencyAmount";
 import { ReassignNameNoticeTransactionData } from "../../../arns-data-service/abstract/transaction-data/ReassignNameNoticeTransactionData";
 import { IReassignNameEvent } from "./abstract/IReassignNameEvent";
-import { ARNameEvent } from "./ARNameEvent";
 import { ARIO_TOKEN } from "../../../../../constants/maps/currencies";
 import { ARNameTransactionDataEvent } from "./ARNameTransactionDataEvent";
 

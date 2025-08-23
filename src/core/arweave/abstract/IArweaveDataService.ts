@@ -8,7 +8,7 @@ export interface IArweaveDataService {
 	 * @returns Promise resolving to the query response
 	 * @throws ArweaveGraphQLError if the query fails
 	 */
-	graphQuery<T = any>(query: string): Promise<T>;
+	graphQuery(query: string): Promise<ArweaveGQLResponse>;
 
 	/**
 	 * Executes a query using an ArweaveGQLBuilder

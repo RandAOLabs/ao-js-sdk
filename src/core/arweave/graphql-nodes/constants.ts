@@ -15,3 +15,9 @@ export const ARWEAVE_DOT_NET_NODE_CONFIG: ApiConfig = {
 	port: 443,
 	protocol: 'https'
 } as const;
+
+export const ARIO_DEV_NODE_CONFIG: ApiConfig = {
+	host: 'ar-io.dev',
+	port: 443,
+	protocol: 'https'
+} as const;

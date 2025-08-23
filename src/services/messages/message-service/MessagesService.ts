@@ -71,9 +71,7 @@ export class MessagesService implements IMessagesService {
 			}
 
 			const response = await this.arweaveDataService.query(builder);
-			if (!response.data) {
-				Logger.info(response)
-			}
+
 			const edges = response.data.transactions.edges;
 
 			return {

@@ -9,8 +9,8 @@ export class WalletUtils {
 		if (environment === Environment.BROWSER) {
 			return await wallet.getActiveAddress();
 		} else {
-			const arweave = ArweaveNodeFactory.getInstance().getNodeClient(ArweaveNodeType.GOLDSKY);
-			return await arweave.wallets.jwkToAddress(wallet);
+			const arweaveNode = ArweaveNodeFactory.getInstance().getNode(ArweaveNodeType.GOLDSKY);
+			return await arweaveNode.jwkToAddress(wallet);
 		}
 	}
 }

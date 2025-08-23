@@ -12,6 +12,7 @@ import {
 	ArweaveGQLSortOrder
 } from './types';
 import { ArweaveGQLBuilderError } from './ArweaveGQLBuilderError';
+import { ArweaveNodeType } from '../graphql-nodes';
 
 /**
  * @category Core
@@ -190,14 +191,21 @@ export class ArweaveGQLBuilder {
 		return this;
 	}
 
-	private buildFieldSelection(obj: Record<string, any>): string[] {
+	private buildFieldSelection(obj: Record<string, any>, optimizedNode: boolean): string[] {
 		const selections = new Set<string>();
 
 		Object.entries(obj).forEach(([key, value]) => {
 			if (value === true) {
-				selections.add(key);
+				if (key == 'ingested_at') {
+					// Only Optimized nodes support ingested_at
+					if (optimizedNode) {
+						selections.add(key);
+					}
+				} else {
+					selections.add(key);
+				}
 			} else if (this.isNestedField(value)) {
-				const nestedFields = this.buildFieldSelection(value);
+				const nestedFields = this.buildFieldSelection(value, optimizedNode);
 				if (nestedFields.length > 0) {
 					selections.add(`${key} { ${nestedFields.join(' ')} }`);
 				}
@@ -208,7 +216,8 @@ export class ArweaveGQLBuilder {
 	}
 
 	// Build the final query
-	public build(): ArweaveGQLQuery {
+	public build(nodeType: ArweaveNodeType): ArweaveGQLQuery {
+		const optimizedNode = nodeType === ArweaveNodeType.GOLDSKY
 		const filterConditions: string[] = [];
 
 		// Build filter conditions
@@ -237,7 +246,10 @@ export class ArweaveGQLBuilder {
 				filterConditions.push(`owners: ["${value.address}"]`);
 			} else if (key === 'ingested_at' && typeof value === 'object' && value.min) {
 				// Handle ingested_at filter
-				filterConditions.push(`ingested_at: { min: ${value.min} }`);
+				if (optimizedNode) {
+					// Optimized endcpoints support injected at
+					filterConditions.push(`ingestedAt: { min: ${value.min} }`);
+				}
 			} else if (Array.isArray(value)) {
 				// Handle arrays (ids, recipients)
 				filterConditions.push(`${key}: ["${value.join('", "')}"]`);
@@ -265,7 +277,7 @@ export class ArweaveGQLBuilder {
 		}
 
 		// Build field selection
-		const nodeFields = this.buildFieldSelection(this.fields);
+		const nodeFields = this.buildFieldSelection(this.fields, optimizedNode);
 
 		// Construct the final query
 		// Combine filter conditions and options
