@@ -1,6 +1,6 @@
 import { StakingClient } from "../../ao";
 import { InputValidationError } from "../../bazar";
-import { ClientError } from "../../common/ClientError";
+import { ProcessClientError } from "../../common/ProcessClientError";
 import { TokenInterfacingClientBuilder } from "../../common/TokenInterfacingClientBuilder";
 import { ProviderDetails } from "../provider-profile";
 import { IProviderStakingClient } from "./abstract/IProviderStakingClient";
@@ -46,7 +46,7 @@ export class ProviderStakingClient extends StakingClient implements IProviderSta
 		try {
 			return super.stake(quantity, additionaForwardedlTags)
 		} catch (error: any) {
-			throw new ClientError(this, this.stake, { quantity, additionaForwardedlTags }, error);
+			throw new ProcessClientError(this, this.stake, { quantity, additionaForwardedlTags }, error);
 		}
 	}
 
@@ -62,7 +62,7 @@ export class ProviderStakingClient extends StakingClient implements IProviderSta
 			const success = await super.stake(quantity, additionaForwardedlTags);
 			return success
 		} catch (error: any) {
-			throw new ClientError(this, this.stakeWithDetails, { quantity, providerDetails }, error);
+			throw new ProcessClientError(this, this.stakeWithDetails, { quantity, providerDetails }, error);
 		}
 	}
 
@@ -78,7 +78,7 @@ export class ProviderStakingClient extends StakingClient implements IProviderSta
 
 			return stake;
 		} catch (error: any) {
-			throw new ClientError(this, this.getStake, { providerId }, error);
+			throw new ProcessClientError(this, this.getStake, { providerId }, error);
 
 		}
 	}
@@ -93,7 +93,7 @@ export class ProviderStakingClient extends StakingClient implements IProviderSta
 			const result = await super.unstake(data)
 			return result
 		} catch (error: any) {
-			throw new ClientError(this, this.unstake, { providerId }, error);
+			throw new ProcessClientError(this, this.unstake, { providerId }, error);
 		}
 	}
 }

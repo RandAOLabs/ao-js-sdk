@@ -1,6 +1,6 @@
 import { CollectionClient, TAG_NAMES, ACTIONS, Logger, STATUS, RESPONSE_ACTIONS, AuthorizationError, InputValidationError, getWalletSafely } from "src";
-import { ClientError } from "src/clients/common/ClientError";
 import { MessageResult } from "../../../../src/core/ao/abstract";
+import { ProcessClientError } from "../../../../src/clients/common/ProcessClientError";
 
 
 jest.mock('src/utils/logger/logger');
@@ -53,7 +53,7 @@ describe('CollectionClient', () => {
 			const error = new Error('Network error');
 			mockMessageResult.mockRejectedValueOnce(error);
 
-			await expect(client.getInfo()).rejects.toThrow(ClientError);
+			await expect(client.getInfo()).rejects.toThrow(ProcessClientError);
 		});
 	});
 
@@ -125,7 +125,7 @@ describe('CollectionClient', () => {
 			const error = new Error('Network error');
 			mockMessageResult.mockRejectedValueOnce(error);
 
-			await expect(client.updateAssets(updateRequest)).rejects.toThrow(ClientError);
+			await expect(client.updateAssets(updateRequest)).rejects.toThrow(ProcessClientError);
 		});
 	});
 
@@ -174,7 +174,7 @@ describe('CollectionClient', () => {
 			const error = new Error('Network error');
 			mockMessageResult.mockRejectedValueOnce(error);
 
-			await expect(client.addToProfile(profileProcessId)).rejects.toThrow(ClientError);
+			await expect(client.addToProfile(profileProcessId)).rejects.toThrow(ProcessClientError);
 		});
 	});
 

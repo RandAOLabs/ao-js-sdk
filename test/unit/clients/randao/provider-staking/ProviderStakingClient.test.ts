@@ -4,8 +4,8 @@ import { ProviderDetails } from "src/clients/randao/provider-profile";
 import { BaseClient } from "src/core/ao/BaseClient";
 import { Logger, LogLevel } from "src/utils";
 import { TokenClient } from "src/clients";
-import { ClientError } from "src/clients/common/ClientError";
 import { DryRunResult, MessageResult } from "../../../../../src/core/ao/abstract";
+import { ProcessClientError } from "../../../../../src/clients/common/ProcessClientError";
 
 // Mock BaseClient methods
 jest.spyOn(BaseClient.prototype, 'message').mockResolvedValue("test-message-id");
@@ -75,7 +75,7 @@ describe("ProviderStakingClient", () => {
 			mockTokenClient.transfer.mockRejectedValueOnce(new Error("Transfer failed"));
 
 			await expect(client.stakeWithDetails(quantity, providerDetails))
-				.rejects.toThrow(ClientError);
+				.rejects.toThrow(ProcessClientError);
 		});
 	});
 
@@ -103,7 +103,7 @@ describe("ProviderStakingClient", () => {
 			jest.spyOn(BaseClient.prototype, 'dryrun').mockRejectedValueOnce(new Error("Failed to get stake"));
 
 			await expect(client.getStake(providerId))
-				.rejects.toThrow(ClientError);
+				.rejects.toThrow(ProcessClientError);
 		});
 	});
 
@@ -123,7 +123,7 @@ describe("ProviderStakingClient", () => {
 			jest.spyOn(BaseClient.prototype, 'messageResult').mockRejectedValueOnce(new Error("Failed to unstake"));
 
 			await expect(client.unstake(providerId))
-				.rejects.toThrow(ClientError);
+				.rejects.toThrow(ProcessClientError);
 		});
 	});
 });

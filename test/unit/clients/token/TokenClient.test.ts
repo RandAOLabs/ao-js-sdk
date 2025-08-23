@@ -18,12 +18,12 @@ jest.mock('@permaweb/aoconnect', () => ({
 	})
 }));
 
-import { ClientError } from "src/clients/common/ClientError";
 import { Tags } from "src/core";
 import { BaseClient } from "src/core/ao/BaseClient";
 import { BaseClientConfigBuilder } from "src/core/ao/configuration/builder";
 import { TokenClient } from "src/index";
 import { MessageResult } from "../../../../src/core/ao/abstract";
+import { ProcessClientError } from "../../../../src/clients/common/ProcessClientError";
 
 
 // Mock the functions from '@permaweb/aoconnect'
@@ -230,7 +230,7 @@ describe("TokenClient", () => {
 			jest.spyOn(BaseClient.prototype, 'messageResult').mockRejectedValue(new Error("Network error"));
 
 			// Act & Assert
-			await expect(client.grant(quantity, recipient)).rejects.toThrow(ClientError);
+			await expect(client.grant(quantity, recipient)).rejects.toThrow(ProcessClientError);
 		});
 	});
 });

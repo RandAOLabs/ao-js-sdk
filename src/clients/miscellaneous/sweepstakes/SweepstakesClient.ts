@@ -12,7 +12,7 @@ import { AO_CONFIGURATIONS } from "../../../core/ao/ao-client/configurations";
 import ResultUtils from "../../../core/common/result-utils/ResultUtils";
 import { ClientBuilder } from "../../common";
 import { PROCESS_IDS } from "../../../constants/processIds";
-import { ClientError } from "../../common/ClientError";
+import { ProcessClientError } from "../../common/ProcessClientError";
 import { TokenClient, TokenClientConfig } from "../../ao";
 import { TokenInterfacingClientBuilder } from "../../common/TokenInterfacingClientBuilder";
 import { IClassBuilder } from "../../../utils/class-interfaces/IClientBuilder";
@@ -78,7 +78,7 @@ export class SweepstakesClient extends BaseClient implements ISweepstakesClient 
 
 			return await this.tokenClient.transfer(this.getProcessId(), paymentAmount, tags);
 		} catch (error: any) {
-			throw new ClientError(this, this.registerSweepstakes, { entrants }, error);
+			throw new ProcessClientError(this, this.registerSweepstakes, { entrants }, error);
 		}
 	}
 
@@ -93,7 +93,7 @@ export class SweepstakesClient extends BaseClient implements ISweepstakesClient 
 			this.checkResultForErrors(result)
 			return true;
 		} catch (error: any) {
-			throw new ClientError(this, this.setSweepstakesEntrants, { entrants }, error);
+			throw new ProcessClientError(this, this.setSweepstakesEntrants, { entrants }, error);
 		}
 	}
 
@@ -108,7 +108,7 @@ export class SweepstakesClient extends BaseClient implements ISweepstakesClient 
 			this.checkResultForErrors(result)
 			return true;
 		} catch (error: any) {
-			throw new ClientError(this, this.addSweepstakesEntrant, { entrant }, error);
+			throw new ProcessClientError(this, this.addSweepstakesEntrant, { entrant }, error);
 		}
 	}
 
@@ -125,7 +125,7 @@ export class SweepstakesClient extends BaseClient implements ISweepstakesClient 
 			this.checkResultForErrors(result)
 			return true;
 		} catch (error: any) {
-			throw new ClientError(this, this.deleteSweepstakesData, { sweepstakesId, pullId }, error);
+			throw new ProcessClientError(this, this.deleteSweepstakesData, { sweepstakesId, pullId }, error);
 		}
 	}
 
@@ -139,7 +139,7 @@ export class SweepstakesClient extends BaseClient implements ISweepstakesClient 
 			const result = await this.messageResult(undefined, tags);
 			return true
 		} catch (error: any) {
-			throw new ClientError(this, this.pullSweepstakes, { sweepstakesId, details }, error);
+			throw new ProcessClientError(this, this.pullSweepstakes, { sweepstakesId, details }, error);
 		}
 	}
 
@@ -154,7 +154,7 @@ export class SweepstakesClient extends BaseClient implements ISweepstakesClient 
 			this.checkResultForErrors(result);
 			return ResultUtils.getFirstMessageDataJson(result);
 		} catch (error: any) {
-			throw new ClientError(this, this.viewSweepstakesPull, { sweepstakesId, pullId }, error);
+			throw new ProcessClientError(this, this.viewSweepstakesPull, { sweepstakesId, pullId }, error);
 		}
 	}
 
@@ -168,7 +168,7 @@ export class SweepstakesClient extends BaseClient implements ISweepstakesClient 
 			this.checkResultForErrors(result);
 			return ResultUtils.getFirstMessageDataJson(result);
 		} catch (error: any) {
-			throw new ClientError(this, this.viewSweepstakes, { sweepstakesId }, error);
+			throw new ProcessClientError(this, this.viewSweepstakes, { sweepstakesId }, error);
 		}
 	}
 
@@ -181,7 +181,7 @@ export class SweepstakesClient extends BaseClient implements ISweepstakesClient 
 			this.checkResultForErrors(result);
 			return ResultUtils.getFirstMessageDataJson(result);
 		} catch (error: any) {
-			throw new ClientError(this, this.viewAllSweepstakes, null, error);
+			throw new ProcessClientError(this, this.viewAllSweepstakes, null, error);
 		}
 	}
 
