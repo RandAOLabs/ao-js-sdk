@@ -1,4 +1,4 @@
-import { Observable, merge, EMPTY, Subject, firstValueFrom } from "rxjs";
+import { Observable, merge, EMPTY, firstValueFrom } from "rxjs";
 import { map, scan, startWith, shareReplay, mergeMap, catchError, distinct, filter, last } from "rxjs/operators";
 import { staticImplements, IAutoconfiguration, Logger } from "../../../utils";
 import { IANTEventHistoryService, IARIORewindService, IARNameEventHistoryService } from "./abstract";
@@ -9,9 +9,8 @@ import { ARNameDetail, AllARNameEventsType } from "./abstract/responseTypes";
 import { ARIOService, IARIOService } from "../ario-service";
 import { FullARNSName } from "../../../models";
 import { ANTUtils } from "../../../models/ario/ant/AntUtils";
+import { EntityService, IEntityService } from "../../entity";
 import { EntityType } from "../../../models/entity/abstract/EntityType";
-import { EntityService } from "../../entity/EntityDataService";
-import { IEntityService } from "../../entity/abstract/IEntityService";
 
 /**
  * @category ARIO
@@ -22,6 +21,7 @@ export class ARIORewindService implements IARIORewindService {
 		private readonly arnEventHistoryService: IARNameEventHistoryService,
 		private readonly antEventHistoryService: IANTEventHistoryService,
 		private readonly arioService: IARIOService,
+		private readonly entityService: IEntityService,
 	) { }
 
 
@@ -34,7 +34,8 @@ export class ARIORewindService implements IARIORewindService {
 		return new ARIORewindService(
 			ARNameEventHistoryService.autoConfiguration(),
 			ANTEventHistoryService.autoConfiguration(),
-			ARIOService.getInstance()
+			ARIOService.getInstance(),
+			EntityService.autoConfiguration()
 		);
 	}
 
@@ -92,7 +93,7 @@ export class ARIORewindService implements IARIORewindService {
 
 		const antEventStream = this.createANTEventStreamFromProcessIds(processIdStream);
 		const allEvents = this.combineEventStreams(arNameEventStream, antEventStream);
-		const filteredEvents = this.filterEvents(allEvents, processIdStream);
+		const filteredEvents = this.filterEvents(allEvents);
 		return filteredEvents;
 	}
 
@@ -206,39 +207,41 @@ export class ARIORewindService implements IARIORewindService {
 	}
 
 	/**
-	 * Filters out ReassignNameEvent events that have a getNotified() value matching
-	 * one of the process IDs in the provided stream
+	 * Filters ReassignNameEvent events based on entity type:
+	 * - Keep events where getNotified() returns a User entity
+	 * - Filter out events where getNotified() returns a Process entity
 	 * @param allEvents - Observable stream of all events
-	 * @param processIdStream - Observable stream of process IDs to filter against
 	 * @returns Observable<IARNSEvent[]> - Filtered events stream
 	 */
-	private filterEvents(
-		allEvents: Observable<IARNSEvent[]>,
-		processIdStream: Observable<string>
-	): Observable<IARNSEvent[]> {
-		return processIdStream.pipe(
-			// Collect all process IDs into a Set for efficient lookup
-			scan((processIds: Set<string>, newProcessId: string) => {
-				processIds.add(newProcessId.trim());
-				return processIds;
-			}, new Set<string>()),
-			// Switch to the latest set of process IDs and filter events
-			mergeMap((processIds: Set<string>) =>
-				allEvents.pipe(
-					map((events: IARNSEvent[]) =>
-						events.filter((event: IARNSEvent) => {
-							// Check if this is a ReassignNameEvent
-							if (this.isReassignNameEvent(event)) {
-								const reassignEvent = event as IReassignNameEvent;
-								// Filter out if the notified process ID is in our process ID set
-								return !processIds.has(reassignEvent.getNotified());
+	private filterEvents(allEvents: Observable<IARNSEvent[]>): Observable<IARNSEvent[]> {
+		return allEvents.pipe(
+			mergeMap(async (events: IARNSEvent[]) => {
+				const filteredEvents: IARNSEvent[] = [];
+
+				// Process events sequentially to avoid overwhelming the EntityService
+				for (const event of events) {
+					if (this.isReassignNameEvent(event)) {
+						const reassignEvent = event as IReassignNameEvent;
+						try {
+							const entity = await this.entityService.getEntity(reassignEvent.getNotified());
+							// Keep event if it's a User, filter out if it's a Process
+							if (entity.getType() === EntityType.USER) {
+								filteredEvents.push(event);
+							} else {
+								Logger.debug(`Filtered out ReassignNameEvent for Process entity: ${reassignEvent.getNotified()}`);
 							}
-							// Keep all other events
-							return true;
-						})
-					)
-				)
-			)
+						} catch (error) {
+							// If there's an error getting the entity, keep the event to be safe
+							filteredEvents.push(event);
+						}
+					} else {
+						// Keep all other events
+						filteredEvents.push(event);
+					}
+				}
+
+				return filteredEvents;
+			})
 		);
 	}
 
