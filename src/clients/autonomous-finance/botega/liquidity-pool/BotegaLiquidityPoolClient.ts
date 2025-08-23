@@ -8,7 +8,7 @@ import { ITokenClient } from "../../../ao";
 import { Tags } from "../../../../core/common/types";
 
 import { BaseClientConfigBuilder, DryRunCachingClientConfigBuilder } from "../../../../core/ao/configuration/builder";
-import { ClientError } from "../../../common/ClientError";
+import { ProcessClientError } from "../../../common/ProcessClientError";
 import { FORWARD_RESEARCH_AO_CONFIG } from "../../../../core/ao/ao-client/configurations";
 
 
@@ -61,7 +61,7 @@ export class BotegaAmmClient extends DryRunCachingClient implements IBotegaAmmCl
 				name: TagUtils.getTagValue(tags, "Name") || ""
 			};
 		} catch (error: any) {
-			throw new ClientError(this, this.getLPInfo, null, error);
+			throw new ProcessClientError(this, this.getLPInfo, null, error);
 		}
 	}
 
@@ -80,7 +80,7 @@ export class BotegaAmmClient extends DryRunCachingClient implements IBotegaAmmCl
 
 			return Number(price)
 		} catch (error: any) {
-			throw new ClientError(this, this.getPrice, { quantity, tokenId }, error);
+			throw new ProcessClientError(this, this.getPrice, { quantity, tokenId }, error);
 		}
 	}
 
@@ -94,7 +94,7 @@ export class BotegaAmmClient extends DryRunCachingClient implements IBotegaAmmCl
 					.build()
 				this.tokenAClient = new TokenClient(config);
 			} catch (error: any) {
-				throw new ClientError(this, this.getTokenA, null, error);
+				throw new ProcessClientError(this, this.getTokenA, null, error);
 			}
 		}
 		return this.tokenAClient;
@@ -110,7 +110,7 @@ export class BotegaAmmClient extends DryRunCachingClient implements IBotegaAmmCl
 					.build()
 				this.tokenBClient = new TokenClient(config);
 			} catch (error: any) {
-				throw new ClientError(this, this.getTokenB, null, error);
+				throw new ProcessClientError(this, this.getTokenB, null, error);
 			}
 		}
 		return this.tokenBClient;
@@ -121,7 +121,7 @@ export class BotegaAmmClient extends DryRunCachingClient implements IBotegaAmmCl
 			const lpInfo = await this.getLPInfo();
 			return this.getPrice(Number(quantity), lpInfo.tokenA);
 		} catch (error: any) {
-			throw new ClientError(this, this.getPriceOfTokenAInTokenB, { quantity }, error);
+			throw new ProcessClientError(this, this.getPriceOfTokenAInTokenB, { quantity }, error);
 		}
 	}
 
@@ -130,7 +130,7 @@ export class BotegaAmmClient extends DryRunCachingClient implements IBotegaAmmCl
 			const lpInfo = await this.getLPInfo();
 			return this.getPrice(Number(quantity), lpInfo.tokenB);
 		} catch (error: any) {
-			throw new ClientError(this, this.getPriceOfTokenBInTokenA, { quantity }, error);
+			throw new ProcessClientError(this, this.getPriceOfTokenBInTokenA, { quantity }, error);
 		}
 	}
 

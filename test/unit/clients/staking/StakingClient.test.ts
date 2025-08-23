@@ -1,10 +1,10 @@
 
-import { ClientError } from "src/clients/common/ClientError";
 import { BaseClient } from "src/core/ao/BaseClient";
 import { getWallet } from "src/utils/wallet/environmentWallet";
 import { TokenClient } from "../../../../src/clients/ao/token/TokenClient";
 import { StakingClient, StakingClientConfig } from "../../../../src";
 import { DryRunResult, MessageResult } from "../../../../src/core/ao/abstract";
+import { ProcessClientError } from "../../../../src/clients/common/ProcessClientError";
 
 
 // Mock individual methods of BaseClient using jest.spyOn
@@ -127,7 +127,7 @@ describe("StakingClient Unit Test", () => {
 		it("should throw UnstakeError when messageResult fails", async () => {
 			jest.spyOn(BaseClient.prototype, 'messageResult').mockRejectedValueOnce(new Error("Network error"));
 
-			await expect(client.unstake(providerId)).rejects.toThrow(ClientError);
+			await expect(client.unstake(providerId)).rejects.toThrow(ProcessClientError);
 			expect(BaseClient.prototype.messageResult).toHaveBeenCalled();
 		});
 

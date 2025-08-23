@@ -11,7 +11,7 @@ import { AO_CONFIGURATIONS } from "../../../core/ao/ao-client/configurations";
 import ResultUtils from "../../../core/common/result-utils/ResultUtils";
 import { ClientBuilder } from "../../common";
 import { PROCESS_IDS } from "../../../constants/processIds";
-import { ClientError } from "../../common/ClientError";
+import { ProcessClientError } from "../../common/ProcessClientError";
 import { TokenClient, TokenClientConfig } from "../../ao";
 import { TokenInterfacingClientBuilder } from "../../common/TokenInterfacingClientBuilder";
 import { IClassBuilder } from "../../../utils/class-interfaces/IClientBuilder";
@@ -76,7 +76,7 @@ export class FaucetClient extends BaseClient implements IFaucetClient {
 
 			return await this.tokenClient.transfer(this.getProcessId(), paymentAmount, tags);
 		} catch (error: any) {
-			throw new ClientError(this, this.useFaucet, {}, error);
+			throw new ProcessClientError(this, this.useFaucet, {}, error);
 		}
 	}
 

@@ -10,7 +10,7 @@ import { TokenInterfacingClientBuilder } from "../../common/TokenInterfacingClie
 import { DOMAIN } from "../../../services/ario/ario-service/domains";
 import { AO_CONFIGURATIONS } from "../../../core/ao/ao-client/configurations";
 import { PROCESS_IDS } from "../../../constants/processIds";
-import { ClientError } from "../../common/ClientError";
+import { ProcessClientError } from "../../common/ProcessClientError";
 import TAGS from "./tags";
 import { RandomProcessError } from "./RandomProcessError";
 import { IClassBuilder } from "../../../utils/class-interfaces/IClientBuilder";
@@ -80,7 +80,7 @@ export class RandomClient extends BaseClient implements IRandomClient {
 			];
 			await this.message(undefined, tags);
 		} catch (error: any) {
-			throw new ClientError(this, this.crank, {}, error);
+			throw new ProcessClientError(this, this.crank, {}, error);
 		}
 	}
 
@@ -91,7 +91,7 @@ export class RandomClient extends BaseClient implements IRandomClient {
 			];
 			await this.message(undefined, tags);
 		} catch (error: any) {
-			throw new ClientError(this, this.claimRewards, {}, error);
+			throw new ProcessClientError(this, this.claimRewards, {}, error);
 		}
 	}
 
@@ -103,7 +103,7 @@ export class RandomClient extends BaseClient implements IRandomClient {
 			const data = JSON.stringify(params);
 			await this.message(data, tags);
 		} catch (error: any) {
-			throw new ClientError(this, this.commit, params, error);
+			throw new ProcessClientError(this, this.commit, params, error);
 		}
 	}
 
@@ -115,7 +115,7 @@ export class RandomClient extends BaseClient implements IRandomClient {
 			const data = JSON.stringify(params);
 			await this.message(data, tags);
 		} catch (error: any) {
-			throw new ClientError(this, this.reveal, params, error);
+			throw new ProcessClientError(this, this.reveal, params, error);
 		}
 	}
 
@@ -129,7 +129,7 @@ export class RandomClient extends BaseClient implements IRandomClient {
 			this.checkResultForErrors(result)
 			return await ResultUtils.getFirstMessageDataJson(result)
 		} catch (error: any) {
-			throw new ClientError(this, this.getProviderAvailableValues, { providerId }, error);
+			throw new ProcessClientError(this, this.getProviderAvailableValues, { providerId }, error);
 		}
 	}
 
@@ -143,7 +143,7 @@ export class RandomClient extends BaseClient implements IRandomClient {
 			this.checkResultForErrors(result)
 			return await ResultUtils.getFirstMessageDataJson(result)
 		} catch (error: any) {
-			throw new ClientError(this, this.getUserInfo, { userId }, error);
+			throw new ProcessClientError(this, this.getUserInfo, { userId }, error);
 		}
 	}
 
@@ -157,7 +157,7 @@ export class RandomClient extends BaseClient implements IRandomClient {
 			this.checkResultForErrors(result)
 			return await ResultUtils.getFirstMessageDataJson(result)
 		} catch (error: any) {
-			throw new ClientError(this, this.getAllUserInfo, {}, error);
+			throw new ProcessClientError(this, this.getAllUserInfo, {}, error);
 		}
 	}
 
@@ -181,7 +181,7 @@ export class RandomClient extends BaseClient implements IRandomClient {
 			//this.checkResultForErrors(result)
 			return true
 		} catch (error: any) {
-			throw new ClientError(this, this.redeem, { providersIds, requestedInputs, callbackId }, error);
+			throw new ProcessClientError(this, this.redeem, { providersIds, requestedInputs, callbackId }, error);
 		}
 	}
 
@@ -198,7 +198,7 @@ export class RandomClient extends BaseClient implements IRandomClient {
 			this.checkResultForErrors(result)
 			return true
 		} catch (error: any) {
-			throw new ClientError(this, this.updateProviderAvailableValues, { availableRandomValues }, error);
+			throw new ProcessClientError(this, this.updateProviderAvailableValues, { availableRandomValues }, error);
 		}
 	}
 
@@ -212,7 +212,7 @@ export class RandomClient extends BaseClient implements IRandomClient {
 			this.checkResultForErrors(result)
 			return ResultUtils.getFirstMessageDataJson(result)
 		} catch (error: any) {
-			throw new ClientError(this, this.getOpenRandomRequests, { provider }, error);
+			throw new ProcessClientError(this, this.getOpenRandomRequests, { provider }, error);
 		}
 	}
 
@@ -226,7 +226,7 @@ export class RandomClient extends BaseClient implements IRandomClient {
 			this.checkResultForErrors(result)
 			return ResultUtils.getFirstMessageDataJson(result)
 		} catch (error: any) {
-			throw new ClientError(this, this.getRandomRequests, { randomnessRequestIds }, error);
+			throw new ProcessClientError(this, this.getRandomRequests, { randomnessRequestIds }, error);
 		}
 	}
 
@@ -240,7 +240,7 @@ export class RandomClient extends BaseClient implements IRandomClient {
 			this.checkResultForErrors(result)
 			return ResultUtils.getFirstMessageDataJson(result)
 		} catch (error: any) {
-			throw new ClientError(this, this.getRandomRequestViaCallbackId, { callbackId }, error);
+			throw new ProcessClientError(this, this.getRandomRequestViaCallbackId, { callbackId }, error);
 		}
 	}
 
@@ -258,7 +258,7 @@ export class RandomClient extends BaseClient implements IRandomClient {
 
 			return await this.tokenClient.transfer(this.getProcessId(), paymentAmount, tags);
 		} catch (error: any) {
-			throw new ClientError(this, this.createRequest, { provider_ids, requestedInputs, callbackId }, error);
+			throw new ProcessClientError(this, this.createRequest, { provider_ids, requestedInputs, callbackId }, error);
 		}
 	}
 
@@ -275,7 +275,7 @@ export class RandomClient extends BaseClient implements IRandomClient {
 
 			return await this.tokenClient.transfer(this.getProcessId(), paymentAmount, tags);
 		} catch (error: any) {
-			throw new ClientError(this, this.prepay, { quantity, userId }, error);
+			throw new ProcessClientError(this, this.prepay, { quantity, userId }, error);
 		}
 	}
 
@@ -288,7 +288,7 @@ export class RandomClient extends BaseClient implements IRandomClient {
 			this.checkResultForErrors(result)
 			return ResultUtils.getFirstMessageDataJson(result)
 		} catch (error: any) {
-			throw new ClientError(this, this.getAllProviderActivity, null, error);
+			throw new ProcessClientError(this, this.getAllProviderActivity, null, error);
 		}
 	}
 
@@ -302,7 +302,7 @@ export class RandomClient extends BaseClient implements IRandomClient {
 			this.checkResultForErrors(result)
 			return ResultUtils.getFirstMessageDataJson(result)
 		} catch (error: any) {
-			throw new ClientError(this, this.getAllProviderActivity, { providerId }, error);
+			throw new ProcessClientError(this, this.getAllProviderActivity, { providerId }, error);
 		}
 	}
 
