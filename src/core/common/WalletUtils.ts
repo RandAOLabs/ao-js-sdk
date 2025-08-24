@@ -1,6 +1,6 @@
 import { JWKInterface } from "arweave/node/lib/wallet";
 import { Environment, getEnvironment } from "../../utils/environment";
-import { ArweaveNodeFactory, ArweaveNodeType } from "../arweave/graphql-nodes";
+import { ArweaveGraphQLNodeClientFactory, ArweaveNodeType } from "../arweave/graphql-nodes";
 
 export class WalletUtils {
 	public static async getWalletAddress(wallet: JWKInterface | any): Promise<string> {
@@ -9,8 +9,8 @@ export class WalletUtils {
 		if (environment === Environment.BROWSER) {
 			return await wallet.getActiveAddress();
 		} else {
-			const arweave = ArweaveNodeFactory.getInstance().getNodeClient(ArweaveNodeType.GOLDSKY);
-			return await arweave.wallets.jwkToAddress(wallet);
+			const arweaveNode = ArweaveGraphQLNodeClientFactory.getInstance().getNode(ArweaveNodeType.GOLDSKY);
+			return await arweaveNode.jwkToAddress(wallet);
 		}
 	}
 }
