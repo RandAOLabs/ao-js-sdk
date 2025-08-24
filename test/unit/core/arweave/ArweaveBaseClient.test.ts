@@ -7,8 +7,8 @@ import { ArweaveGQLBuilder } from '../../../../src/core/arweave/gql/ArweaveGQLBu
 const mockApiPost = jest.fn();
 
 // Mock the ArweaveNodeFactory
-jest.mock('../../../../src/core/arweave/graphql-nodes/ArweaveNodeFactory', () => ({
-	ArweaveNodeFactory: {
+jest.mock('../../../../src/core/arweave/graphql-nodes/ArweaveGraphQLNodeClient.ts', () => ({
+	ArweaveGraphQLNodeClientFactory: {
 		getInstance: jest.fn(() => ({
 			getNodeClient: jest.fn(() => ({
 				api: {

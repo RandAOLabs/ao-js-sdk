@@ -11,42 +11,33 @@ import {
 	IHttpClient,
 	ResponseType
 } from '../../utils/http';
-import { ArweaveNodeFactory, ArweaveNodeType } from './graphql-nodes';
+import { ArweaveGraphQLNodeClientFactory, IArweaveGraphQLNodeClient } from './graphql-nodes';
 import { getArweaveDotNetHttpClient } from './http-nodes/arweave-dot-net-http-client';
+import { ArweaveNodeType } from './graphql-nodes/abstract/types';
 
 /**
  * @category Core
  */
 @staticImplements<IAutoconfiguration>()
 export class ArweaveDataService implements IArweaveDataService {
-	private readonly arweave: Arweave;
+	private readonly arweaveGraphQLNodeClient: IArweaveGraphQLNodeClient;
 	private readonly httpClient: IHttpClient;
 
-	protected constructor(_arweave: Arweave, _httpClient: IHttpClient) {
-		this.arweave = _arweave;
+	protected constructor(_arweave: IArweaveGraphQLNodeClient, _httpClient: IHttpClient) {
+		this.arweaveGraphQLNodeClient = _arweave;
 		this.httpClient = _httpClient;
 	}
 
 
 	public static autoConfiguration(): IArweaveDataService {
-		const _arweave = ArweaveNodeFactory.getInstance().getNodeClient(ArweaveNodeType.GOLDSKY)
+		const _arweave = ArweaveGraphQLNodeClientFactory.getInstance().getNode(ArweaveNodeType.GOLDSKY)
 		const _httpClient = getArweaveDotNetHttpClient()
 		return new ArweaveDataService(_arweave, _httpClient);
 	}
 
 	/** @protected */
-	public async graphQuery<T = any>(query: string): Promise<T> {
-		try {
-			const response = await this.arweave.api.post('/graphql', {
-				query: query
-			});
-			// Logger.debug(query)
-			// Logger.debug(response)
-			return response.data as T;
-		} catch (error: any) {
-			Logger.error(`GraphQL query error: ${error.message}`);
-			throw new ArweaveGraphQLError(query, error);
-		}
+	public async graphQuery(query: string): Promise<ArweaveGQLResponse> {
+		return await this.arweaveGraphQLNodeClient.graphqlQuery(query);
 	}
 
 	/** @protected */
@@ -57,7 +48,7 @@ export class ArweaveDataService implements IArweaveDataService {
 
 		const builtQuery = builder.build();
 
-		return this.graphQuery<ArweaveGQLResponse>(builtQuery.query);
+		return this.graphQuery(builtQuery.query);
 	}
 
 	/** @protected */
