@@ -1,31 +1,25 @@
-import Arweave from 'arweave';
+import { IArweaveGraphQLNodeClient } from './IArweaveGraphQLNodeClient';
+import { ArweaveNodeType } from './types';
 
-/**
- * Supported Arweave node configuration types
- */
-export enum ArweaveNodeType {
-	GOLDSKY = 'goldsky',
-	DOT_NET = 'dotnet'
-}
 
 /**
  * Type definition for the ArweaveNodeFactory
  */
-export interface IArweaveNodeFactory {
+export interface IArweaveGraphQLNodeClientFactory {
 	/**
-	 * Creates or returns existing Arweave instance for the specified node type
+	 * Creates or returns wrapped ArweaveNode instance for the specified node type
 	 * @param nodeType The type of Arweave node configuration to use
-	 * @returns Arweave instance configured for the specified node type
+	 * @returns ArweaveNode wrapper instance configured for the specified node type
 	 */
-	getNodeClient(nodeType: ArweaveNodeType): Arweave;
-	
+	getNode(nodeType: ArweaveNodeType): IArweaveGraphQLNodeClient;
+
 	/**
 	 * Checks if a node instance exists for the given type
 	 * @param nodeType The type of Arweave node configuration to check
 	 * @returns True if instance exists, false otherwise
 	 */
 	hasInstance(nodeType: ArweaveNodeType): boolean;
-	
+
 	/**
 	 * Clears all cached instances (useful for testing)
 	 */
