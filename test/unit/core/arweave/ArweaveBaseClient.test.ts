@@ -4,16 +4,14 @@ import { ArweaveGraphQLError } from '../../../../src/core/arweave/ArweaveDataSer
 import { ArweaveGQLBuilder } from '../../../../src/core/arweave/gql/ArweaveGQLBuilder';
 
 // Create a proper mock response object
-const mockApiPost = jest.fn();
+const mockGraphqlQuery = jest.fn();
 
-// Mock the ArweaveNodeFactory
-jest.mock('../../../../src/core/arweave/graphql-nodes/ArweaveGraphQLNodeClient.ts', () => ({
+// Mock the ArweaveGraphQLNodeClientFactory
+jest.mock('../../../../src/core/arweave/graphql-nodes/ArweaveGraphQLNodeClientFactory.ts', () => ({
 	ArweaveGraphQLNodeClientFactory: {
 		getInstance: jest.fn(() => ({
-			getNodeClient: jest.fn(() => ({
-				api: {
-					post: mockApiPost
-				}
+			getNode: jest.fn(() => ({
+				graphqlQuery: mockGraphqlQuery
 			}))
 		}))
 	}
@@ -42,7 +40,7 @@ describe('ArweaveBaseClient', () => {
 		(ArweaveDataService as any).instance = null;
 
 		// Clear mock data
-		mockApiPost.mockClear();
+		mockGraphqlQuery.mockClear();
 
 		// Get a new instance
 		client = ArweaveDataService.autoConfiguration();
@@ -79,11 +77,7 @@ describe('ArweaveBaseClient', () => {
 					}
 				};
 
-				mockApiPost.mockResolvedValueOnce({
-					ok: true,
-					status: 200,
-					data: mockResponse
-				});
+				mockGraphqlQuery.mockResolvedValueOnce(mockResponse);
 
 				const builder = new ArweaveGQLBuilder()
 					.withOwner()
@@ -92,9 +86,9 @@ describe('ArweaveBaseClient', () => {
 
 				const result = await client.query(builder);
 
-				expect(mockApiPost).toHaveBeenCalledWith('/graphql', {
-					query: expect.stringContaining('transactions')
-				});
+				expect(mockGraphqlQuery).toHaveBeenCalledWith(
+					expect.stringContaining('transactions')
+				);
 				expect(result).toEqual(mockResponse);
 			});
 
@@ -105,7 +99,7 @@ describe('ArweaveBaseClient', () => {
 			});
 
 			it('should throw ArweaveGraphQLError when query execution fails', async () => {
-				mockApiPost.mockRejectedValueOnce(new Error('Query failed'));
+				mockGraphqlQuery.mockRejectedValueOnce(new ArweaveGraphQLError('test query', new Error('Query failed')));
 
 				const builder = new ArweaveGQLBuilder()
 					.withOwner()
@@ -134,25 +128,21 @@ describe('ArweaveBaseClient', () => {
 			};
 
 			// Set up the mock to return a proper response
-			mockApiPost.mockResolvedValueOnce({
-				ok: true,
-				status: 200,
-				data: mockResponse
-			});
+			mockGraphqlQuery.mockResolvedValueOnce(mockResponse);
 
 			// Test query
 			const query = 'query { transactions { edges { node { id } } } }';
 			const result = await client.graphQuery(query);
 
 			// Assertions
-			expect(mockApiPost).toHaveBeenCalledWith('/graphql', { query });
+			expect(mockGraphqlQuery).toHaveBeenCalledWith(query);
 			expect(result).toEqual(mockResponse);
 		});
 
 		it('should throw ArweaveGraphQLError when query fails', async () => {
-			// Mock error
+			// Mock error - should throw ArweaveGraphQLError since that's what the real implementation does
 			const errorMessage = 'GraphQL query failed';
-			mockApiPost.mockRejectedValueOnce(new Error(errorMessage));
+			mockGraphqlQuery.mockRejectedValueOnce(new ArweaveGraphQLError('invalid query', new Error(errorMessage)));
 
 			// Test query
 			const query = 'invalid query';
