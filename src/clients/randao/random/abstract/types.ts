@@ -98,6 +98,7 @@ export interface MonitoringData {
 export interface ProviderActivity {
     active_challenge_requests: RequestList,
     provider_id: string,
+    owner_id?: string,
     active: number,
     created_at: number,
     random_balance: number,

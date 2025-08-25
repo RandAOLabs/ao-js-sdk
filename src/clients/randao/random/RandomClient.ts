@@ -279,14 +279,23 @@ export class RandomClient extends BaseClient implements IRandomClient {
 		}
 	}
 
-	async getAllProviderActivity(): Promise<ProviderActivity[]> {
+async getAllProviderActivity(): Promise<ProviderActivity[]> {
 		try {
 			const tags: Tags = [
 				TAGS.ACTION.GET_ALL_PROVIDERS
 			];
 			const result = await this.dryrun(undefined, tags);
 			this.checkResultForErrors(result)
-			return ResultUtils.getFirstMessageDataJson(result)
+			const providers: ProviderActivity[] = ResultUtils.getFirstMessageDataJson(result);
+			
+			// Process each provider to ensure consistent property naming
+			return providers.map(provider => {
+				// If owner_id is not present, set it to provider_id (for backward compatibility)
+				if (!provider.owner_id) {
+					provider.owner_id = provider.provider_id;
+				}
+				return provider;
+			});
 		} catch (error: any) {
 			throw new ProcessClientError(this, this.getAllProviderActivity, null, error);
 		}
@@ -300,9 +309,16 @@ export class RandomClient extends BaseClient implements IRandomClient {
 			const data = JSON.stringify({ providerId: providerId })
 			const result = await this.dryrun(data, tags);
 			this.checkResultForErrors(result)
-			return ResultUtils.getFirstMessageDataJson(result)
+			const provider: ProviderActivity = ResultUtils.getFirstMessageDataJson(result);
+			
+			// If owner_id is not present, set it to provider_id (for backward compatibility)
+			if (!provider.owner_id) {
+				provider.owner_id = provider.provider_id;
+			}
+			
+			return provider;
 		} catch (error: any) {
-			throw new ProcessClientError(this, this.getAllProviderActivity, { providerId }, error);
+			throw new ProcessClientError(this, this.getProviderActivity, { providerId }, error);
 		}
 	}
 
