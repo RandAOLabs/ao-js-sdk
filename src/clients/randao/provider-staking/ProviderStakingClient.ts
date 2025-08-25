@@ -13,6 +13,13 @@ import { PROCESS_IDS } from "../../../constants/processIds";
 import { IAutoconfiguration, IDefaultBuilder, staticImplements } from "../../../utils";
 
 /**
+ * Global record for updating a provider actor
+ */
+export interface UpdateProviderActorData {
+	actorId: string;
+}
+
+/**
  * @category RandAO
  */
 @staticImplements<IAutoconfiguration>()
@@ -42,23 +49,41 @@ export class ProviderStakingClient extends StakingClient implements IProviderSta
 	 * @inheritdoc
 	 * @override
 	 */
-	public async stake(quantity: string, additionaForwardedlTags?: Tags): Promise<boolean> {
+	public async stake(quantity: string, additionaForwardedlTags?: Tags, actorId?: string): Promise<boolean> {
 		try {
+			// Add actor ID to tags if provided
+			if (actorId) {
+				const actorTags: Tags = [{ name: "X-Actor", value: actorId }];
+				additionaForwardedlTags = additionaForwardedlTags 
+					? [...additionaForwardedlTags, ...actorTags] 
+					: actorTags;
+			}
 			return super.stake(quantity, additionaForwardedlTags)
 		} catch (error: any) {
-			throw new ProcessClientError(this, this.stake, { quantity, additionaForwardedlTags }, error);
+			throw new ProcessClientError(this, this.stake, { quantity, additionaForwardedlTags, actorId }, error);
 		}
 	}
 
-	public async stakeWithDetails(quantity: string, providerDetails?: ProviderDetails): Promise<boolean> {
+	public async stakeWithDetails(quantity: string, providerDetails?: ProviderDetails, actorId?: string): Promise<boolean> {
 		try {
 
-			const additionaForwardedlTags = providerDetails
-				? [{
+			let additionaForwardedlTags: Tags | undefined = undefined;
+			
+			if (providerDetails) {
+				additionaForwardedlTags = [{
 					name: "ProviderDetails",
 					value: JSON.stringify(providerDetails)
-				}]
-				: undefined
+				}];
+			}
+
+			// Add actor ID to tags if provided
+			if (actorId) {
+				const actorTags: Tags = [{ name: "X-Actor", value: actorId }];
+				additionaForwardedlTags = additionaForwardedlTags 
+					? [...additionaForwardedlTags, ...actorTags] 
+					: actorTags;
+			}
+			
 			const success = await super.stake(quantity, additionaForwardedlTags);
 			return success
 		} catch (error: any) {
@@ -80,6 +105,26 @@ export class ProviderStakingClient extends StakingClient implements IProviderSta
 		} catch (error: any) {
 			throw new ProcessClientError(this, this.getStake, { providerId }, error);
 
+		}
+	}
+
+	/**
+	 * Updates the provider actor for a staker
+	 * @param providerId - The ID of the provider
+	 * @param actorId - The ID of the actor being authorized
+	 * @returns Promise resolving to a boolean indicating success
+	 */
+	public async updateProviderActor(providerId: string, actorId: string): Promise<boolean> {
+		try {
+			const tags: Tags = [
+				{ name: "Action", value: "Update-Provider-Actor" }
+			];
+			const data: UpdateProviderActorData = { actorId };
+			const requestData = JSON.stringify({ providerId, ...data });
+			const result = await this.message(requestData, tags);
+			return true;
+		} catch (error: any) {
+			throw new ProcessClientError(this, this.updateProviderActor, { providerId, actorId }, error);
 		}
 	}
 
