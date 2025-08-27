@@ -102,6 +102,6 @@ export class ReadOnlyRetryAOClient extends ReadOnlyAOClient implements IReadOnly
 		}
 
 		// If we get here, all compute units failed
-		throw new AOAllConfigsFailedError(this, this.retryWithConfigs, { params, initialOperation, operationFn }, this.encounteredErrors, undefined)
+		throw new AOAllConfigsFailedError(this, this.retryWithConfigs, { params, initialOperation, operationFn }, this.encounteredErrors, await this.getCallingWalletAddress())
 	}
 }
