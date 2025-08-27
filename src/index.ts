@@ -1,4 +1,10 @@
 // src/index.ts
+import { Logger } from './utils/logger'
+import { getPackageVersion } from './utils/version'
+
+// Debug log the package version
+Logger.info('ao-js-sdk version:', getPackageVersion())
+
 export * from "./clients"
 export * from "./services"
 
