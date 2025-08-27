@@ -39,7 +39,7 @@ export class ReadOnlyAOClient implements IReadOnlyAOClient {
 			return results
 		} catch (error: any) {
 			if (error.message = RATELIMIT_ERROR_TEXT) {
-				throw new AORateLimitingError(this, this.dryrun, params, undefined, error)
+				throw new AORateLimitingError(this, this.results, params, undefined, error)
 			} else {
 				throw new AOClientError(this, this.results, params, undefined, error);
 			}
@@ -53,7 +53,7 @@ export class ReadOnlyAOClient implements IReadOnlyAOClient {
 			return result
 		} catch (error: any) {
 			if (error.message = RATELIMIT_ERROR_TEXT) {
-				throw new AORateLimitingError(this, this.dryrun, params, undefined, error)
+				throw new AORateLimitingError(this, this.result, params, undefined, error)
 			} else {
 				throw new AOClientError(this, this.result, params, undefined, error);
 			}
@@ -79,7 +79,7 @@ export class ReadOnlyAOClient implements IReadOnlyAOClient {
 
 
 	public setConfig(aoConnectConfig: ConnectArgsLegacy): void {
-		// Logger.debug(`Connecting to AO with:`, aoConnectConfig)// Leave
+		Logger.debug(`Connecting to AO with:`, aoConnectConfig)
 		const { message, result, results, dryrun } = connect(aoConnectConfig);
 		this._message = message;
 		this._result = result;
