@@ -11,10 +11,12 @@ export class ClientError<T extends Object, P = any> extends AOJsError {
 		public readonly originalError?: Error,
 		public readonly additionalInfo?: string,
 	) {
-		const functionName = func.name;
-		const paramsString = JSON.stringify(clientFunctionParams, null, 2);
+		const clientErrorString = `Client Error in ${client.constructor.name}`
+		const functionOccurrenceString = `Occurred while executing function: ${func.name}`;
+		const paramsString = `With parameters: ${JSON.stringify(clientFunctionParams, null, 2)}`
+		const additionalInfoString = `${additionalInfo ? `\nAdditional Info:\n${additionalInfo}` : '\nNo Additional Info Provided.'}`
 
-		const errorMessage = `Client Error in ${client.constructor.name}\nOccurred while executing function: ${functionName}\nWith parameters: ${paramsString}${additionalInfo ? `\nAdditional Info:\n${additionalInfo}` : '\n'}`;
+		const errorMessage = `${clientErrorString}\n${functionOccurrenceString}\n${paramsString}\n${additionalInfoString}`;
 
 		const fullMessage = StringFormatting.wrapMessageInBox(errorMessage, ClientError.CLIENT_ERROR_MAX_LINE_LENGTH);
 
