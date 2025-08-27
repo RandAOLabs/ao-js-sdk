@@ -1,8 +1,8 @@
 import { ClientError } from "../../../common/error/client-error";
-import { IReadOnlyAOClient } from "./interfaces/IReadOnlyAOClient";
+import { IAOClient } from "./interfaces/IAOClient";
 
 
-export class AOClientError<T extends IReadOnlyAOClient, P = any> extends ClientError<T, P> {
+export class AOClientError<T extends IAOClient, P = any> extends ClientError<T, P> {
 	public constructor(
 		public readonly client: T,
 		public readonly func: Function,
@@ -12,14 +12,16 @@ export class AOClientError<T extends IReadOnlyAOClient, P = any> extends ClientE
 		public readonly explanation?: string,
 		public readonly _name?: string
 	) {
-		const additionalInfo: string = `This error can be explained by: ${explanation ? explanation : "No known cause."}\nWallet Address: ${walletAddress ? walletAddress : "No wallet associated with this client"}\nActive AO Configuration:${JSON.stringify(client.getActiveConfig())}`
+		const walletAddressString = `Wallet Address: ${walletAddress ? walletAddress : client.getCallingWalletAddress()}`
+		const aoConfigString = `Active AO Configuration:${JSON.stringify(client.getActiveConfig())}`
+		const errorExplanationString = `This error can be explained by: ${explanation ? explanation : "No known cause."}`
+		const additionalInfo: string = `\n${walletAddressString}\n${aoConfigString}\n${errorExplanationString}`
 		super(client, func, clientFunctionParams, originalError, additionalInfo)
-		//super(formattedMessage);
 		this.name = _name ? _name : `${client.constructor.name} Error`;
 	}
 }
 
-export class AORateLimitingError<T extends IReadOnlyAOClient, P = any> extends AOClientError<T, P> {
+export class AORateLimitingError<T extends IAOClient, P = any> extends AOClientError<T, P> {
 	public constructor(
 		client: T,
 		func: Function,
@@ -35,7 +37,7 @@ export class AORateLimitingError<T extends IReadOnlyAOClient, P = any> extends A
 /**
  * Error thrown when attempting write operations on a read-only AO client.
  */
-export class AOReadOnlyClientError<T extends IReadOnlyAOClient, P = any> extends AOClientError<T, P> {
+export class AOReadOnlyClientError<T extends IAOClient, P = any> extends AOClientError<T, P> {
 	public constructor(
 		client: T,
 		func: Function,
@@ -49,7 +51,7 @@ export class AOReadOnlyClientError<T extends IReadOnlyAOClient, P = any> extends
 }
 
 
-export class AOAllConfigsFailedError<T extends IReadOnlyAOClient, P = any> extends AOClientError<T, P> {
+export class AOAllConfigsFailedError<T extends IAOClient, P = any> extends AOClientError<T, P> {
 	public constructor(
 		client: T,
 		func: Function,
