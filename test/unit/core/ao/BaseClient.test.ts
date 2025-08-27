@@ -9,6 +9,9 @@ const results = jest.fn();
 const result = jest.fn();
 const dryrun = jest.fn();
 const getCallingWalletAddress = jest.fn();
+const getWallet = jest.fn();
+const isReadOnly = jest.fn();
+const getActiveConfig = jest.fn();
 
 // Mock AOClientBuilder
 jest.mock('src/core/ao/ao-client/AOClientBuilder', () => {
@@ -22,7 +25,10 @@ jest.mock('src/core/ao/ao-client/AOClientBuilder', () => {
 				results,
 				result,
 				dryrun,
-				getCallingWalletAddress
+				getCallingWalletAddress,
+				getWallet,
+				isReadOnly,
+				getActiveConfig
 			})
 		}))
 	};
@@ -101,6 +107,24 @@ describe("BaseClient", () => {
 
 	// Setting up mocks and BaseClient instance before each test
 	beforeEach(() => {
+		// Reset all mocks first
+		jest.clearAllMocks();
+
+		// Set up default mock return values
+		isReadOnly.mockReturnValue(false); // Default to write-enabled client
+		getWallet.mockReturnValue({
+			kty: "RSA",
+			n: "test-modulus",
+			e: "test-exponent",
+			d: "test-private-exponent",
+			p: "test-prime-1",
+			q: "test-prime-2",
+			dp: "test-exponent-1",
+			dq: "test-exponent-2",
+			qi: "test-coefficient"
+		});
+		getActiveConfig.mockReturnValue({});
+
 		const config = new BaseClientConfigBuilder()
 			.withProcessId("test-process-id")
 			.withWallet({
@@ -259,6 +283,75 @@ describe("BaseClient", () => {
 				owner,
 			});
 			expect(response).toEqual(mockResponse);
+		});
+	});
+
+	/**
+	 * Test case: Checking if client is read-only
+	 */
+	describe('isReadOnly()', () => {
+		it('should return false for write-enabled client', () => {
+			// Arrange
+			isReadOnly.mockReturnValue(false);
+
+			// Act
+			const readOnly = client.isReadOnly();
+
+			// Assert
+			expect(isReadOnly).toHaveBeenCalled();
+			expect(readOnly).toBe(false);
+		});
+
+		it('should return true for read-only client', () => {
+			// Arrange
+			isReadOnly.mockReturnValue(true);
+
+			// Act
+			const readOnly = client.isReadOnly();
+
+			// Assert
+			expect(isReadOnly).toHaveBeenCalled();
+			expect(readOnly).toBe(true);
+		});
+	});
+
+	/**
+	 * Test case: Getting wallet
+	 */
+	describe('getWallet()', () => {
+		it('should return the wallet object', () => {
+			// Arrange
+			const mockWallet = {
+				kty: "RSA",
+				n: "test-modulus",
+				e: "test-exponent",
+				d: "test-private-exponent",
+				p: "test-prime-1",
+				q: "test-prime-2",
+				dp: "test-exponent-1",
+				dq: "test-exponent-2",
+				qi: "test-coefficient"
+			};
+			getWallet.mockReturnValue(mockWallet);
+
+			// Act
+			const wallet = client.getWallet();
+
+			// Assert
+			expect(getWallet).toHaveBeenCalled();
+			expect(wallet).toEqual(mockWallet);
+		});
+
+		it('should return undefined for read-only client', () => {
+			// Arrange
+			getWallet.mockReturnValue(undefined);
+
+			// Act
+			const wallet = client.getWallet();
+
+			// Assert
+			expect(getWallet).toHaveBeenCalled();
+			expect(wallet).toBeUndefined();
 		});
 	});
 });

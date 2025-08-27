@@ -5,10 +5,10 @@ import { ConnectArgsLegacy } from '../aoconnect-types';
 import { AOClientError } from '../AOClientError';
 import { AOMessageIdMissingError } from '../../AOError';
 import { ReadOnlyAOClient } from './ReadOnlyAOClient';
-import { IWriteReadAOClient } from '../interfaces';
+import { IAOClient } from '../interfaces/IAOClient';
 import { WalletUtils } from '../../../common/WalletUtils';
 
-export class WriteReadAOClient extends ReadOnlyAOClient implements IWriteReadAOClient {
+export class WriteReadAOClient extends ReadOnlyAOClient implements IAOClient {
 	private readonly signer: ReturnType<typeof createDataItemSigner>;
 	private readonly wallet: JWKInterface | any;
 
@@ -51,5 +51,9 @@ export class WriteReadAOClient extends ReadOnlyAOClient implements IWriteReadAOC
 
 	public getWallet(): JWKInterface | any | undefined {
 		return this.wallet
+	}
+
+	public isReadOnly(): boolean {
+		return false;
 	}
 }

@@ -1,16 +1,15 @@
 import { JWKInterface } from "arweave/node/lib/wallet";
 import { IBuilder } from "../../../utils";
 import { ConnectArgsLegacy } from "./aoconnect-types";
-import { IReadOnlyAOClient } from "./interfaces/IReadOnlyAOClient";
 import { ReadOnlyAOClient, ReadOnlyRetryAOClient, WriteReadAOClient, WriteReadRetryAOClient } from "./implementations";
-import { IWriteReadAOClient } from "./interfaces";
+import { IAOClient } from "./interfaces/IAOClient";
 
-export class AOClientBuilder implements IBuilder<IReadOnlyAOClient | IWriteReadAOClient> {
+export class AOClientBuilder implements IBuilder<IAOClient> {
 	private wallet: JWKInterface | any | undefined;
 	private aoConfig: ConnectArgsLegacy | undefined;
 	private retriesEnabled: boolean = false;
 
-	build(): IReadOnlyAOClient | IWriteReadAOClient {
+	build(): IAOClient {
 		if (this.wallet) {
 			// If wallet is provided, return write-read client
 			return this.retriesEnabled

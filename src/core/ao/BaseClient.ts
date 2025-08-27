@@ -8,14 +8,13 @@ import { Tags } from '../common';
 import { DryRunParams } from './ao-client/interfaces';
 import { ArweaveDataCachingService } from '../arweave/ArweaveDataCachingService';
 import { ArweaveTransaction } from '../arweave/abstract/types';
-import { IWriteReadAOClient } from './ao-client/interfaces/IWriteReadAOClient';
 import { JWKInterface } from 'arweave/node/lib/wallet';
 import { AOReadOnlyClientError, ReadOnlyAOClient, ReadOnlyRetryAOClient, WriteReadAOClient } from './ao-client';
 import { AOClientBuilder } from './ao-client/AOClientBuilder';
 import { DryRunResult, MessageResult, ResultsResponse, SortOrder } from './abstract';
 import ResultUtils from '../common/result-utils/ResultUtils';
 import { IArweaveDataCachingService } from '../arweave/abstract/IArweaveDataCachingService';
-import { IReadOnlyAOClient } from './ao-client/interfaces/IReadOnlyAOClient';
+import { IAOClient } from './ao-client/interfaces/IAOClient';
 
 /**
  * Base client implementation for AO Process interactions.
@@ -28,7 +27,7 @@ export class BaseClient implements IProcessClient {
 	/** @protected */
 	readonly baseConfig: BaseClientConfig;
 	/** @protected */
-	private ao: IWriteReadAOClient | IReadOnlyAOClient;
+	private ao: IAOClient;
 	private useDryRunAsMessage: boolean = false;
 	private readonly arweaveService: IArweaveDataCachingService;
 	/* Fields */
@@ -52,7 +51,7 @@ export class BaseClient implements IProcessClient {
 
 		const mergedTags = mergeLists(tags, DEFAULT_TAGS, tag => tag.name);
 
-		return await (this.ao as IWriteReadAOClient).message(
+		return await this.ao.message(
 			this.baseConfig.processId,
 			data,
 			mergedTags,
@@ -138,7 +137,7 @@ export class BaseClient implements IProcessClient {
 		if (this.isReadOnly()) {
 			throw new AOReadOnlyClientError(this.ao, this.getCallingWalletAddress, undefined)
 		}
-		return (this.ao as IWriteReadAOClient).getCallingWalletAddress()
+		return this.ao.getCallingWalletAddress()
 	}
 
 	public isRunningDryRunsAsMessages(): boolean {
@@ -146,7 +145,7 @@ export class BaseClient implements IProcessClient {
 	}
 
 	public isReadOnly(): boolean {
-		return !('message' in this.ao);
+		return this.ao.isReadOnly();
 	}
 
 	public async getProcessInfo(): Promise<ArweaveTransaction> {
@@ -154,10 +153,7 @@ export class BaseClient implements IProcessClient {
 	}
 
 	public getWallet(): JWKInterface | any | undefined {
-		if (this.isReadOnly()) {
-			return undefined;
-		}
-		return (this.ao as IWriteReadAOClient).getWallet();
+		return this.ao.getWallet();
 	}
 
 	/* Public Utility */
