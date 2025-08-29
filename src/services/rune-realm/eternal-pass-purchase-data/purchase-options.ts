@@ -5,7 +5,7 @@ import {
 	GAME_TOKEN_CONFIG,
 	NAB_TOKEN_CONFIG
 } from "../../../constants/maps/tokenConfigs";
-import { TokenConfig } from "../../../models/token-balance";
+import { TokenConfig } from "../../../models/financial/token-balance";
 
 export enum PurchaseOption {
 	AO,

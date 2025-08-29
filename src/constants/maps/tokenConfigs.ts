@@ -1,5 +1,5 @@
 import { EntityId } from "../../models/entity/abstract/EntityType";
-import { TokenConfig } from "../../models/token-balance";
+import { TokenConfig } from "../../models/financial/token-balance";
 import { COMMUNITY_TOKENS } from "../processIds/community_tokens";
 import { ARCAO } from "../processIds/arcao";
 import { DEFI } from "../processIds/defi";

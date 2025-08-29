@@ -1,4 +1,4 @@
-import { CurrencyAmount } from "../../../../../../models/currency";
+import { CurrencyAmount } from "../../../../../../models/financial/currency";
 import { BuyNameNoticeTransactionData } from "../../../../arns-data-service";
 import { ITransactionDataEvent } from "../../abstract";
 import { IARNameEvent } from "./IARNameEvent";
