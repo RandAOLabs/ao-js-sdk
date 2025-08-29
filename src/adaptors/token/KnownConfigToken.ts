@@ -1,5 +1,5 @@
 import { IProcess, Process } from "../../models";
-import { TokenConfig } from "../../models/token-balance";
+import { TokenConfig } from "../../models/financial/token-balance";
 import { IToken } from "./abstract/IToken";
 import { Token } from "./Token";
 

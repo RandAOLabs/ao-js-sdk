@@ -1,5 +1,5 @@
 import { ArweaveTransaction } from "../../../../../core/arweave/abstract/types";
-import { CurrencyAmount } from "../../../../../models/currency/CurrencyAmount";
+import { CurrencyAmount } from "../../../../../models/financial/currency/CurrencyAmount";
 import { BuyNameNoticeTransactionData } from "../../../arns-data-service/abstract/transaction-data/BuyNameNoticeTransactionData";
 import { IBuyNameEvent } from "./abstract/IBuyNameEvent";
 import { ARNameEvent } from "./ARNameEvent";

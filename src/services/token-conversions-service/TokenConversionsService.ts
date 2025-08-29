@@ -1,5 +1,5 @@
 import { IAmm } from '../../adaptors';
-import { ITokenBalance } from '../../models/token-balance/abstract/ITokenBalance';
+import { ITokenBalance } from '../../models/financial/token-balance/abstract/ITokenBalance';
 import { IAutoconfiguration, ServiceErrorHandler, staticImplements } from '../../utils';
 import { AmmFinderService, IAmmFinderService } from '../amm-finder-service';
 import { Service } from '../common';

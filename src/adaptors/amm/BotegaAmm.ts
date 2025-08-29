@@ -2,7 +2,7 @@ import { bigint } from "zod";
 import { BotegaAmmClient, IBotegaAmmClient, ITokenClient, TokenClient, TokenInfo } from "../../clients";
 import { ArweaveTransaction } from "../../core/arweave/abstract/types";
 import { CurrencyAmount, IProcess, Process } from "../../models";
-import { ITokenBalance, TokenBalance, TokenConfig } from "../../models/token-balance";
+import { ITokenBalance, TokenBalance, TokenConfig } from "../../models/financial/token-balance";
 import { IAmm } from "./abstract";
 import { Logger } from "../../utils";
 import { Token } from "../token/Token";

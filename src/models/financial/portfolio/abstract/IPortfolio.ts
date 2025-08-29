@@ -1,5 +1,5 @@
-import { IEntity } from '../../entity/abstract/IEntity';
-import { CurrencyAmount } from '../../currency/CurrencyAmount';
+
+import { IEntity } from '../../../entity';
 import { TokenBalance } from '../../token-balance';
 
 /**

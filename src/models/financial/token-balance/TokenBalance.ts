@@ -1,7 +1,7 @@
 import { ITokenBalance } from './abstract/ITokenBalance';
 import { CurrencyAmount } from '../currency/CurrencyAmount';
 import { TokenConfig } from './abstract/types';
-import { CreditNotice } from '../../services';
+import { CreditNotice } from '../../../services';
 
 /**
  * Constructor parameters for TokenBalance class.

@@ -1,4 +1,4 @@
-import { ITokenBalance, TokenBalance } from "../../../models/token-balance";
+import { ITokenBalance, TokenBalance } from "../../../models/financial/token-balance";
 import { ITokenClient } from "../../../clients/ao";
 import { IProcess } from "../../../models";
 

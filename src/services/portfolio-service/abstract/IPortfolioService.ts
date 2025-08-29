@@ -1,7 +1,6 @@
 import { Observable } from "rxjs";
-import { TokenBalance } from "../../../models/token-balance";
-import { Portfolio } from "../../../models/portfolio";
-import { ICurrencyAmount } from "../../../models";
+import { TokenBalance } from "../../../models/financial/token-balance";
+import { ICurrencyAmount, Portfolio } from "../../../models";
 
 /**
  * Service for managing and retrieving portfolio data.
