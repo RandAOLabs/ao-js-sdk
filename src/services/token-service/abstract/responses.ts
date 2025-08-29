@@ -1,4 +1,4 @@
-export interface TokenBalance{
-	entityId:string,
+export interface TokenBalanceS {
+	entityId: string,
 	balance: bigint
 }

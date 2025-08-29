@@ -2,7 +2,7 @@ import { PortfolioService } from "src/services/portfolio-service/PortfolioServic
 import { IPortfolioService } from "src/services/portfolio-service/abstract/IPortfolioService";
 import { Logger, LogLevel } from "src/utils/logger";
 import { timeout } from "rxjs";
-import { TokenBalance } from "../../../../src";
+import { TokenBalanceS } from "../../../../src";
 
 describe("PortfolioService Integration Tests", () => {
 	let service: IPortfolioService;

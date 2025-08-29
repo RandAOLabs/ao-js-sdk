@@ -2,7 +2,7 @@ import { ITokenClient, TokenClient } from "../../clients";
 import { Tags } from "../../core";
 import { CurrencyAmount, IEntity, IProcess, Process } from "../../models";
 import { EntityId } from "../../models/entity/abstract/EntityType";
-import { TokenConfig } from "../../models/token-balance";
+import { TokenConfig } from "../../models/financial/token-balance";
 import { IToken } from "./abstract/IToken";
 
 export class Token implements IToken {
