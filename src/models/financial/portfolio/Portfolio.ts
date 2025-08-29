@@ -1,8 +1,6 @@
 import { IPortfolio } from './abstract/IPortfolio';
-import { CurrencyAmount } from '../currency/CurrencyAmount';
-import { Process } from '../entity/process/Process';
-import { IEntity } from '../entity/abstract/IEntity';
 import { TokenBalance } from '../token-balance';
+import { IEntity, Process } from '../../entity';
 
 /**
  * Constructor parameters for Portfolio class.

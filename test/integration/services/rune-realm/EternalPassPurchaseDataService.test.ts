@@ -21,11 +21,8 @@ describe("EternalPassPurchaseDataService Integration Tests", () => {
 
 		// Print details of first few results
 		for (let i = 0; i < Math.min(result.length, 5); i++) {
-			const tokenBalance = result[i];
-			Logger.info(`Purchase ${i + 1}:`);
-			Logger.info(`  Token: ${tokenBalance.getTokenConfig().name}`);
-			Logger.info(`  Amount: ${tokenBalance.getCurrencyAmount().toString()}`);
-			Logger.info(`  Process ID: ${tokenBalance.getTokenConfig().tokenProcessId}`);
+			const credit = result[i];
+			Logger.info(`Credit: ${credit.toString()}`);
 		}
 	}, 500000);
 
@@ -39,11 +36,8 @@ describe("EternalPassPurchaseDataService Integration Tests", () => {
 
 		// Print details of first few results
 		for (let i = 0; i < Math.min(result.length, 5); i++) {
-			const tokenBalance = result[i];
-			Logger.info(`Purchase ${i + 1}:`);
-			Logger.info(`  Token: ${tokenBalance.getTokenConfig().name}`);
-			Logger.info(`  Amount: ${tokenBalance.getCurrencyAmount().toString()}`);
-			Logger.info(`  Process ID: ${tokenBalance.getTokenConfig().tokenProcessId}`);
+			const credit = result[i];
+			Logger.info(`Credit: ${credit.toString()}`);
 		}
 	}, 500000);
 
@@ -57,11 +51,8 @@ describe("EternalPassPurchaseDataService Integration Tests", () => {
 
 		// Print details of first few results
 		for (let i = 0; i < Math.min(result.length, 5); i++) {
-			const tokenBalance = result[i];
-			Logger.info(`Purchase ${i + 1}:`);
-			Logger.info(`  Token: ${tokenBalance.getTokenConfig().name}`);
-			Logger.info(`  Amount: ${tokenBalance.getCurrencyAmount().toString()}`);
-			Logger.info(`  Process ID: ${tokenBalance.getTokenConfig().tokenProcessId}`);
+			const credit = result[i];
+			Logger.info(`Credit: ${credit.toString()}`);
 		}
 	}, 500000);
 
@@ -85,10 +76,9 @@ describe("EternalPassPurchaseDataService Integration Tests", () => {
 
 				Logger.info(`${PurchaseOption[option]}: ${result.length} purchase records found`);
 
-				if (result.length > 0) {
-					const firstRecord = result[0];
-					Logger.info(`  Sample record - Amount: ${firstRecord.getCurrencyAmount().toString()}`);
-					Logger.info(`  Token Config: ${JSON.stringify(firstRecord.getTokenConfig(), null, 2)}`);
+				for (let i = 0; i < Math.min(result.length, 5); i++) {
+					const credit = result[i];
+					Logger.info(`Credit: ${credit.toString()}`);
 				}
 			} catch (error) {
 				Logger.error(`Error testing ${PurchaseOption[option]}:`, error);

@@ -1,5 +1,5 @@
 import { ArweaveTransaction } from "../../../../../core/arweave/abstract/types";
-import { CurrencyAmount } from "../../../../../models/currency/CurrencyAmount";
+import { CurrencyAmount } from "../../../../../models/financial/currency/CurrencyAmount";
 import { RecordNoticeTransactionData } from "../../../arns-data-service/abstract/transaction-data/RecordNoticeTransactionData";
 import { IRecordEvent } from "./abstract/IRecordEvent";
 import { ARIO_TOKEN } from "../../../../../constants/maps/currencies";

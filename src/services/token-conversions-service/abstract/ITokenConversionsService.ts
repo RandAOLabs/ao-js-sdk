@@ -1,4 +1,4 @@
-import { ITokenBalance } from '../../../models/token-balance/abstract/ITokenBalance';
+import { ITokenBalance } from '../../../models/financial/token-balance/abstract/ITokenBalance';
 
 /**
  * Interface for token conversion services that handle converting token balances.

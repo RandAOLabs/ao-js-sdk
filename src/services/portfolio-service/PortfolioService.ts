@@ -1,14 +1,14 @@
 import { Observable, from, mergeMap, map, distinct, switchMap, toArray, of, merge, scan } from 'rxjs';
 import { IPortfolioService } from './abstract/IPortfolioService';
-import { CurrencyAmount, ICurrencyAmount } from '../../models';
 import { Logger } from '../../utils/logger/logger';
 import { ReactiveCreditNoticeService, CreditNotice } from '../credit-notices';
 import { TokenClient, TokenInfo } from '../../clients/ao';
 import { ClientBuilder } from '../../clients/common';
 import { IReactiveCreditNoticeService } from '../credit-notices/reactive-credit-notice-service/abstract';
-import { TokenBalance } from '../../models/token-balance';
-import { Portfolio } from '../../models/portfolio';
+import { TokenBalance } from '../../models/financial/token-balance';
 import { IAutoconfiguration, staticImplements } from '../../utils';
+import { ICurrencyAmount, CurrencyAmount } from '../../models/financial/currency';
+import { Portfolio } from '../../models/financial/portfolio';
 
 /**
  * @category Portfolio
