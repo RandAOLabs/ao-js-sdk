@@ -1,6 +1,7 @@
 import { ITokenBalance } from './abstract/ITokenBalance';
 import { CurrencyAmount } from '../currency/CurrencyAmount';
 import { TokenConfig } from './abstract/types';
+import { CreditNotice } from '../../services';
 
 /**
  * Constructor parameters for TokenBalance class.
@@ -14,6 +15,24 @@ export interface TokenBalanceConstructorParams {
  * Concrete implementation of ITokenBalance for managing token balances with configuration.
  */
 export class TokenBalance implements ITokenBalance {
+	/**
+	 * Creates a TokenBalance from a credit notice and token configuration
+	 * @param creditNotice The credit notice containing quantity information
+	 * @param tokenConfig The token configuration for the balance
+	 * @returns A new TokenBalance instance
+	 */
+	public static fromCreditNotice(creditNotice: CreditNotice, tokenConfig: TokenConfig): TokenBalance {
+		const denomination = tokenConfig.denomination ?? 12; // Default to 12 if not specified
+		const currencyAmount = CurrencyAmount.fromDecimal(
+			creditNotice.quantity,
+			denomination
+		);
+
+		return new TokenBalance({
+			currencyAmount,
+			tokenConfig
+		});
+	}
 	private readonly currencyAmount: CurrencyAmount;
 	private readonly tokenConfig: TokenConfig;
 
