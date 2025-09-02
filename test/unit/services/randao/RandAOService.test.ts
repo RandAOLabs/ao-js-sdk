@@ -51,6 +51,7 @@ describe("RandAOService", () => {
 		// Mock instance methods with some data
 		mockRandomClient.getAllProviderActivity = jest.fn().mockResolvedValue([{
 			provider_id: "test-provider",
+			owner_id: "test-owner",
 			active: 1,
 			created_at: Date.now(),
 			random_balance: 100,
@@ -60,6 +61,7 @@ describe("RandAOService", () => {
 		}]);
 		mockRandomClient.getProviderActivity = jest.fn().mockResolvedValue({
 			provider_id: "test-provider",
+			owner_id: "test-owner",
 			active: 1,
 			created_at: Date.now(),
 			random_balance: 100,
@@ -127,6 +129,7 @@ describe("RandAOService", () => {
 		const providerId = "test-provider";
 		const mockProviderData: ProviderInfoAggregate = {
 			providerId,
+			owner: "test-owner",
 			providerInfo: {
 				provider_id: providerId,
 				created_at: Date.now(),
@@ -140,6 +143,7 @@ describe("RandAOService", () => {
 			},
 			providerActivity: {
 				provider_id: providerId,
+				owner_id: "test-owner",
 				active: 1,
 				created_at: Date.now(),
 				random_balance: 100,
@@ -178,7 +182,7 @@ describe("RandAOService", () => {
 			const result = await service.getAllInfoForProvider(providerId);
 
 			// Assert
-			expect(result).toEqual({ providerId });
+			expect(result).toEqual({ providerId, owner: '' });
 		});
 
 		it("should return only providerId when ProviderProfileClient throws an error", async () => {
@@ -194,7 +198,7 @@ describe("RandAOService", () => {
 			const result = await service.getAllInfoForProvider(providerId);
 
 			// Assert
-			expect(result).toEqual({ providerId });
+			expect(result).toEqual({ providerId, owner: '' });
 		});
 	});
 });
