@@ -84,7 +84,7 @@ export class RandAOService implements IRandAOService {
 				lastValueFrom(infoStream)
 			]);
 		} catch (error: any) {
-			return { providerId } // No Provider data found for this 
+			return { providerId, owner: '' } // No Provider data found for this 
 		}
 
 		// Get the aggregated data for this specific provider
