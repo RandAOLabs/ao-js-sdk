@@ -46,7 +46,10 @@ export class ProviderInfoDataAggregator {
 	private getOrInitializeProvider(providerId: string): ProviderInfoAggregate {
 		let entry = this.aggregateMap.get(providerId);
 		if (!entry) {
-			entry = { providerId };
+			entry = { 
+				providerId,
+				owner: '', // Initialize with empty string, will be set when ProviderActivity is updated
+			};
 			this.aggregateMap.set(providerId, entry);
 		}
 		return entry;
@@ -64,6 +67,10 @@ export class ProviderInfoDataAggregator {
 		// Update data based on type
 		if ('staked' in item) {
 			entry.providerActivity = item;
+			// Update owner from ProviderActivity
+			if (item.owner_id) {
+				entry.owner = item.owner_id;
+			}
 		} else {
 			entry.providerInfo = item;
 		}
