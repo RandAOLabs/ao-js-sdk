@@ -53,4 +53,6 @@ export interface ProviderInfo {
     stake: ProviderStakeInfo;
     /** Provider ID */
     provider_id: string;
+    /** Actor ID - The ID of the actor associated with this provider */
+    actor_id?: string;
 }

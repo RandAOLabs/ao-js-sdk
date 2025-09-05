@@ -61,16 +61,29 @@ export class ProviderInfoDataAggregator {
 	 * @param item The provider data item
 	 */
 	public async updateProviderData(item: ProviderInfo | ProviderActivity): Promise<void> {
-		const providerId = item.provider_id;
-		const entry = this.getOrInitializeProvider(providerId);
+		let providerId: string;
+		let owner: string = '';
 
-		// Update data based on type
+		// Handle data based on type
+		if ('staked' in item) { // ProviderActivity from randomClient
+			providerId = item.provider_id;
+			owner = item.owner_id || '';
+		} else { // ProviderInfo from providerProfileClient
+			// If there's an actor_id, use that as providerId and provider_id as owner
+			if (item.actor_id) {
+				providerId = item.actor_id;
+				owner = item.provider_id;
+			} else {
+				providerId = item.provider_id;
+			}
+		}
+
+		const entry = this.getOrInitializeProvider(providerId);
+		entry.owner = owner;
+
+		// Update specific data
 		if ('staked' in item) {
 			entry.providerActivity = item;
-			// Update owner from ProviderActivity
-			if (item.owner_id) {
-				entry.owner = item.owner_id;
-			}
 		} else {
 			entry.providerInfo = item;
 		}
