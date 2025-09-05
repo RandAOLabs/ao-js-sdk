@@ -1,12 +1,13 @@
 import { Observable } from "rxjs";
-import { IARNSEvent } from "../events";
 import { ARNameDetail } from "./responseTypes";
+import { IARNSInitialMainnetStateService } from "../../arns-initial-mainnet-state-service/abstract/IARNSInitialMainnetStateService";
+import { IARNSEvent } from "../events";
 
 /**
  * ARIO Rewind Service
  * Provides Transaction Information for ARIO ARNS and ANTS
  */
-export interface IARIORewindService {
+export interface IARIORewindService extends IARNSInitialMainnetStateService {
 
 	/**
 	 * Retrieves the event history for a given ARNS name.

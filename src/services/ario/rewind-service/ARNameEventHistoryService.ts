@@ -25,8 +25,8 @@ export class ARNameEventHistoryService implements IARNameEventHistoryService {
 	) { }
 
 	/**
-	 * Creates a pre-configured instance of PiDataService
-	 * @returns A pre-configured PiDataService instance
+	 * Creates a pre-configured instance of ARNameEventHistoryService
+	 * @returns A pre-configured ARNameEventHistoryService instance
 	 */
 	public static autoConfiguration(): IARNameEventHistoryService {
 		return new ARNameEventHistoryService(

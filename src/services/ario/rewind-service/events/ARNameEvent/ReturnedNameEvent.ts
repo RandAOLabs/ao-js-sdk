@@ -1,7 +1,6 @@
 import { ArweaveTransaction } from "../../../../../core/arweave/abstract/types";
 import { ReturnedNameNoticeTransactionData } from "../../../arns-data-service/abstract/transaction-data/ReturnedNameNoticeTransactionData";
 import { IReturnedNameEvent } from "./abstract/IReturnedNameEvent";
-import { ARNameEvent } from "./ARNameEvent";
 import { ARNameTransactionDataEvent } from "./ARNameTransactionDataEvent";
 
 export class ReturnedNameEvent extends ARNameTransactionDataEvent<ReturnedNameNoticeTransactionData> implements IReturnedNameEvent {
