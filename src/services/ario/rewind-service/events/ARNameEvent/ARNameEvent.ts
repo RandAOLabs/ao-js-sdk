@@ -1,10 +1,7 @@
-import { Tags, TagUtils } from "../../../../../core";
-import { ArweaveTransaction } from "../../../../../core/arweave/abstract/types";
+import { TagUtils } from "../../../../../core";
 import { FROM_PROCESS_TAG_NAME } from "../../../../credit-notices/constants";
 import { ARNS_NAME_TAG_NAME } from "../../../../../models/ario/arns/tags";
 import { IARNameEvent } from "./abstract/IARNameEvent";
-import { IArweaveDataService } from "../../../../../core/arweave/abstract/IArweaveDataService";
-import { ArweaveDataService } from "../../../../../core/arweave/ArweaveDataService";
 import { ARNSEvent } from "../ARNSEvent";
 
 export class ARNameEvent extends ARNSEvent implements IARNameEvent {

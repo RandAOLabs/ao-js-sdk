@@ -1,42 +1,56 @@
 import { Observable, merge, EMPTY, firstValueFrom } from "rxjs";
 import { map, scan, startWith, shareReplay, mergeMap, catchError, distinct, filter, last } from "rxjs/operators";
-import { staticImplements, IAutoconfiguration, Logger } from "../../../utils";
-import { IANTEventHistoryService, IARIORewindService, IARNameEventHistoryService } from "./abstract";
-import { IARNameEvent, IANTEvent, IARNSEvent, IBuyNameEvent, IReassignNameEvent } from "./events";
+import { staticImplements, IAutoconfiguration, Logger, ServiceErrorHandler } from "../../../utils";
 import { ARNameEventHistoryService } from "./ARNameEventHistoryService";
 import { ANTEventHistoryService } from "./ANTEventHistoryService";
+import { ARNSInitialMainnetStateService } from "../arns-initial-mainnet-state-service/ARNSInitialMainnetStateService";
 import { ARNameDetail, AllARNameEventsType } from "./abstract/responseTypes";
 import { ARIOService, IARIOService } from "../ario-service";
 import { FullARNSName } from "../../../models";
 import { ANTUtils } from "../../../models/ario/ant/AntUtils";
 import { EntityService, IEntityService } from "../../entity";
 import { EntityType } from "../../../models/entity/abstract/EntityType";
+import { IService } from "../../common";
+import { IANTEventHistoryService, IARIORewindService, IARNameEventHistoryService } from "./abstract";
+import { IARNSInitialMainnetStateService, IMainnetInitialState } from "../arns-initial-mainnet-state-service";
+import { IANTEvent, IARNameEvent, IARNSEvent, IBuyNameEvent, IReassignNameEvent } from "./events";
 
 /**
  * @category ARIO
  */
 @staticImplements<IAutoconfiguration>()
-export class ARIORewindService implements IARIORewindService {
+export class ARIORewindService implements IARIORewindService, IService {
 	constructor(
 		private readonly arnEventHistoryService: IARNameEventHistoryService,
 		private readonly antEventHistoryService: IANTEventHistoryService,
+		private readonly arnsInitialMainnetStateService: IARNSInitialMainnetStateService,
 		private readonly arioService: IARIOService,
 		private readonly entityService: IEntityService,
 	) { }
 
 
 	/**
-	 * Creates a pre-configured instance of PiDataService
-	 * @returns A pre-configured PiDataService instance
+	 * Creates a pre-configured instance of ARIORewindService
+	 * @returns A pre-configured ARIORewindService instance
 	 * @constructor
 	 */
 	public static autoConfiguration(): IARIORewindService {
 		return new ARIORewindService(
 			ARNameEventHistoryService.autoConfiguration(),
 			ANTEventHistoryService.autoConfiguration(),
+			ARNSInitialMainnetStateService.autoConfiguration(),
 			ARIOService.getInstance(),
 			EntityService.autoConfiguration()
 		);
+	}
+
+	public getServiceName(): string {
+		return 'ARNSInitialMainnetStateService';
+	}
+
+	@ServiceErrorHandler
+	public getMainnetInitialState(name: string): IMainnetInitialState | undefined {
+		return this.arnsInitialMainnetStateService.getMainnetInitialState(name);
 	}
 
 	public async getAntDetail(fullName: string): Promise<ARNameDetail> {
@@ -99,7 +113,7 @@ export class ARIORewindService implements IARIORewindService {
 	}
 
 	/**
-	 * Creates a stream of all ARName events using shared event streams
+	 * Creates a stream of all ARName events using shared event streams (excluding mainnet initial state)
 	 */
 	private createARNameEventStream(sharedStreams: AllARNameEventsType): Observable<IARNameEvent[]> {
 		return merge(
@@ -209,9 +223,9 @@ export class ARIORewindService implements IARIORewindService {
 
 
 	private sortEvents(allEvents: Observable<IARNSEvent[]>): Observable<IARNSEvent[]> {
-	return allEvents.pipe(
+		return allEvents.pipe(
 			map(events =>
-			[...events].sort((a, b) => a.getEventTimeStamp() - b.getEventTimeStamp())
+				[...events].sort((a, b) => a.getEventTimeStamp() - b.getEventTimeStamp())
 			)
 		);
 	}
