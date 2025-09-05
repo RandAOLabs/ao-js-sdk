@@ -41,6 +41,15 @@ describe("ARIORewindService Integration Tests", () => {
 	});
 
 
+	describe("getMainnetInitialState()", () => {
+		it("return getMainnetInitialState", () => {
+			const domain = "randao"
+			const details = service.getMainnetInitialState(domain)
+			Logger.debug(details)
+		});
+	});
+
+
 	describe("getEventHistory()", () => {
 		it("return ant details", async () => {
 			const domain = "randao"
