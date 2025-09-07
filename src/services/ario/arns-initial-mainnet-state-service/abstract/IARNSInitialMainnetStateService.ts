@@ -1,6 +1,7 @@
+import { IService } from "../../../common";
 import { IMainnetInitialState } from "./IMainnetInitialState";
 
-export interface IARNSInitialMainnetStateService {
+export interface IARNSInitialMainnetStateService extends IService {
 	/**
 	 * Get mainnet initial state events for a specific name
 	 * @param name The name to get events for
