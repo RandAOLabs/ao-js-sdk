@@ -27,7 +27,7 @@ export class AmmFinderService extends Service implements IAmmFinderService {
 	}
 
 	@ServiceErrorHandler
-	async findAmms(tokenProcessIdA: string, tokenProcessIdB: string): Promise<IAmm[]> {
+	public async findAmms(tokenProcessIdA: string, tokenProcessIdB: string): Promise<IAmm[]> {
 		return this.botegaAmmFinderService.findAmms(tokenProcessIdA, tokenProcessIdB);
 	}
 }
