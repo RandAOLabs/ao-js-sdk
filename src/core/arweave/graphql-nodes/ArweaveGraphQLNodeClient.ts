@@ -34,9 +34,11 @@ export class ArweaveNodeClient implements IArweaveGraphQLNodeClient {
 	 */
 	public async graphqlQuery(query: string): Promise<ArweaveGQLResponse> {
 		try {
+			Logger.debug(`Executing GraphQL query on ${this.nodeType} node: ${query}`);
 			const response = await this.arweave.api.post('/graphql', {
 				query: query
 			});
+			Logger.debug(`GraphQL query response from ${this.nodeType} node: ${JSON.stringify(response)}`);
 			if (typeof response == "string" || typeof response.data == "string") {
 				throw new MalformedArweaveNodeResponseError(this, this.graphqlQuery, query, response)
 			}

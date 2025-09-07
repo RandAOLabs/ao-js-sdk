@@ -37,7 +37,8 @@ export class ArweaveDataService implements IArweaveDataService {
 
 	/** @protected */
 	public async graphQuery(query: string): Promise<ArweaveGQLResponse> {
-		return await this.arweaveGraphQLNodeClient.graphqlQuery(query);
+		const response = await this.arweaveGraphQLNodeClient.graphqlQuery(query);
+		return response
 	}
 
 	/** @protected */

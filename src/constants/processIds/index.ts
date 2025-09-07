@@ -10,6 +10,7 @@ import { AUTONOMOUS_FINANCE } from "./autonomous-finance";
 import { PERMASWAP } from "./permaswap";
 import { ARCAO, ARC } from "./arcao";
 import { BOTEGA } from "./botega";
+import { AOX } from "./aox";
 
 export const PROCESS_IDS = {
 	AO,
@@ -24,5 +25,6 @@ export const PROCESS_IDS = {
 	ARCAO,
 	ARC,
 	PERMASWAP,
-	BOTEGA
+	BOTEGA,
+	AOX
 }

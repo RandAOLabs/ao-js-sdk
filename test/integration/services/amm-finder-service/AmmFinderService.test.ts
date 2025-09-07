@@ -1,16 +1,18 @@
-import { Logger } from "src/utils/logger";
+import { Logger, LogLevel } from "src/utils/logger";
 import { IAmmFinderService, AmmFinderService } from "../../../../src/services";
+import { BotegaAmmFinderService } from "../../../../src/services/autonomous-finance/botega-amm-finder-service/BotegaAmmFinderService";
 
 describe("IAmmFinderService Integration Tests", () => {
 	let service: IAmmFinderService;
 
 	beforeEach(() => {
-		service = AmmFinderService.autoConfiguration();
+		Logger.setLogLevel(LogLevel.DEBUG);
+		service = BotegaAmmFinderService.autoConfiguration();
 	});
 
 	it("should find AMMs for token pairs and print results", async () => {
 		// Test token process IDs - you can replace these with real token process IDs
-		const tokenProcessIdA = "4hXj_E-5fAKmo4E8KjgQvuDJKAFk9P2grhycVmISDLs";
+		const tokenProcessIdA = "s6jcB3ctSbiDNwR-paJgy5iOAhahXahLul8exSLHbGE";
 		const tokenProcessIdB = "0syT13r0s0tgPmIed95bJnuSqaD29HQNN8D3ElLSrsc";
 
 		Logger.info(`Testing findAmm for token pair: ${tokenProcessIdA} <-> ${tokenProcessIdB}`);

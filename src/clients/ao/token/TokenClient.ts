@@ -38,7 +38,6 @@ export class TokenClient extends BaseClient implements ITokenClient, IGrantToken
 
 	/**
 	 * {@inheritdoc IDefaultBuilder.defaultBuilder}
-	 * @see {@link IDefaultBuilder.defaultBuilder}
 	 */
 	public static defaultBuilder(): ClientBuilder<TokenClient> {
 		return TokenClient.builder()

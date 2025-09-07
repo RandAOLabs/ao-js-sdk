@@ -1,14 +1,14 @@
 import { PortfolioService } from "src/services/portfolio-service/PortfolioService";
 import { IPortfolioService } from "src/services/portfolio-service/abstract/IPortfolioService";
 import { Logger, LogLevel } from "src/utils/logger";
-import { timeout } from "rxjs";
-import { TokenBalanceS } from "../../../../src";
+import { lastValueFrom, Observable, timeout } from "rxjs";
+import { Portfolio, TokenBalanceS } from "../../../../src";
 
 describe("PortfolioService Integration Tests", () => {
 	let service: IPortfolioService;
 
 	beforeEach(() => {
-		Logger.setLogLevel(LogLevel.DEBUG);
+		Logger.setLogLevel(LogLevel.INFO);
 		service = PortfolioService.autoConfiguration();
 		Logger.debug("PortfolioService test initialized");
 	});
@@ -41,5 +41,27 @@ describe("PortfolioService Integration Tests", () => {
 		});
 
 	}, 500000);
+
+
+	describe("calculatePortfolioWorthUSD()", () => {
+		let portfolio$: Observable<Portfolio>;
+		it("return the value", (done) => {
+			portfolio$ = service.getPortfolio$("rG-b4gQwhfjnbmYhrnvCMDPuXguqmAmYwHZf4y24WYs")
+
+			service.calculatePortfolioWorthAO$(portfolio$).pipe(timeout(300000)).subscribe({
+				next: (value) => {
+					Logger.info(`Portfolio USD worth update: ${value.toString()}`);
+				},
+				error: (error) => {
+					// Logger.error('Error calculating portfolio USD worth:', error);
+					// done(error);
+				},
+				complete: () => {
+					Logger.info('Portfolio USD calculation completed');
+					done();
+				}
+			});
+		}, 500000);
+	});
 
 });
