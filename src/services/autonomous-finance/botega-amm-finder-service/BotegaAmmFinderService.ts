@@ -8,6 +8,7 @@ import { BotegaAmm } from "../../../adaptors/amm/BotegaAmm";
 import { IAmm } from "../../../adaptors";
 import { ArweaveGQLBuilder, ArweaveGQLSortOrder } from "../../../core";
 import { Service } from "../../common";
+import { FORWARD_RESEARCH_USER } from "../../../constants";
 
 
 /**
@@ -38,10 +39,11 @@ export class BotegaAmmFinderService extends Service implements IAmmFinderService
 			.limit(100)
 			.tags([
 				SYSTEM_TAGS.FROM_PROCESS(BOTEGA_AMM_FACTORT),
+				SYSTEM_TAGS.TYPE_PROCESS,
 				BOTEGA_TAGS.TOKEN_A(tokenProcessIdA),
-				BOTEGA_TAGS.TOKEN_B(tokenProcessIdB)
+				BOTEGA_TAGS.TOKEN_B(tokenProcessIdB),
+				BOTEGA_TAGS.AMM_FACTORY(BOTEGA_AMM_FACTORT)
 			])
-			.containsTagName(SYSTEM_SCHEDULER_TAG_NAME);
 
 		const gqlBuilder2 = new ArweaveGQLBuilder()
 			.withAllFields()
@@ -49,10 +51,11 @@ export class BotegaAmmFinderService extends Service implements IAmmFinderService
 			.limit(100)
 			.tags([
 				SYSTEM_TAGS.FROM_PROCESS(BOTEGA_AMM_FACTORT),
+				SYSTEM_TAGS.TYPE_PROCESS,
 				BOTEGA_TAGS.TOKEN_A(tokenProcessIdB),
-				BOTEGA_TAGS.TOKEN_B(tokenProcessIdA)
+				BOTEGA_TAGS.TOKEN_B(tokenProcessIdA),
+				BOTEGA_TAGS.AMM_FACTORY(BOTEGA_AMM_FACTORT)
 			])
-			.containsTagName(SYSTEM_SCHEDULER_TAG_NAME);
 
 		// Await both transactions concurrently
 		const [transactionsAB, transactionsBA] = await Promise.all([

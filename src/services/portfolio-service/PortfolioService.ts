@@ -1,4 +1,4 @@
-import { Observable, from, mergeMap, map, distinct, switchMap, toArray, of, merge, scan } from 'rxjs';
+import { Observable, from, mergeMap, map, distinct, switchMap, toArray, of, merge, scan, forkJoin } from 'rxjs';
 import { IPortfolioService } from './abstract/IPortfolioService';
 import { Logger } from '../../utils/logger/logger';
 import { ReactiveCreditNoticeService, CreditNotice } from '../credit-notices';
@@ -9,6 +9,8 @@ import { TokenBalance } from '../../models/financial/token-balance';
 import { IAutoconfiguration, staticImplements } from '../../utils';
 import { ICurrencyAmount, CurrencyAmount } from '../../models/financial/currency';
 import { Portfolio } from '../../models/financial/portfolio';
+import { ITokenConversionsService, TokenConversionsService } from '../token-conversions-service';
+import { PROCESS_IDS } from '../../constants/processIds';
 
 /**
  * @category Portfolio
@@ -17,7 +19,8 @@ import { Portfolio } from '../../models/financial/portfolio';
 @staticImplements<IAutoconfiguration>()
 export class PortfolioService implements IPortfolioService {
 	constructor(
-		private readonly reactiveCreditNoticeService: IReactiveCreditNoticeService
+		private readonly reactiveCreditNoticeService: IReactiveCreditNoticeService,
+		private readonly tokenConversionsService: ITokenConversionsService
 	) { }
 
 
@@ -27,21 +30,28 @@ export class PortfolioService implements IPortfolioService {
 	 */
 	public static autoConfiguration(): IPortfolioService {
 		return new PortfolioService(
-			ReactiveCreditNoticeService.autoConfiguration()
+			ReactiveCreditNoticeService.autoConfiguration(),
+			TokenConversionsService.autoConfiguration()
 		);
 	}
 	public calculatePortfolioWorthUSD$(portfolio: Observable<Portfolio>): Observable<ICurrencyAmount> {
-		portfolio.pipe(
-			map(portfolio => portfolio.getTokens()),
-		)
-		throw new Error('Method not implemented.');
+		return portfolio.pipe(
+			switchMap(portfolio => this.convertPortfolioTokensToStream(portfolio)),
+			switchMap(token => this.convertTokenToUSD$(token)),
+			scan((total: CurrencyAmount, amount: ICurrencyAmount) => {
+				return total.add(amount as CurrencyAmount);
+			}, CurrencyAmount.None)
+		);
 	}
 
 	public calculatePortfolioWorthAO$(portfolio: Observable<Portfolio>): Observable<ICurrencyAmount> {
-		portfolio.pipe(
-			map(portfolio => portfolio.getTokens()),
-		)
-		throw new Error('Method not implemented.');
+		return portfolio.pipe(
+			switchMap(portfolio => this.convertPortfolioTokensToStream(portfolio)),
+			switchMap(token => this.convertTokenToAO$(token)),
+			scan((total: CurrencyAmount, amount: ICurrencyAmount) => {
+				return total.add(amount as CurrencyAmount);
+			}, CurrencyAmount.None)
+		);
 	}
 
 
@@ -191,5 +201,63 @@ export class PortfolioService implements IPortfolioService {
 			// Get distinct process IDs
 			distinct()
 		)
+	}
+
+	/**
+	 * Converts a portfolio's token array into a stream of individual tokens
+	 * @param portfolio The portfolio containing tokens
+	 * @returns Observable stream of individual TokenBalance objects
+	 */
+	private convertPortfolioTokensToStream(portfolio: Portfolio): Observable<TokenBalance> {
+		return from(portfolio.getTokens());
+	}
+
+	/**
+	 * Converts a single token to the specified target token process ID
+	 * @param token The token to convert
+	 * @param targetTokenProcessId The target token process ID to convert to
+	 * @returns Observable of the converted currency amount
+	 */
+	private convertTokenTo$(token: TokenBalance, targetTokenProcessId: string): Observable<ICurrencyAmount> {
+		// Skip conversion if token has no balance
+		if (token.getCurrencyAmount().isZero()) {
+			return of(CurrencyAmount.None);
+		}
+		Logger.debug(`Converting token ${token.getTokenConfig().tokenProcessId} to ${targetTokenProcessId}`);
+
+		// Create a token with 1 unit to get the conversion rate
+		const originalAmount = token.getCurrencyAmount();
+		const oneUnitToken = new TokenBalance({
+			tokenConfig: token.getTokenConfig(),
+			currencyAmount: new CurrencyAmount(BigInt(1), originalAmount.decimals())
+		});
+
+		return from(this.tokenConversionsService.convert(oneUnitToken, targetTokenProcessId)).pipe(
+			map(convertedToken => {
+				const conversionRate = convertedToken.getCurrencyAmount();
+				// Multiply the original balance by the conversion rate (convert to number for multiplication)
+				return originalAmount.multiply(conversionRate.toNumber());
+			}),
+			// Handle errors by returning zero amount
+			map(amount => amount || CurrencyAmount.None)
+		);
+	}
+
+	/**
+	 * Converts a single token to its USD equivalent using WUSDC
+	 * @param token The token to convert
+	 * @returns Observable of the converted currency amount
+	 */
+	private convertTokenToUSD$(token: TokenBalance): Observable<ICurrencyAmount> {
+		return this.convertTokenTo$(token, PROCESS_IDS.AOX.WUSDC);
+	}
+
+	/**
+	 * Converts a single token to its AO equivalent
+	 * @param token The token to convert
+	 * @returns Observable of the converted currency amount
+	 */
+	private convertTokenToAO$(token: TokenBalance): Observable<ICurrencyAmount> {
+		return this.convertTokenTo$(token, PROCESS_IDS.AO);
 	}
 }

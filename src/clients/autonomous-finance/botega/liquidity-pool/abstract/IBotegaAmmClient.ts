@@ -42,7 +42,7 @@ export interface IBotegaAmmClient extends IProcessClient {
 	 */
 	getTokenB(): Promise<ITokenClient>;
 
-	getTokenAProcessId(): string;
+	getTokenAProcessId(): Promise<string>;
 
-	getTokenBProcessId(): string;
+	getTokenBProcessId(): Promise<string>;
 }

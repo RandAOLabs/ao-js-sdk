@@ -99,7 +99,7 @@ export class BotegaAmm implements IAmm {
 	private async getQuoteOfTokenAInTokenB(tokenBalance: ITokenBalance): Promise<TokenBalance> {
 		const quote = await this.botegaAmmClient.getPriceOfTokenAInTokenB(tokenBalance.getCurrencyAmount().amount().toString())
 
-		const tokenBProcessId = this.botegaAmmClient.getTokenBProcessId()
+		const tokenBProcessId = await this.botegaAmmClient.getTokenBProcessId()
 		const tokenB = TokenFactory.from(tokenBProcessId)
 
 		const currencyAmount = new CurrencyAmount(BigInt(quote), await tokenB.getDecimals())
@@ -111,7 +111,7 @@ export class BotegaAmm implements IAmm {
 	private async getQuoteOfTokenBInTokenA(tokenBalance: ITokenBalance): Promise<TokenBalance> {
 		const quote = await this.botegaAmmClient.getPriceOfTokenBInTokenA(tokenBalance.getCurrencyAmount().amount().toString())
 
-		const tokenAProcessId = this.botegaAmmClient.getTokenAProcessId()
+		const tokenAProcessId = await this.botegaAmmClient.getTokenAProcessId()
 		const tokenA = TokenFactory.from(tokenAProcessId)
 
 		const currencyAmount = new CurrencyAmount(BigInt(quote), await tokenA.getDecimals())
