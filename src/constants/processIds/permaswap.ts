@@ -1,0 +1,9 @@
+
+export const PERMASWAP = {
+	LP_TOKENS: {
+		AO_GAME_30: "hbRwutwINSXCNxXxVNoNRT2YQk-OIX3Objqu85zJrLo",
+		GAME_WAR_30: "9rc1X4ZTyu4Di2FiS8Np3xBx6xl2FCuAwZAwOcfB1tc",
+		GAME_VAR_30: "Yc4NVqtewI9U4cGJb1XFC5Ny5HrbaekEmZA3DBUhhKA"
+	}
+}
+

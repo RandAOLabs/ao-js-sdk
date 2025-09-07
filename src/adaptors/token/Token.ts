@@ -1,6 +1,6 @@
 import { ITokenClient, TokenClient } from "../../clients";
 import { Tags } from "../../core";
-import { CurrencyAmount, IEntity, IProcess, Process } from "../../models";
+import { CurrencyAmount, IProcess, Process } from "../../models";
 import { EntityId } from "../../models/entity/abstract/EntityType";
 import { TokenConfig } from "../../models/financial/token-balance";
 import { IToken } from "./abstract/IToken";
