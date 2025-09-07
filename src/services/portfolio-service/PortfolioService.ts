@@ -14,6 +14,7 @@ import { PROCESS_IDS } from '../../constants/processIds';
 
 /**
  * @category Portfolio
+ * @Beta
  * @inheritdoc
  */
 @staticImplements<IAutoconfiguration>()
