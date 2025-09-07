@@ -1,7 +1,6 @@
 import { Observable, from, mergeMap, map, distinct, switchMap, toArray, of, merge, scan, forkJoin } from 'rxjs';
 import { IPortfolioService } from './abstract/IPortfolioService';
 import { Logger } from '../../utils/logger/logger';
-import { ReactiveCreditNoticeService, CreditNotice } from '../credit-notices';
 import { TokenClient, TokenInfo } from '../../clients/ao';
 import { ClientBuilder } from '../../clients/common';
 import { IReactiveCreditNoticeService } from '../credit-notices/reactive-credit-notice-service/abstract';
@@ -11,9 +10,12 @@ import { ICurrencyAmount, CurrencyAmount } from '../../models/financial/currency
 import { Portfolio } from '../../models/financial/portfolio';
 import { ITokenConversionsService, TokenConversionsService } from '../token-conversions-service';
 import { PROCESS_IDS } from '../../constants/processIds';
+import { ReactiveCreditNoticeService } from '../credit-notices/reactive-credit-notice-service/ReactiveCreditNoticeService';
+import { CreditNotice } from '../credit-notices/abstract';
 
 /**
  * @category Portfolio
+ * @Beta
  * @inheritdoc
  */
 @staticImplements<IAutoconfiguration>()
