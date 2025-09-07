@@ -50,7 +50,6 @@ export class ARIORewindService extends Service implements IARIORewindService {
 		return 'ARNSInitialMainnetStateService';
 	}
 
-	@ServiceErrorHandler
 	public getMainnetInitialState(name: string): IMainnetInitialState | undefined {
 		return this.arnsInitialMainnetStateService.getMainnetInitialState(name);
 	}
