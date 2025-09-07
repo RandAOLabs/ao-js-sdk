@@ -8,11 +8,13 @@ import { Service } from '../common';
  * Implementation of AMM finder service that locates AMM pools for token pairs.
  */
 @staticImplements<IAutoconfiguration>()
-export class AmmFinderService extends Service implements IAmmFinderService {
+export class AmmFinderService implements IAmmFinderService {
 	constructor(
 		private readonly botegaAmmFinderService: IAmmFinderService,
-	) {
-		super()
+	) { }
+
+	getServiceName(): string {
+		return this.constructor.name
 	}
 
 
