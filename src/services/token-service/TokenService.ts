@@ -55,6 +55,7 @@ export class TokenService implements ITokenService, ICaching {
 		return allBalances;
 	}
 
+
 	public async getBalance(address: string): Promise<bigint> {
 		const allBalances = await this.getAllBalances();
 		const balance = allBalances.find(b => b.entityId === address);
