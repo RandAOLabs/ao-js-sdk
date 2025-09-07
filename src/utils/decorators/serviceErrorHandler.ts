@@ -7,7 +7,11 @@ import { IService } from "../../services/common";
  * @param propertyKey The method name
  * @param descriptor The method descriptor
  */
-export function ServiceErrorHandler(target: any, propertyKey: string, descriptor: PropertyDescriptor) {
+export function ServiceErrorHandler(target: any, propertyKey: string, descriptor: PropertyDescriptor): void {
+	if (!descriptor || typeof descriptor.value !== 'function') {
+		return
+	}
+
 	const originalMethod = descriptor.value;
 
 	descriptor.value = function (this: IService, ...args: any[]) {
@@ -41,5 +45,5 @@ export function ServiceErrorHandler(target: any, propertyKey: string, descriptor
 		}
 	};
 
-	return descriptor;
+	// Don't return anything - we modified descriptor in place
 }
