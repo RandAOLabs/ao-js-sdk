@@ -10,7 +10,7 @@ import { FullARNSName } from "../../../models";
 import { ANTUtils } from "../../../models/ario/ant/AntUtils";
 import { EntityService, IEntityService } from "../../entity";
 import { EntityType } from "../../../models/entity/abstract/EntityType";
-import { IService } from "../../common";
+import { IService, Service } from "../../common";
 import { IANTEventHistoryService, IARIORewindService, IARNameEventHistoryService } from "./abstract";
 import { IARNSInitialMainnetStateService, IMainnetInitialState } from "../arns-initial-mainnet-state-service";
 import { IANTEvent, IARNameEvent, IARNSEvent, IBuyNameEvent, IReassignNameEvent } from "./events";
@@ -19,14 +19,16 @@ import { IANTEvent, IARNameEvent, IARNSEvent, IBuyNameEvent, IReassignNameEvent 
  * @category ARIO
  */
 @staticImplements<IAutoconfiguration>()
-export class ARIORewindService implements IARIORewindService, IService {
+export class ARIORewindService extends Service implements IARIORewindService {
 	constructor(
 		private readonly arnEventHistoryService: IARNameEventHistoryService,
 		private readonly antEventHistoryService: IANTEventHistoryService,
 		private readonly arnsInitialMainnetStateService: IARNSInitialMainnetStateService,
 		private readonly arioService: IARIOService,
 		private readonly entityService: IEntityService,
-	) { }
+	) {
+		super();
+	}
 
 
 	/**
