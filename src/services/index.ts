@@ -14,6 +14,7 @@ export * from "./token-service"
 export * from "./currency"
 export * from "./entity"
 export * from "./token-conversions-service"
+export * from "./token-service"
 export * from "./amm-finder-service"
 export * from "./rune-realm"
 // export * from "./randao" // Not needed yet
