@@ -29,11 +29,13 @@ export class BotegaAmmClient extends DryRunCachingClient implements IBotegaAmmCl
 		super(config);
 	}
 
-	getTokenAProcessId(): string {
-		return this.tokenAClient?.getProcessId()!
+	async getTokenAProcessId(): Promise<string> {
+		const client = await this.getTokenA()
+		return client.getProcessId()
 	}
-	getTokenBProcessId(): string {
-		return this.tokenBClient?.getProcessId()!
+	async getTokenBProcessId(): Promise<string> {
+		const client = await this.getTokenB()
+		return client.getProcessId()
 	}
 
 	public static from(transaction: ArweaveTransaction): IBotegaAmmClient {
@@ -119,7 +121,8 @@ export class BotegaAmmClient extends DryRunCachingClient implements IBotegaAmmCl
 	public async getPriceOfTokenAInTokenB(quantity: number | string): Promise<number> {
 		try {
 			const lpInfo = await this.getLPInfo();
-			return this.getPrice(Number(quantity), lpInfo.tokenA);
+			const amount = await this.getPrice(Number(quantity), lpInfo.tokenA);
+			return amount
 		} catch (error: any) {
 			throw new ProcessClientError(this, this.getPriceOfTokenAInTokenB, { quantity }, error);
 		}

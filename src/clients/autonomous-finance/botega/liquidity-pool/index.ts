@@ -1,2 +1,2 @@
 export * from "./abstract"
-export * from "./BotegaLiquidityPoolClient"
+export * from "./BotegaAmmClient"
