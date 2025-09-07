@@ -14,10 +14,13 @@ export class ServiceError<T extends Service> extends AOJsError {
 		const functionName = func.name;
 
 		let paramsString;
+
 		try {
-			paramsString = JSON.stringify(serviceFunctionParams, null, 2);
+			if (serviceFunctionParams === undefined) {
+				paramsString = JSON.stringify(serviceFunctionParams, null, 2);
+			}
 		} catch (error: any) {
-			Logger.error("Error Handling Error | Could not serialize Paramaters")
+			Logger.error(`Error Handling Error | Could not serialize Paramaters: ${serviceFunctionParams}`)
 		}
 
 		const errorMessage = `A(n) ${service.getServiceName()} Error\nOccurred while executing function: ${functionName}\nWith parameters: ${paramsString}`;

@@ -1,8 +1,7 @@
-import { TokenConversionsService } from "src/services/token-conversions-service/TokenConversionsService";
-import { ITokenConversionsService } from "src/services/token-conversions-service/abstract/ITokenConversionsService";
-import { Logger, LogLevel } from "src/utils/logger";
-import { TokenBalance } from "src/models/token-balance/TokenBalance";
-import { CurrencyAmount } from "src/models/currency/CurrencyAmount";
+import { CurrencyAmount, TokenBalance } from "../../../../src/models";
+import { ITokenConversionsService, TokenConversionsService } from "../../../../src/services/token-conversions-service";
+import { Logger, LogLevel } from "../../../../src/utils/logger";
+
 
 describe("TokenConversionsService Integration Tests", () => {
 	let service: ITokenConversionsService;
@@ -15,13 +14,13 @@ describe("TokenConversionsService Integration Tests", () => {
 
 	it("should convert token balance from one token to another and print results", async () => {
 
-		const tokenProcessIdA = "4hXj_E-5fAKmo4E8KjgQvuDJKAFk9P2grhycVmISDLs";
+		const tokenProcessIdA = "s6jcB3ctSbiDNwR-paJgy5iOAhahXahLul8exSLHbGE";
 		const tokenProcessIdB = "0syT13r0s0tgPmIed95bJnuSqaD29HQNN8D3ElLSrsc";
 
 		const sourceTokenBalance = new TokenBalance({
-			currencyAmount: CurrencyAmount.fromDecimal("100", 12),
+			currencyAmount: CurrencyAmount.fromDecimal("1", 18),
 			tokenConfig: {
-				name: "PI",
+				name: "GAME",
 				tokenProcessId: tokenProcessIdA,
 				logoTxId: "test-logo-tx-id"
 			}

@@ -67,7 +67,6 @@ export class ReadOnlyAOClient implements IAOClient {
 		try {
 			Logger.debug(params)
 			const result = await this._dryrun(params);
-			Logger.debug("---------------------")
 			Logger.debug(result)
 			return result
 		} catch (error: any) {
