@@ -23,10 +23,11 @@ export interface IRandomClient {
     /**
      * Updates the count of available random values for a specific provider.
      * @param amount - The new amount of random values available.
+     * @param providerId - The identifier for the provider allowing the staker to update the providers balance.
      * @param info - An optional MonitoringData object containing provider monitoring information.
      * @returns - A promise that resolves with a boolean indicating success.
      */
-    updateProviderAvailableValues(amount: number, info?: MonitoringData): Promise<boolean>;
+    updateProviderAvailableValues(amount: number, providerId?: string, info?: MonitoringData): Promise<boolean>;
 
     /**
      * Retrieves all open, incomplete randomness requests for a specific provider.
