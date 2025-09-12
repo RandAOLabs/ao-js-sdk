@@ -1,10 +1,10 @@
 import { Observable } from "rxjs";
 import { map, filter } from "rxjs/operators";
 import { staticImplements, IAutoconfiguration } from "../../../utils";
-import { IStateNoticeEvent, IReassignNameNoticeEvent, IReleaseNameNoticeEvent, IApprovePrimaryNameNoticeEvent, IRemovePrimaryNamesNoticeEvent, ICreditNoticeEvent, IDebitNoticeEvent, ISetRecordEvent } from "./events";
+import { IStateNoticeEvent, IReassignNameNoticeEvent, IReleaseNameNoticeEvent, IApprovePrimaryNameNoticeEvent, IRemovePrimaryNamesNoticeEvent, ICreditNoticeEvent, IDebitNoticeEvent, ISetRecordEvent, ISetNameNoticeEvent, ISetDescriptionNoticeEvent, ISetTickerNoticeEvent } from "./events";
 import { ANTDataService, IANTDataService } from "../ant-data-service";
 import { IANTEventHistoryService } from "./abstract/IANTEventHistoryService";
-import { StateNoticeEvent, ReassignNameNoticeEvent, ReleaseNameNoticeEvent, ApprovePrimaryNameNoticeEvent, RemovePrimaryNamesNoticeEvent, CreditNoticeEvent, DebitNoticeEvent } from "./events";
+import { StateNoticeEvent, ReassignNameNoticeEvent, ReleaseNameNoticeEvent, ApprovePrimaryNameNoticeEvent, RemovePrimaryNamesNoticeEvent, CreditNoticeEvent, DebitNoticeEvent, SetNameNoticeEvent, SetDescriptionNoticeEvent, SetTickerNoticeEvent } from "./events";
 import { AllANTEventsType } from "./abstract/responseTypes";
 import { SetRecordEvent } from "./events/ANTEvent/SetRecordEvent";
 
@@ -82,6 +82,24 @@ export class ANTEventHistoryService implements IANTEventHistoryService {
 		);
 	}
 
+	public getSetNameNoticeEvents(processId: string): Observable<ISetNameNoticeEvent[]> {
+		return this.antDataService.getSetNameNotices(processId).pipe(
+			map(transactions => transactions.map(transaction => new SetNameNoticeEvent(transaction)))
+		);
+	}
+
+	public getSetDescriptionNoticeEvents(processId: string): Observable<ISetDescriptionNoticeEvent[]> {
+		return this.antDataService.getSetDescriptionNotices(processId).pipe(
+			map(transactions => transactions.map(transaction => new SetDescriptionNoticeEvent(transaction)))
+		);
+	}
+
+	public getSetTickerNoticeEvents(processId: string): Observable<ISetTickerNoticeEvent[]> {
+		return this.antDataService.getSetTickerNotices(processId).pipe(
+			map(transactions => transactions.map(transaction => new SetTickerNoticeEvent(transaction)))
+		);
+	}
+
 	public getAllEvents(processId: string): AllANTEventsType {
 		return {
 			stateNoticeEvents: this.getStateNoticeEvents(processId),
@@ -91,7 +109,10 @@ export class ANTEventHistoryService implements IANTEventHistoryService {
 			removePrimaryNamesNoticeEvents: this.getRemovePrimaryNamesNoticeEvents(processId),
 			creditNoticeEvents: this.getCreditNoticeEvents(processId),
 			debitNoticeEvents: this.getDebitNoticeEvents(processId),
-			setRecordEvents: this.getSetRecordEvents(processId)
+			setRecordEvents: this.getSetRecordEvents(processId),
+			setNameNoticeEvents: this.getSetNameNoticeEvents(processId),
+			setDescriptionNoticeEvents: this.getSetDescriptionNoticeEvents(processId),
+			setTickerNoticeEvents: this.getSetTickerNoticeEvents(processId)
 		};
 	}
 }

@@ -127,4 +127,31 @@ export class ANTDataService implements IANTDataService {
 			]
 		})
 	}
+
+	getSetNameNotices(processId: string): Observable<ArweaveTransaction[]> {
+		return this.reactiveMessageService.streamAllMessages({
+			tags: [
+				ANT_NOTICE_TAGS.ACTION.SET_NAME_NOTICE,
+				ANT_NOTICE_TAGS.FROM_PROCESS(processId)
+			]
+		})
+	}
+
+	getSetDescriptionNotices(processId: string): Observable<ArweaveTransaction[]> {
+		return this.reactiveMessageService.streamAllMessages({
+			tags: [
+				ANT_NOTICE_TAGS.ACTION.SET_DESCRIPTION_NOTICE,
+				ANT_NOTICE_TAGS.FROM_PROCESS(processId)
+			]
+		})
+	}
+
+	getSetTickerNotices(processId: string): Observable<ArweaveTransaction[]> {
+		return this.reactiveMessageService.streamAllMessages({
+			tags: [
+				ANT_NOTICE_TAGS.ACTION.SET_TICKER_NOTICE,
+				ANT_NOTICE_TAGS.FROM_PROCESS(processId)
+			]
+		})
+	}
 }
