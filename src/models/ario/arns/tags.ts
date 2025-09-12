@@ -17,6 +17,10 @@ export const ARNS_QUERY_TAGS = {
 			name: ARNS_ACTION_TAG_NAME,
 			value: "Records"
 		},
+		PAGINATED_RECORDS: {
+			name: ARNS_ACTION_TAG_NAME,
+			value: "Paginated-Records"
+		},
 		BUYNAME: {
 			name: ARNS_ACTION_TAG_NAME,
 			value: "Buy-Name"

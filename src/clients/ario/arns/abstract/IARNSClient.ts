@@ -1,4 +1,5 @@
-import { ARNSRecordResponse } from "./responseTypes";
+import { ARNSRecordResponse, GetArNSRecordsResponse } from "./responseTypes";
+import { GetArNSRecordsParams } from "./params";
 
 /**
  * Interface for ARNS (Arweave Name Service) client operations
@@ -10,6 +11,13 @@ export interface IARNSClient {
 	 * @returns Promise resolving to the ARNS record if found, undefined otherwise
 	 */
 	getRecord(name: string): Promise<ARNSRecordResponse | undefined>;
+
+	/**
+	 * Retrieves paginated ARNS records
+	 * @param params - Optional pagination parameters (cursor and limit)
+	 * @returns Promise resolving to paginated ARNS records response
+	 */
+	getArNSRecords(params?: GetArNSRecordsParams): Promise<GetArNSRecordsResponse>;
 
 	/**
 	 * Gets the process ID for this client

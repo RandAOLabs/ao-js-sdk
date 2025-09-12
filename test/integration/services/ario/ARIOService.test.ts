@@ -19,4 +19,12 @@ describe("ARIOService Integration Tests", () => {
 		Logger.info(`Process ID for 'rng_randao': ${underscoreResult}`);
 		expect(underscoreResult).toBeDefined();
 	});
+
+	it("should get all ARNS records and print total count", async () => {
+		const allRecords = await service.getAllARNSRecords();
+		Logger.info(`Total number of ARNS names: ${allRecords.length}`);
+		expect(allRecords).toBeDefined();
+		expect(Array.isArray(allRecords)).toBe(true);
+		expect(allRecords.length).toBeGreaterThan(0);
+	}, 200000);
 });
