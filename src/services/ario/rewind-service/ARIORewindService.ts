@@ -76,12 +76,12 @@ export class ARIORewindService extends Service implements IARIORewindService {
 			undernameLimit: currentARNSRecord?.undernameLimit!,
 			expiryDate: new Date(currentARNSRecord?.endTimestamp!),
 			leaseDuration: this.calculateLeaseDuration(currentARNSRecord?.startTimestamp!, currentARNSRecord?.endTimestamp!)
-		}
-		return details
+		};
+		return details;
 	}
 
 	public async getEventHistory(fullName: string): Promise<IARNSEvent[]> {
-		return firstValueFrom(this.getEventHistory$(fullName).pipe(last()));
+		return firstValueFrom(this.getEventHistory$(fullName).pipe(last()));;
 	}
 
 	public getEventHistory$(fullName: string): Observable<IARNSEvent[]> {
@@ -137,7 +137,7 @@ export class ARIORewindService extends Service implements IARIORewindService {
 			mergeMap(async (event: IARNameEvent) => {
 				const buyEvent = event as IBuyNameEvent;
 				try {
-					return await buyEvent.getPurchasedProcessId();
+					return await buyEvent.getPurchasedProcessId()
 				} catch (error) {
 					return null;
 				}
@@ -179,11 +179,15 @@ export class ARIORewindService extends Service implements IARIORewindService {
 			this.antEventHistoryService.getRemovePrimaryNamesNoticeEvents(processId),
 			this.antEventHistoryService.getCreditNoticeEvents(processId),
 			this.antEventHistoryService.getDebitNoticeEvents(processId),
-			this.antEventHistoryService.getSetRecordEvents(processId)
+			this.antEventHistoryService.getSetRecordEvents(processId),
+			this.antEventHistoryService.getSetNameNoticeEvents(processId),
+			this.antEventHistoryService.getSetDescriptionNoticeEvents(processId),
+			this.antEventHistoryService.getSetTickerNoticeEvents(processId)
 		).pipe(
 			catchError(() => EMPTY)
 		);
 	}
+
 
 	/**
 	 * Creates a stream of ANT events from a stream of process IDs
@@ -222,7 +226,9 @@ export class ARIORewindService extends Service implements IARIORewindService {
 		);
 	}
 
-
+	/**
+	 * Sorts events by timestamp
+	 */
 	private sortEvents(allEvents: Observable<IARNSEvent[]>): Observable<IARNSEvent[]> {
 		return allEvents.pipe(
 			map(events =>

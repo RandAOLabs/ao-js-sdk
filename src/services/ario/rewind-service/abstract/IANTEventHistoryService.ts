@@ -1,5 +1,5 @@
 import { Observable } from "rxjs";
-import { IStateNoticeEvent, IReassignNameNoticeEvent, IReleaseNameNoticeEvent, IApprovePrimaryNameNoticeEvent, IRemovePrimaryNamesNoticeEvent, ICreditNoticeEvent, IDebitNoticeEvent, ISetRecordEvent } from "../events";
+import { IStateNoticeEvent, IReassignNameNoticeEvent, IReleaseNameNoticeEvent, IApprovePrimaryNameNoticeEvent, IRemovePrimaryNamesNoticeEvent, ICreditNoticeEvent, IDebitNoticeEvent, ISetRecordEvent, ISetNameNoticeEvent, ISetDescriptionNoticeEvent, ISetTickerNoticeEvent } from "../events";
 import { AllANTEventsType } from "./responseTypes";
 
 export interface IANTEventHistoryService {
@@ -12,5 +12,8 @@ export interface IANTEventHistoryService {
 	getCreditNoticeEvents(processId: string): Observable<ICreditNoticeEvent[]>;
 	getDebitNoticeEvents(processId: string): Observable<IDebitNoticeEvent[]>;
 	getSetRecordEvents(processId: string): Observable<ISetRecordEvent[]>;
+	getSetNameNoticeEvents(processId: string): Observable<ISetNameNoticeEvent[]>;
+	getSetDescriptionNoticeEvents(processId: string): Observable<ISetDescriptionNoticeEvent[]>;
+	getSetTickerNoticeEvents(processId: string): Observable<ISetTickerNoticeEvent[]>;
 	getAllEvents(processId: string): AllANTEventsType;
 }

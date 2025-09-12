@@ -1,2 +1,5 @@
 export * from "./StateNoticeTransactionData"
 export * from "./SetRecordNoticeTransactionData"
+export * from "./SetTickerNoticeTransactionData"
+export * from "./SetNameNoticeTransactionData"
+export * from "./SetDescriptionNoticeTransactionData"
