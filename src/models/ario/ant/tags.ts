@@ -61,6 +61,18 @@ export const ANT_NOTICE_TAGS = {
 		SET_RECORD_NOTICE: {
 			name: ACTION_TAG_NAME,
 			value: "Set-Record-Notice"
+		},
+		SET_NAME_NOTICE: {
+			name: ACTION_TAG_NAME,
+			value: "Set-Name-Notice"
+		},
+		SET_DESCRIPTION_NOTICE: {
+			name: ACTION_TAG_NAME,
+			value: "Set-Description-Notice"
+		},
+		SET_TICKER_NOTICE: {
+			name: ACTION_TAG_NAME,
+			value: "Set-Ticker-Notice"
 		}
 	} satisfies TagRecord<Record<string, Tag | ((value: string) => Tag)>>,
 	NAME: (value: string) => {
