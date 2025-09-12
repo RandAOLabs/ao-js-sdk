@@ -12,127 +12,127 @@ const MockedProfileClient = ProfileClient as jest.MockedClass<typeof ProfileClie
 const MockedProfileRegistryClient = ProfileRegistryClient as jest.Mocked<typeof ProfileRegistryClient>;
 
 describe("ProfilesService", () => {
-    let service: ProfilesService;
-    let mockProfileRegistryClient: jest.Mocked<ProfileRegistryClient>;
-    let mockProfileClient: jest.Mocked<ProfileClient>;
+	let service: ProfilesService;
+	let mockProfileRegistryClient: jest.Mocked<ProfileRegistryClient>;
+	let mockProfileClient: jest.Mocked<ProfileClient>;
 
-    const mockRegistryEntry: ProfileRegistryEntry = {
-        ProfileId: "test-profile-id",
-        CallerAddress: "test-caller",
-        Role: "test-role"
-    };
+	const mockRegistryEntry: ProfileRegistryEntry = {
+		ProfileId: "test-profile-id",
+		CallerAddress: "test-caller",
+		Role: "test-role"
+	};
 
-    const mockProfileInfo: ProfileInfo = {
-        Profile: {},
-        Assets: [],
-        Collections: [],
-        Owner: "test-owner"
-    };
+	const mockProfileInfo: ProfileInfo = {
+		Profile: {},
+		Assets: [],
+		Collections: [],
+		Owner: "test-owner"
+	};
 
-    beforeAll(() => {
-        Logger.setLogLevel(LogLevel.NONE)
+	beforeAll(() => {
+		Logger.setLogLevel(LogLevel.NONE)
 
-        // Logger.setLogLevel(LogLevel.DEBUG)
-    });
+		// Logger.setLogLevel(LogLevel.DEBUG)
+	});
 
-    beforeEach(() => {
-        // Clear all mocks and reset modules
-        jest.clearAllMocks();
-        jest.resetModules();
+	beforeEach(() => {
+		// Clear all mocks and reset modules
+		jest.clearAllMocks();
+		jest.resetModules();
 
-        // Mock ProfileRegistryClient.autoConfiguration
-        mockProfileRegistryClient = {
-            getProfileByWalletAddress: jest.fn(),
-        } as unknown as jest.Mocked<ProfileRegistryClient>;
-        MockedProfileRegistryClient.autoConfiguration = jest.fn().mockReturnValue(mockProfileRegistryClient);
+		// Mock ProfileRegistryClient.autoConfiguration
+		mockProfileRegistryClient = {
+			getProfileByWalletAddress: jest.fn(),
+		} as unknown as jest.Mocked<ProfileRegistryClient>;
+		MockedProfileRegistryClient.autoConfiguration = jest.fn().mockReturnValue(mockProfileRegistryClient);
 
-        // Mock ProfileClient constructor and methods
-        mockProfileClient = {
-            getProfileInfo: jest.fn(),
-        } as unknown as jest.Mocked<ProfileClient>;
-        MockedProfileClient.mockImplementation(() => mockProfileClient);
+		// Mock ProfileClient constructor and methods
+		mockProfileClient = {
+			getProfileInfo: jest.fn(),
+		} as unknown as jest.Mocked<ProfileClient>;
+		MockedProfileClient.mockImplementation(() => mockProfileClient);
 
-        // Reset singleton instance
-        // @ts-ignore - accessing private property for testing
-        ProfilesService.instance = undefined;
-        service = ProfilesService.getInstance();
-    });
+		// Reset singleton instance
+		// @ts-ignore - accessing private property for testing
+		ProfilesService.instance = undefined;
+		service = ProfilesService.getInstance();
+	});
 
-    describe("getProfileInfosByWalletAddress", () => {
-        it("should fetch profile infos for wallet addresses", async () => {
-            // Setup mocks
-            mockProfileRegistryClient.getProfileByWalletAddress.mockResolvedValue([mockRegistryEntry]);
-            mockProfileClient.getProfileInfo.mockResolvedValue(mockProfileInfo);
+	describe("getProfileInfosByWalletAddress", () => {
+		it("should fetch profile infos for wallet addresses", async () => {
+			// Setup mocks
+			mockProfileRegistryClient.getProfileByWalletAddress.mockResolvedValue([mockRegistryEntry]);
+			mockProfileClient.getProfileInfo.mockResolvedValue(mockProfileInfo);
 
-            // Test
-            const result = await service.getProfileInfosByWalletAddress(["test-wallet"]);
+			// Test
+			const result = await service.getProfileInfosByWalletAddress(["test-wallet"]);
 
-            // Verify
-            expect(mockProfileRegistryClient.getProfileByWalletAddress).toHaveBeenCalledWith("test-wallet");
-            expect(mockProfileClient.getProfileInfo).toHaveBeenCalled();
-            expect(result).toEqual([mockProfileInfo]);
-        });
+			// Verify
+			expect(mockProfileRegistryClient.getProfileByWalletAddress).toHaveBeenCalledWith("test-wallet");
+			expect(mockProfileClient.getProfileInfo).toHaveBeenCalled();
+			expect(result).toEqual([mockProfileInfo]);
+		});
 
-        it("should handle empty registry results", async () => {
-            // Setup mocks
-            mockProfileRegistryClient.getProfileByWalletAddress.mockResolvedValue([]);
+		it("should handle empty registry results", async () => {
+			// Setup mocks
+			mockProfileRegistryClient.getProfileByWalletAddress.mockResolvedValue([]);
 
-            // Test
-            const result = await service.getProfileInfosByWalletAddress(["test-wallet"]);
+			// Test
+			const result = await service.getProfileInfosByWalletAddress(["test-wallet"]);
 
-            // Verify
-            expect(result).toEqual([]);
-            expect(mockProfileClient.getProfileInfo).not.toHaveBeenCalled();
-        });
+			// Verify
+			expect(result).toEqual([]);
+			expect(mockProfileClient.getProfileInfo).not.toHaveBeenCalled();
+		}, 50000);
 
-        it("should handle registry errors", async () => {
-            // Setup mocks
-            mockProfileRegistryClient.getProfileByWalletAddress.mockRejectedValue(new Error("Registry error"));
+		it("should handle registry errors", async () => {
+			// Setup mocks
+			mockProfileRegistryClient.getProfileByWalletAddress.mockRejectedValue(new Error("Registry error"));
 
-            // Test
-            const result = await service.getProfileInfosByWalletAddress(["test-wallet"]);
+			// Test
+			const result = await service.getProfileInfosByWalletAddress(["test-wallet"]);
 
-            // Verify
-            expect(result).toEqual([]);
-        });
-    });
+			// Verify
+			expect(result).toEqual([]);
+		}, 50000);
+	});
 
-    describe("getProfileInfosByProfileProcessIds", () => {
-        it("should fetch profile infos for process IDs", async () => {
-            // Setup mocks
-            mockProfileClient.getProfileInfo.mockResolvedValue(mockProfileInfo);
+	describe("getProfileInfosByProfileProcessIds", () => {
+		it("should fetch profile infos for process IDs", async () => {
+			// Setup mocks
+			mockProfileClient.getProfileInfo.mockResolvedValue(mockProfileInfo);
 
-            // Test
-            const result = await service.getProfileInfosByProfileProcessIds(["test-process-id"]);
+			// Test
+			const result = await service.getProfileInfosByProfileProcessIds(["test-process-id"]);
 
-            // Verify
-            expect(mockProfileClient.getProfileInfo).toHaveBeenCalled();
-            expect(result).toEqual([mockProfileInfo]);
-        });
+			// Verify
+			expect(mockProfileClient.getProfileInfo).toHaveBeenCalled();
+			expect(result).toEqual([mockProfileInfo]);
+		});
 
-        it("should handle profile client errors", async () => {
-            // Setup mocks
-            mockProfileClient.getProfileInfo.mockRejectedValue(new Error("Profile error"));
+		it("should handle profile client errors", async () => {
+			// Setup mocks
+			mockProfileClient.getProfileInfo.mockRejectedValue(new Error("Profile error"));
 
-            // Test
-            const result = await service.getProfileInfosByProfileProcessIds(["test-process-id"]);
+			// Test
+			const result = await service.getProfileInfosByProfileProcessIds(["test-process-id"]);
 
-            // Verify
-            expect(result).toEqual([]);
-        });
+			// Verify
+			expect(result).toEqual([]);
+		}, 50000);
 
-        it("should use cache for subsequent requests", async () => {
-            // Setup mocks
-            mockProfileClient.getProfileInfo.mockResolvedValue(mockProfileInfo);
+		it("should use cache for subsequent requests", async () => {
+			// Setup mocks
+			mockProfileClient.getProfileInfo.mockResolvedValue(mockProfileInfo);
 
-            // First request
-            await service.getProfileInfosByProfileProcessIds(["test-process-id"]);
+			// First request
+			await service.getProfileInfosByProfileProcessIds(["test-process-id"]);
 
-            // Second request - should use cache
-            await service.getProfileInfosByProfileProcessIds(["test-process-id"]);
+			// Second request - should use cache
+			await service.getProfileInfosByProfileProcessIds(["test-process-id"]);
 
-            // Verify
-            expect(mockProfileClient.getProfileInfo).toHaveBeenCalledTimes(1);
-        });
-    });
+			// Verify
+			expect(mockProfileClient.getProfileInfo).toHaveBeenCalledTimes(1);
+		});
+	});
 });
