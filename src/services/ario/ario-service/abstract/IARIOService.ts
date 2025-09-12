@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import { ARNSRecordResponse } from '../../../../clients';
+import { ARNSRecordResponse, ARNSRecordWithName } from '../../../../clients';
 import { ANTState } from '../../../../models';
 import { DOMAIN } from '../domains';
 
@@ -47,4 +47,11 @@ export interface IARIOService {
 	getANTStateForARName(fullName: string): Promise<ANTState>
 
 	getARNSRecordForARName(fullName: string): Promise<ARNSRecordResponse | undefined>
+
+	/**
+	 * Gets all ARNS records by paginating through all available records.
+	 * Uses a while loop to continuously fetch records until all are retrieved.
+	 * @returns Promise resolving to an array of all ARNS records with names
+	 */
+	getAllARNSRecords(): Promise<ARNSRecordWithName[]>
 }
