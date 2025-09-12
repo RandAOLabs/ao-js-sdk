@@ -7,3 +7,4 @@
 export * from "./raffle"
 export * from "./sweepstakes"
 export * from "./faucet"
+export * from "./redemption"
