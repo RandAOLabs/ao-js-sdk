@@ -26,5 +26,5 @@ export const PROCESS_IDS = {
 	ARC,
 	PERMASWAP,
 	BOTEGA,
-	AOX
+	AOX,
 }
