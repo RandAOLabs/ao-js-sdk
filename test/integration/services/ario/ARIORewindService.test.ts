@@ -6,9 +6,9 @@ import { lastValueFrom, timeout } from "rxjs";
 describe("ARIORewindService Integration Tests", () => {
 	let service: IARIORewindService;
 
-	beforeEach(() => {
+	beforeEach(async () => {
 		Logger.setLogLevel(LogLevel.DEBUG)
-		service = ARIORewindService.autoConfiguration()
+		service = await ARIORewindService.autoConfiguration()
 		Logger.debug("0-20f2-f9j09jf9023jf0293jf2039fj2390fj3290jf")
 	});
 
@@ -32,6 +32,21 @@ describe("ARIORewindService Integration Tests", () => {
 			Logger.info(`Event ${i + 1}: ${result[i].toString()}`);
 		}
 	}, 500000);
+
+	describe("getRandomARNSName()", () => {
+		it("should return a random ARNS name and print it", async () => {
+			Logger.info("Testing getRandomARNSName method");
+
+			const randomName = await service.getRandomARNSName();
+
+			Logger.info(`Random ARNS name returned: ${randomName}`);
+			console.log(`Random ARNS name returned: ${randomName}`);
+
+			expect(randomName).toBeTruthy();
+			expect(typeof randomName).toBe('string');
+			expect(randomName.length).toBeGreaterThan(0);
+		}, 30000);
+	});
 
 	describe("getAntDetail()", () => {
 		it("return ant details", async () => {

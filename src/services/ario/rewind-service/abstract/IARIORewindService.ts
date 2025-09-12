@@ -36,4 +36,10 @@ export interface IARIORewindService extends IARNSInitialMainnetStateService {
 	 * @returns Promise of ARName Details
 	 */
 	getAntDetail(fullName: string): Promise<ARNameDetail>;
+
+	/**
+	 * Gets a random ARNS name using entropy as a random seed
+	 * @returns Promise of a random ARNS name string
+	 */
+	getRandomARNSName(): Promise<string>;
 }

@@ -1,6 +1,6 @@
 import { Observable, merge, EMPTY, firstValueFrom } from "rxjs";
 import { map, scan, startWith, shareReplay, mergeMap, catchError, distinct, filter, last } from "rxjs/operators";
-import { staticImplements, IAutoconfiguration, Logger, ServiceErrorHandler } from "../../../utils";
+import { staticImplements, IAutoconfiguration, Logger, ServiceErrorHandler, createSeededRandom } from "../../../utils";
 import { ARNameEventHistoryService } from "./ARNameEventHistoryService";
 import { ANTEventHistoryService } from "./ANTEventHistoryService";
 import { ARNSInitialMainnetStateService } from "../arns-initial-mainnet-state-service/ARNSInitialMainnetStateService";
@@ -14,6 +14,8 @@ import { IService, Service } from "../../common";
 import { IANTEventHistoryService, IARIORewindService, IARNameEventHistoryService } from "./abstract";
 import { IARNSInitialMainnetStateService, IMainnetInitialState } from "../arns-initial-mainnet-state-service";
 import { IANTEvent, IARNameEvent, IARNSEvent, IBuyNameEvent, IReassignNameEvent } from "./events";
+import { ARNSClient } from "../../../clients/ario/arns/ARNSClient";
+import { RandAOService, IRandAOService } from "../../randao";
 
 /**
  * @category ARIO
@@ -26,6 +28,8 @@ export class ARIORewindService extends Service implements IARIORewindService {
 		private readonly arnsInitialMainnetStateService: IARNSInitialMainnetStateService,
 		private readonly arioService: IARIOService,
 		private readonly entityService: IEntityService,
+		private readonly arnsClient: ARNSClient,
+		private readonly randAOService: IRandAOService,
 	) {
 		super();
 	}
@@ -36,13 +40,15 @@ export class ARIORewindService extends Service implements IARIORewindService {
 	 * @returns A pre-configured ARIORewindService instance
 	 * @constructor
 	 */
-	public static autoConfiguration(): IARIORewindService {
+	public static async autoConfiguration(): Promise<IARIORewindService> {
 		return new ARIORewindService(
 			ARNameEventHistoryService.autoConfiguration(),
 			ANTEventHistoryService.autoConfiguration(),
 			ARNSInitialMainnetStateService.autoConfiguration(),
 			ARIOService.getInstance(),
-			EntityService.autoConfiguration()
+			EntityService.autoConfiguration(),
+			ARNSClient.autoConfiguration(),
+			await RandAOService.autoConfiguration()
 		);
 	}
 
@@ -89,17 +95,17 @@ export class ARIORewindService extends Service implements IARIORewindService {
 		const arnsName = fullARNSName.getARNSName();
 
 		// Get shared event streams from the ARNameEventHistoryService
-		const allArnameEvents = this.arnEventHistoryService.getAllEvents(arnsName);
-		const arNameEventStream = this.createARNameEventStream(allArnameEvents);
+		const allArNameEvents = this.arnEventHistoryService.getAllEvents(arnsName);
+		const arNameEventStream = this.createARNameEventStream(allArNameEvents);
 
 		// Create a stream of process IDs from multiple sources
 		const processIdStream = merge(
 			// Current ARNS process ID
 			this.arioService.getAntProcessId(arnsName),
 			// Process IDs from buy name events
-			this.extractProcessIdsFromBuyEvents(allArnameEvents.buyNameEvents),
+			this.extractProcessIdsFromBuyEvents(allArNameEvents.buyNameEvents),
 			// Process IDs from reassign name events
-			this.extractProcessIdsFromReassignEvents(allArnameEvents.reassignNameEvents)
+			this.extractProcessIdsFromReassignEvents(allArNameEvents.reassignNameEvents)
 		).pipe(
 			// Filter out null values and trim
 			map((processId: string | null) => processId?.trim()),
@@ -112,6 +118,7 @@ export class ARIORewindService extends Service implements IARIORewindService {
 		const sortedEvents = this.sortEvents(filteredEvents);
 		return filteredEvents;
 	}
+
 
 	/**
 	 * Creates a stream of all ARName events using shared event streams (excluding mainnet initial state)
@@ -128,6 +135,7 @@ export class ARIORewindService extends Service implements IARIORewindService {
 		);
 	}
 
+
 	/**
 	 * Extracts purchased process IDs from buy name events
 	 */
@@ -137,13 +145,14 @@ export class ARIORewindService extends Service implements IARIORewindService {
 			mergeMap(async (event: IARNameEvent) => {
 				const buyEvent = event as IBuyNameEvent;
 				try {
-					return await buyEvent.getPurchasedProcessId()
+					return await buyEvent.getPurchasedProcessId();
 				} catch (error) {
 					return null;
 				}
 			})
 		);
 	}
+
 
 	/**
 	 * Extracts reassigned process IDs from reassign name events
@@ -162,6 +171,7 @@ export class ARIORewindService extends Service implements IARIORewindService {
 		);
 	}
 
+
 	/**
 	 * Fetches ANT events for a given process ID
 	 */
@@ -172,7 +182,7 @@ export class ARIORewindService extends Service implements IARIORewindService {
 
 		// Combine all ANT event types for the given process ID
 		return merge(
-			this.antEventHistoryService.getFilteredStateNoticeEvents(processId),//Filtered
+			this.antEventHistoryService.getFilteredStateNoticeEvents(processId), // Filtered
 			// this.antEventHistoryService.getReassignNameNoticeEvents(processId), // Removed in favor of reassign events from the registry
 			this.antEventHistoryService.getReleaseNameNoticeEvents(processId),
 			this.antEventHistoryService.getApprovePrimaryNameNoticeEvents(processId),
@@ -204,6 +214,7 @@ export class ARIORewindService extends Service implements IARIORewindService {
 		);
 	}
 
+
 	/**
 	 * Combines ARName and ANT event streams into a single aggregated stream
 	 */
@@ -226,6 +237,7 @@ export class ARIORewindService extends Service implements IARIORewindService {
 		);
 	}
 
+
 	/**
 	 * Sorts events by timestamp
 	 */
@@ -236,6 +248,7 @@ export class ARIORewindService extends Service implements IARIORewindService {
 			)
 		);
 	}
+
 
 	/**
 	 * Filters ReassignNameEvent events based on entity type:
@@ -276,6 +289,7 @@ export class ARIORewindService extends Service implements IARIORewindService {
 		);
 	}
 
+
 	/**
 	 * Type guard to check if an event is a ReassignNameEvent
 	 * @param event - The event to check
@@ -285,6 +299,7 @@ export class ARIORewindService extends Service implements IARIORewindService {
 		// Check if the event has the getReassignedProcessId method which is unique to IReassignNameEvent
 		return 'getReassignedProcessId' in event && typeof (event as any).getReassignedProcessId === 'function';
 	}
+
 
 	/**
 	 * Calculates the lease duration in years between start and end timestamps
@@ -309,5 +324,27 @@ export class ARIORewindService extends Service implements IARIORewindService {
 
 		// Handle singular vs plural
 		return years === 1 ? "1 year" : `${years} years`;
+	}
+
+	public async getRandomARNSName(): Promise<string> {
+		try {
+			// Run both async operations concurrently for better performance
+			const [entropy, arnsRecords] = await Promise.all([
+				this.randAOService.getMostRecentEntropy(),
+				this.arnsClient.getArNSRecords()
+			]);
+
+			if (!arnsRecords.items || arnsRecords.items.length === 0) {
+				throw new Error('No ARNS names found');
+			}
+
+			// Use the secure seeded random generator
+			const seededRandom = createSeededRandom(entropy);
+			return await seededRandom.selectRandom(arnsRecords.items.map(item => item.name));
+		} catch (error: unknown) {
+			const errorMessage = error instanceof Error ? error.message : String(error);
+			Logger.warn(`Failed to get random ARNS name: ${errorMessage}`);
+			throw error;
+		}
 	}
 }
