@@ -10,7 +10,7 @@ import { PROCESS_IDS } from "../../../constants/processIds";
 import { ProcessClientError } from "../../common/ProcessClientError";
 import { InputValidationError } from "../../bazar";
 import { ARNS_QUERY_TAGS } from "../../../models";
-import { ARNSRecordResponse } from "./abstract";
+import { ARNSRecordResponse, GetArNSRecordsResponse, GetArNSRecordsParams } from "./abstract";
 
 /**
  * Client for interacting with ARNS (Arweave Name Service) records.
@@ -55,6 +55,30 @@ export class ARNSClient extends DryRunCachingClient implements IARNSClient {
 			return ResultUtils.getFirstMessageDataJson<ARNSRecordResponse>(result);
 		} catch (error: any) {
 			throw new ProcessClientError(this, this.getRecord, { name }, error);
+		}
+	}
+
+	/**
+	 * Retrieves paginated ARNS records.
+	 * @param params - Optional pagination parameters (cursor and limit)
+	 * @returns Promise resolving to paginated ARNS records response
+	 */
+	public async getArNSRecords(params?: GetArNSRecordsParams): Promise<GetArNSRecordsResponse> {
+		try {
+			const tags = [ARNS_QUERY_TAGS.ACTION.PAGINATED_RECORDS];
+
+			if (params?.cursor) {
+				tags.push({ name: 'Cursor', value: params.cursor.toString() });
+			}
+
+			if (params?.limit) {
+				tags.push({ name: 'Limit', value: params.limit.toString() });
+			}
+
+			const result = await this.dryrun('', tags);
+			return ResultUtils.getFirstMessageDataJson<GetArNSRecordsResponse>(result);
+		} catch (error: any) {
+			throw new ProcessClientError(this, this.getArNSRecords, { params }, error);
 		}
 	}
 
