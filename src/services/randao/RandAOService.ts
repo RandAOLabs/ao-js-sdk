@@ -6,6 +6,7 @@ import { ProviderInfoAggregate } from "./abstract/types";
 import { ProviderInfoDataAggregator } from "./ProviderInfoDataAggregator";
 import { IAutoconfiguration } from "../../utils";
 import { staticImplements } from "../../utils/decorators";
+import { RandAODataService, IRandAODataService } from "./";
 
 /**
  * Service for handling RandAO operations
@@ -16,22 +17,24 @@ export class RandAOService implements IRandAOService {
 	constructor(
 		private readonly randomClient: RandomClient,
 		private readonly providerProfileClient: ProviderProfileClient,
+		private readonly randAODataService: IRandAODataService,
 	) { }
 
-	/** 
+	/**
 	 * {@inheritdoc IAutoconfiguration.autoConfiguration}
-	 * @see {@link IAutoconfiguration.autoConfiguration} 
+	 * @see {@link IAutoconfiguration.autoConfiguration}
 	 */
 	public static async autoConfiguration(): Promise<IRandAOService> {
 		return new RandAOService(
 			await RandomClient.autoConfiguration(),
-			ProviderProfileClient.autoConfiguration()
+			ProviderProfileClient.autoConfiguration(),
+			await RandAODataService.autoConfiguration()
 		);
 	}
 
 	async getAllProviderInfo(): Promise<ProviderInfoAggregate[]> {
 		// Initialize aggregator
-		const aggregator = await ProviderInfoDataAggregator.autoConfiguration()
+		const aggregator = await ProviderInfoDataAggregator.autoConfiguration();
 
 		// Create and process streams
 		const activityStream = from(this.randomClient.getAllProviderActivity()).pipe(
@@ -59,7 +62,7 @@ export class RandAOService implements IRandAOService {
 
 	async getAllInfoForProvider(providerId: string): Promise<ProviderInfoAggregate> {
 		// Initialize aggregator
-		const aggregator = await ProviderInfoDataAggregator.autoConfiguration()
+		const aggregator = await ProviderInfoDataAggregator.autoConfiguration();
 
 		let activityStream;
 		let infoStream;
@@ -84,12 +87,40 @@ export class RandAOService implements IRandAOService {
 				lastValueFrom(infoStream)
 			]);
 		} catch (error: any) {
-			return { providerId, owner: '' } // No Provider data found for this 
+			return { providerId, owner: '' } // No Provider data found for this
 		}
 
 		// Get the aggregated data for this specific provider
 		const allData = aggregator.getAggregatedData();
 
 		return allData[0]; // Return the first (and should be only) item
+	}
+
+	async getMostRecentEntropy(): Promise<string> {
+		try {
+			const mostRecentResponse = await this.randAODataService.getMostRecentRandomResponse();
+
+			if (!mostRecentResponse) {
+				throw new Error('No random response found');
+			}
+
+			// Extract entropy from the response data
+			// Assuming the entropy is in the data field or tags
+			if (mostRecentResponse.data && mostRecentResponse.data.entropy) {
+				return mostRecentResponse.data.entropy;
+			}
+
+			// Check if entropy is in tags
+			const entropyTag = mostRecentResponse.tags?.find((tag: any) => tag.name === 'Entropy' || tag.name === 'entropy');
+			if (entropyTag) {
+				return entropyTag.value;
+			}
+
+			// If no specific entropy field, use the transaction ID as fallback
+			return mostRecentResponse.id || '';
+		} catch (error: unknown) {
+			const errorMessage = error instanceof Error ? error.message : String(error);
+			throw new Error(`Failed to get most recent entropy: ${errorMessage}`);
+		}
 	}
 }
