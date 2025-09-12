@@ -70,4 +70,23 @@ export class RandAODataService implements IRandAODataService {
 		}
 	}
 
+	async getMostRecentRandomResponse(): Promise<any> {
+		try {
+			const randomProcessId = await this.arioservice.getProcessIdForDomain(DOMAIN.RANDAO_API);
+			const response = await this.messagesService.getLatestMessages({
+				tags: [
+					RANDOM_PROCESS_TAGS.ACTION.RESPONSE,
+					SYSTEM_TAGS.FROM_PROCESS(randomProcessId)
+				],
+				limit: 1
+			});
+
+			return response.messages.length > 0 ? response.messages[0] : null;
+		} catch (error: unknown) {
+			const errorMessage = error instanceof Error ? error.message : String(error);
+			Logger.warn(`Failed to get most recent random response: ${errorMessage}`);
+			throw error;
+		}
+	}
+
 }

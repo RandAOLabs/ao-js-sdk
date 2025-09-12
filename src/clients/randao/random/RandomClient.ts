@@ -5,7 +5,6 @@ import { Tags } from "../../../core";
 import { BaseClient } from "../../../core/ao/BaseClient";
 import ResultUtils from "../../../core/common/result-utils/ResultUtils";
 import { IAutoconfiguration, IDefaultBuilder, staticImplements } from "../../../utils";
-import { ARIOService } from "../../../services";
 import { TokenInterfacingClientBuilder } from "../../common/TokenInterfacingClientBuilder";
 import { DOMAIN } from "../../../services/ario/ario-service/domains";
 import { AO_CONFIGURATIONS } from "../../../core/ao/ao-client/configurations";
@@ -15,6 +14,7 @@ import TAGS from "./tags";
 import { RandomProcessError } from "./RandomProcessError";
 import { IClassBuilder } from "../../../utils/class-interfaces/IClientBuilder";
 import { DryRunResult, MessageResult } from "../../../core/ao/abstract";
+import { ARIOService } from "../../../services/ario/ario-service";
 
 /**
  * @category RandAO
@@ -282,7 +282,7 @@ export class RandomClient extends BaseClient implements IRandomClient {
 		}
 	}
 
-async getAllProviderActivity(): Promise<ProviderActivity[]> {
+	async getAllProviderActivity(): Promise<ProviderActivity[]> {
 		try {
 			const tags: Tags = [
 				TAGS.ACTION.GET_ALL_PROVIDERS
@@ -290,7 +290,7 @@ async getAllProviderActivity(): Promise<ProviderActivity[]> {
 			const result = await this.dryrun(undefined, tags);
 			this.checkResultForErrors(result)
 			const providers: ProviderActivity[] = ResultUtils.getFirstMessageDataJson(result);
-			
+
 			// Process each provider to ensure consistent property naming
 			return providers.map(provider => {
 				// If owner_id is not present, set it to provider_id (for backward compatibility)
@@ -313,12 +313,12 @@ async getAllProviderActivity(): Promise<ProviderActivity[]> {
 			const result = await this.dryrun(data, tags);
 			this.checkResultForErrors(result)
 			const provider: ProviderActivity = ResultUtils.getFirstMessageDataJson(result);
-			
+
 			// If owner_id is not present, set it to provider_id (for backward compatibility)
 			if (!provider.owner_id) {
 				provider.owner_id = provider.provider_id;
 			}
-			
+
 			return provider;
 		} catch (error: any) {
 			throw new ProcessClientError(this, this.getProviderActivity, { providerId }, error);
