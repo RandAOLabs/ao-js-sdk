@@ -1,6 +1,6 @@
 import { IARIOService } from './abstract/IARIOService';
 import { ANTClient } from '../../../clients/ario/ant';
-import { ARNSClient, ARNSRecordResponse, } from '../../../clients/ario/arns';
+import { ARNSClient, ARNSRecordResponse, ARNSRecordWithName } from '../../../clients/ario/arns';
 import { ICache, newCache } from '../../../utils/cache';
 import { DOMAIN_SEPARATOR, ARN_ROOT_NAME } from './constants';
 import { DOMAIN, DOMAIN_DEFAULTS } from './domains';
@@ -72,6 +72,40 @@ export class ARIOService implements IARIOService {
 		);
 	}
 
+	/**
+		* Gets all ARNS records by paginating through all available records.
+		* Uses a while loop to continuously fetch records until all are retrieved.
+		* @returns Promise resolving to an array of all ARNS records with names
+		*/
+	async getAllARNSRecords(): Promise<ARNSRecordWithName[]> {
+		const allRecords: ARNSRecordWithName[] = [];
+		let cursor: string | undefined = undefined;
+		let hasMore = true;
+
+		while (hasMore) {
+			try {
+				const response = await this.arnsClient.getArNSRecords({
+					cursor,
+					limit: 100 // Use a reasonable batch size
+				});
+
+				// Add the fetched items to our collection
+				allRecords.push(...response.items);
+
+				// Update pagination state
+				hasMore = response.hasMore;
+				cursor = response.nextCursor;
+
+				Logger.debug(`Fetched ${response.items.length} ARNS records, total so far: ${allRecords.length}/${response.totalItems}`);
+			} catch (error) {
+				Logger.error('Error fetching ARNS records batch:', error);
+				throw error;
+			}
+		}
+
+		Logger.info(`Successfully retrieved all ${allRecords.length} ARNS records`);
+		return allRecords;
+	}
 
 	/**
 	 * Gets the process ID for a given domain.
