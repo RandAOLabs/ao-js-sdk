@@ -1,17 +1,19 @@
-import { IFLPDataSercvice } from './abstract/IFLPDataService';
+import { IFLPDataService } from './abstract/IFLPDataService';
 import { Logger } from '../../../utils/logger/logger';
 import { ArweaveDataService, IArweaveDataService } from '../../../core';
 import { IMessagesService } from '../../messages/message-service/abstract/IMessagesService';
 import { MessagesService } from '../../messages/message-service/MessagesService';
 import { Distribution } from './abstract/responses';
 import { FLP_TAGS } from './tags';
+import { ArweaveDataCachingService } from '../../../core/arweave/ArweaveDataCachingService';
+import { CachingMessageService } from '../../messages/message-service/CachingMessageService';
 
 
 /**
  * @category Autonomous Finance
  * @inheritdoc
  */
-export class FLPDataService implements IFLPDataSercvice {
+export class FLPDataService implements IFLPDataService {
 	constructor(
 		private readonly messagesService: IMessagesService,
 		private readonly arweaveDataService: IArweaveDataService,
@@ -23,10 +25,10 @@ export class FLPDataService implements IFLPDataSercvice {
 	 * @param processId The process ID for the FLP
 	 * @returns A pre-configured FLPDataService instance
 	 */
-	public static autoConfiguration(processId: string): IFLPDataSercvice {
+	public static autoConfiguration(processId: string): IFLPDataService {
 		return new FLPDataService(
-			MessagesService.autoConfiguration(),
-			ArweaveDataService.autoConfiguration(),
+			CachingMessageService.autoConfiguration(),
+			ArweaveDataCachingService.autoConfiguration(),
 			processId
 		);
 	}
@@ -99,4 +101,10 @@ export class FLPDataService implements IFLPDataSercvice {
 		return distributions.find(dist => dist.address === address) || null;
 	}
 
+	public async getNumDelegators(): Promise<number> {
+		const distributions = await this.getMostRecentDistributions();
+		return distributions.length;
+	}
+
 }
+
