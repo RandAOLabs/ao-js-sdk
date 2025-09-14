@@ -1,4 +1,4 @@
-import { ArweaveGQLResponse } from "./abstract/types";
+import { ArweaveGQLResponse, ArweaveTransaction } from "./abstract/types";
 import { ArweaveDataService } from "./ArweaveDataService";
 import { ICache, newCache } from "../../utils/cache";
 import { ICacheConfig } from "../../utils/cache/abstract";
@@ -14,10 +14,12 @@ import { getArweaveDotNetHttpClient } from "./http-nodes/arweave-dot-net-http-cl
 @staticImplements<IAutoconfiguration>()
 export class ArweaveDataCachingService extends ArweaveDataService implements IArweaveDataCachingService {
 	private cache: ICache<string, ArweaveGQLResponse>;
+	private transactionCache: ICache<string, ArweaveTransaction>;
 
 	private constructor(_arweave: IArweaveGraphQLNodeClient, _httpClient: IHttpClient, cacheConfig?: ICacheConfig) {
 		super(_arweave, _httpClient);
 		this.cache = newCache<string, ArweaveGQLResponse>(cacheConfig);
+		this.transactionCache = newCache<string, ArweaveTransaction>(cacheConfig);
 	}
 
 	public static autoConfiguration(): IArweaveDataCachingService {
@@ -28,6 +30,7 @@ export class ArweaveDataCachingService extends ArweaveDataService implements IAr
 
 	public clearCache(): void {
 		this.cache.clear();
+		this.transactionCache.clear();
 	}
 
 	/** @override */
@@ -44,9 +47,27 @@ export class ArweaveDataCachingService extends ArweaveDataService implements IAr
 		return result;
 	}
 
+	/** @override */
+	public async getTransactionById(id: string): Promise<ArweaveTransaction> {
+		const cacheKey = this.createTransactionCacheKey(id);
+		const cachedResult = this.transactionCache.get(cacheKey);
+
+		if (cachedResult) {
+			return cachedResult;
+		}
+
+		const result = await super.getTransactionById(id);
+		this.transactionCache.set(cacheKey, result);
+		return result;
+	}
+
 	/* Private */
 	private createCacheKey(query: string): string {
 		return JSON.stringify({ query });
+	}
+
+	private createTransactionCacheKey(id: string): string {
+		return `transaction:${id}`;
 	}
 	/* Private */
 }

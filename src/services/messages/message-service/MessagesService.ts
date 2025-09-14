@@ -25,6 +25,15 @@ export class MessagesService implements IMessagesService {
 		)
 	}
 
+	/**
+	 * Creates a MessagesService instance with a custom ArweaveDataService
+	 * @param arweaveDataService The custom ArweaveDataService to use
+	 * @returns A MessagesService instance
+	 */
+	public static withArweaveDataService(arweaveDataService: IArweaveDataService): IMessagesService {
+		return new MessagesService(arweaveDataService);
+	}
+
 	private async getAllMessagesPaginated(params: GetLatestMessagesParams): Promise<ArweaveTransaction[]> {
 		const allMessages: ArweaveTransaction[] = [];
 		let currentCursor: string | undefined;
@@ -59,7 +68,7 @@ export class MessagesService implements IMessagesService {
 
 			// Add recipient tag if specified
 			if (params.recipient) {
-				builder.recipient(params.recipient)
+				builder.recipient(params.recipient);
 			}
 
 			if (params.cursor) {
@@ -133,7 +142,7 @@ export class MessagesService implements IMessagesService {
 
 			// Add recipient tag if specified
 			if (params.recipient) {
-				builder.recipient(params.recipient)
+				builder.recipient(params.recipient);
 			}
 
 			if (params.owner) {
@@ -154,12 +163,12 @@ export class MessagesService implements IMessagesService {
 				.id(id)
 				.tags(DEFAULT_AO_TAGS)
 				.minIngestedAt(AO_MIN_INGESTED_AT)
-				.withAllFields()
-			const transaction = await this.arweaveDataService.query(builder)
-			return transaction.data.transactions.edges[0].node
+				.withAllFields();
+			const transaction = await this.arweaveDataService.query(builder);
+			return transaction.data.transactions.edges[0].node;
 		} catch (error: any) {
 			Logger.warn(`Error retrieving message ${id}: ${error.message}`);
-			return undefined
+			return undefined;
 		}
 	}
 
@@ -214,5 +223,6 @@ export class MessagesService implements IMessagesService {
 
 		return allMessages;
 	}
+
 
 }

@@ -5,7 +5,7 @@ import { Distribution } from "./responses";
 /**
  * Service for retrieving data about an FLP.
  */
-export interface IFLPDataSercvice {
+export interface IFLPDataService {
 	/**
 	 * Gets the most recent distributions
 	 * @returns Promise resolving to the most recent distributions
@@ -18,4 +18,10 @@ export interface IFLPDataSercvice {
 	 * @returns Promise resolving to the user's most recent distribution, or null if not found
 	 */
 	getUsersMostRecentDistributions(address: string): Promise<Distribution | null>;
+
+	/**
+	 * Gets the number of delegators
+	 * @returns Promise resolving to the number of delegators based on the most recent distributions
+	 */
+	getNumDelegators(): Promise<number>;
 }
