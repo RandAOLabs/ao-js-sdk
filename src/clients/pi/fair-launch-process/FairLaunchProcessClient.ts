@@ -7,6 +7,7 @@ import { FairLaunchInfo } from "./types";
 import { ProcessClientError } from "../../common/ProcessClientError";
 import TagUtils from "../../../core/common/TagUtils";
 import { DryRunResult } from "../../../core/ao/abstract";
+import { Logger } from "../../../utils/logger";
 
 
 /**
@@ -18,7 +19,7 @@ export class FairLaunchProcessClient extends BaseClient implements IFairLaunchPr
 	public static from(processId: string): FairLaunchProcessClient {
 		return new ClientBuilder(FairLaunchProcessClient)
 			.withProcessId(processId)
-			.withAOConfig(AO_CONFIGURATIONS.RANDAO)
+			.withAOConfig(AO_CONFIGURATIONS.FORWARD_RESEARCH)
 			.build()
 	}
 
@@ -40,12 +41,117 @@ export class FairLaunchProcessClient extends BaseClient implements IFairLaunchPr
 			throw new ProcessClientError(this, this.getInfo, {}, error);
 		}
 	}
+
 	/**
- * Extracts Fair Launch Process information from tags
- * @param result The DryRun result containing tags
- * @returns FairLaunchInfo object with extracted tag values
- * @private
- */
+	 * Gets the withdrawable AO amount for a specific time.
+	 * @param time Optional timestamp to check withdrawable amount at (defaults to current time)
+	 * @returns Promise resolving to withdrawable AO amount as string
+	 */
+	public async getWithdrawableAo(time?: number): Promise<string> {
+		try {
+			const tags = [
+				{ name: "Action", value: "Get-Withdrawable-AO" }
+			];
+
+			if (time !== undefined) {
+				tags.push({ name: "Time", value: time.toString() });
+			}
+
+			const result = await this.dryrun('', tags);
+
+			if (!result.Messages || result.Messages.length === 0) {
+				throw new Error("No messages found in result");
+			}
+
+			const withdrawableAmount = result.Messages[0].Data || "0";
+			Logger.debug(`getWithdrawableAo result: ${withdrawableAmount}`, { time, result });
+
+			return withdrawableAmount;
+
+		} catch (error: any) {
+			throw new ProcessClientError(this, this.getWithdrawableAo, { time }, error);
+		}
+	}
+
+	/**
+	 * Gets the withdrawable PI amount for a specific time.
+	 * @param time Optional timestamp to check withdrawable amount at (defaults to current time)
+	 * @returns Promise resolving to withdrawable PI amount as string
+	 */
+	public async getWithdrawablePi(time?: number): Promise<string> {
+		try {
+			const tags = [
+				{ name: "Action", value: "Get-Withdrawable-PI" }
+			];
+
+			if (time !== undefined) {
+				tags.push({ name: "Time", value: time.toString() });
+			}
+
+			const result = await this.dryrun('', tags);
+
+			if (!result.Messages || result.Messages.length === 0) {
+				throw new Error("No messages found in result");
+			}
+
+			const withdrawableAmount = result.Messages[0].Data || "0";
+			Logger.debug(`getWithdrawablePi result: ${withdrawableAmount}`, { time, result });
+
+			return withdrawableAmount;
+
+		} catch (error: any) {
+			throw new ProcessClientError(this, this.getWithdrawablePi, { time }, error);
+		}
+	}
+
+	/**
+	 * Withdraws available AO tokens to the treasury.
+	 * Only the deployer can perform this action.
+	 * @returns Promise resolving to the withdrawal result
+	 */
+	public async withdrawAo(): Promise<any> {
+		try {
+			const tags = [
+				{ name: "Action", value: "Withdraw-AO" }
+			];
+
+			const result = await this.messageResult('', tags);
+			Logger.debug(`withdrawAo result:`, result);
+
+			return result;
+
+		} catch (error: any) {
+			throw new ProcessClientError(this, this.withdrawAo, {}, error);
+		}
+	}
+
+	/**
+	 * Withdraws available PI tokens to the treasury.
+	 * Only the deployer can perform this action.
+	 * @returns Promise resolving to the withdrawal result
+	 */
+	public async withdrawPi(): Promise<any> {
+		try {
+			const tags = [
+				{ name: "Action", value: "Withdraw-PI" }
+			];
+
+			const result = await this.messageResult('', tags);
+			Logger.debug(`withdrawPi result:`, result);
+
+			return result;
+
+		} catch (error: any) {
+			throw new ProcessClientError(this, this.withdrawPi, {}, error);
+		}
+	}
+
+	/**
+	 * Extracts Fair Launch Process information from tags
+	 * @param result The DryRun result containing tags
+	 * @returns FairLaunchInfo object with extracted tag values
+	 * @private
+	 */
 	private extractFairLaunchInfoFromTags(result: DryRunResult): FairLaunchInfo {
 		if (!result.Messages || result.Messages.length === 0) {
 			throw new Error("No messages found in result");
