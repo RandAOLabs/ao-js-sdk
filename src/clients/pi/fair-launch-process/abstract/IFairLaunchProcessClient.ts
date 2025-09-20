@@ -9,4 +9,32 @@ export interface IFairLaunchProcessClient {
 	 * @returns Promise resolving to a DryRunResult with process information
 	 */
 	getInfo(): Promise<FairLaunchInfo>;
+
+	/**
+	 * Gets the withdrawable AO amount for a specific time.
+	 * @param time Optional timestamp to check withdrawable amount at (defaults to current time)
+	 * @returns Promise resolving to withdrawable AO amount as string
+	 */
+	getWithdrawableAo(time?: number): Promise<string>;
+
+	/**
+	 * Gets the withdrawable PI amount for a specific time.
+	 * @param time Optional timestamp to check withdrawable amount at (defaults to current time)
+	 * @returns Promise resolving to withdrawable PI amount as string
+	 */
+	getWithdrawablePi(time?: number): Promise<string>;
+
+	/**
+	 * Withdraws available AO tokens to the treasury.
+	 * Only the deployer can perform this action.
+	 * @returns Promise resolving to the withdrawal result
+	 */
+	withdrawAo(): Promise<any>;
+
+	/**
+	 * Withdraws available PI tokens to the treasury.
+	 * Only the deployer can perform this action.
+	 * @returns Promise resolving to the withdrawal result
+	 */
+	withdrawPi(): Promise<any>;
 }
