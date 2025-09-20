@@ -25,8 +25,10 @@ pnpm-debug.log*
 
 # Wallet
 wallet.json
+real-wallet.json
 /test-wallets
 deleteme.json
+deleteme.lua
 
 
 # Created by https://www.toptal.com/developers/gitignore/api/macos,windows
