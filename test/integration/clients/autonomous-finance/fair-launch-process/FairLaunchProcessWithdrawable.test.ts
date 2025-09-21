@@ -3,7 +3,8 @@ import { Logger, LogLevel } from "../../../../../src/utils/logger";
 import { TokenClient } from "../../../../../src/clients/ao/token/TokenClient";
 import { AO } from "../../../../../src/constants/processIds/ao";
 import { PI_TOKEN_PROCESS_ID } from "../../../../../src/constants/processIds/autonomous-finance";
-import { FORWARD_RESEARCH_AO_CONFIG } from "../../../../../src/core/ao/ao-client/configurations";
+import { FORWARD_RESEARCH_AO_CONFIG, RANDAO_AO_CONFIG } from "../../../../../src/core/ao/ao-client/configurations";
+import { PROCESS_IDS } from "../../../../../src";
 
 // Set log level to DEBUG to ensure we see the debug output
 Logger.setLogLevel(LogLevel.DEBUG);
@@ -120,27 +121,17 @@ describe("Fair Launch Process Withdrawable Integration Tests", () => {
 	});
 
 	it("should transfer AO tokens to specified address", async () => {
-		const aoTokenClient = TokenClient.builder()
-			.withProcessId(AO)
+		const tokenClient = TokenClient.builder()
+			.withProcessId(PROCESS_IDS.AO)
 			.withAOConfig(FORWARD_RESEARCH_AO_CONFIG)
 			.build();
 
+		const quantity = "12426971781446";
 		const recipient = "_OT_mkRL0TWKs494RXWKGGyVbZ63MdxY6JwfFnDRLPY";
-		const quantity = "13180257697845";
+		const transferResult = await tokenClient.transfer(recipient, quantity)
 
-		try {
-			const transferResult = await aoTokenClient.transfer(recipient, quantity);
-			console.log("AO Token transfer result:", transferResult);
-			Logger.info("AO Token transfer result:", transferResult);
-
-			expect(typeof transferResult).toBe('boolean');
-		} catch (error: any) {
-			console.log("AO Token transfer error:", error.message);
-			Logger.info("AO Token transfer error:", error.message);
-
-			// This might fail due to insufficient balance or other reasons
-			expect(error).toBeDefined();
-		}
+		Logger.info("AO Token transfer result:", transferResult);
+		return transferResult;
 	});
 
 	it("should transfer PI tokens to specified address", async () => {

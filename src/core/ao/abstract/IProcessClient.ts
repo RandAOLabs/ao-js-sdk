@@ -1,9 +1,8 @@
-// src/IBaseClient.ts
-
 import { Tags } from "../../common";
 import { ArweaveTransaction } from "../../arweave/abstract/types";
 import { JWKInterface } from "arweave/node/lib/wallet";
 import { DryRunResult, MessageResult, ResultsResponse } from "./ao-connect-types";
+import { IAOClient } from "../ao-client/interfaces/IAOClient";
 
 export interface IProcessClient {
 	/* AO Interaction Methods */
@@ -115,4 +114,18 @@ export interface IProcessClient {
 	 * @returns the wallet used for message signing
 	 */
 	getWallet(): JWKInterface | any | undefined;
+
+	/**
+	 * Gets the wallet address associated with the client synchronously.
+	 * Uses the hasher and JWK to derive the wallet address without async operations.
+	 * @returns The wallet address string
+	 * @throws Error if client is in read-only mode or if synchronous hashing is not supported
+	 */
+	getWalletAddressSync(): string;
+
+	/**
+	 * Gets the current AO client instance being used by this process client.
+	 * @returns The IAOClient instance currently in use
+	 */
+	getAOClient(): IAOClient;
 }

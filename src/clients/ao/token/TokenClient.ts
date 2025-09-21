@@ -89,6 +89,10 @@ export class TokenClient extends BaseClient implements ITokenClient, IGrantToken
 			}
 			const result = await this.messageResult('', tags)
 			const messageData: string = ResultUtils.getFirstMessageDataString(result)
+			const error = ResultUtils.getTagValue(result.Messages[0].Tags, "Error");
+			if (error === "Insufficient Balance!") {
+				throw new Error("Insufficient Balance for transfer");
+			}
 			return messageData.includes(TRANSFER_SUCCESS_MESSAGE);
 		} catch (error: any) {
 			throw new ProcessClientError(this, this.transfer, { recipient, quantity, forwardedTags }, error);
