@@ -20,7 +20,7 @@ function getMCPServerPath() {
 const CONFIG = {
 	distDir: path.join(process.cwd(), 'dist'),
 	outputDir: getMCPServerPath(),
-	packageName: 'ao-js-sdk-mcp-server',
+	packageName: 'ao-js-sdk-mcp',
 	serverName: 'ao-js-sdk',
 	docsUrl: 'https://randaolabs.github.io/ao-js-sdk'
 };
@@ -259,7 +259,7 @@ import { z } from "zod";
 
 const server = new McpServer({
   name: "${CONFIG.serverName}",
-  version: "1.0.0",
+  version: "0.0.0",
   description: "Auto-generated MCP server providing code assistance for the AO JS SDK"
 });
 
@@ -556,9 +556,7 @@ Auto-generated MCP server providing code assistance for the AO JS SDK.
 ## Installation
 
 \`\`\`bash
-cd "${CONFIG.outputDir}"
-npm install
-npm run build
+npm install -g ao-js-sdk-mcp
 \`\`\`
 
 ## Usage
