@@ -16,7 +16,7 @@ The AO JS SDK MCP server provides AI models with expert knowledge of the AO Java
 
 ```bash
 # Install the MCP server globally
-npm install -g ao-js-sdk-mcp-server
+npm install -g ao-js-sdk-mcp
 
 # The server will be automatically configured for most MCP clients
 ```
@@ -185,7 +185,7 @@ cd ao-js-sdk
 npm run setup:mcp
 
 # Or reinstall from npm
-npm install -g ao-js-sdk-mcp-server
+npm install -g ao-js-sdk-mcp
 ```
 
 ### Tools Not Available
