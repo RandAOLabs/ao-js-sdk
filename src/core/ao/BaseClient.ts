@@ -1,4 +1,4 @@
-import { IProcessClient } from './abstract/IBaseClient';
+import { IProcessClient } from './abstract/IProcessClient';
 import { BaseClientConfig } from './configuration/BaseClientConfig';
 import { mergeLists } from '../../utils/lists';
 import { DEFAULT_TAGS } from './constants';
@@ -15,6 +15,7 @@ import { DryRunResult, MessageResult, ResultsResponse, SortOrder } from './abstr
 import ResultUtils from '../common/result-utils/ResultUtils';
 import { IArweaveDataCachingService } from '../arweave/abstract/IArweaveDataCachingService';
 import { IAOClient } from './ao-client/interfaces/IAOClient';
+import { EnvironmentSha256Hasher, ByteUtils } from '../../utils/crypto';
 
 /**
  * Base client implementation for AO Process interactions.
@@ -154,6 +155,44 @@ export class BaseClient implements IProcessClient {
 
 	public getWallet(): JWKInterface | any | undefined {
 		return this.ao.getWallet();
+	}
+
+	public getAOClient(): IAOClient {
+		return this.ao;
+	}
+
+	public getWalletAddressSync(): string {
+		if (this.isReadOnly()) {
+			throw new AOReadOnlyClientError(this.ao, this.getWalletAddressSync, undefined);
+		}
+
+		const wallet = this.getWallet();
+		if (!wallet || !wallet.n) {
+			throw new Error('No wallet available or invalid JWK format');
+		}
+
+		// Create hasher instance
+		const hasher = EnvironmentSha256Hasher.autoConfiguration();
+
+		// Check if synchronous hashing is supported
+		if (!hasher.supportsSynchronousHashing()) {
+			throw new Error('Synchronous hashing is not supported in the current environment. Use getCallingWalletAddress() instead.');
+		}
+
+		try {
+			// Convert base64url modulus to bytes using ByteUtils
+			const modulusBytes = ByteUtils.base64UrlToBytes(wallet.n);
+
+			// Compute SHA-256 hash of the modulus
+			const hashBytes = hasher.sha256BytesSync(modulusBytes);
+
+			// Convert hash to base64url for the address using ByteUtils
+			const address = ByteUtils.bytesToBase64Url(hashBytes);
+
+			return address;
+		} catch (error) {
+			throw new Error(`Failed to derive wallet address synchronously: ${error instanceof Error ? error.message : 'Unknown error'}`);
+		}
 	}
 
 	/* Public Utility */
