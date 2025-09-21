@@ -1,0 +1,1 @@
+export { IHasher } from './IHasher';
