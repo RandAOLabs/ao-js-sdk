@@ -52,7 +52,7 @@ jobs:
           cd ~/.mcp/servers/ao-js-sdk-server
           
           # Update package name for npm publishing
-          jq '.name = "ao-js-sdk-mcp-server"' package.json > package.json.tmp
+          jq '.name = "ao-js-sdk-mcp"' package.json > package.json.tmp
           mv package.json.tmp package.json
           
           # Use the same version as the main SDK
@@ -71,4 +71,4 @@ jobs:
           echo "- SDK Version: $(jq -r '.version' package.json)"
           echo "- MCP Tools: 390+"
           echo "- Clients Processed: 67"
-          echo "- Package: ao-js-sdk-mcp-server"
+          echo "- Package: ao-js-sdk-mcp"
