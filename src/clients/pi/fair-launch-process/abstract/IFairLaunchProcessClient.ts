@@ -1,4 +1,4 @@
-import { FairLaunchInfo } from "../types";
+import { FairLaunchInfo, ProceedsData } from "../types";
 
 /**
  * Interface for interacting with a Fair Launch Process.
@@ -37,4 +37,16 @@ export interface IFairLaunchProcessClient {
 	 * @returns Promise resolving to the withdrawal result
 	 */
 	withdrawPi(): Promise<any>;
+
+	/**
+	 * Gets AO proceeds data for all yield cycles.
+	 * @returns Promise resolving to proceeds data indexed by yield cycle
+	 */
+	getAoProceeds(): Promise<ProceedsData>;
+
+	/**
+	 * Gets PI proceeds data for all yield cycles.
+	 * @returns Promise resolving to proceeds data indexed by yield cycle
+	 */
+	getPiProceeds(): Promise<ProceedsData>;
 }
