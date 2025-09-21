@@ -11,22 +11,22 @@ jobs:
   generate-mcp-server:
     name: Generate MCP Server
     runs-on: ubuntu-latest
-
+    
     permissions:
       contents: write
       packages: write
-
+      
     steps:
       # Checkout the repository
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       # Set up Node.js environment
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 22
-          registry-url: "https://registry.npmjs.org"
+          registry-url: 'https://registry.npmjs.org'
 
       # Install dependencies
       - name: Install dependencies
@@ -53,7 +53,7 @@ jobs:
 
       # Upload MCP server as artifact
       - name: Upload MCP Server Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ao-js-sdk-mcp-server
           path: ao-js-sdk-mcp-server.tar.gz
@@ -66,30 +66,29 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           cd ~/.mcp/servers/ao-js-sdk-server
-
+          
           # Update package name for npm publishing
           jq '.name = "ao-js-sdk-mcp-server"' package.json > package.json.tmp
           mv package.json.tmp package.json
-
+          
           # Use the same version as the main SDK
           VERSION=$(jq -r '.version' $GITHUB_WORKSPACE/package.json)
           jq ".version = \"$VERSION\"" package.json > package.json.tmp
           mv package.json.tmp package.json
-
+          
           echo "📦 Publishing MCP server v$VERSION to npm..."
           npm publish --access public
 
-      # Create release artifact (if this is a release)
+      # Add MCP server to release assets (if this is a release)
       - name: Add MCP Server to Release
         if: github.event_name == 'release'
-        uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./ao-js-sdk-mcp-server.tar.gz
-          asset_name: ao-js-sdk-mcp-server-${{ github.event.release.tag_name }}.tar.gz
-          asset_content_type: application/gzip
+        run: |
+          gh release upload ${{ github.event.release.tag_name }} \
+            ao-js-sdk-mcp-server.tar.gz \
+            --clobber \
+            --repo ${{ github.repository }}
 
       # Generate installation instructions
       - name: Generate Installation Instructions
@@ -97,25 +96,25 @@ jobs:
         run: |
           cat > mcp-installation.md << 'EOF'
           # AO JS SDK MCP Server Installation
-
+          
           ## Quick Install from npm
           ```bash
           npm install -g ao-js-sdk-mcp-server@${{ github.event.release.tag_name }}
           ```
-
+          
           ## Manual Install from Release
           ```bash
           # Download and extract
-          wget https://github.com/RandAOLabs/ao-js-sdk/releases/download/${{ github.event.release.tag_name }}/ao-js-sdk-mcp-server-${{ github.event.release.tag_name }}.tar.gz
-          tar -xzf ao-js-sdk-mcp-server-${{ github.event.release.tag_name }}.tar.gz
+          wget https://github.com/RandAOLabs/ao-js-sdk/releases/download/${{ github.event.release.tag_name }}/ao-js-sdk-mcp-server.tar.gz
+          tar -xzf ao-js-sdk-mcp-server.tar.gz
           mv ao-js-sdk-server ~/.mcp/servers/
-
+          
           # Install dependencies and build
           cd ~/.mcp/servers/ao-js-sdk-server
           npm install
           npm run build
           ```
-
+          
           ## Configuration
           Add to your MCP client settings:
           ```json
@@ -128,7 +127,7 @@ jobs:
             }
           }
           ```
-
+          
           **Generated from SDK v${{ github.event.release.tag_name }}**
           **Total tools available: 390+**
           EOF
