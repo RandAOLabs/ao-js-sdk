@@ -11,11 +11,40 @@
 </p>
 
 A modular TypeScript Process client library for AO Process interactions. This library simplifies interactions with various AO processes.
+
 ---
+
 ## Install
 ```bash
 npm i ao-js-sdk
 ```
+
+## MCP Server for AI Code Assistance
+
+**Use this SDK with AI models like Claude, GPT, or any MCP-compatible LLM for intelligent code generation!**
+
+### Quick Setup
+```bash
+# Clone and setup MCP server
+git clone https://github.com/RandAOLabs/ao-js-sdk.git
+cd ao-js-sdk
+npm install
+npm run setup:mcp
+```
+
+### What You Get
+- **390+ AI Tools** covering every SDK method
+- **Auto-generated code examples** for all AO operations  
+- **Real-time documentation** that stays in sync with the SDK
+- **Cross-platform support** (Windows, macOS, Linux)
+- **Zero maintenance** - updates automatically
+
+### Documentation
+- 📖 **[Using the MCP Server](./docs/using-mcp-server.md)** - Setup and usage guide
+- 🔧 **[MCP Generation System](./docs/mcp-server-generation.md)** - Technical details
+- 🤖 **Ask your AI**: "How do I transfer AO tokens?" and get instant, accurate code!
+
+---
 
 ## Environment
 ### Node

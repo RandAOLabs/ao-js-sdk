@@ -1,6 +1,6 @@
 {
 	"name": "ao-js-sdk",
-	"version": "0.2.49",
+	"version": "0.3.0",
 	"description": "A modular TypeScript API client library for AO Process interactions",
 	"main": "dist/src/index.js",
 	"types": "dist/src/index.d.ts",
@@ -12,7 +12,11 @@
 	],
 	"scripts": {
 		"build": "tsc && tsc-alias",
-		"postbuild": "node scripts/inject-doc-links.js",
+		"postbuild": "node scripts/inject-doc-links.js && npm run generate:mcp",
+		"generate:mcp": "node scripts/generate-mcp-server.js",
+		"postgenerate:mcp": "node scripts/build-mcp-server.js",
+		"configure:mcp": "node scripts/configure-mcp.js",
+		"setup:mcp": "npm run generate:mcp && npm run configure:mcp",
 		"prepare": "npm run build",
 		"test:unit": "ts-node -P test/scripts/tsconfig.json test/scripts/run-tests.ts unit",
 		"test:integration": "ts-node -P test/scripts/tsconfig.json test/scripts/run-tests.ts integration",
