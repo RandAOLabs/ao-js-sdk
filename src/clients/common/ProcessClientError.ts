@@ -8,7 +8,15 @@ export class ProcessClientError<T extends IProcessClient, P = any> extends Clien
 		public readonly clientFunctionParams: P,
 		public readonly originalError?: Error,
 	) {
-		const additionalInfo = `Process Id: ${client.getProcessId()}\nReadOnly: ${client.isReadOnly()}`;
+		const aoClient = client.getAOClient();
+		const aoConfig = aoClient.getActiveConfig();
+		let additionalInfo = `Process Id: ${client.getProcessId()}\nReadOnly: ${client.isReadOnly()}\nAO Config: ${JSON.stringify(aoConfig, null, 2)}`;
+
+		if (!client.isReadOnly()) {
+			const wallet = client.getWalletAddressSync();
+			additionalInfo += `\nWallet: ${wallet}`;
+		}
+
 		super(client, func, clientFunctionParams, originalError, additionalInfo);
 		this.name = `${client.constructor.name} Error`;
 	}
