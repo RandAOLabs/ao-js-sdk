@@ -105,3 +105,20 @@ export interface FairLaunchInfo {
 	/** Whether batch transfers are possible */
 	areBatchTransfersPossible: string;
 }
+
+/**
+ * Represents proceeds for a specific yield cycle
+ */
+export interface ProceedsEntry {
+	/** Amount of proceeds */
+	amount: string;
+	/** Timestamp when proceeds were recorded */
+	timestamp: string;
+}
+
+/**
+ * Represents all proceeds data indexed by yield cycle
+ */
+export interface ProceedsData {
+	[yieldCycle: string]: ProceedsEntry;
+}
