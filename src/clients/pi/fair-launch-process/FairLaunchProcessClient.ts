@@ -16,13 +16,13 @@ import { Logger } from "../../../utils/logger";
  */
 export class FairLaunchProcessClient extends BaseClient implements IFairLaunchProcessClient {
 	/**@constructor */
-	public static from(processId: string): FairLaunchProcessClient {
+	public static from(processId: string, wallet?: any): FairLaunchProcessClient {
 		return new ClientBuilder(FairLaunchProcessClient)
 			.withProcessId(processId)
 			.withAOConfig(AO_CONFIGURATIONS.FORWARD_RESEARCH)
+			.withWallet(wallet)
 			.build()
 	}
-
 
 
 	/**
