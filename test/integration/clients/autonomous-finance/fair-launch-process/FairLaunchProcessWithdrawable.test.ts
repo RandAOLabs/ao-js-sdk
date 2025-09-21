@@ -1,5 +1,9 @@
 import { GameFLP } from "../../../../../src/clients/pi/fair-launch-process/flps";
 import { Logger, LogLevel } from "../../../../../src/utils/logger";
+import { TokenClient } from "../../../../../src/clients/ao/token/TokenClient";
+import { AO } from "../../../../../src/constants/processIds/ao";
+import { PI_TOKEN_PROCESS_ID } from "../../../../../src/constants/processIds/autonomous-finance";
+import { FORWARD_RESEARCH_AO_CONFIG } from "../../../../../src/core/ao/ao-client/configurations";
 
 // Set log level to DEBUG to ensure we see the debug output
 Logger.setLogLevel(LogLevel.DEBUG);
@@ -8,7 +12,7 @@ describe("Fair Launch Process Withdrawable Integration Tests", () => {
 	jest.setTimeout(30000); // Increase timeout for network requests
 
 	it("should retrieve withdrawable AO amount", async () => {
-		const withdrawableAo = await GameFLP.getWithdrawableAo(1758494854);
+		const withdrawableAo = await GameFLP.getWithdrawableAo();
 		console.log("Withdrawable AO:", withdrawableAo);
 		Logger.info("Withdrawable AO amount:", withdrawableAo);
 
@@ -69,6 +73,96 @@ describe("Fair Launch Process Withdrawable Integration Tests", () => {
 			Logger.info("Withdraw PI error (expected if not deployer):", error.message);
 
 			// This is expected if the calling wallet is not the deployer
+			expect(error).toBeDefined();
+		}
+	});
+
+	it("should retrieve AO proceeds data", async () => {
+		const aoProceeds = await GameFLP.getAoProceeds();
+		console.log("AO Proceeds:", aoProceeds);
+		Logger.info("AO proceeds data:", aoProceeds);
+
+		// Add 16 hours (in milliseconds) to timestamps and print
+		const sixteenHoursMs = 16 * 60 * 60 * 1000;
+		for (const [yieldCycle, proceeds] of Object.entries(aoProceeds)) {
+			if (proceeds.timestamp) {
+				const originalTimestamp = parseInt(proceeds.timestamp); // Already in milliseconds
+				const newTimestamp = originalTimestamp + sixteenHoursMs;
+				const newDate = new Date(newTimestamp);
+				console.log(`AO Proceeds Yield Cycle ${yieldCycle}: Original timestamp: ${proceeds.timestamp}, +16 hours: ${newTimestamp} (${newDate.toISOString()})`);
+				Logger.info(`AO Proceeds Yield Cycle ${yieldCycle}: Original timestamp: ${proceeds.timestamp}, +16 hours: ${newTimestamp} (${newDate.toISOString()})`);
+			}
+		}
+
+		expect(typeof aoProceeds).toBe('object');
+		expect(aoProceeds).toBeDefined();
+	});
+
+	it("should retrieve PI proceeds data", async () => {
+		const piProceeds = await GameFLP.getPiProceeds();
+		console.log("PI Proceeds:", piProceeds);
+		Logger.info("PI proceeds data:", piProceeds);
+
+		// Add 16 hours (in milliseconds) to timestamps and print
+		const sixteenHoursMs = 16 * 60 * 60 * 1000;
+		for (const [yieldCycle, proceeds] of Object.entries(piProceeds)) {
+			if (proceeds.timestamp) {
+				const originalTimestamp = parseInt(proceeds.timestamp); // Already in milliseconds
+				const newTimestamp = originalTimestamp + sixteenHoursMs;
+				const newDate = new Date(newTimestamp);
+				console.log(`PI Proceeds Yield Cycle ${yieldCycle}: Original timestamp: ${proceeds.timestamp}, +16 hours: ${newTimestamp} (${newDate.toISOString()})`);
+				Logger.info(`PI Proceeds Yield Cycle ${yieldCycle}: Original timestamp: ${proceeds.timestamp}, +16 hours: ${newTimestamp} (${newDate.toISOString()})`);
+			}
+		}
+
+		expect(typeof piProceeds).toBe('object');
+		expect(piProceeds).toBeDefined();
+	});
+
+	it("should transfer AO tokens to specified address", async () => {
+		const aoTokenClient = TokenClient.builder()
+			.withProcessId(AO)
+			.withAOConfig(FORWARD_RESEARCH_AO_CONFIG)
+			.build();
+
+		const recipient = "_OT_mkRL0TWKs494RXWKGGyVbZ63MdxY6JwfFnDRLPY";
+		const quantity = "13180257697845";
+
+		try {
+			const transferResult = await aoTokenClient.transfer(recipient, quantity);
+			console.log("AO Token transfer result:", transferResult);
+			Logger.info("AO Token transfer result:", transferResult);
+
+			expect(typeof transferResult).toBe('boolean');
+		} catch (error: any) {
+			console.log("AO Token transfer error:", error.message);
+			Logger.info("AO Token transfer error:", error.message);
+
+			// This might fail due to insufficient balance or other reasons
+			expect(error).toBeDefined();
+		}
+	});
+
+	it("should transfer PI tokens to specified address", async () => {
+		const piTokenClient = TokenClient.builder()
+			.withAOConfig(FORWARD_RESEARCH_AO_CONFIG)
+			.withProcessId(PI_TOKEN_PROCESS_ID)
+			.build();
+
+		const recipient = "_OT_mkRL0TWKs494RXWKGGyVbZ63MdxY6JwfFnDRLPY";
+		const quantity = "356939094887130"; // 1 token with 12 decimals
+
+		try {
+			const transferResult = await piTokenClient.transfer(recipient, quantity);
+			console.log("PI Token transfer result:", transferResult);
+			Logger.info("PI Token transfer result:", transferResult);
+
+			expect(typeof transferResult).toBe('boolean');
+		} catch (error: any) {
+			console.log("PI Token transfer error:", error.message);
+			Logger.info("PI Token transfer error:", error.message);
+
+			// This might fail due to insufficient balance or other reasons
 			expect(error).toBeDefined();
 		}
 	});

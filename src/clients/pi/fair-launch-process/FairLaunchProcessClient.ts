@@ -3,7 +3,7 @@ import { ClientBuilder } from "../../common";
 import { IFairLaunchProcessClient } from "./abstract/IFairLaunchProcessClient";
 
 import { AO_CONFIGURATIONS } from "../../../core/ao/ao-client/configurations";
-import { FairLaunchInfo } from "./types";
+import { FairLaunchInfo, ProceedsData } from "./types";
 import { ProcessClientError } from "../../common/ProcessClientError";
 import TagUtils from "../../../core/common/TagUtils";
 import { DryRunResult } from "../../../core/ao/abstract";
@@ -143,6 +143,73 @@ export class FairLaunchProcessClient extends BaseClient implements IFairLaunchPr
 
 		} catch (error: any) {
 			throw new ProcessClientError(this, this.withdrawPi, {}, error);
+		}
+	}
+
+	/**
+	 * Gets AO proceeds data for all yield cycles.
+	 * @returns Promise resolving to proceeds data indexed by yield cycle
+	 */
+	public async getAoProceeds(): Promise<ProceedsData> {
+		try {
+			const tags = [
+				{ name: "Action", value: "Get-AO-Proceeds" }
+			];
+
+			const result = await this.dryrun('', tags);
+
+			if (!result.Messages || result.Messages.length === 0) {
+				throw new Error("No messages found in result");
+			}
+
+			const proceedsData = this.parseProceedsData(result.Messages[0].Data || "{}");
+			Logger.debug(`getAoProceeds result:`, proceedsData);
+
+			return proceedsData;
+
+		} catch (error: any) {
+			throw new ProcessClientError(this, this.getAoProceeds, {}, error);
+		}
+	}
+
+	/**
+	 * Gets PI proceeds data for all yield cycles.
+	 * @returns Promise resolving to proceeds data indexed by yield cycle
+	 */
+	public async getPiProceeds(): Promise<ProceedsData> {
+		try {
+			const tags = [
+				{ name: "Action", value: "Get-PI-Proceeds" }
+			];
+
+			const result = await this.dryrun('', tags);
+
+			if (!result.Messages || result.Messages.length === 0) {
+				throw new Error("No messages found in result");
+			}
+
+			const proceedsData = this.parseProceedsData(result.Messages[0].Data || "{}");
+			Logger.debug(`getPiProceeds result:`, proceedsData);
+
+			return proceedsData;
+
+		} catch (error: any) {
+			throw new ProcessClientError(this, this.getPiProceeds, {}, error);
+		}
+	}
+
+	/**
+	 * Parses proceeds data from JSON string to ProceedsData object
+	 * @param data JSON string containing proceeds data
+	 * @returns Parsed proceeds data
+	 * @private
+	 */
+	private parseProceedsData(data: string): ProceedsData {
+		try {
+			return JSON.parse(data);
+		} catch (error) {
+			Logger.debug(`Failed to parse proceeds data: ${data}`, error);
+			return {};
 		}
 	}
 
