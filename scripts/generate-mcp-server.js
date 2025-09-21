@@ -460,7 +460,7 @@ function generateToolResponse(
 	generatePackageJson() {
 		return {
 			name: CONFIG.packageName,
-			version: "1.0.0",
+			version: "0.0.0",
 			description: "Auto-generated MCP server for AO JS SDK",
 			type: "module",
 			main: "build/index.js",
