@@ -3,18 +3,15 @@ name: Generate and Publish MCP Server
 on:
   push:
     branches:
-      - main
-  release:
-    types: [published]
+      - main # Trigger only on pushes to the main branch
 
 jobs:
-  generate-mcp-server:
-    name: Generate MCP Server
+  publish-mcp-server:
+    name: Publish MCP Server
     runs-on: ubuntu-latest
     
     permissions:
       contents: write
-      packages: write
       
     steps:
       # Checkout the repository
@@ -42,28 +39,15 @@ jobs:
           echo "🔍 Checking generated MCP server..."
           ls -la ~/.mcp/servers/ao-js-sdk-server/
           cat ~/.mcp/servers/ao-js-sdk-server/package.json
-          echo "✅ MCP server structure verified"
 
-      # Archive the generated MCP server
-      - name: Create MCP Server Archive
-        run: |
-          cd ~/.mcp/servers/
-          tar -czf ao-js-sdk-mcp-server.tar.gz ao-js-sdk-server/
-          mv ao-js-sdk-mcp-server.tar.gz $GITHUB_WORKSPACE/
-
-      # Upload MCP server as artifact
-      - name: Upload MCP Server Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: ao-js-sdk-mcp-server
-          path: ao-js-sdk-mcp-server.tar.gz
-          retention-days: 90
-
-      # Publish MCP server to npm (if this is a release)
-      - name: Publish MCP Server to npm
-        if: github.event_name == 'release'
+      # Authenticate with npm
+      - name: Authenticate with npm
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+
+      # Publish MCP server to npm
+      - name: Publish MCP Server to npm
         run: |
           cd ~/.mcp/servers/ao-js-sdk-server
           
@@ -79,68 +63,12 @@ jobs:
           echo "📦 Publishing MCP server v$VERSION to npm..."
           npm publish --access public
 
-      # Add MCP server to release assets (if this is a release)
-      - name: Add MCP Server to Release
-        if: github.event_name == 'release'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh release upload ${{ github.event.release.tag_name }} \
-            ao-js-sdk-mcp-server.tar.gz \
-            --clobber \
-            --repo ${{ github.repository }}
-
-      # Generate installation instructions
-      - name: Generate Installation Instructions
-        if: github.event_name == 'release'
-        run: |
-          cat > mcp-installation.md << 'EOF'
-          # AO JS SDK MCP Server Installation
-          
-          ## Quick Install from npm
-          ```bash
-          npm install -g ao-js-sdk-mcp-server@${{ github.event.release.tag_name }}
-          ```
-          
-          ## Manual Install from Release
-          ```bash
-          # Download and extract
-          wget https://github.com/RandAOLabs/ao-js-sdk/releases/download/${{ github.event.release.tag_name }}/ao-js-sdk-mcp-server.tar.gz
-          tar -xzf ao-js-sdk-mcp-server.tar.gz
-          mv ao-js-sdk-server ~/.mcp/servers/
-          
-          # Install dependencies and build
-          cd ~/.mcp/servers/ao-js-sdk-server
-          npm install
-          npm run build
-          ```
-          
-          ## Configuration
-          Add to your MCP client settings:
-          ```json
-          {
-            "mcpServers": {
-              "ao-js-sdk": {
-                "command": "node",
-                "args": ["~/.mcp/servers/ao-js-sdk-server/build/index.js"]
-              }
-            }
-          }
-          ```
-          
-          **Generated from SDK v${{ github.event.release.tag_name }}**
-          **Total tools available: 390+**
-          EOF
-
       # Summary
       - name: Generation Summary
         run: |
-          echo "🎉 MCP Server Generation Complete!"
+          echo "🎉 MCP Server Published to npm!"
           echo "📋 Summary:"
           echo "- SDK Version: $(jq -r '.version' package.json)"
           echo "- MCP Tools: 390+"
           echo "- Clients Processed: 67"
-          echo "- Cross-Platform: ✅"
-          echo "- Auto-Generated: ✅"
-          echo ""
-          echo "🚀 The AO JS SDK is now available as an MCP server for AI code assistance!"
+          echo "- Package: ao-js-sdk-mcp-server"
