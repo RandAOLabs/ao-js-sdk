@@ -150,7 +150,7 @@ export class MessagesService implements IMessagesService {
 			}
 
 			const response = await this.arweaveDataService.query(builder);
-			return response.data.transactions.count!
+			return parseInt(response.data.transactions.count! as string)
 		} catch (error: any) {
 			Logger.error(`Error retrieving latest messages: ${error.message}`);
 			throw new GetLatestMessagesError(error);
