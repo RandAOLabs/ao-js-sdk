@@ -18,4 +18,5 @@ export * from "./token-service"
 export * from "./amm-finder-service"
 export * from "./rune-realm"
 export * from "./portfolio-service"
+export * from "./ao-js-sdk"
 // export * from "./randao" // Not needed yet

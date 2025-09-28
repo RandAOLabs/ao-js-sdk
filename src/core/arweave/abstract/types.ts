@@ -50,7 +50,7 @@ export interface ArweaveGQLResponse {
 				cursor: string;
 				node: ArweaveTransaction;
 			}>;
-			count?: number;
+			count?: number | string;
 		};
 	};
 }
