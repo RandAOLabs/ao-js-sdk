@@ -9,7 +9,6 @@ describe("ARIORewindService Integration Tests", () => {
 	beforeEach(async () => {
 		Logger.setLogLevel(LogLevel.DEBUG)
 		service = await ARIORewindService.autoConfiguration()
-		Logger.debug("0-20f2-f9j09jf9023jf0293jf2039fj2390fj3290jf")
 	});
 
 	it("should get event history for a domain and print results", async () => {
