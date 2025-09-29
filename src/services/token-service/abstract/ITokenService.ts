@@ -1,4 +1,5 @@
 import { CreditNotice } from "../../credit-notices";
+import { CurrencyAmount } from "../../../models/financial/currency/CurrencyAmount";
 import { TokenBalanceS } from "./responses";
 
 /**
@@ -25,11 +26,19 @@ export interface ITokenService {
 	getTotalHolders(): Promise<number>;
 
 	/**
-
+	 * Gets the transaction volume for a date range
 	 */
 	getTransactionVolume(from: Date, to: Date): Promise<bigint>;
 
 	getAllCreditNoticesTo(entityId: string): Promise<CreditNotice[]>
 
 	getProcessId(): string;
+
+	/**
+	 * Evenly disperses tokens among the provided wallet addresses
+	 * @param amount The total amount to disperse
+	 * @param wallets Array of wallet addresses to receive tokens
+	 * @returns Promise resolving to an array of transaction IDs
+	 */
+	disperseTokens(amount: CurrencyAmount, wallets: string[]): Promise<string[]>;
 }
