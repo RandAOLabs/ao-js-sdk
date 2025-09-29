@@ -3,6 +3,8 @@ import { DryRunCachingClientConfigBuilder } from "../../core";
 import ResultUtils from "../../core/common/result-utils/ResultUtils";
 import { ICaching } from "../../utils/class-interfaces/ICaching";
 import { CreditNotice, CreditNoticeService } from "../credit-notices";
+import { CurrencyAmount } from "../../models/financial/currency/CurrencyAmount";
+import { ConcurrencyManager } from "../../utils/concurrency/ConcurrencyManager";
 import { ITokenService, TokenBalanceS } from "./abstract";
 
 
@@ -99,6 +101,74 @@ export class TokenService implements ITokenService, ICaching {
 		}, BigInt(0));
 
 		return totalVolume;
+	}
+
+	/**
+	 * Evenly disperses tokens among the provided wallet addresses using concurrent batched transfers
+	 * @param amount The total amount to disperse
+	 * @param wallets Array of wallet addresses to receive tokens
+	 * @returns Promise resolving to an array of transaction IDs
+	 */
+	public async disperseTokens(amount: CurrencyAmount, wallets: string[]): Promise<string[]> {
+		if (wallets.length === 0) {
+			throw new Error("Cannot disperse tokens to an empty list of wallets");
+		}
+
+		if (amount.isZero() || amount.isNegative()) {
+			throw new Error("Amount must be positive");
+		}
+
+		// Calculate amount per wallet by dividing by the number of wallets
+		const amountPerWallet = amount.divide(wallets.length);
+
+		// If the division results in zero, throw an error
+		if (amountPerWallet.isZero()) {
+			throw new Error("Amount too small to distribute among wallets");
+		}
+
+		// Create transfer operations for concurrent execution
+		const transferOperations = wallets.map((wallet, index) =>
+			async (): Promise<{ wallet: string; success: boolean; txId: string }> => {
+				const success = await this.tokenClient.transfer(wallet, amountPerWallet.amountString());
+
+				if (!success) {
+					throw new Error(`Failed to transfer ${amountPerWallet.toString()} tokens to wallet ${wallet}`);
+				}
+
+				// Generate transaction ID (in real implementation, this would come from the transfer method)
+				const txId = `transfer-${wallet}-${Date.now()}-${index}`;
+
+				return { wallet, success, txId };
+			}
+		);
+
+		// Execute all transfers concurrently with retry capability
+		const concurrencyManager = ConcurrencyManager.getInstance();
+		const results = await concurrencyManager.executeAllWithRetry(transferOperations, {
+			retries: 3,
+			onFailedAttempt: (error: { attemptNumber: number; retriesLeft: number; message: string }) => {
+				console.warn(`Transfer retry attempt ${error.attemptNumber}: ${error.message}`);
+			}
+		});
+
+		// Process results and extract transaction IDs
+		const transactionIds: string[] = [];
+		const failedTransfers: string[] = [];
+
+		results.forEach((result: { wallet: string; success: boolean; txId: string } | null, index: number) => {
+			if (result === null) {
+				failedTransfers.push(wallets[index]);
+			} else {
+				transactionIds.push(result.txId);
+			}
+		});
+
+		// If any transfers failed after all retries, throw an error
+		if (failedTransfers.length > 0) {
+			throw new Error(`Failed to transfer tokens to the following wallets after all retries: ${failedTransfers.join(', ')}`);
+		}
+
+		return transactionIds;
 	}
 
 	public clearCache(): void {
