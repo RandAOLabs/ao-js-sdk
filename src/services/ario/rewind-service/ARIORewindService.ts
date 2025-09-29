@@ -101,7 +101,7 @@ export class ARIORewindService extends Service implements IARIORewindService {
 		// Create a stream of process IDs from multiple sources
 		const processIdStream = merge(
 			// Current ARNS process ID
-			this.arioService.getAntProcessId(arnsName),
+			this.arioService.getAntProcessId(arnsName).pipe(catchError(() => EMPTY)),
 			// Process IDs from buy name events
 			this.extractProcessIdsFromBuyEvents(allArNameEvents.buyNameEvents),
 			// Process IDs from reassign name events
