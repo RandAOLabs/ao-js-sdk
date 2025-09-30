@@ -6,7 +6,7 @@ import { AOClientError } from '../AOClientError';
 import { AOMessageIdMissingError } from '../../AOError';
 import { ReadOnlyAOClient } from './ReadOnlyAOClient';
 import { IAOClient } from '../interfaces/IAOClient';
-import { WalletUtils } from '../../../common/WalletUtils';
+import { WalletUtils } from '../../../common/wallet-utils/WalletUtils';
 
 export class WriteReadAOClient extends ReadOnlyAOClient implements IAOClient {
 	private readonly signer: ReturnType<typeof createDataItemSigner>;
