@@ -1,4 +1,3 @@
-
 import { IProfileClient, ProfileInfo } from "./abstract";
 import { Tags, TagUtils } from "../../../core";
 import { DryRunCachingClient } from "../../../core/ao/client-variants";
@@ -47,8 +46,6 @@ export class ProfileClient extends DryRunCachingClient implements IProfileClient
 
 	/* Core Profile Functions */
 	public async getProfileInfo(): Promise<ProfileInfo> {
-		const address = await this.getCallingWalletAddress();
-
 		try {
 			const response = await this.dryrun('', [
 				{ name: "Action", value: "Info" },
