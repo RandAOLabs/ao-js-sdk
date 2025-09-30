@@ -6,7 +6,7 @@ import { AOClientError } from '../AOClientError';
 import { AOMessageIdMissingError } from '../../AOError';
 import { ReadOnlyRetryAOClient } from './ReadOnlyRetryClient';
 import { IWriteReadAOClient } from '../interfaces';
-import { WalletUtils } from '../../../common/WalletUtils';
+import { WalletUtils } from '../../../common/wallet-utils/WalletUtils';
 import { SendMessage } from '../../abstract';
 
 export class WriteReadRetryAOClient extends ReadOnlyRetryAOClient implements IWriteReadAOClient {
