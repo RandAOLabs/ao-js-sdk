@@ -13,18 +13,21 @@ import { ArweaveGQLBuilder } from '../../../core/arweave/gql/ArweaveGQLBuilder';
 import { IRandAOStatsService, RandomStatsTimeEntry, TimePeriod } from './abstract';
 import RANDOM_PROCESS_TAGS from '../../../clients/randao/random/tags';
 import { SYSTEM_TAGS } from '../../../core/common/tags';
+import { Service } from '../../common/Service';
 
 /**
  * Service for handling RandAO statistics operations
  * @category RandAO
  */
 @staticImplements<IAutoconfiguration>()
-export class RandAOStatsService implements IRandAOStatsService {
+export class RandAOStatsService extends Service implements IRandAOStatsService {
 	constructor(
 		private readonly arioService: IARIOService,
 		private readonly cachingMessageService: IMessagesService,
 		private readonly arweaveDataService: IArweaveDataService,
-	) { }
+	) {
+		super();
+	}
 
 	/**
 	 * {@inheritdoc IAutoconfiguration.autoConfiguration}
