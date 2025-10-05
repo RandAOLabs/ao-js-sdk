@@ -1,8 +1,8 @@
-import { ProviderInfo } from "../../clients/randao/provider-profile/abstract/types";
-import { ProviderActivity } from "../../clients/randao/random/abstract/types";
+import { ProviderInfo } from "../../../clients/randao/provider-profile/abstract/types";
+import { ProviderActivity } from "../../../clients/randao/random/abstract/types";
 import { ProviderInfoAggregate } from "./abstract/types";
-import { ARIOService } from "../ario";
-import { IAutoconfiguration, staticImplements } from "../../utils";
+import { ARIOService } from "../../ario";
+import { IAutoconfiguration, staticImplements } from "../../../utils";
 import { RandAODataService } from "./RandAODataService";
 import { IRandAODataService } from "./abstract/IRandAODataService";
 
@@ -46,7 +46,7 @@ export class ProviderInfoDataAggregator {
 	private getOrInitializeProvider(providerId: string): ProviderInfoAggregate {
 		let entry = this.aggregateMap.get(providerId);
 		if (!entry) {
-			entry = { 
+			entry = {
 				providerId,
 				owner: '', // Initialize with empty string, will be set when ProviderActivity is updated
 			};

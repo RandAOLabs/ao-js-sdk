@@ -1,12 +1,13 @@
-import { ProviderProfileClient, RandomClient } from "../../clients";
 import { IRandAOService } from "./abstract";
 import { from, lastValueFrom } from "rxjs";
 import { mergeMap } from "rxjs/operators";
-import { ProviderInfoAggregate } from "./abstract/types";
-import { ProviderInfoDataAggregator } from "./ProviderInfoDataAggregator";
-import { IAutoconfiguration } from "../../utils";
-import { staticImplements } from "../../utils/decorators";
-import { RandAODataService, IRandAODataService } from "./";
+import { ProviderInfoDataAggregator } from "../RandAODataService/ProviderInfoDataAggregator";
+import { IAutoconfiguration } from "../../../utils";
+import { staticImplements } from "../../../utils/decorators";
+import { IRandAODataService, ProviderInfoAggregate } from "../RandAODataService/abstract";
+import { RandAODataService } from "../RandAODataService";
+import { RandomClient } from "../../../clients/randao/random/RandomClient";
+import { ProviderProfileClient } from "../../../clients/randao/provider-profile/ProviderProfileClient";
 
 /**
  * Service for handling RandAO operations
