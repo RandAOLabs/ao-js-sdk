@@ -1,4 +1,3 @@
-import { ProviderProfileClient, RandomClient } from "../../../clients";
 import { IRandAOService } from "./abstract";
 import { from, lastValueFrom } from "rxjs";
 import { mergeMap } from "rxjs/operators";
@@ -7,6 +6,8 @@ import { IAutoconfiguration } from "../../../utils";
 import { staticImplements } from "../../../utils/decorators";
 import { IRandAODataService, ProviderInfoAggregate } from "../RandAODataService/abstract";
 import { RandAODataService } from "../RandAODataService";
+import { RandomClient } from "../../../clients/randao/random/RandomClient";
+import { ProviderProfileClient } from "../../../clients/randao/provider-profile/ProviderProfileClient";
 
 /**
  * Service for handling RandAO operations

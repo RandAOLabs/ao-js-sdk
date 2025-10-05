@@ -1,13 +1,18 @@
-import { ProviderActivity, ProviderInfo } from "../../../../src";
-import { ARIOService } from "../../../../src/services/ario/ario-service";
-import { MessagesService } from "../../../../src/services/messages/message-service";
-import { IRandAODataService, ProviderInfoDataAggregator, RandAODataService } from "../../../../src/services/randao/RandAODataService";
+jest.mock("../../../../src/services/messages");
+jest.mock("../../../../src/services/ario/");
+jest.mock("../../../../src/services/randao/RandAODataService/RandAODataService");
+
+import { ProviderInfo } from "../../../../src/clients/randao";
+import { ProviderActivity } from "../../../../src/clients/randao/random";
+import { ARIOService } from "../../../../src/services/ario";
+import { MessagesService } from "../../../../src/services/messages";
+import { IRandAODataService } from "../../../../src/services/randao/RandAODataService/abstract/IRandAODataService";
+import { ProviderInfoDataAggregator } from "../../../../src/services/randao/RandAODataService/ProviderInfoDataAggregator";
+import { RandAODataService } from "../../../../src/services/randao/RandAODataService/RandAODataService";
 
 
 // Mock dependencies
-jest.mock("src/services/messages");
-jest.mock("src/services/ario");
-jest.mock("src/services/randao/RandAODataService");
+
 
 describe("ProviderInfoDataAggregator", () => {
 	let mockMessagesService: jest.Mocked<MessagesService>;
