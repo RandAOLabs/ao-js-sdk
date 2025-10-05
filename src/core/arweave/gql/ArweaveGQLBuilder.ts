@@ -72,7 +72,19 @@ export class ArweaveGQLBuilder {
 
 	public minIngestedAt(time: number): this {
 		if (!time || time < 0) throw ArweaveGQLBuilderError.invalidTimestamp();
-		this.filters.ingested_at = { min: time };
+		if (!this.filters.ingested_at) {
+			this.filters.ingested_at = {};
+		}
+		this.filters.ingested_at.min = time;
+		return this;
+	}
+
+	public maxIngestedAt(time: number): this {
+		if (!time || time < 0) throw ArweaveGQLBuilderError.invalidTimestamp();
+		if (!this.filters.ingested_at) {
+			this.filters.ingested_at = {};
+		}
+		this.filters.ingested_at.max = time;
 		return this;
 	}
 
@@ -235,9 +247,18 @@ export class ArweaveGQLBuilder {
 			} else if (key === 'owner' && typeof value === 'object' && value.address) {
 				// Handle owner
 				filterConditions.push(`owners: ["${value.address}"]`);
-			} else if (key === 'ingested_at' && typeof value === 'object' && value.min) {
-				// Handle ingested_at filter
-				filterConditions.push(`ingested_at: { min: ${value.min} }`);
+			} else if (key === 'ingested_at' && typeof value === 'object') {
+				// Handle ingested_at filter with min and/or max
+				const ingestedAtConditions: string[] = [];
+				if (value.min) {
+					ingestedAtConditions.push(`min: ${value.min}`);
+				}
+				if (value.max) {
+					ingestedAtConditions.push(`max: ${value.max}`);
+				}
+				if (ingestedAtConditions.length > 0) {
+					filterConditions.push(`ingested_at: { ${ingestedAtConditions.join(', ')} }`);
+				}
 			} else if (Array.isArray(value)) {
 				// Handle arrays (ids, recipients)
 				filterConditions.push(`${key}: ["${value.join('", "')}"]`);

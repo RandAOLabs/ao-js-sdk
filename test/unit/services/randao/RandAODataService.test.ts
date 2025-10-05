@@ -1,6 +1,6 @@
 import { IARIOService } from "../../../../src/services/ario";
 import { IMessagesService } from "../../../../src/services/messages";
-import { RandAODataService } from "../../../../src/services/randao/RandAODataService";
+import { RandAODataService } from "../../../../src/services/randao/RandAODataService/RandAODataService";
 import RANDOM_PROCESS_TAGS from "../../../../src/clients/randao/random/tags";
 import { SYSTEM_TAGS } from "../../../../src/core/common/tags";
 import { DOMAIN } from "../../../../src/services/ario/ario-service/domains";

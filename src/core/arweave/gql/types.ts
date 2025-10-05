@@ -9,7 +9,8 @@ export interface ArweaveGQLFilter {
 		value: string;
 	}[];
 	ingested_at?: {
-		min: number;
+		min?: number;
+		max?: number;
 	};
 }
 

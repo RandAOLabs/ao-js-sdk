@@ -1,4 +1,4 @@
-import { ProviderInfoAggregate } from "..";
+import { ProviderInfoAggregate } from "../../RandAODataService/abstract";
 
 /**
  * Interface for the RandAO Service
