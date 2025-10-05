@@ -9,10 +9,10 @@ jobs:
   publish-mcp-server:
     name: Publish MCP Server
     runs-on: ubuntu-latest
-    
+
     permissions:
       contents: write
-      
+
     steps:
       # Checkout the repository
       - name: Checkout code
@@ -23,7 +23,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          registry-url: 'https://registry.npmjs.org'
+          registry-url: "https://registry.npmjs.org"
 
       # Install dependencies
       - name: Install dependencies
@@ -46,21 +46,36 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
 
+      # Verify npm authentication
+      - name: Verify npm authentication
+        run: |
+          echo "🔐 Verifying npm authentication..."
+          npm whoami
+          echo "📋 Current npm user: $(npm whoami)"
+          echo "📋 npm registry: $(npm config get registry)"
+          npm owner ls ao-js-sdk-mcp || echo "⚠️ Could not fetch package owners"
+
       # Publish MCP server to npm
       - name: Publish MCP Server to npm
         run: |
           cd ~/.mcp/servers/ao-js-sdk-server
-          
+
+          echo "👤 Publishing as npm user: $(npm whoami)"
+
           # Update package name for npm publishing
           jq '.name = "ao-js-sdk-mcp"' package.json > package.json.tmp
           mv package.json.tmp package.json
-          
+
           # Use the same version as the main SDK
           VERSION=$(jq -r '.version' $GITHUB_WORKSPACE/package.json)
           jq ".version = \"$VERSION\"" package.json > package.json.tmp
           mv package.json.tmp package.json
-          
+
           echo "📦 Publishing MCP server v$VERSION to npm..."
+          echo "👤 Publishing as: $(npm whoami)"
+          echo "📋 Package owners for ao-js-sdk-mcp:"
+          npm owner ls ao-js-sdk-mcp || echo "⚠️ Could not fetch current package owners"
+
           npm publish --access public
 
       # Summary
