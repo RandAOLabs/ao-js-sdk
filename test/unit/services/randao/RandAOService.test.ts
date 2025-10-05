@@ -1,7 +1,8 @@
-import { ProviderProfileClient, RandomClient } from "src/clients";
-import { RandAOService, RandAODataService } from "src/services/randao";
-import { ProviderInfoAggregate } from "src/services/randao/abstract/types";
-import { ProviderInfoDataAggregator } from "src/services/randao/ProviderInfoDataAggregator";
+import { ProviderProfileClient, RandomClient } from "../../../../src/clients/randao";
+import { ProviderInfoAggregate, ProviderInfoDataAggregator, RandAODataService } from "../../../../src/services/randao/RandAODataService";
+import { RandAOService } from "../../../../src/services/randao/RandAOService";
+
+
 
 // Mock dependencies
 jest.mock("src/clients/randao/random/RandomClient");
