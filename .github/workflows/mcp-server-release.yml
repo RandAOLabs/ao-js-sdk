@@ -40,14 +40,10 @@ jobs:
           ls -la ~/.mcp/servers/ao-js-sdk-server/
           cat ~/.mcp/servers/ao-js-sdk-server/package.json
 
-      # Authenticate with npm
-      - name: Authenticate with npm
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
-
       # Verify npm authentication
       - name: Verify npm authentication
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           echo "🔐 Verifying npm authentication..."
           npm whoami
@@ -57,6 +53,8 @@ jobs:
 
       # Publish MCP server to npm
       - name: Publish MCP Server to npm
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           cd ~/.mcp/servers/ao-js-sdk-server
 
