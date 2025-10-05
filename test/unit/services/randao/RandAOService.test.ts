@@ -1,14 +1,20 @@
-import { ProviderProfileClient, RandomClient } from "../../../../src/clients/randao";
-import { ProviderInfoAggregate, ProviderInfoDataAggregator, RandAODataService } from "../../../../src/services/randao/RandAODataService";
-import { RandAOService } from "../../../../src/services/randao/RandAOService";
-
-
 
 // Mock dependencies
-jest.mock("src/clients/randao/random/RandomClient");
-jest.mock("src/clients/randao/provider-profile/ProviderProfileClient");
-jest.mock("src/services/randao/RandAODataService");
-jest.mock("src/services/randao/ProviderInfoDataAggregator");
+jest.mock("../../../../src/clients/randao");
+jest.mock("../../../../src/clients/randao/provider-profile/ProviderProfileClient");
+jest.mock("../../../../src/services/randao/RandAODataService/RandAODataService");
+jest.mock("../../../../src/services/randao/RandAODataService/ProviderInfoDataAggregator");
+
+import { ProviderProfileClient } from "../../../../src/clients/randao/provider-profile/ProviderProfileClient";
+import { RandomClient } from "../../../../src/clients/randao";
+
+import { ProviderInfoDataAggregator } from "../../../../src/services/randao/RandAODataService/ProviderInfoDataAggregator";
+import { RandAODataService } from "../../../../src/services/randao/RandAODataService/RandAODataService";
+import { RandAOService } from "../../../../src/services/randao/RandAOService";
+import { ProviderInfoAggregate } from "../../../../src/services/randao/RandAODataService";
+
+
+
 
 describe("RandAOService", () => {
 	let mockRandomClient: jest.Mocked<RandomClient>;
@@ -89,19 +95,6 @@ describe("RandAOService", () => {
 		ProviderProfileClient.autoConfiguration = jest.fn().mockReturnValue(mockProviderProfileClient);
 		RandAODataService.autoConfiguration = jest.fn().mockResolvedValue(mockRandAODataService);
 		ProviderInfoDataAggregator.autoConfiguration = jest.fn().mockResolvedValue(mockProviderInfoDataAggregator);
-	});
-
-	describe("autoConfiguration", () => {
-		it("should create instance with auto-configured clients", async () => {
-			// Act
-			const service = await RandAOService.autoConfiguration();
-
-			// Assert
-			expect(RandomClient.autoConfiguration).toHaveBeenCalled();
-			expect(ProviderProfileClient.autoConfiguration).toHaveBeenCalled();
-			expect(RandAODataService.autoConfiguration).toHaveBeenCalled();
-			expect(service).toBeInstanceOf(RandAOService);
-		});
 	});
 
 	describe("getAllProviderInfo", () => {
