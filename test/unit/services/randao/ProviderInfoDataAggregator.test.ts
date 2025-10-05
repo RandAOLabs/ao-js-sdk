@@ -1,10 +1,8 @@
-import { MessagesService } from "src/services/messages";
-import { ARIOService } from "src/services/ario";
-import { ProviderInfoDataAggregator } from "src/services/randao/ProviderInfoDataAggregator";
-import { ProviderActivity } from "src/clients/randao/random/abstract/types";
-import { ProviderInfo } from "src/clients/randao/provider-profile/abstract/types";
-import { RandAODataService } from "src/services/randao/RandAODataService";
-import { IRandAODataService } from "src/services/randao/abstract/IRandAODataService";
+import { ProviderActivity, ProviderInfo } from "../../../../src";
+import { ARIOService } from "../../../../src/services/ario/ario-service";
+import { MessagesService } from "../../../../src/services/messages/message-service";
+import { IRandAODataService, ProviderInfoDataAggregator, RandAODataService } from "../../../../src/services/randao/RandAODataService";
+
 
 // Mock dependencies
 jest.mock("src/services/messages");
