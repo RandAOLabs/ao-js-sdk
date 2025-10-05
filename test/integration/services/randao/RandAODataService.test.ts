@@ -1,5 +1,5 @@
 import { Logger, LogLevel } from "src/utils";
-import { RandAODataService } from "../../../../src/services/randao/RandAODataService";
+import { RandAODataService } from "../../../../src/services/randao/RandAODataService/RandAODataService";
 import { IRandAODataService } from "src/services";
 
 jest.setTimeout(6000000);
