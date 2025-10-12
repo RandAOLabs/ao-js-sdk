@@ -1,6 +1,7 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import { BaseHttpClient } from '../abstract/IHttpClient';
 import { HttpClientConfig, HttpRequestConfig } from '../abstract/types';
+import { Logger } from '../../logger';
 
 export class AxiosHttpClient extends BaseHttpClient {
 	private instance: AxiosInstance;
@@ -60,7 +61,16 @@ export class AxiosHttpClient extends BaseHttpClient {
 	}
 
 	async get<R = any>(url: string, config?: HttpRequestConfig<R>): Promise<R> {
-		const response = await this.instance.get(url, this.transformRequestConfig(config));
+		const requestConfig = this.transformRequestConfig(config);
+		const fullUrl = this.clientConfig.baseURL ? `${this.clientConfig.baseURL}${url}` : url;
+
+		Logger.debug('AxiosHttpClient GET request:', {
+			url: fullUrl,
+			config: requestConfig
+		});
+
+		const response = await this.instance.get(url, requestConfig);
+		Logger.debug(response)
 		return response.data;
 	}
 
