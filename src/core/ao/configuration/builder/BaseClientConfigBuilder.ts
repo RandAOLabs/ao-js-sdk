@@ -1,5 +1,5 @@
 import { JWKInterface } from 'arweave/node/lib/wallet.js';
-import { IBuilder } from '../../../../utils/class-interfaces/IBuilder';
+import { IBuilder } from '../../../../utils/class-interfaces/builder/IBuilder';
 import { BaseClientConfig } from '../BaseClientConfig';
 import { getWalletSafely, Logger } from '../../../../utils';
 import { ConnectArgsLegacy } from '../../ao-client/aoconnect-types';
@@ -104,7 +104,7 @@ export class BaseClientConfigBuilder implements IBuilder<BaseClientConfig> {
 		this.config.aoConfig = aoConfig;
 		return this;
 	}
-	
+
 	/**
 	 * Gets the current AO config
 	 * @returns The current AO config or undefined if not set
