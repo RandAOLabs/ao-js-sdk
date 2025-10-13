@@ -2,11 +2,12 @@ import { ArweaveGQLResponse, ArweaveTransaction } from "./abstract/types";
 import { ArweaveDataService } from "./ArweaveDataService";
 import { ICache, newCache } from "../../utils/cache";
 import { ICacheConfig } from "../../utils/cache/abstract";
-import { IAutoconfiguration, staticImplements } from "../../utils";
 import { IArweaveDataCachingService } from "./abstract/IArweaveDataCachingService";
 import { IHttpClient } from "../../utils/http";
 import { ArweaveGraphQLNodeClientFactory, ArweaveNodeType, IArweaveGraphQLNodeClient } from "./graphql-nodes";
 import { getArweaveDotNetHttpClient } from "./http-nodes/arweave-dot-net-http-client";
+import { staticImplements } from "../../utils/decorators";
+import { IAutoconfiguration } from "../../utils/class-interfaces";
 
 /**
  * @category Core
