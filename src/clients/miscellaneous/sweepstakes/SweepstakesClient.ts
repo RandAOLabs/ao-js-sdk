@@ -1,7 +1,6 @@
 
 
 import { Tags } from "../../../core";
-import { IAutoconfiguration, IDefaultBuilder, staticImplements } from "../../../utils";
 import { ISweepstakesClient, SweepstakesClientConfig, SweepstakesPull, ViewAllSweepstakesResponse, ViewOneSweepstakesResponse } from "./abstract";
 import { ViewPullError } from "./SweepstakesClientError";
 import { SweepstakesProcessError } from "./SweepstakesProcessError";
@@ -17,6 +16,8 @@ import { TokenClient, TokenClientConfig } from "../../ao";
 import { TokenInterfacingClientBuilder } from "../../common/TokenInterfacingClientBuilder";
 import { IClassBuilder } from "../../../utils/class-interfaces/IClientBuilder";
 import { DryRunResult, MessageResult } from "../../../core/ao/abstract";
+import { IAutoconfiguration, IDefaultBuilder } from "../../../utils/class-interfaces";
+import { staticImplements } from "../../../utils/decorators";
 
 /**
  * @category Miscellaneous

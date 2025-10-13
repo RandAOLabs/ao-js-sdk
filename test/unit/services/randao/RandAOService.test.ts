@@ -6,12 +6,12 @@ jest.mock("../../../../src/services/randao/RandAODataService/RandAODataService")
 jest.mock("../../../../src/services/randao/RandAODataService/ProviderInfoDataAggregator");
 
 import { ProviderProfileClient } from "../../../../src/clients/randao/provider-profile/ProviderProfileClient";
-import { RandomClient } from "../../../../src/clients/randao";
 
 import { ProviderInfoDataAggregator } from "../../../../src/services/randao/RandAODataService/ProviderInfoDataAggregator";
 import { RandAODataService } from "../../../../src/services/randao/RandAODataService/RandAODataService";
-import { RandAOService } from "../../../../src/services/randao/RandAOService";
 import { ProviderInfoAggregate } from "../../../../src/services/randao/RandAODataService";
+import { RandomClient } from "../../../../src/clients/randao/random";
+import { RandAOService } from "../../../../src/services/randao/RandAOService/RandAOService";
 
 
 

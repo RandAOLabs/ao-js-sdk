@@ -2,11 +2,12 @@ import { IProfileClient, ProfileInfo } from "./abstract";
 import { Tags, TagUtils } from "../../../core";
 import { DryRunCachingClient } from "../../../core/ao/client-variants";
 import ResultUtils from "../../../core/common/result-utils/ResultUtils";
-import { IAutoconfiguration, IDefaultBuilder, Logger, staticImplements } from "../../../utils/index";
 import { ProfileRegistryClient } from "../profile-registry";
 import { ClientBuilder } from "../../common";
 import { NoProfileFoundError } from "./ProfileClientError";
 import { ProcessClientError } from "../../common/ProcessClientError";
+import { IAutoconfiguration, IDefaultBuilder } from "../../../utils/class-interfaces";
+import { staticImplements } from "../../../utils/decorators";
 
 /**
  * @category Bazar

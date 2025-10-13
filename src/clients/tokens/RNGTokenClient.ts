@@ -2,7 +2,8 @@ import { TokenClient } from "../ao";
 import { ClientBuilder } from "../common";
 import { AO_CONFIGURATIONS } from "../../core/ao/ao-client/configurations";
 import { PROCESS_IDS } from "../../constants/processIds";
-import { staticImplements, IAutoconfiguration, IDefaultBuilder } from "../../utils";
+import { IAutoconfiguration, IDefaultBuilder } from "../../utils/class-interfaces";
+import { staticImplements } from "../../utils/decorators";
 /**
  * @category Tokens
  */
