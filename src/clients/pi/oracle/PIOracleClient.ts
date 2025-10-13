@@ -8,7 +8,6 @@ import {
 } from "../constants";
 import { PITokenClient } from "../PIToken/PITokenClient";
 import { AOToken } from "../../tokens/AOTokenClient";
-import { TokenClient } from "../../ao";
 import { PIOracleClientError } from "./PIOracleClientError";
 import { PIOracleProcessError } from "./PIOracleProcessError";
 import { AO_CONFIGURATIONS } from "../../../core/ao/ao-client/configurations";
@@ -16,6 +15,7 @@ import { IAutoconfiguration, IDefaultBuilder, staticImplements } from "../../../
 import { ClientBuilder } from "../../common";
 import { IClassBuilder } from "../../../utils/class-interfaces/IClientBuilder";
 import { DryRunResult } from "../../../core/ao/abstract";
+import { TokenClient } from "../../ao/token/implementations";
 
 /**
  * Client for interacting with the PI Oracle process.

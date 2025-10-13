@@ -1,9 +1,13 @@
+import { Tags } from "../../../../core";
+import { DryRunResult } from "../../../../core/ao/abstract";
+import { DryRunCachingClientConfig } from "../../../../core/ao/configuration/DryRunCachingConfig";
+import { Logger } from "../../../../utils";
+import { newCache } from "../../../../utils/cache";
+import { ICache } from "../../../../utils/cache/abstract";
+import { ICaching } from "../../../../utils/class-interfaces";
+import { ITokenClient } from "../abstract/ITokenClient";
 import { TokenClient } from "./TokenClient";
-import { ICache, Logger, newCache } from "../../../utils";
-import { DryRunCachingClientConfig, Tags } from "../../../core";
-import { ICaching } from "../../../utils/class-interfaces/ICaching";
-import { ITokenClient } from "./abstract";
-import { DryRunResult } from "../../../core/ao/abstract";
+
 
 
 export class DryRunCachingTokenClient extends TokenClient implements ICaching, ITokenClient {

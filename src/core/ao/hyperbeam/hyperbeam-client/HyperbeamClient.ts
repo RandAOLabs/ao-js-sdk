@@ -18,6 +18,7 @@ import { HyperBeamNodes } from './HyperBeamNodes';
 
 /**
  * HyperBEAM client implementation for accessing AO-Core process state
+ * @category Core
  */
 @staticImplements<IAutoconfiguration>()
 export class HyperbeamClient implements IHyperbeamClient {

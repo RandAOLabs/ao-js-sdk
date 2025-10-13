@@ -1,14 +1,15 @@
-import { ITokenClient, IGrantToken, TokenInfo } from "./abstract";
-import { TRANSFER_SUCCESS_MESSAGE } from "./constants";
-import { ProcessClientError } from "../../common/ProcessClientError";
-import { Tags, TagUtils } from "../../../core";
-import { BaseClient } from "../../../core/ao/BaseClient";
-import ResultUtils from "../../../core/common/result-utils/ResultUtils";
-import { ClientBuilder } from "../../common/ClientBuilder";
-import { AO_CONFIGURATION_DEFAULT } from "../../../core/ao/ao-client/configurations";
-import { DryRunResult } from "../../../core/ao/abstract";
-import { staticImplements } from "../../../utils/decorators";
-import { IAutoconfiguration, IDefaultBuilder } from "../../../utils/class-interfaces";
+import { TagUtils, Tags } from "../../../../core";
+import { DryRunResult } from "../../../../core/ao/abstract/ao-connect-types";
+import { AO_CONFIGURATION_DEFAULT } from "../../../../core/ao/ao-client/configurations";
+import { BaseClient } from "../../../../core/ao/BaseClient";
+import ResultUtils from "../../../../core/common/result-utils/ResultUtils";
+import { IAutoconfiguration, IDefaultBuilder } from "../../../../utils/class-interfaces";
+import { staticImplements } from "../../../../utils/decorators";
+import { ClientBuilder } from "../../../common";
+import { ProcessClientError } from "../../../common/ProcessClientError";
+import { ITokenClient, IGrantToken, TokenInfo } from "../abstract";
+import { TRANSFER_SUCCESS_MESSAGE } from "../constants";
+
 
 /**
  * @category ao-standards

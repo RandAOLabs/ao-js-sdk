@@ -1,27 +1,25 @@
 {
-    "compilerOptions": {
-        "target": "es6",
-        "module": "commonjs",
-        "outDir": "./dist",
-        "rootDir": ".",
-        "sourceMap": true,
-        "declaration": true,
-        "declarationMap": true,
-        "moduleResolution": "node",
-        "strict": true,
-        "esModuleInterop": true,
-        "skipLibCheck": true,
-        "forceConsistentCasingInFileNames": true,
-        "experimentalDecorators": true,
-        "emitDecoratorMetadata": true,
-        "baseUrl": "."
-    },
-    "include": [
-        "src"
-    ],
-    "exclude": [
-        "node_modules",
-        "dist",
-        "test"
-    ]
+	"compilerOptions": {
+		"target": "es6",
+		"module": "commonjs",
+		"outDir": "./dist",
+		"rootDir": ".",
+		"sourceMap": true,
+		"declaration": true,
+		"declarationMap": true,
+		"strict": true,
+		"esModuleInterop": true,
+		"skipLibCheck": true,
+		"forceConsistentCasingInFileNames": true,
+		"experimentalDecorators": true,
+		"emitDecoratorMetadata": true,
+	},
+	"include": [
+		"src"
+	],
+	"exclude": [
+		"node_modules",
+		"dist",
+		"test"
+	]
 }
