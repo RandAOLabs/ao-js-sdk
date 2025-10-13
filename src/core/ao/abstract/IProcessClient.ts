@@ -42,7 +42,7 @@ export interface IProcessClient {
 	 * Performs a dry run, executing the logic of a message without actually persisting the result.
 	 * When useDryRunAsMessage is false (default), this performs a simulation.
 	 * When useDryRunAsMessage is true, this executes as a real message.
-	 *
+	 * @deprecated
 	 * @param data Optional data to be passed to the message.
 	 * @param tags Optional tags to be passed to the message.
 	 * @param anchor Optional anchor to be passed to the message.
