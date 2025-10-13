@@ -1,14 +1,26 @@
 import { IHyperbeamClient, Tags } from "../../../../core";
+import { builder, IAutoconfiguration, IBuilder, staticImplements } from "../../../../utils";
+import { IBuilderClass } from "../../../../utils/class-interfaces/builder/IBuilderClass";
 import { IAOTokenClient, TokenInfo } from "../abstract";
 
 /**
  * @category ao-standards
  * @see {@link https://cookbook_ao.g8way.io/references/token.html | specification}
  */
+@staticImplements<IBuilderClass>()
+@staticImplements<IAutoconfiguration>()
 export class HyperBeamTokenClient implements IAOTokenClient {
 
 	/* Constructors */
 	public constructor(hyperBeamClient: IHyperbeamClient) {
+	}
+
+	public static builder(): IBuilder<IAOTokenClient> {
+		// return new ClientBuilder(HyperBeamTokenClient);
+		return builder<HyperBeamTokenClient>();
+	}
+	public static autoConfiguration(): IAOTokenClient {
+		return HyperBeamTokenClient.builder().build();
 	}
 
 

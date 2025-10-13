@@ -1,7 +1,7 @@
 import { ConnectArgsLegacy } from "src/core/ao/ao-client/aoconnect-types";
 import { BaseClientConfig, BaseClientConfigBuilder } from "../../core";
 import { BaseClient } from "../../core/ao/BaseClient";
-import { IBuilder } from "../../utils/class-interfaces/IBuilder";
+import { IBuilder } from "../../utils/class-interfaces/builder/IBuilder";
 
 export class ClientBuilder<T extends BaseClient> implements IBuilder<T> {
 	private configBuilder: BaseClientConfigBuilder;

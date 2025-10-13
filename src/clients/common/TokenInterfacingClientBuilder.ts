@@ -1,5 +1,5 @@
 import { BaseClient } from "../../core/ao/BaseClient";
-import { IBuilder } from "../../utils/class-interfaces/IBuilder";
+import { IBuilder } from "../../utils/class-interfaces/builder/IBuilder";
 import { TokenInterfacingClientConfig } from "./TokenInterfacingClientConfig";
 import { TokenInterfacingClientConfigBuilder } from ".";
 import { ConnectArgsLegacy } from "../../core/ao/ao-client/aoconnect-types";

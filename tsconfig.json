@@ -11,8 +11,9 @@
 		"esModuleInterop": true,
 		"skipLibCheck": true,
 		"forceConsistentCasingInFileNames": true,
-		"experimentalDecorators": true,
-		"emitDecoratorMetadata": true,
+		// "experimentalDecorators": true,
+		// "emitDecoratorMetadata": true,
+		"useDefineForClassFields": true
 	},
 	"include": [
 		"src"
