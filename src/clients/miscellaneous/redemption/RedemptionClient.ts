@@ -1,7 +1,6 @@
 
 
 import { Tags } from "../../../core";
-import { IAutoconfiguration, IDefaultBuilder, staticImplements } from "../../../utils";
 import { BaseClient } from "../../../core/ao/BaseClient";
 import ResultUtils from "../../../core/common/result-utils/ResultUtils";
 import { ClientBuilder } from "../../common";
@@ -10,6 +9,8 @@ import { ProcessClientError } from "../../common/ProcessClientError";
 import { DryRunResult, MessageResult } from "../../../core/ao/abstract";
 import { IRedemptionClient, ViewRedeemedCodesResponse } from "./abstract";
 import { RedemptionProcessError } from "./RedemptionProcessError";
+import { IAutoconfiguration, IDefaultBuilder } from "../../../utils/class-interfaces";
+import { staticImplements } from "../../../utils/decorators";
 
 /**
  * @category Miscellaneous
@@ -55,15 +56,15 @@ export class RedemptionClient extends BaseClient implements IRedemptionClient {
 		try {
 			const tags: Tags = [
 				{ name: "Action", value: "View-Redeemed-Codes" },
-				];
-				const result = await this.dryrun(undefined, tags);
-				this.checkResultForErrors(result);
-				return ResultUtils.getFirstMessageDataJson(result);
-			} catch (error: any) {
-				throw new ProcessClientError(this, this.viewRedeemedCodes, null, error);
-			}
+			];
+			const result = await this.dryrun(undefined, tags);
+			this.checkResultForErrors(result);
+			return ResultUtils.getFirstMessageDataJson(result);
+		} catch (error: any) {
+			throw new ProcessClientError(this, this.viewRedeemedCodes, null, error);
 		}
-	
+	}
+
 
 	/* Utilities */
 	/* Private */

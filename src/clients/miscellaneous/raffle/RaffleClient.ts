@@ -1,7 +1,6 @@
 
 
 import { Tags } from "../../../core";
-import { IAutoconfiguration, IDefaultBuilder, staticImplements } from "../../../utils";
 import { IRaffleClient, RafflePull, ViewPullsResponse, ViewEntrantsResponse, ViewRaffleOwnersResponse } from "../..";
 import { ViewPullError } from "./RaffleClientError";
 import { RaffleProcessError } from "./RaffleProcessError";
@@ -11,6 +10,8 @@ import { ClientBuilder } from "../../common";
 import { PROCESS_IDS } from "../../../constants/processIds";
 import { ProcessClientError } from "../../common/ProcessClientError";
 import { DryRunResult, MessageResult } from "../../../core/ao/abstract";
+import { IAutoconfiguration, IDefaultBuilder } from "../../../utils/class-interfaces";
+import { staticImplements } from "../../../utils/decorators";
 
 /**
  * @category Miscellaneous

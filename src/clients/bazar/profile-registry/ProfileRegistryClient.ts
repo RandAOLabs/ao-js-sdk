@@ -4,7 +4,8 @@ import { ProcessClientError } from "../../common/ProcessClientError";
 import { DryRunCachingClient } from "../../../core/ao/client-variants";
 import ResultUtils from "../../../core/common/result-utils/ResultUtils";
 import { PROCESS_IDS } from "../../../constants/processIds";
-import { IAutoconfiguration, IDefaultBuilder, Logger, staticImplements } from "../../../utils/index";
+import { IAutoconfiguration, IDefaultBuilder } from "../../../utils/class-interfaces";
+import { staticImplements } from "../../../utils/decorators";
 
 
 /**
