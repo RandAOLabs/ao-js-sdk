@@ -5,12 +5,12 @@ import ResultUtils from "../../../core/common/result-utils/ResultUtils";
 import { IAutoconfiguration, IDefaultBuilder } from "../../../utils/class-interfaces";
 import { AO_CONFIGURATIONS } from "../../../core/ao/ao-client/configurations";
 import { ClientBuilder } from "../../common";
-import { staticImplements } from "../../../utils";
 import { PROCESS_IDS } from "../../../constants/processIds";
 import { ProcessClientError } from "../../common/ProcessClientError";
 import { InputValidationError } from "../../bazar";
 import { ARNS_QUERY_TAGS } from "../../../models";
 import { ARNSRecordResponse, GetArNSRecordsResponse, GetArNSRecordsParams } from "./abstract";
+import { staticImplements } from "../../../utils/decorators";
 
 /**
  * Client for interacting with ARNS (Arweave Name Service) records.
