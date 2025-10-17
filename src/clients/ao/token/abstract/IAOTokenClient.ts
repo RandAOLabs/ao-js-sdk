@@ -15,7 +15,7 @@ export interface IAOTokenClient {
 	 * @param identifier The address to check the balance for
 	 * @returns Promise resolving to the current balance as a string
 	 */
-	balance(identifier: string): Promise<string>;
+	balance(entityId: string): Promise<string>;
 
 	/**
 	 * Transfers tokens from the caller's balance to one or more target addresses.

@@ -1,1 +1,1 @@
-export * from "./HyperBeamTokenClient"
+export * from "./hyperbeam-token-client"
