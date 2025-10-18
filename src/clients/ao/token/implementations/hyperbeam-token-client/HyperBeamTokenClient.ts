@@ -25,7 +25,7 @@ export class HyperBeamTokenClient extends AOProcessClient implements IAOTokenCli
 	}
 
 	public async balance(entityId: string): Promise<string> {
-		const balanceResponse: string = await this.hyperBeamClient.compute(this.getProcessId(), `${TOKEN_BALANC ityId}`);
+		const balanceResponse: string = await this.hyperBeamClient.compute(this.getProcessId(), `${TOKEN_BALANCE_ENDPOINT}/${entityId}`);
 		return balanceResponse
 	}
 	transfer(recipient: string, quantity: string, forwardedTags?: Tags): Promise<boolean> {
