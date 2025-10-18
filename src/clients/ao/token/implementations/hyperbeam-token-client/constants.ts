@@ -1,1 +1,1 @@
-export const TOKEN_BALANCE_ENDPOINT = "balance"
+export const TOKEN_BALANCE_ENDPOINT = "balances"
