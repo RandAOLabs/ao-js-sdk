@@ -1,5 +1,5 @@
 import { JWKInterface } from "arweave/node/lib/wallet";
-import { IBuilder } from "../../../utils";
+import { IBuilder, getWalletSafely } from "../../../utils";
 import { ConnectArgsLegacy } from "./aoconnect-types";
 import { ReadOnlyAOClient, ReadOnlyRetryAOClient, WriteReadAOClient, WriteReadRetryAOClient } from "./implementations";
 import { IAOClient } from "./interfaces/IAOClient";
@@ -35,6 +35,18 @@ export class AOClientBuilder implements IBuilder<IAOClient> {
 
 	withWallet(wallet: JWKInterface | any | undefined): this {
 		this.wallet = wallet;
+		return this;
+	}
+
+	/**
+	 * Automatically configures the wallet using getWalletSafely() if available.
+	 * @returns The builder instance for method chaining
+	 */
+	withWalletAutoConfiguration(): this {
+		const autoWallet = getWalletSafely();
+		if (autoWallet) {
+			this.wallet = autoWallet;
+		}
 		return this;
 	}
 

@@ -1,4 +1,4 @@
-import { RaffleClient } from "src/clients";
+import { RaffleClient } from "src/clients/miscellaneous";
 import { Logger, LogLevel } from "src/utils";
 import { MockBaseClient } from "test/unit/clients/MockBaseClient";
 import ResultUtils from "src/core/common/result-utils/ResultUtils";

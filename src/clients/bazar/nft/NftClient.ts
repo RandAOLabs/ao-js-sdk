@@ -1,11 +1,12 @@
 
-import { TokenClient, TokenClientConfig } from "../../ao";
+import { TokenClient } from "../../ao/token/TokenClient";
 import { INftClient } from "./abstract/INftClient";
 import { NFT_QUANTITY } from "./constants";
 import { ProcessClientError } from "../../common/ProcessClientError";
 import { Tags } from "../../../core";
 
 import { Logger } from "../../../utils/index";
+import { TokenClientConfig } from "../../ao/token/abstract";
 
 /**
  * @category Bazar
