@@ -1,4 +1,4 @@
-import { ProfileRegistryClient } from "src/clients";
+import { ProfileRegistryClient } from "src/clients/bazar";
 import { BaseClient } from "src/core/ao/BaseClient";
 import { getWalletLazy } from "src/utils";
 import { DryRunResult } from "../../../../src/core/ao/abstract";
