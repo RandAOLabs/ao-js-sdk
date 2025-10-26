@@ -1,32 +1,20 @@
 // src/ITokenClient.ts
 import { Tags } from "../../../../core";
-import { DryRunResult, IProcessClient } from "../../../../core/ao/abstract";
 import { TokenInfo } from "./types";
 
 /**
  * Interface for interacting with ao token processes.
- * @deprecated in favor of IAOTokenClient
  * Implements the standard token interface specification for managing transferable assets.
  * @see {@link https://cookbook_ao.g8way.io/references/token.html | specification}
  */
-export interface ITokenClient extends IProcessClient {
+export interface IAOTokenClient {
 	/**
 	 * Gets the balance of a specific identifier (address) in the token ledger.
 	 * This is a read-only operation that queries the current state of the ledger.
 	 * @param identifier The address to check the balance for
 	 * @returns Promise resolving to the current balance as a string
 	 */
-	balance(identifier: string): Promise<string>;
-
-	/**
-	 * Gets a paginated list of all balances in the token ledger.
-	 * This is a read-only operation that returns all ledger/account balances.
-	 * @param limit Optional maximum number of balances to return per page
-	 * @param cursor Optional pagination cursor for fetching subsequent pages
-	 * @returns Promise resolving to the dry run result containing the balances
-	 * @remarks If ever used should refactor to return the balances in a list format
-	 */
-	balances(limit?: number, cursor?: string): Promise<DryRunResult>;
+	balance(entityId: string): Promise<string>;
 
 	/**
 	 * Transfers tokens from the caller's balance to one or more target addresses.

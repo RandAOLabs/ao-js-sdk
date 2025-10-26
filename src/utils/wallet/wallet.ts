@@ -16,8 +16,8 @@ export function getWalletLazy(): JWKInterface {
 
 
 /**
- * Builds and returns the final BaseClientConfig object.
- * @returns The constructed BaseClientConfig
+ * Safely attempts to get the wallet, returning undefined if not available.
+ * @returns Wallet if available, otherwise undefined
  */
 export function getWalletSafely(): JWKInterface | undefined {
 	try {
