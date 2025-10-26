@@ -1,54 +1,54 @@
-import { getEnvironment, Environment, getEnvironmentVariable } from "src";
+import { getEnvironment, Environment, getEnvironmentVariable } from "src/utils/environment";
 
 describe('Environment Functions', () => {
-    afterEach(() => {
-        jest.clearAllMocks();
-    });
+	afterEach(() => {
+		jest.clearAllMocks();
+	});
 
-    describe('getEnvironment', () => {
-        it('should return Environment.BROWSER when running in a browser context', () => {
-            // Arrange
-            const originalWindow = global.window;
-            (global as any).window = { document: {} };
+	describe('getEnvironment', () => {
+		it('should return Environment.BROWSER when running in a browser context', () => {
+			// Arrange
+			const originalWindow = global.window;
+			(global as any).window = { document: {} };
 
-            // Act
-            const environment = getEnvironment();
+			// Act
+			const environment = getEnvironment();
 
-            // Assert
-            expect(environment).toBe(Environment.BROWSER);
+			// Assert
+			expect(environment).toBe(Environment.BROWSER);
 
-            // Cleanup
-            global.window = originalWindow;
-        });
+			// Cleanup
+			global.window = originalWindow;
+		});
 
-        it('should return Environment.NODE when running in a node context', () => {
-            // Arrange
-            const originalProcess = global.process;
-            (global as any).process = { versions: { node: 'v22.0.0' } };
+		it('should return Environment.NODE when running in a node context', () => {
+			// Arrange
+			const originalProcess = global.process;
+			(global as any).process = { versions: { node: 'v22.0.0' } };
 
-            // Act
-            const environment = getEnvironment();
+			// Act
+			const environment = getEnvironment();
 
-            // Assert
-            expect(environment).toBe(Environment.NODE);
+			// Assert
+			expect(environment).toBe(Environment.NODE);
 
-            // Cleanup
-            global.process = originalProcess;
-        });
-    });
+			// Cleanup
+			global.process = originalProcess;
+		});
+	});
 
-    describe('getEnvironmentVariable', () => {
-        it('should return the environment variable if it is set', () => {
-            // Arrange
-            const variableName = 'TEST_VARIABLE';
-            const variableValue = 'test_value';
-            process.env[variableName] = variableValue;
+	describe('getEnvironmentVariable', () => {
+		it('should return the environment variable if it is set', () => {
+			// Arrange
+			const variableName = 'TEST_VARIABLE';
+			const variableValue = 'test_value';
+			process.env[variableName] = variableValue;
 
-            // Act
-            const value = getEnvironmentVariable(variableName);
+			// Act
+			const value = getEnvironmentVariable(variableName);
 
-            // Assert
-            expect(value).toBe(variableValue);
-        });
-    });
+			// Assert
+			expect(value).toBe(variableValue);
+		});
+	});
 });

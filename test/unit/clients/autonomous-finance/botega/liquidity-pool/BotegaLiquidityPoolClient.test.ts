@@ -2,7 +2,7 @@ import { MockBaseClient } from "test/unit/clients/MockBaseClient";
 import { ArweaveTransaction } from "src/core/arweave/abstract/types";
 import { Logger, LogLevel } from "src/utils";
 import { DryRunResult } from "../../../../../../src/core/ao/abstract";
-import { BotegaAmmClient } from "../../../../../../src";
+import { BotegaAmmClient } from "../../../../../../src/clients/autonomous-finance";
 import { ProcessClientError } from "../../../../../../src/clients/common/ProcessClientError";
 
 describe("BotegaLiquidityPoolClient Unit Tests", () => {
