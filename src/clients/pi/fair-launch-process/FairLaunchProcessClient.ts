@@ -19,7 +19,7 @@ export class FairLaunchProcessClient extends BaseClient implements IFairLaunchPr
 	public static from(processId: string, wallet?: any): FairLaunchProcessClient {
 		return new ClientBuilder(FairLaunchProcessClient)
 			.withProcessId(processId)
-			.withAOConfig(AO_CONFIGURATIONS.ARIO)
+			.withAOConfig(AO_CONFIGURATIONS.ARDRIVE)
 			.withWallet(wallet)
 			.build()
 	}
